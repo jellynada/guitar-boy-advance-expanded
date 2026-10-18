@@ -44,7 +44,9 @@ CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
 HOSTCXX ?= g++
-CHART_READER := $(CURDIR)/bin/chart_reader
+# Keep native/container helper binaries separate: their C++ runtimes can differ.
+HOST_TOOL_ID := $(shell $(HOSTCXX) -dumpmachine)-$(shell $(HOSTCXX) -dumpversion)
+CHART_READER := $(CURDIR)/bin/chart_reader-$(HOST_TOOL_ID)
 
 #---------------------------------------------------------------------------------
 # options for code generation

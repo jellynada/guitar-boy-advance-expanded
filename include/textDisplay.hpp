@@ -14,6 +14,7 @@ class textDisplay{
         u16 endSprite;
         u16 index;
         bool left_aligned;
+        u16 limit;
 
         void erase();
 
@@ -27,6 +28,8 @@ class textDisplay{
         ~textDisplay();
 
         void update(u32 streak);
+        void updateText(const char* text);
+        void updateLabel(const char* label, u32 value);
 
         void update(u32 notes_hit, u32 total_notes){
             //erase last text

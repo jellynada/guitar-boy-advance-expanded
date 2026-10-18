@@ -12,7 +12,7 @@ extern NoteManager<careless_expertsingle_count>* nm;
 extern int first_sprite;
 extern volatile int recent_sprite;
 
-void init_sprite(int ii, noteSprite sprite);
+void init_sprite(int ii, noteSprite sprite, u32 note_index);
 void init_sprites();
 void update_sprites();
 

@@ -6,6 +6,8 @@
 #include "mode7.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
+#include "gameControls.hpp"
+#include "textDisplay.hpp"
 #include "notes.h"
 
 #include "image.h"
@@ -80,7 +82,7 @@ void drawButtons(){
 }
 
 void updateButtons(u16 hit, u16 released){
-	u16 buttons[4] = {KEY_L, KEY_B, KEY_A, KEY_R};
+	const u16* buttons = LANE_BUTTONS;
 	for(int i = 0; i < 4; i ++){
 		if( buttons[i] & hit ){
 			drawButton(i, true);
@@ -92,9 +94,50 @@ void updateButtons(u16 hit, u16 released){
 	}
 }
 
+// The interrupt owns only the frame clock and Maxmod DMA service. All note
+// judgments and presentation happen together on the main thread.
+volatile u32 gameplayFrames = 0;
+u32 currentGameFrame = 0;
+JudgmentStats displayedStats;
+textDisplay judgmentText(4, 4, 32);
+textDisplay hitText(96, 4, 48);
+textDisplay missText(168, 4, 64);
+textDisplay wrongText(4, 22, 80);
+const char* lastJudgment = "READY";
+bool feedbackDirty = true;
+bool wrongVisible = false;
+u32 wrongUntilFrame = 0;
+
+void onGameplayEvent(void*, const GameplayEvent& event) {
+    switch (event.kind) {
+        case GameplayEventKind::PerfectHit: lastJudgment = "PERFECT"; break;
+        case GameplayEventKind::GoodHit: lastJudgment = "GOOD"; break;
+        case GameplayEventKind::Miss: lastJudgment = "MISS"; break;
+        case GameplayEventKind::WrongInput:
+            wrongVisible = true;
+            wrongUntilFrame = currentGameFrame + 24;
+            break;
+    }
+    feedbackDirty = true;
+}
+
+void refreshFeedback() {
+    if (wrongVisible && currentGameFrame >= wrongUntilFrame) {
+        wrongVisible = false;
+        feedbackDirty = true;
+    }
+    if (!feedbackDirty) return;
+    displayedStats = nm->judgment().stats();
+    judgmentText.updateText(lastJudgment);
+    hitText.updateLabel("H:", displayedStats.hits());
+    missText.updateLabel("M:", displayedStats.missed);
+    wrongText.updateText(wrongVisible ? "WRONG" : "");
+    feedbackDirty = false;
+}
+
 void update(){
-	mmVBlank();
-	recent_sprite = nm->update();
+    mmVBlank();
+    ++gameplayFrames;
 }
 
 int main(){
@@ -138,7 +181,9 @@ int main(){
 	init_sprites();
     // Initialize Interrupts
     irq_init(nullptr);
-	nm->init();
+	nm->reset();
+	nm->judgment().setEventSink(onGameplayEvent);
+	refreshFeedback();
 
 	// Initialise audio before any VBlank handler can call mmVBlank().
 	mmInitDefault((mm_addr)soundbank_bin, 16);
@@ -156,6 +201,14 @@ int main(){
     mmStart( MOD_CARELESS_WHISPER, MM_PLAY_LOOP );
 
     while(1){
+        // Poll first: judge the newly observed input, not last frame's keys.
+        key_poll();
+        currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
+        recent_sprite = nm->update(currentGameFrame,
+            laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
+        updateButtons(key_hit(GAME_BUTTONS), key_released(GAME_BUTTONS));
+        refreshFeedback();
+
         input_game();
 
         m7_prep_horizon(&m7_level);
@@ -164,20 +217,6 @@ int main(){
 		update_sprites();
 		m7_prep_affines(&m7_level);
 
-		u16 buttons_hit = key_hit(KEY_L | KEY_A | KEY_B | KEY_R);
-		u16 buttons_released = key_released(KEY_L | KEY_A | KEY_B | KEY_R);
-		if(buttons_hit){
-			// Keep the 64-bit song clock stable while checking the hit window.
-			u16 ime = REG_IME;
-			REG_IME = 0;
-			int note_hit = nm->checkHit(buttons_hit);
-			REG_IME = ime;
-			if(note_hit != -1){
-				m7_level.sprites[note_hit%SPR_COUNT].obj.attr2 = (m7_level.sprites[note_hit%SPR_COUNT].obj.attr2 & ~ATTR2_ID_MASK) | ATTR2_ID(65);
-			}
-		}
-		updateButtons(buttons_hit, buttons_released);
-
 		//if(key_hit(KEY_START)) Terminal::log("Tick = %%", m7_level.camera->pos.z);
 
         //update song
@@ -185,9 +224,6 @@ int main(){
 
         //update random nunmber
         qran();
-
-        //poll what keys are down
-        key_poll();
 
         //helps with visual tearing
         vid_vsync();

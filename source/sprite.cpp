@@ -4,11 +4,13 @@
 
 u8 sort_ids[SPR_COUNT];
 int sort_keys[SPR_COUNT];
+static u32 loaded_notes[SPR_COUNT];
 
 int first_sprite = SPR_COUNT;
 volatile int recent_sprite = 0;
 
-void init_sprite(int ii, noteSprite sprite){
+void init_sprite(int ii, noteSprite sprite, u32 note_index){
+	loaded_notes[ii] = note_index;
 	M7_SPRITE *spr= &m7_level.sprites[ii];
 	spr->pos= sprite.pos;
 	spr->anchor.x= 16;
@@ -30,20 +32,28 @@ void update_sprites()
 
 	M7_SPRITE *spr= m7_level.sprites;
 
-	const int recent = recent_sprite; // Snapshot the VBlank-owned cursor.
+	const int recent = recent_sprite; // Main-thread visual lookahead cursor.
 	const int count = nm->getNoteCount();
 	//check the next 30 sprites,
 	if(first_sprite != recent+SPR_COUNT-2){
 		noteSprite* positions = nm->getNoteSprites();
 		for(ii=first_sprite; ii<recent+SPR_COUNT-2 && ii<count; ii++){
-			init_sprite(ii%SPR_COUNT, positions[ii]);
+			init_sprite(ii%SPR_COUNT, positions[ii], ii);
 		}
 		first_sprite = recent;
 	}
 
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
-		m7_prep_sprite(&m7_level, &spr[ii]);
+        // Keep the chart identity of each recycled slot. A judged note may be
+        // behind the lookahead cursor and therefore not reloaded this frame.
+        if (loaded_notes[ii] < (u32)count) {
+            const u32 tile = nm->wasHit(loaded_notes[ii]) ? 65 : 1;
+            spr[ii].obj.attr2 = (spr[ii].obj.attr2 & ~ATTR2_ID_MASK) | ATTR2_ID(tile);
+            m7_prep_sprite(&m7_level, &spr[ii]);
+        } else {
+            obj_hide(&spr[ii].obj);
+        }
 
 		// Create sort key
 		if(BFN_GET2(spr[ii].obj.attr0, ATTR0_MODE) != ATTR0_HIDE){
@@ -66,8 +76,11 @@ void init_sprites()
 	// Notes
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
-		if(ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii]);
-		else obj_hide(&m7_level.sprites[ii].obj);
+		if(ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii], ii);
+        else {
+            loaded_notes[ii] = UINT32_MAX;
+            obj_hide(&m7_level.sprites[ii].obj);
+        }
 	}
 
 	// Setup sorting list

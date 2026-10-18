@@ -7,6 +7,7 @@ textDisplay::textDisplay(u16 x, u16 y, u16 index, bool left_aligned){
     this->index = index;
     this->endSprite = 0;
     this->left_aligned = left_aligned;
+    this->limit = index + 16 < 128 ? index + 16 : 128;
 }
 
 textDisplay::~textDisplay(){
@@ -23,7 +24,9 @@ void textDisplay::erase(){
 }   
 
 u16 textDisplay::createSprite(char c, u16 curr_width){
+    if (c < 32 || c > 126) c = '?';
     u16 charInd = CHAR_TO_IND(c);
+    if (endSprite >= limit) return textSpriteWidths[charInd];
     obj_set_attr(
         &oam_mem[endSprite++], 
         ATTR0_SQUARE | ATTR0_Y(yLevel),
@@ -80,4 +83,19 @@ void textDisplay::update(u32 streak){
         head++;
     }
     createSprite(streak, curr_width);
+}
+
+// Minimal gameplay labels using the existing font tiles. Each display owns
+// at most 16 OAM entries, leaving the 32 perspective-note entries untouched.
+void textDisplay::updateText(const char* text) {
+    erase();
+    u16 width = xLevel;
+    while (*text && endSprite < limit) width += createSprite(*text++, width);
+}
+
+void textDisplay::updateLabel(const char* label, u32 value) {
+    erase();
+    u16 width = xLevel;
+    while (*label && endSprite < limit) width += createSprite(*label++, width);
+    createSprite(value, width);
 }

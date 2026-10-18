@@ -2,97 +2,54 @@
 #define __NOTE_MANAGER__
 
 #include "tonc.h"
-#include "terminal.hpp"
-#include "textDisplay.hpp"
-#include "note.h"  // For struct Note definition
+#include "noteJudgment.hpp"
 
-struct noteSprite{
+struct noteSprite {
     VECTOR pos;
     u8 pal;
 };
 
 #define ENABLED true
 
+// Keep the original note-position formulas and ten-frame sprite lookahead.
+// Judgment and presentation are deliberately separate.
 template <u32 N>
-class NoteManager{
-    public:
-        NoteManager(const Note* song_notes, u32 song_bpm) {
-            this->song_notes = song_notes;
-            this->streak_text = new textDisplay(4, 4, 32);
-            this->percentage_text = new textDisplay(236, 4, 48, false);
-            this->note_ct = N;
-            this->song_bpm = song_bpm; //minutes to seconds to frames
-            this->current_tick = 0;
-            this->current_frame = 0;
-            this->current_note_index = 0;
-            this->curr_note_lanes = 0;
-            this->note_check = 0;
-            this->notes_hit = 0;
-            this->current_streak = 0;
-            prepSprites();
+class NoteManager {
+public:
+    NoteManager(const Note* song_notes, u32 song_bpm)
+        : song_notes(song_notes), song_bpm(song_bpm), judgment_(song_notes, song_bpm) {
+        prepSprites();
+    }
+
+    void reset(u8 heldLanes = 0) {
+        current_note_index = 0;
+        judgment_.reset(heldLanes);
+    }
+
+    u32 update(u32 frame, u8 heldLanes) {
+        const u64 tick = u64(frame) * song_bpm;
+        judgment_.step(tick, heldLanes);
+        const u64 lookahead = u64(song_bpm) * 10;
+        const u64 visualTick = frame ? tick - song_bpm : 0; // Mission 001 pre-increment lookahead.
+        while (current_note_index < N) {
+            const u64 target = song_notes[current_note_index].tick;
+            if (target > visualTick && target - visualTick > lookahead) break;
+            ++current_note_index;
         }
+        return current_note_index;
+    }
 
-        void init(){
-            if(ENABLED) percentage_text->update(0, N);
-            if(ENABLED) streak_text->update(0);
-        }
+    u32 getNoteCount() const { return N; }
+    noteSprite* getNoteSprites() { return note_sprites; }
+    NoteJudgment<N>& judgment() { return judgment_; }
+    const NoteJudgment<N>& judgment() const { return judgment_; }
+    bool wasHit(u32 index) const {
+        if (index >= N) return false;
+        NoteState state = judgment_.state(index);
+        return state == NoteState::Perfect || state == NoteState::Good;
+    }
 
-        int update() {
-            //right before hit window, set up what lanes should we expect the player to hit
-            if(current_note_index < N && current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){
-                u16 note_lanes = 0;
-                note_check = current_note_index;
-                //iterate through all notes that should be spawned at this tick
-                while(current_note_index < N && current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){
-                    //Terminal::log("UPPER Range of note %%", current_note_index);
-                    // Move to the next note in the song
-                    switch(song_notes[current_note_index].lane){
-                        case 0:
-                            note_lanes |= KEY_L;
-                            break;
-                        case 1:
-                            note_lanes |= KEY_B;
-                            break;
-                        case 2:
-                            note_lanes |= KEY_A;
-                            break;
-                        case 3:
-                            note_lanes |= KEY_R;
-                            break;
-                    }
-                    current_note_index++;
-                }
-                curr_note_lanes = note_lanes;
-            }
-            current_tick += song_bpm; // Increment tick based on BPM (assuming update is called every frame at 60 FPS)
-            return current_note_index;
-        };
-
-        u32 getNoteCount() const { return N; }
-
-        noteSprite* getNoteSprites() {
-            return note_sprites;
-        }
-
-        int checkHit(u32 keys_hit){
-            //if within hit window of current note, check if correct button is pressed
-            
-            if(note_check < N && current_tick >= song_notes[note_check].tick - (song_bpm * 3) && current_tick <= song_notes[note_check].tick + (song_bpm * 5)){
-
-                if(keys_hit == curr_note_lanes){
-                    if(ENABLED) percentage_text->update(++notes_hit, N);
-                    if(ENABLED) streak_text->update(++current_streak);
-                    return note_check; // Note hit successfully
-                }
-
-            }
-            
-            current_streak = 0;
-            if(ENABLED) streak_text->update(current_streak);
-            return -1;
-        }
-
-    private:
+private:
         void prepSprites(){
             for(u32 i = 0; i < N; i++){
                 VECTOR pos = {};
@@ -123,19 +80,10 @@ class NoteManager{
         }
         
         const Note* song_notes;
-        noteSprite note_sprites[N];
-        textDisplay* streak_text;
-        textDisplay* percentage_text;
         u32 song_bpm;
-        u32 note_ct;
-        u64 current_tick;
-        u32 current_frame;
-        u32 current_note_index;
-        u32 current_streak;
-        u32 notes_hit;
-
-        u16 curr_note_lanes;
-        u32 note_check;
+        noteSprite note_sprites[N];
+        NoteJudgment<N> judgment_;
+        u32 current_note_index = 0;
 };
 
-#endif // __NOTE_MANAGER_HPP__
+#endif

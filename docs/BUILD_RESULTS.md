@@ -1,5 +1,7 @@
 # Mission 001 build and test evidence
 
+Historical baseline. Current results are in [MISSION_002_RESULTS.md](MISSION_002_RESULTS.md).
+
 These results describe this cloud workspace, not a human playthrough.
 
 ## Build

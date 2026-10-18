@@ -1,11 +1,14 @@
 // Optional headless smoke test. Requires mGBA development headers/library.
-// Usage: emulator_smoke game.gba recent_sprite_address expected_notes frames output.ppm
+// Legacy smoke: game.gba cursor_address notes frames output.ppm
+// Judgment run: same arguments, then mode(miss/perfect/mixed), frame_address,
+// stats_address, chart_address, ticks_per_frame. Addresses come from matching ELF.
 #include <mgba/core/core.h>
 #include <mgba/core/blip_buf.h>
 #include <mgba/core/log.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static void log_message(struct mLogger* logger, int category, enum mLogLevel level,
                         const char* format, va_list args) {
@@ -18,7 +21,7 @@ static void log_message(struct mLogger* logger, int category, enum mLogLevel lev
 static int crashed;
 static void on_crash(void* context) { (void)context; crashed = 1; }
 int main(int argc, char** argv) {
-    if (argc != 6) return 2;
+    if (argc != 6 && argc != 11) return 2;
     struct mLogger logger = {.log = log_message};
     mLogSetDefaultLogger(&logger);
     struct mCore* core = mCoreFind(argv[1]);
@@ -36,15 +39,56 @@ int main(int argc, char** argv) {
     unsigned cursor_address = strtoul(argv[2], NULL, 16);
     unsigned notes = strtoul(argv[3], NULL, 10);
     unsigned frames = strtoul(argv[4], NULL, 10);
-    unsigned long nonzero_samples = 0, changed_frames = 0;
+    const char* mode = argc == 11 ? argv[6] : "smoke";
+    unsigned clock_address = argc == 11 ? strtoul(argv[7], NULL, 16) : 0;
+    unsigned stats_address = argc == 11 ? strtoul(argv[8], NULL, 16) : 0;
+    unsigned chart_address = argc == 11 ? strtoul(argv[9], NULL, 16) : 0;
+    unsigned bpm = argc == 11 ? strtoul(argv[10], NULL, 10) : 0;
+    assert(!strcmp(mode, "smoke") || !strcmp(mode, "miss") || !strcmp(mode, "perfect") || !strcmp(mode, "mixed"));
+    const unsigned buttons[] = {32, 16, 1, 2}; // Left, Right, A, B.
+    unsigned next_note = 0;
+    unsigned long nonzero_samples = 0, changed_frames = 0, hit_tile_frames = 0;
     unsigned previous_hash = 0;
     for (unsigned frame = 0; frame < frames; ++frame) {
-        // Exercise all four buttons, including after the final note.
-        core->setKeys(core, frame % 30 == 0 ? (1u | 2u | 256u | 512u) : 0);
+        unsigned held = 0;
+        if (!strcmp(mode, "smoke") || !strcmp(mode, "mixed")) {
+            // Include wrong presses before/after the song. The opposing D-pad
+            // directions can be injected by the core even though real hardware
+            // normally cannot press both; the demo chart contains no chords.
+            if (frame % 30 == 0) held = 32u | 16u | 1u | 2u;
+        } else if (!strcmp(mode, "perfect")) {
+            uint64_t tick = (uint64_t)core->busRead32(core, clock_address) * bpm;
+            while (next_note < notes) {
+                unsigned address = chart_address + next_note * 16;
+                uint64_t target = core->busRead32(core, address) |
+                    ((uint64_t)core->busRead32(core, address + 4) << 32);
+                if (target > tick + bpm) break;
+                unsigned lane = core->busRead32(core, address + 8);
+                assert(lane < 4);
+                held |= buttons[lane];
+                ++next_note;
+            }
+        }
+        core->setKeys(core, held);
         core->runFrame(core);
         assert(!crashed);
         unsigned cursor = core->busRead32(core, cursor_address);
         assert(cursor <= notes);
+        if (argc == 11) {
+            unsigned perfect = core->busRead32(core, stats_address);
+            unsigned good = core->busRead32(core, stats_address + 4);
+            unsigned missed = core->busRead32(core, stats_address + 8);
+            assert(perfect + good + missed <= notes);
+        }
+        // Verify actual GBA OAM receives the existing hit tile (65), not only
+        // the counter/HUD. Only the first 32 OAM entries belong to note sprites.
+        for (unsigned sprite = 0; sprite < 32; ++sprite) {
+            if ((core->busRead16(core, 0x07000000 + sprite * 8 + 4) & 0x03ff) == 65 &&
+                (core->busRead16(core, 0x07000000 + sprite * 8) & 0x0300) != 0x0200) {
+                ++hit_tile_frames;
+                break;
+            }
+        }
         unsigned hash = 2166136261u;
         for (unsigned i = 0; i < 240 * 160; ++i) hash = (hash ^ pixels[i]) * 16777619u;
         if (hash != previous_hash) ++changed_frames;
@@ -69,6 +113,23 @@ int main(int argc, char** argv) {
     assert(changed_frames > 100 && nonzero_samples > 1000);
     printf("PASS: %u frames, final cursor %u, %lu changing frames, %lu nonzero audio samples, no core crash\n",
            frames, notes, changed_frames, nonzero_samples);
+    if (argc == 11) {
+        unsigned perfect = core->busRead32(core, stats_address);
+        unsigned good = core->busRead32(core, stats_address + 4);
+        unsigned missed = core->busRead32(core, stats_address + 8);
+        unsigned wrong = core->busRead32(core, stats_address + 12);
+        assert(perfect + good + missed == notes);
+        if (!strcmp(mode, "miss")) assert(missed == notes && wrong == 0);
+        if (!strcmp(mode, "perfect")) {
+            assert(perfect == notes && good == 0 && missed == 0 && wrong == 0);
+            assert(hit_tile_frames > 100);
+        }
+        if (!strcmp(mode, "miss")) assert(hit_tile_frames == 0);
+        if (!strcmp(mode, "mixed")) assert(wrong > 0);
+        printf("PASS: mode %s, Perfect %u, Good %u, Miss %u, WrongInput %u; every note counted once\n",
+               mode, perfect, good, missed, wrong);
+        printf("PASS: visible hit-tile feedback present for %lu frames\n", hit_tile_frames);
+    }
     fflush(stdout);
     core->deinit(core);
     mLogSetDefaultLogger(NULL);
