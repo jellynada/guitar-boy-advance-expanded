@@ -39,11 +39,11 @@ class NoteManager{
 
         int update() {
             //right before hit window, set up what lanes should we expect the player to hit
-            if(current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){ 
+            if(current_note_index < N && current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){
                 u16 note_lanes = 0;
                 note_check = current_note_index;
                 //iterate through all notes that should be spawned at this tick
-                while(current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){
+                while(current_note_index < N && current_tick >= song_notes[current_note_index].tick - (song_bpm * 10)){
                     //Terminal::log("UPPER Range of note %%", current_note_index);
                     // Move to the next note in the song
                     switch(song_notes[current_note_index].lane){
@@ -68,6 +68,8 @@ class NoteManager{
             return current_note_index;
         };
 
+        u32 getNoteCount() const { return N; }
+
         noteSprite* getNoteSprites() {
             return note_sprites;
         }
@@ -75,7 +77,7 @@ class NoteManager{
         int checkHit(u32 keys_hit){
             //if within hit window of current note, check if correct button is pressed
             
-            if(current_tick >= song_notes[note_check].tick - (song_bpm * 3) && current_tick <= song_notes[note_check].tick + (song_bpm * 5)){
+            if(note_check < N && current_tick >= song_notes[note_check].tick - (song_bpm * 3) && current_tick <= song_notes[note_check].tick + (song_bpm * 5)){
 
                 if(keys_hit == curr_note_lanes){
                     if(ENABLED) percentage_text->update(++notes_hit, N);
@@ -93,7 +95,8 @@ class NoteManager{
     private:
         void prepSprites(){
             for(u32 i = 0; i < N; i++){
-                VECTOR pos;
+                VECTOR pos = {};
+                note_sprites[i].pal = 0;
                 pos.y = 0;
                 switch(song_notes[i].lane){
                     case 0:
@@ -113,7 +116,7 @@ class NoteManager{
                         pos.x = 0x11600;
                         break;
                 }
-                s64 temp_tick = song_notes[i].tick * -1;
+                s64 temp_tick = -static_cast<s64>(song_notes[i].tick);
                 pos.z = (((256 * temp_tick / 871) - 640000)>>4)-25000; //this is a placeholder, will need to be converted to actual z position based on tempo and speed of highway
                 note_sprites[i].pos = pos;
             }
