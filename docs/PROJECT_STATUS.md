@@ -114,3 +114,24 @@ Mission 002 audio or played it manually during this task.
    with an explicit per-note/per-chord policy and measured playback-clock alignment.
    It should not rebuild the judgment system or import unapproved music.
 5. Add CI and physical-hardware checks as a separate follow-up if desired.
+
+## Mission 002 review handoff
+
+Implementation commit `79ea19a` was pushed to `mission-002-note-judgment`.
+Automatic draft PR creation was attempted with Mission 001's fixed branch as
+its base, but GitHub returned `Post https://api.github.com/graphql: Forbidden`.
+No PR was created by that request, and main was not merged. GitHub Git reads and
+pushes work; no new token or credential was requested.
+
+Review comparison:
+https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-001-reproducible-build...mission-002-note-judgment
+
+Suggested title: **Mission 002: judge each note once and use Left/Right/A/B controls**.
+The prepared description is `PULL_REQUEST.md` in the review bundle. A user with
+GitHub access can click **Create pull request**, paste that description and choose
+**Create draft pull request** without merging anything.
+
+Binaries and the review bundle are delivered on `mission-002-download`, separate
+from the source review branch. That download branch is not intended to be merged.
+The Mission 001 download branch is preserved. Download links and play instructions
+are in the README; no GitHub programming knowledge is needed to play the ROM.
