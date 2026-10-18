@@ -151,3 +151,22 @@ to this unchanged song. The screenshot is an output asset and is not committed.
 Review branch: `mission-001-reproducible-build`. Main must not be merged or reset
 automatically. Pull-request creation/publishing status is reported separately;
 a local commit is not evidence of an opened PR.
+
+## Review handoff
+
+The Mission 001 implementation was committed as `02e6bd8` and successfully pushed
+to `origin/mission-001-reproducible-build`. The automatic draft pull-request
+request failed with `Post https://api.github.com/graphql: Forbidden`; no PR was
+opened by that command and main was not merged. This is an API-access blocker,
+not a build failure. Git read/push access works, so a new Git token was not
+requested.
+
+The owner can open the proposed PR at:
+https://github.com/jellynada/guitar-boy-advance-expanded/compare/main...mission-001-reproducible-build
+
+Suggested title: **Mission 001: reproducible GBA build and end-of-song safety**.
+Use `docs/BUILD_RESULTS.md` and this document for the description, or copy
+`PULL_REQUEST.md` from the cloud download bundle. Select **Create draft pull
+request** to open review without merging. The cloud bundle is
+`build/mission001-review.zip`; it is a generated local download, not a published
+GitHub release. Download it before running `make clean`, which removes `build/`.
