@@ -113,3 +113,20 @@ PR creation previously failed with GitHub API Forbidden while Git pushes worked.
 The final handoff reports the new attempt separately; a source branch or compare
 link must not be described as an opened pull request. Download branches remain
 separate and must not be merged into main.
+
+## Mission 003 review handoff
+
+Implementation commit `747c3f7` was pushed to `mission-003-chart-importer`.
+A draft PR against `mission-002-note-judgment` was attempted, but GitHub returned
+`Post https://api.github.com/graphql: Forbidden`. No PR was opened by that command;
+main and prior download branches were not merged or changed. Git push works, so
+no new secret or login was requested.
+
+Review comparison:
+https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-002-note-judgment...mission-003-chart-importer
+
+Suggested title: **Mission 003: import community charts with exact tempo timing**.
+The prepared description is `PULL_REQUEST.md` in the bundle. Someone with GitHub
+access can choose **Create pull request**, paste it, and create a draft without
+merging. The separate `mission-003-download` branch supplies the ROM and standalone
+import tools/examples; that download branch must not be merged into main.
