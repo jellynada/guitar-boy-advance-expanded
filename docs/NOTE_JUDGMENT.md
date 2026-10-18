@@ -132,9 +132,10 @@ constant BPM. Tempo changes, arbitrary malformed data, sustain gameplay and
 multi-hour playback are not qualified. See `MISSION_002_RESULTS.md` for measured
 results and the manual-play limitations.
 
-## Mission 003 integration point
+## Future reactive-audio integration point
 
-Reactive audio can consume the existing events in the main-thread consumer (or
+Mission 003 instead establishes chart importing; it does not add reactive audio.
+A later audio mission can consume the existing events in the main-thread consumer (or
 in a small dispatcher called by it), using note index, lane and timing as needed.
 Do not put music-volume logic into `NoteJudgment`. Chords emit per-note events,
 so decide explicitly whether audio should respond per note or per chord/frame.

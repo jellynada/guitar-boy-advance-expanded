@@ -1,0 +1,12 @@
+{
+  "constant.chart": {
+    "track": "MediumSingle",
+    "start_us": [0, 500000, 500000, 1500000],
+    "duration_us": [0, 1000000, 0, 0]
+  },
+  "tempo_changes.chart": {
+    "track": "MediumSingle",
+    "start_us": [750000, 1250000, 1250000, 2250000, 2500000],
+    "duration_us": [1750000, 0, 0, 0, 0]
+  }
+}

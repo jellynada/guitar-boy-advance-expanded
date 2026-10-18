@@ -1,137 +1,115 @@
-# Project status — Mission 002
+# Project status — Mission 003
 
-## Baseline and scope
+## Branches and preserved baseline
 
-Mission 002 starts from the working Mission 001 fixes on
-`mission-001-reproducible-build`, commit `47d340e`. They have not been silently
-replaced with upstream's unpatched code or merged into main. The new source
-branch is `mission-002-note-judgment`; its review comparison uses the Mission 001
-branch as its base so only the new work is shown.
+Mission 003 starts at tested Mission 002 source commit
+`533862124079a9dca1f84a6d88f54e40cde189cb`, on `mission-003-chart-importer`.
+Mission 002 contains Mission 001: ancestry was verified with Git, not inferred
+from branch names. All repository branches were listed/checked; download branches
+contain binaries separately from source review branches.
 
-Mission 001's original baseline was `6c4e63460fab10733d8ff011045ee246e7201952`.
-Its historical validation remains in `docs/BUILD_RESULTS.md`. The owner reported
-that the Mission 001 ROM worked when played. Mission 002's implementation and
-validation are separate; no manual Mission 002 playthrough is claimed.
-
-## Architecture
-
-| Part | Responsibility |
+| Branch | Role / state at Mission 003 start |
 | --- | --- |
-| `Makefile`, `scripts/build-docker.sh` | Retained digest-pinned devkitARM C++17 build; compiler-specific chart-converter cache avoids native/container runtime conflicts |
-| `bin/chart_reader.cpp` | Unchanged chart conversion, generated headers/assembly, verified 16-byte record layout |
-| `include/gameControls.hpp` | Shared physical-button-to-lane mapping: Left, Right, A, B |
-| `include/noteJudgment.hpp` | Pure per-note state machine, physical timing windows, edge input, statistics and synchronous gameplay events |
-| `include/noteManager.hpp` | Original note-position preparation and ten-frame lookahead; owns judgment without rendering/audio dependencies |
-| `source/main.cpp` | Initialization, VBlank frame clock and Maxmod service, main-thread input/judgment, feedback event consumer |
-| `source/sprite.cpp` | Existing perspective sprite loading/sorting, persistent hit appearance from judgment state |
-| `source/mode7*`, `id_sort_shell.s` | Original perspective background, camera, affine note projection and depth sort |
-| `textDisplay`, `font`, `terminal` | Existing font/graphics helpers; textDisplay gains bounded simple labels |
-| `charts/careless.chart` | Unchanged 699-note single-tempo chart; sorted lanes 0–3, no chords or sustains |
-| `music/`, `graphics/` | Unchanged module audio, palettes, note/fret/background/font art |
-| `tests/` | Sanitized host judgment/converter/full-chart tests and real mGBA ROM checks |
+| `main`, original `work` checkout | Original `6c4e634`; no mission fixes merged |
+| `mission-001-reproducible-build` | `47d340e`, working native/pinned builds and end-of-song safety |
+| `mission-001-download` | Preserved original tested download |
+| `mission-002-note-judgment` | `5338621`, reliable judgment, Left/Right/A/B, unchanged demo |
+| `mission-002-download` | Preserved Mission 002 download |
+| `mission-003-chart-importer` | New source work; based on Mission 002, not main |
 
-## Current gameplay
+No automatic merge into main is performed. The future target is now **Sunshine
+of Your Love by Cream**, superseding the earlier long-term song/audio plan. This
+mission prepares community charts only; it does not import a target song or
+implement reactive audio.
 
-- Existing four-lane perspective highway, camera, artwork and module playback.
-- New controls: **D-pad Left, D-pad Right, A, B**, left to right, as requested by
-  the owner; shoulder buttons no longer play notes.
-- Per-note Pending, Perfect, Good or Missed state; each note judged once.
-- Perfect within 25 ms; Good up to 50 ms early/85 ms late; expired notes become
-  automatic misses even when the player presses nothing.
-- Fresh presses only; held buttons cannot retrigger notes. Chords are judged
-  per member. Extra wrong presses are separate events and cannot consume valid
-  notes. See `NOTE_JUDGMENT.md` for the exact partial-chord and boundary rules.
-- Minimal PERFECT/GOOD/MISS feedback, H/M counters and a WRONG flash. These are
-  diagnostic counters, not a points/multiplier scoring system.
-- Hit appearance remains attached to note state during sprite reuse.
-- `PerfectHit`, `GoodHit`, `Miss`, `WrongInput` events available to future consumers.
+## Current game — unchanged
 
-## Mission 001 audit and behavior changes
+The same 699-note Careless Whisper demo, module, art, perspective highway, camera,
+button animations and **D-pad Left / D-pad Right / A / B** controls remain.
+Mission 002's per-note Pending/Perfect/Good/Missed states, 25 ms Perfect,
+50 ms early/85 ms late Good, fresh-press input, chord rules, hit/miss counters,
+WRONG indicator and gameplay event interface are preserved. No gameplay source,
+converter, Makefile, toolchain image, chart, graphics or music changed.
 
-The generated `note.h` and song/graphics/audio headers are build outputs, not
-missing replacement content. `Note` remains 8-byte timestamp, 4-byte lane,
-4-byte duration, 16-byte stride, at 8-byte array alignment. Chart conversion and
-position constants are unchanged. Maxmod playback remains independent of
-judgment, with no new seeking, volume changes or imported song.
+A clean ROM build has exactly the Mission 002 checksum. New imports are not
+wired into its legacy clock or compiled by the default Makefile. No new three/
+five-lane renderer, difficulty menu, song selection, audio changes or scoring was
+added. The owner can continue using the known working game while data work proceeds.
 
-The host chart-converter cache now includes its compiler target/version in the
-filename. This prevents a binary compiled with cloud GCC 14 from being reused
-inside the pinned container, which has GCC 12 and an older C++ runtime. The GBA
-toolchain image, converter source/data, and build script remain unchanged.
+## New importer architecture
 
-Mission 001's repeat-hit bug, wrong-button streak reset, chord/total mismatch and
-lack of automatic misses are replaced by per-note accounting. Streak text is
-replaced with judgment/hit/miss feedback. Newly observed input is checked on the
-main thread instead of checking the previous poll against interrupt-owned state.
-The late/early allowances are now explicitly in milliseconds and close to the
-old five/three-frame windows. These are intentional behavioral differences, not
-a timing recalibration. The old projection/lookahead formulas remain.
+| Component | Responsibility |
+| --- | --- |
+| `tools/chart_importer.py` | Parse/validate metadata/events, exact cumulative tempo map, normalized data, compatibility analysis and prepared header |
+| `tools/import_chart.py` | One-command file/folder workflow, readable/JSON reports, managed outputs and error exit status |
+| `imports/incoming/` | User-supplied authorized charts; ignored by Git |
+| `imports/output/` | Per-chart reports, normalized JSON and C++17 tables; ignored by Git |
+| `tests/fixtures/charts/` | Original synthetic charts with independently calculated expected timestamps; no audio |
+| `tests/test_chart_importer.py` | Math, parsing, validation, CLI/determinism/failure cases and host/GBA header compilation |
+| `tests/check.sh` | Existing judgment/sanitizer/699-note tests plus new importer suite |
 
-The pure engine allocates no heap memory and has no renderer or audio calls.
-The existing process-lifetime NoteManager allocation remains. No new in-game
-restart, menu, score system or audio penalty has been implemented.
+See `CHART_IMPORT_GUIDE.md` for beginner commands and compatibility warnings.
+See `SONG_DATA_ARCHITECTURE.md` for the old-converter audit, new schema, exact
+timing model, offset convention and integration boundaries.
 
-## Verified development capabilities
+## Supported versus prepared versus playable
 
-The digest-pinned Mission 001 toolchain and native extracted copy are retained.
-Build and emulator outcomes for the final Mission 002 ROM are in
-`docs/MISSION_002_RESULTS.md`. Three full ten-minute emulator scenarios exercise
-all-success, all-miss and mixed-input play. Desktop tests cover synthetic chords
-because the real demo contains none. The updated HUD and original highway were
-inspected in emulator screenshots. Samples were measured; nobody listened to
-Mission 002 audio or played it manually during this task.
+- Metadata, resolution, all BPM changes, boundary timing, signed decimal Offset,
+  meter metadata, source-order chords and tempo-aware sustain durations are parsed.
+- Easy/Medium/Hard/Expert Single tracks stay independent. Logical frets 0–4 and
+  open notes are retained; HOPO/tap markers are separate records, not fake notes.
+- Phrases, text, anchors and unknown instrument rows are retained with explicit
+  warnings. Not every retained feature has gameplay semantics or header tables.
+- Duplicate/unsorted/malformed/overflowing supported events fail clearly rather
+  than being silently fixed or dropped. Unknown note types are errors.
+- Future layout reports identify Easy 3, Medium 4 and Hard 5 button arrangements,
+  fret-count mismatches, opposing D-pad chords and diagonals. Lanes are not collapsed.
+- Successful import means **prepared, not playable**. Even four-lane note-shape
+  compatibility does not enable the new clock, recording or audio adapter.
 
-## Remaining limitations and missing features
+## Validation and limitations
 
-- Music loops but the chart/judgment does not restart. Reset/reload in mGBA to replay.
-- The chart converter's empirical timing constant, first-tempo-only behavior,
-  ignored offset metadata and lack of an audio-position clock remain. Human
-  audiovisual alignment and latency need measurement before recalibration.
-- A physical D-pad cannot normally hold Left+Right together. The supplied chart
-  contains no chords, but future charts need to respect this control constraint.
-- The engine assumes sorted notes, lanes 0–3 and positive fixed tempo. Arbitrary
-  malformed charts, tempo changes and extended multi-hour playback are unqualified.
-- Host tests verify isolated reset, not an in-game restart flow. Hardware testing,
-  manual keyboard/controller play and audio listening are still outstanding.
-- Developer terminal helpers retain legacy unchecked character assumptions;
-  the normal HUD uses bounded labels and validated characters instead.
-- No sustained-note gameplay, star power, multiple songs, song selection, menus,
-  pause UI, results screen, score points/multipliers or reactive audio yet.
-- No project license or complete asset-rights records exist in the baseline.
-  Existing credits remain. No new song, substitute art or license grant is added.
-- GitHub API access previously rejected PR creation, although authenticated Git
-  reads/pushes work. Source/download publication and PR-creation outcomes must be
-  reported separately; a pushed branch is not an opened pull request.
+`MISSION_003_RESULTS.md` records actual test counts, math examples, build logs,
+checksum identity and mGBA results. Generated headers compile on both desktop C++
+and devkitARM ARM7TDMI/Thumb. The original 699-note chart is valid in the new
+pipeline, while all live note timestamps remain exactly unchanged.
 
-## Recommended next sequence
+No authorized Sunshine of Your Love chart was supplied; none was downloaded,
+fabricated or substituted. No Cream audio or official Guitar Hero assets were
+obtained. Tests use original synthetic fixtures and the existing checked-in demo.
+A GHIII cover chart must not be assumed to match Cream's original performance.
 
-1. Owner downloads Mission 002, maps Left/Right/A/B in mGBA, and tries hits, holds,
-   wrong presses and letting notes pass. Check H+M reaches 699 at the end.
-2. Review source changes against Mission 001 without automatically merging main.
-3. Confirm asset/music/code permissions and measure audio/visual alignment before
-   any public-release or timing-calibration decision.
-4. Mission 003 can subscribe to the existing gameplay events for reactive audio,
-   with an explicit per-note/per-chord policy and measured playback-clock alignment.
-   It should not rebuild the judgment system or import unapproved music.
-5. Add CI and physical-hardware checks as a separate follow-up if desired.
+Remaining data/runtime work:
 
-## Mission 002 review handoff
+- An explicit absolute-time gameplay adapter, audio-origin/pre-roll policy,
+  calibration and measured beginning/middle/end alignment.
+- Approved three/five-lane renderers and difficulty selection; Expert is not
+  automatically renamed Hard, and five-lane community charts are not reduced.
+- `song.ini` metadata/delay overrides, MIDI and other instruments are not applied.
+- Anchors are editor metadata; contradictory anchor/tempo information is warned
+  about, not used to invent a new clock.
+- HOPO/tap/open/sustain/phrase gameplay is not implemented. D-pad checks cover
+  simultaneous onsets; held-sustain overlaps and ergonomics need later validation.
+- Audio licensing, recording/version matching and preparation need authorization;
+  no compression, muting or guitar-volume features have been implemented.
+- Music still loops without resetting demo notes. Physical hardware testing,
+  manual listening/play, latency measurement and multi-hour runs remain outstanding.
+- Baseline code/music/art redistribution permissions are not newly established.
+  Source credits remain; ignored input/output folders avoid accidental community
+  chart redistribution.
 
-Implementation commit `79ea19a` was pushed to `mission-002-note-judgment`.
-Automatic draft PR creation was attempted with Mission 001's fixed branch as
-its base, but GitHub returned `Post https://api.github.com/graphql: Forbidden`.
-No PR was created by that request, and main was not merged. GitHub Git reads and
-pushes work; no new token or credential was requested.
+## Recommended Mission 004 sequence
 
-Review comparison:
-https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-001-reproducible-build...mission-002-note-judgment
+1. Obtain a properly authorized chart and matching recording, or continue with
+   synthetic data until those are available. Keep source/author/license/version.
+2. Review the import report and required lane layouts without silently remapping.
+3. Design and test the absolute-time game/audio adapter, retaining a verified
+   legacy demo path or measuring any proposed recalibration explicitly.
+4. Implement only the approved difficulty renderer/integration next. Do not add
+   reactive audio penalties or new assets just because import preparation passed.
+5. Later, existing judgment events can drive an authorized reactive-audio task.
 
-Suggested title: **Mission 002: judge each note once and use Left/Right/A/B controls**.
-The prepared description is `PULL_REQUEST.md` in the review bundle. A user with
-GitHub access can click **Create pull request**, paste that description and choose
-**Create draft pull request** without merging anything.
-
-Binaries and the review bundle are delivered on `mission-002-download`, separate
-from the source review branch. That download branch is not intended to be merged.
-The Mission 001 download branch is preserved. Download links and play instructions
-are in the README; no GitHub programming knowledge is needed to play the ROM.
+PR creation previously failed with GitHub API Forbidden while Git pushes worked.
+The final handoff reports the new attempt separately; a source branch or compare
+link must not be described as an opened pull request. Download branches remain
+separate and must not be merged into main.

@@ -1,11 +1,36 @@
-# Guitar Boy Advance Expanded — Mission 002
+# Guitar Boy Advance Expanded — Mission 003
 
 A four-lane Game Boy Advance rhythm-game prototype based on
 [startfliing's Guitar Boy Advance](https://github.com/startfliing/guitar-boy-advance).
-Mission 002 adds reliable note judgment on top of the working Mission 001
-build. The four controls, from left to right, are **D-pad Left, D-pad Right, A,
-B**. Each note is counted once as a hit or miss. The existing song, highway,
-artwork and music playback remain in place; no new audio or menus are added.
+Mission 003 adds a computer-side community chart importer and validator. It
+prepares tempo-aware song data without changing the working Mission 002 game.
+The existing ROM, note judgments, music, graphics and **Left / Right / A / B**
+controls are unchanged. No new song, audio, lane renderer or gameplay is added.
+
+## Inspect a chart — no C++ editing needed
+
+Install Python 3.10+ if necessary. To try the included original synthetic example:
+
+```text
+python3 tools/import_chart.py tests/fixtures/charts/tempo_changes.chart
+```
+
+Open `imports/output/tempo_changes/report.txt`. To inspect your own authorized
+chart, place its `.chart` in `imports/incoming/` and run:
+
+```text
+python3 tools/import_chart.py
+```
+
+On Windows, `py -3` can replace `python3`. The download bundle includes these tools
+and fixtures, so you do not need to learn Git to try them. No audio is downloaded
+or opened. Successful import means **prepared, not yet playable**: the current
+game still uses its original chart/clock until a separately tested adapter exists.
+
+Read the [beginner import guide](docs/CHART_IMPORT_GUIDE.md),
+[song-data format](docs/SONG_DATA_ARCHITECTURE.md) and
+[Mission 003 results](docs/MISSION_003_RESULTS.md). No authorized Sunshine of Your
+Love chart was provided; no Cream recording or Guitar Hero III assets were imported.
 
 ## Play the ROM (no programming needed)
 
@@ -13,10 +38,10 @@ artwork and music playback remain in place; no new audio or menus are added.
    Windows: extract the downloaded ZIP and open mGBA. macOS: open the disk image
    and drag mGBA into Applications. Linux: install mGBA using your distribution's
    software manager (Ubuntu/Debian package: `mgba-qt`).
-2. Download the [Mission 002 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-002-download/downloads/mission002-review.zip)
-   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-002-download/downloads/mission002-review.zip)
+2. Download the [Mission 003 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-003-download/downloads/mission003-review.zip)
+   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-003-download/downloads/mission003-review.zip)
    and click the **Download raw file** arrow. The game inside is named
-   `guitar-boy-advance-mission-002.gba`, so it is easy to distinguish from the old ROM.
+   `guitar-boy-advance-mission-003.gba`, but its game bytes match Mission 002 exactly.
 3. In mGBA, choose **File → Load ROM** and select that `.gba` file. A separately
    downloaded Nintendo BIOS is not required for this workflow.
 4. Open mGBA's keyboard/controller settings and assign convenient keys to the
@@ -60,9 +85,14 @@ The song starts automatically. There is no menu, pause or results screen.
 Reset/reload the ROM to replay. Music loops but the chart does not reset.
 Automated mGBA runs verify the game and counters; please also judge the sound,
 alignment and button response yourself. We have not manually played or listened
-to this Mission 002 version. Your working Mission 001 download remains unchanged.
+to this build. Your working Mission 001 and Mission 002 downloads remain unchanged.
 
 ## Build it using Docker (recommended for a repeatable build)
+
+These build commands require the complete source repository on
+`mission-003-chart-importer`. The review bundle includes the playable ROM and
+standalone import tools/examples, not every original game build asset. Import
+inspection commands above work directly from the extracted bundle.
 
 A build turns the source code and assets into the `.gba` cartridge file.
 Install Docker Desktop from https://www.docker.com/products/docker-desktop/
@@ -78,7 +108,7 @@ bash scripts/build-docker.sh
 ```
 
 The second command creates `guitar-boy-advance-expanded.gba` in the project
-folder (the download bundle gives its copy the clearer Mission 002 filename). Internet access is needed to download the image initially. The script
+folder (the download bundle gives its copy the clearer Mission 003 filename). Internet access is needed to download the image initially. The script
 pins the official devkitPro image by its content digest, rather than using a
 moving `latest` tag. It includes devkitARM GCC 16.1.0, libtonc, libgba/Maxmod,
 `grit`, `mmutil`, `gbafix`, GNU Make 4.3 and desktop GCC 12.2.0. The game uses
@@ -123,16 +153,20 @@ not required. CSV inputs are outside this mission.
 Run `bash tests/check.sh` with desktop GCC and Python 3. It tests judgment under
 memory/undefined-behavior sanitizers, all timing boundaries and input rules, and
 two runs of the unchanged 699-note chart. Leak checking is enabled as well.
+It also runs the new importer fixtures, exact timing checks, report/CLI checks and
+generated-header compilation checks (GBA check is explicitly skipped if devkitARM
+is absent).
 
 With mGBA development headers/library installed, `DEVKITARM` set and a built ROM,
 run `bash tests/run_emulator.sh perfect`, then the same command with `miss` or
 `mixed`. Each runs about ten minutes of emulated time. These are optional tools
 for developers; you can simply load the downloaded ROM in mGBA.
 
-See [project status](docs/PROJECT_STATUS.md), [judgment rules and event interface](docs/NOTE_JUDGMENT.md)
-and [Mission 002 test results](docs/MISSION_002_RESULTS.md). Source review branch:
-`mission-002-note-judgment`; neither this nor the download branch is automatically
-merged into main. [Review Mission 002 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-001-reproducible-build...mission-002-note-judgment).
+See [project status](docs/PROJECT_STATUS.md), [import instructions](docs/CHART_IMPORT_GUIDE.md),
+[judgment rules](docs/NOTE_JUDGMENT.md), [Mission 003 results](docs/MISSION_003_RESULTS.md)
+and [historical Mission 002 results](docs/MISSION_002_RESULTS.md).
+Source branch: `mission-003-chart-importer`; no automatic merge into main.
+[Review Mission 003 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-002-note-judgment...mission-003-chart-importer).
 
 ## Credits and asset rights
 

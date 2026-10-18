@@ -1,0 +1,168 @@
+# Song data architecture — Mission 003
+
+## Boundaries
+
+The new path is entirely computer-side:
+
+`.chart → parse_sections → validation → exact tempo map → normalized JSON → prepared C++17 tables`
+
+`tools/chart_importer.py` owns parsing, timing, validation, compatibility analysis
+and header generation. `tools/import_chart.py` handles CLI input, reports and
+managed output files. Both use only Python's standard library. Fractions are
+practical here without adding a multiprecision dependency to the old C++ tool.
+
+The existing `bin/chart_reader.cpp`, Makefile, game source, note judgment, graphics,
+controls and audio remain unchanged. The Makefile does not search the import
+folder. New data has its own namespace, schema and timestamp units; it cannot
+silently replace the old `Note` array. `tests/check.sh` now also runs importer tests.
+
+## Audit of the live legacy converter
+
+| Concern | Legacy behavior |
+| --- | --- |
+| Timing | `uint64(double(chart_tick)/resolution * 3567673)`; empirical factor, floating point |
+| BPM | First B only; game time is `VBlank frames × first BPM in thousandths`; later tempo events ignored |
+| Resolution | Positive Resolution required before notes; missing/zero detected by Mission 001 fix |
+| Meter | Time signatures ignored |
+| Offset/audio | Offset and recording references ignored; current module is hardcoded elsewhere |
+| Difficulty | Other section names treated as possible note tracks; game references ExpertSingle directly |
+| Lanes/flags | Numeric identifiers emitted without guitar-lane/marker semantic validation |
+| Chords | Same-tick records emitted; old converter does not supply a chord schema |
+| Sustains | Raw duration ticks emitted, not converted to time; current gameplay does not use sustain durations |
+| Ordering/input errors | No robust sorted/duplicate/unknown-type validation; some unknown events silently ignored |
+| Generated ABI | `u64 tick, u32 lane, u32 duration`, 16-byte stride; layout assertions and 8-byte array alignment from Mission 001 |
+
+Those limitations are not corrected in the live path during Mission 003. Replacing
+its timing formula would change the tested behavior. The new importer is the
+validated path for inspecting/preparing new community data; the legacy converter
+is retained only to preserve the demo until an explicit integration task.
+
+## Exact timing model
+
+Input chart ticks are unsigned 64-bit positions, measured in subdivisions of a
+quarter note. Resolution and BPM-in-thousandths are positive unsigned 32-bit
+integers. A time signature changes notation, not the duration represented by a
+tick at a given BPM/resolution.
+
+For a segment containing `delta_ticks` at milli-BPM `b` and resolution `r`:
+
+```text
+segment_microseconds = delta_ticks × 60,000,000,000 / (r × b)
+```
+
+The numerator includes 60 seconds/minute, 1,000,000 microseconds/second and 1,000
+units/BPM. Python `Fraction` retains exact numerators/denominators while summing
+segments. A note at a tempo boundary has the cumulative time at that boundary;
+the new BPM applies to the interval after it. `bisect_right` selects that segment.
+A sustain is integrated independently to its end tick, so changes inside it count.
+
+Offset is parsed as an exact decimal number of seconds and added once to the
+cumulative time at the audio origin. Missing optional Offset is explicitly marked
+implicit zero. A tempo at tick zero is mandatory; no default tempo is invented.
+Missing meter is retained as unspecified. TS denominator exponent defaults to 2
+when omitted, as defined by the format. Editor A anchors are retained as metadata,
+compared with the computed audio-origin time and warned about when inconsistent;
+they do not impose a second unverified clock.
+
+Only at export are times rounded to integer microseconds: nearest, halves away
+from zero. Duration is rounded end minus rounded start, preserving the identity
+`start_us + duration_us == end_us`. Exact rational start/duration remain in JSON.
+A half-microsecond negative start can therefore round to -1 while its end rounds
+up; this is deliberate endpoint rounding, not accumulated timing drift.
+
+Source ticks/sustain end ticks must fit unsigned 64-bit. Absolute starts/ends,
+rounded values and durations must fit signed 64-bit microseconds. Invalid values,
+zero tempo/resolution and overflow fail clearly; no wraparound or truncation is
+allowed. Extremely large numeric data beyond Python's representation limits also
+fails with a report. Consumers of JSON must preserve integers; JavaScript Number
+is insufficient for arbitrary 64-bit ticks/rational numerators.
+
+## Versioned normalized format
+
+`schema_version: "gba-song-data-v1"` identifies `song.json`.
+
+- `source_name`, SHA-256: provenance of input bytes, without copying licensed files.
+- `metadata`: all Song values retained as strings; no audio reference is opened.
+- `resolution`, `timing`: units, explicit/implicit offset and rounding policy.
+- `tempo_map`: tick, milli-BPM, cumulative integer and exact rational audio time.
+- `time_signatures`, `anchors`: retained meter/editor information.
+- `tracks`: independent source section, difficulty, instrument, ordered notes,
+  modifiers and special events. Expert is never relabeled to another difficulty.
+- Notes: source tick/duration, original lane identifier, logical lane or null,
+  kind, integer start/end/duration, exact rational start/duration, source line/order.
+- Modifiers: identifiers 5/6 stored separately with type/timing; not extra notes.
+- Phrases/text/global events: retained with raw payloads where not interpreted.
+- Unsupported sections: full raw rows plus source line numbers, with warnings.
+
+Valid playable-note identifiers are frets 0–4 and open 7. Logical open lane is
+null in JSON, avoiding confusion with a sixth/fifth normal fret. Markers 5 and 6
+mean strum/HOPO flip and tap. The engine does not infer HOPO thresholds or apply
+these modifiers; it retains enough information for a future policy. Orphan point
+modifiers are errors. Nonzero-duration modifier ranges are retained with warnings.
+
+All section events must be nondecreasing in tick order. Exact duplicate events,
+duplicate note/modifier identifiers at a tick, duplicate tempo-type entries at a
+tick, duplicate metadata and duplicate sections fail rather than silently winning
+or being deleted. Different lanes at one tick are chords and retain source order.
+Unknown playable note IDs/event types are errors. Unknown instruments are raw
+unvalidated data with warnings, not falsely certified guitar tracks.
+
+`report.json` uses `gba-chart-import-report-v1`. It separates nonempty available
+difficulties from present/empty tracks, successful data preparation from runtime
+playability, minimum logical fret slots from planned button layouts, and errors
+from warnings/info. Four-lane note-shape compatibility is only a shape check;
+it does not authorize clock binding, open/sustain rules or playback.
+
+## Prepared GBA header
+
+`song_data.hpp` uses a content-hash namespace and `std::array` C++17 declarations:
+
+```cpp
+struct Note { int64_t start_us; int64_t duration_us; uint8_t lane; uint8_t kind; };
+struct Modifier { int64_t start_us; int64_t duration_us; uint8_t kind; };
+struct Tempo { uint64_t tick; uint32_t milli_bpm; int64_t time_us; };
+struct Meter { uint64_t tick; uint32_t numerator; uint32_t denominator; };
+```
+
+Note kind 0 is fretted, kind 1 is open (lane sentinel 255). Modifier kind 5 is
+HOPO flip and 6 tap. Each source difficulty gets its own note/modifier arrays,
+even if empty. Metadata, unsupported raw rows, phrases/text and exact fractions
+remain in the accompanying JSON; the header does not claim to implement them.
+The C++ compiler lays these declarations out; this is not a packed binary format
+or the legacy 16-byte ABI. Never reinterpret-cast between them. Both host and
+actual devkitARM compilers check generated headers in this environment, including
+negative/large endpoint values. No GBA library/hardware access is needed to import.
+
+## Compatibility and future work
+
+The existing game's ideal chart-time scale is about **0.9955416868** times the
+new constant-tempo audio-time scale. For the demo's first note, legacy ideal frame
+time is about 10.035462 s; exact imported chart time is about 10.080403 s. This is
+a mathematical clock comparison, **not** a measured claim about heard audio sync.
+Mission 003 changes zero demo note timestamps: the entire ROM remains byte-for-byte
+identical to Mission 002. New imported data is intentionally prepared, not played.
+
+Planned layouts belong to compatibility reports, not logical song records:
+Easy Left/A/B, Medium Left/Right/A/B, Hard Left/Up/Right/A/B. Unsupported fret counts
+are flagged, never collapsed. Opposing D-pad chords and potentially uncomfortable
+diagonals are reported for same-tick onsets. Sustain-overlap constraints and human
+ergonomics remain future checks; manual hardware testing is still needed.
+
+Mission 004 should choose a tested absolute-time runtime adapter and audio-origin/
+pre-roll policy with authorized matching chart/audio. Keep a legacy demo path or
+verify recalibration explicitly. Then implement only the approved lane renderer
+and difficulty selection path, preserving imported source tracks. Existing
+judgment events can later drive reactive audio; this mission adds no compression,
+muting, new music, menus, score systems or runtime difficulty implementation.
+
+## Reference conventions
+
+Community format documentation consulted at commit
+`3d3640574821e1f7f0ec4be70627893aa88fdff6`:
+
+- [Format overview: metadata, offset, tempo, meter and anchors](https://github.com/TheNathannator/GuitarGame_ChartFormats/blob/3d3640574821e1f7f0ec4be70627893aa88fdff6/docs/Chart-File-Formats/chart-format/Format-Overview.md)
+- [Five-fret tracks, note identifiers and modifiers](https://github.com/TheNathannator/GuitarGame_ChartFormats/blob/3d3640574821e1f7f0ec4be70627893aa88fdff6/docs/Chart-File-Formats/chart-format/Tracks/5-Fret-Guitar.md)
+
+The importer is deliberately stricter than players that guess missing BPM, sort
+broken tracks or apply external song.ini defaults. No external code/audio/chart
+was copied into the fixtures; they contain only original synthetic test events.

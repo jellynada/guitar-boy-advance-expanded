@@ -1,0 +1,49 @@
+// Synthetic fixture. No song/audio or commercial chart content.
+[Song]
+{
+  Name = "Synthetic tempo test"
+  Charter = "Project test fixture"
+  Resolution = 192
+  Offset = 0.25
+}
+[SyncTrack]
+{
+  0 = TS 4
+  0 = B 120000
+  384 = TS 3 2
+  384 = B 60000
+  576 = B 240000
+}
+[Events]
+{
+  192 = E "section Synthetic section"
+}
+[EasySingle]
+{
+  0 = N 0 0
+  192 = N 1 0
+  384 = N 2 0
+}
+[MediumSingle]
+{
+  192 = N 0 576
+  384 = N 1 0
+  384 = N 3 0
+  576 = N 2 0
+  768 = N 3 0
+}
+[HardSingle]
+{
+  384 = N 0 0
+  384 = N 2 0
+  576 = N 4 0
+}
+[ExpertSingle]
+{
+  192 = N 4 0
+  192 = N 5 0
+  384 = N 7 192
+  384 = N 6 0
+  576 = S 2 192
+  768 = E "soloend"
+}

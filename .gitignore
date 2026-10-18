@@ -45,3 +45,10 @@ bin/
 
 # debug information files
 *.dwo
+
+# Local imported community charts/audio are not automatically redistributed.
+imports/incoming/*
+!imports/incoming/README.md
+imports/output/*
+!imports/output/README.md
+__pycache__/
