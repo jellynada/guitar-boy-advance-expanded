@@ -26,7 +26,7 @@ NoteManager<careless_expertsingle_count>* nm = new NoteManager<careless_expertsi
 
 FIXED VEL_H = CONTROLS_ENABLED ? 0x200 : careless_BPM;
 
-FIXED curr_z = 0;
+s64 curr_z = 0; // Avoid signed overflow when the music keeps looping.
 
 void input_game()
 {
@@ -140,13 +140,16 @@ int main(){
     irq_init(nullptr);
 	nm->init();
 
+	// Initialise audio before any VBlank handler can call mmVBlank().
+	mmInitDefault((mm_addr)soundbank_bin, 16);
+
 	// Maxmod requires the vblank interrupt to reset sound DMA. 
 	irq_set( II_VBLANK, update, 0);
     irq_add(II_HBLANK, (fnptr)m7_hbl_floor);
 	irq_enable(II_VBLANK);
 
 	// initialise maxmod with soundbank and 8 channels
-    mmInitDefault( (mm_addr)soundbank_bin, 16 );
+    // Initialised above, before interrupts are enabled.
     
     //Setup is done. Lets put it into action!
     //Terminal::log("Hello World! %%", careless_expertsingle_data[0].tick);
@@ -164,7 +167,11 @@ int main(){
 		u16 buttons_hit = key_hit(KEY_L | KEY_A | KEY_B | KEY_R);
 		u16 buttons_released = key_released(KEY_L | KEY_A | KEY_B | KEY_R);
 		if(buttons_hit){
+			// Keep the 64-bit song clock stable while checking the hit window.
+			u16 ime = REG_IME;
+			REG_IME = 0;
 			int note_hit = nm->checkHit(buttons_hit);
+			REG_IME = ime;
 			if(note_hit != -1){
 				m7_level.sprites[note_hit%SPR_COUNT].obj.attr2 = (m7_level.sprites[note_hit%SPR_COUNT].obj.attr2 & ~ATTR2_ID_MASK) | ATTR2_ID(65);
 			}

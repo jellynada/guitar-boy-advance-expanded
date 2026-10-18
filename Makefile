@@ -43,7 +43,8 @@ CHARTS		:= charts
 CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
-CHART_READER	:= chart_reader.exe
+HOSTCXX ?= g++
+CHART_READER := $(CURDIR)/bin/chart_reader
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -56,7 +57,7 @@ CFLAGS	:=	-g -Wall -O2\
 
 CFLAGS	+=	$(INCLUDE)
 
-CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:=	$(CFLAGS) -std=gnu++17 -fno-rtti -fno-exceptions
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
@@ -81,6 +82,7 @@ LIBDIRS	:=	$(LIBGBA) $(LIBTONC)
 
 
 ifneq ($(BUILD),$(notdir $(CURDIR)))
+.DEFAULT_GOAL := build
 #---------------------------------------------------------------------------------
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
@@ -136,7 +138,10 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 .PHONY: $(BUILD) clean
 
 #---------------------------------------------------------------------------------
-$(BUILD): $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+$(CHART_READER): bin/chart_reader.cpp
+	$(HOSTCXX) -std=c++17 -O2 -Wall -Wextra $< -o $@
+
+$(BUILD): $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
@@ -170,10 +175,9 @@ $(BUILD)/%.s $(BUILD)/%.h : $(CSV_DIR)/%.csv
 #---------------------------------------------------------------------------------
 # CHART processing rules (parent directory)
 #---------------------------------------------------------------------------------
-$(BUILD)/%.s $(BUILD)/%.h : $(CHARTS)/%.chart
+$(CHART_SFILES) $(CHART_HFILES) $(BUILD)/note.h &: $(CHART_FILES) $(CHART_READER)
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
-	@echo "chart_reader $(notdir $<)"
-	@$(CHART_READER) $(CURDIR)/$<
+	@for chart in $(CHART_FILES); do $(CHART_READER) "$(CURDIR)/$$chart" "$(CURDIR)/$(BUILD)" || exit $$?; done
 
 
 #---------------------------------------------------------------------------------
@@ -197,7 +201,7 @@ $(OFILES_SOURCES) : $(HFILES) $(CSV_HFILES) $(CHART_HFILES)
 #---------------------------------------------------------------------------------
 # rule to build soundbank from music files
 #---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(AUDIOFILES)
+soundbank.bin soundbank.h &: $(AUDIOFILES)
 #---------------------------------------------------------------------------------
 	@mmutil $^ -osoundbank.bin -hsoundbank.h
 
@@ -215,7 +219,7 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 # add additional rules like this for each image extension
 # you use in the graphics folders
 #---------------------------------------------------------------------------------
-%.s %.h: %.png %.grit
+%.s %.h &: %.png %.grit
 #---------------------------------------------------------------------------------
 	@echo "grit $(notdir $<)"
 	@grit $< -fts -o$*

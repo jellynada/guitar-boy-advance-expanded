@@ -59,9 +59,9 @@ int main(int argc, char* argv[]) {
     // Create output directory if it doesn't exist
     std::filesystem::create_directories(outputDir);
 
-    // Check if note.h exists in output directory, if not create it
+    // Generate the shared record definition and its binary-layout checks
     std::string noteHeaderFile = outputDir + "/note.h";
-    if (!std::filesystem::exists(noteHeaderFile)) {
+    { // Always regenerate the header together with the assembly.
         std::ofstream noteHeaderOut(noteHeaderFile);
         if (!noteHeaderOut.is_open()) {
             std::cerr << "Error: Cannot write to file " << noteHeaderFile << std::endl;
@@ -71,11 +71,16 @@ int main(int argc, char* argv[]) {
         noteHeaderOut << "#ifndef __NOTE__\n";
         noteHeaderOut << "#define __NOTE__\n\n";
         noteHeaderOut << "#include \"tonc.h\"\n\n";
+        noteHeaderOut << "#include <cstddef>\n\n";
         noteHeaderOut << "struct Note {\n";
         noteHeaderOut << "    u64 tick;\n";
         noteHeaderOut << "    u32 lane;\n";
         noteHeaderOut << "    u32 duration;\n";
         noteHeaderOut << "};\n\n";
+        noteHeaderOut << "static_assert(sizeof(Note) == 16, \"Chart record size\");\n";
+        noteHeaderOut << "static_assert(offsetof(Note, tick) == 0, \"Tick offset\");\n";
+        noteHeaderOut << "static_assert(offsetof(Note, lane) == 8, \"Lane offset\");\n";
+        noteHeaderOut << "static_assert(offsetof(Note, duration) == 12, \"Duration offset\");\n";
         noteHeaderOut << "#endif\n";
         
         noteHeaderOut.close();
@@ -204,6 +209,10 @@ int main(int argc, char* argv[]) {
                         //Not sure why this works, but it works: 59.73 * 59.73 * 1000 = 3567673
                         //(60 seconds/minute) * (59.73 Hz) * (1000 for BPM conversion) = 3583800
                         //(60 seconds/minute) * (60 Hz) * (1000 for BPM conversion) = 3600000
+                        if (!resolutionFound || resolution == 0) {
+                            std::cerr << "Error: Song Resolution must be positive and precede notes\n";
+                            return 1;
+                        }
                         uint64_t tickValue = ((double)tick/resolution)*3567673;
                         sections[currentSection].push_back({tickValue, lane, duration});
                     }
@@ -260,7 +269,7 @@ int main(int argc, char* argv[]) {
         size_t recordSize = 16; // 8 + 4 + 4
         size_t totalDataSize = recordSize * notes.size();
 
-        asmout << ".align 2\n";
+        asmout << ".balign 8\n";
         asmout << ".global " << dataSymbol << "\t\t@ " << totalDataSize << " bytes\n";
         asmout << dataSymbol << ":\n";
 

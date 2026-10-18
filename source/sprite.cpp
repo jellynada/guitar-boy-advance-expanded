@@ -6,7 +6,7 @@ u8 sort_ids[SPR_COUNT];
 int sort_keys[SPR_COUNT];
 
 int first_sprite = SPR_COUNT;
-int recent_sprite = 0;
+volatile int recent_sprite = 0;
 
 void init_sprite(int ii, noteSprite sprite){
 	M7_SPRITE *spr= &m7_level.sprites[ii];
@@ -30,13 +30,15 @@ void update_sprites()
 
 	M7_SPRITE *spr= m7_level.sprites;
 
+	const int recent = recent_sprite; // Snapshot the VBlank-owned cursor.
+	const int count = nm->getNoteCount();
 	//check the next 30 sprites,
-	if(first_sprite != recent_sprite+SPR_COUNT-2){
+	if(first_sprite != recent+SPR_COUNT-2){
 		noteSprite* positions = nm->getNoteSprites();
-		for(ii=first_sprite; ii<recent_sprite+SPR_COUNT-2; ii++){
+		for(ii=first_sprite; ii<recent+SPR_COUNT-2 && ii<count; ii++){
 			init_sprite(ii%SPR_COUNT, positions[ii]);
 		}
-		first_sprite = recent_sprite;
+		first_sprite = recent;
 	}
 
 	for(ii=0; ii<SPR_COUNT; ii++)
@@ -64,7 +66,8 @@ void init_sprites()
 	// Notes
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
-		init_sprite(ii, pos[ii]);
+		if(ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii]);
+		else obj_hide(&m7_level.sprites[ii].obj);
 	}
 
 	// Setup sorting list
