@@ -1,4 +1,4 @@
-# Guitar Boy Advance Expanded — Mission 001
+# Guitar Boy Advance Expanded — Mission 002
 
 A four-lane Game Boy Advance rhythm-game prototype based on
 [startfliing's Guitar Boy Advance](https://github.com/startfliing/guitar-boy-advance).
