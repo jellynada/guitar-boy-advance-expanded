@@ -1,0 +1,14 @@
+{
+  "download_commit": "274461455c468b4741d57f5d928373a2a56f3c96",
+  "source_commit": "233112a072e5a0e90e5a766207761474130f75a6",
+  "zip_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/274461455c468b4741d57f5d928373a2a56f3c96/downloads/mission010-review.zip",
+  "rom_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/274461455c468b4741d57f5d928373a2a56f3c96/downloads/Guitar-Boy-Advance-Mission-010-Synthetic.gba",
+  "zip_sha256": "b6822a87a8f70eadf27d0562b07d51fb71842446fb62c9e7588b77d66b05c12a",
+  "rom_sha256": "48ff797804e86e59f70b4e733d5af651616a75b3d9dbe6bc1bb0026c1e6790ac",
+  "source_files_compared": 175,
+  "crc": "passed",
+  "no_new_cream_assets": true,
+  "readme_download_url_checked": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/refs/heads/mission-010-download/downloads/mission010-review.zip",
+  "download-input": "PASS: diagnostic perfect; 87 composed labels, 4 chord observations, 267 valid holds, 19 new presses; retry/exit/imported/original audio checked",
+  "download-audio": "PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash"
+}
