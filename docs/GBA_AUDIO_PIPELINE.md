@@ -38,10 +38,10 @@ it consumes prepared PCM or generates the public synthetic clip with standard Py
 In Ubuntu, change into the extracted project folder, for example:
 
 ```bash
-cd "/mnt/c/Users/YOURNAME/Downloads/mission006-review"
+cd "/mnt/c/Users/YOURNAME/Downloads/mission006-review/guitar-boy-advance-expanded"
 ```
 
-Replace YOURNAME/path with yours. Put your authorized ZIP into imports/incoming.
+Replace YOURNAME/path with yours. The source folder is guitar-boy-advance-expanded inside the unzipped bundle; it contains Makefile and tools. Put your authorized ZIP into that source folder's imports/incoming directory.
 Then run these two commands, one at a time:
 
 ```bash
