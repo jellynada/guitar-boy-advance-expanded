@@ -1,4 +1,48 @@
-# Project status — Mission 009
+# Project status — Mission 010 review candidate
+
+Current source: **mission-010-stabilization**, based on final M009 `f589e62`.
+All Mission001–009 source tips and hotfix `71f0152` are verified ancestors.
+Main remains historical `6c4e634`; download branches are separate.
+
+Architecture: original four-lane mode uses Maxmod and frame-clock judgments;
+Imported Easy uses exact sample-clock snapshots, NoteJudgment, NoteScore,
+fixed-storage Holds, reactive two-stem PCM/FIFO audio and the existing Mode7
+highway plus bounded head/tail sprites. BG0 provides receptors/HUD, BG1depth mask
+and results, BG2the affine floor. Offline Python imports chart/MIDI/ZIP, adapts
+Easy and prepares PCM; the host C++ chart converter preserves the original ABI.
+New mode3 is an isolated, silent13-case input diagnostic with its own26heads and
+fiveholds, same existing judgments/scoring/hold controller, and explicit hardware
+versus target versus outcome labels. It does not alter the real song or audio.
+
+Established features remain: original699-note demo; imported395-head/78-sustain
+real reference; taps/chords, Perfect/Good/Miss/WrongInput, sample-synchronized
+reactive guitar, unchanged combo/scoring/250msbonuses, readable HUD/results,
+replay/menu reset. No new difficulty/song library/codec/polish animations.
+
+Current QA:98Python tests,8sanitizer executables;10real full-song gameplay runs,
+17synthetic scenarios,5input scenarios,3original699-note runs, compatibility and
+visual negatives. All gameplay/navigation scenarios pass. **One required reactive
+waveform window fails (0.909975versus>0.94 at232.665039s)**; cause remains open,
+so stable promotion is blocked. Owner/Windows/physical-hardware acceptance remains
+pending. Scanline seams reproduced and narrowed to audio/HBlank contention;
+not repaired by a broad rendering rewrite. See issue IDs and owner actions in
+[KNOWN_ISSUES](KNOWN_ISSUES.md).
+
+Public synthetic review ROM/source/instructions are linked from README and
+versioned separately. Real M010 ROM built locally; private uploader unavailable;
+verified clean local two-command workflow in [RELEASE_PROCESS](RELEASE_PROCESS.md).
+Historical M006–009 public Cream binaries and original-demo assets need a separate
+permissions review. No new M010 Cream data is publicly uploaded.
+
+Next sequence: owner diagnostic/song playtest → resolve audio-analysis failure
+and bounded scanline scheduling work → approved feedback polish → manual/hardware
+acceptance and explicit source integration approval → consider future features.
+No main merge, default-branch change, new stable reference, deletion or history
+rewrite was performed. Full evidence: [MISSION_010_STABILIZATION](MISSION_010_STABILIZATION.md)
+and [QA_TEST_PLAN](QA_TEST_PLAN.md).
+
+## Historical Mission009 status (superseded)
+
 
 
 Current branch: **mission-009-sustain-gameplay**, based on the verified owner-tested

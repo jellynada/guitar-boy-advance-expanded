@@ -1,99 +1,95 @@
-# Guitar Boy Advance Expanded — Mission 009
+# Guitar Boy Advance Expanded — Mission 010 review candidate
 
-A Game Boy Advance rhythm prototype based on
+A Game Boy Advance rhythm game based on
 [startfliing's original project](https://github.com/startfliing/guitar-boy-advance).
-Imported Easy Test now has playable sustains and hold bonuses, built on the
-owner-tested Mission 008 HUD/results hotfix. No automatic merge into main.
+Mission010 adds an isolated input/chord diagnostic and stronger build/graphics
+checks. **Owner acceptance is pending; one strict audio-analysis check is still
+failing. This is not a stable release.** Main has not been merged.
 
-## Download and play
+## Download and play on Windows 11
 
-[**Download the public Mission 009 review ZIP**](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/refs/heads/mission-009-download/downloads/mission009-review.zip).
+[**Download the public Mission 010 review ZIP**](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/refs/heads/mission-010-download/downloads/mission010-review.zip).
 
-1. Download and **Extract All** on Windows.
-2. In [mGBA](https://mgba.io/downloads.html), choose **File > Load ROM**.
-3. Open **Guitar-Boy-Advance-Mission-009-Synthetic.gba**.
-4. Confirm **M009 HOLDS** and choose **Imported Easy Test** using Up/Down and A/Start.
+1. Download, right-click the ZIP and select **Extract All**.
+2. Install [mGBA for Windows](https://mgba.io/downloads.html).
+3. In mGBA choose **File → Load ROM** and open
+   **Guitar-Boy-Advance-Mission-010-Synthetic.gba**.
+4. Check that the selector says **M010 QA**. Up/Down selects; A/Start begins.
 
-This public ROM contains original synthetic music and 25 note heads, including
-six genuine holds. It includes regular taps, simultaneous A+B holds, and new
-notes during holds. **It is not the Cream song.**
+**INPUT / CHORD TEST** checks simultaneous buttons, missing/extra inputs, rapid
+presses and overlapping holds. It is silent, original diagnostic data, separate
+from the real song. Watch the countdown and follow the on-screen instructions.
+GBA HELD shows received inputs; EXPECTED shows the target; HEAD HIT/NOT HIT and
+PASS/PARTIAL/MISS/WRONG/HOLD FAIL show what registered. LAST PRESS keeps brief new
+presses readable. [Full instructions and keyboard tips](docs/QA_TEST_PLAN.md).
 
-These are GBA button names; check mGBA's keyboard settings for your PC mappings:
+**Imported Easy Test** is the short synthetic song (25heads, six holds), not the
+Cream recording. **Original Demo** keeps the original music/art and699notes.
 
-- Imported Easy, left to right: **Left / A / B**.
-- Original Demo: **Left / Right / A / B**, original music and 699 notes.
-- Results: **A or Start** replays; **B or Select** returns to mode selection.
-- **Start+Select** returns to selection during play.
+- Easy lane order: **GBA Left / A / B**.
+- Original lane order: **GBA Left / Right / A / B**.
+- **Start+Select** returns to selection during play or diagnostics.
+- Song results: **A/Start** replays; **B/Select** returns to selection.
+- Diagnostic final summary: **A/Start** retries; **B/Select** exits.
 
-Hit a long note's head, then keep its button held. SCORE, COMBO and MULT remain
-visible. Each complete 250ms held earns one bonus point times the multiplier
-captured at the head. Releasing early keeps previous points, combo and guitar
-sound. Missed heads and wrong new presses retain their normal combo reset and
-guitar muting. Holding one button does not prevent pressing another.
+These are GBA button names. Check mGBA Settings → Controllers for keyboard
+mappings. Some keyboards drop simultaneous keys; try GBA Left/A/B on J/K/L or
+use a controller before concluding that the game missed a physical press.
 
-## Playing your Cream song
+Scoring is unchanged: Perfect10/Good5times multiplier;2x/3x/4x at10/20/30hits;
+Miss/WrongInput reset combo and mute guitar; Perfect/Good restore guitar; backing
+continues. Sustains earn1base point per completed250ms at the head's captured
+multiplier. Early release stops future bonus, keeping prior points/combo/guitar.
 
-The full supplied Cream/WaveGroup recording and matching 395-head Easy chart
-were built and tested locally with **78 genuine sustains**. This mission restricts
-public upload of the new Cream ROM without redistribution confirmation. No private
-artifact transfer is available here; the supported delivery is a verified local
-build using your existing song ZIP.
+## Your Cream song
 
-Follow the [Windows 11 setup and two-command build guide](docs/SUSTAIN_GAMEPLAY.md#windows-11-build-your-cream-rom-locally).
-After one-time Ubuntu/WSL, Docker Desktop and FFmpeg setup, copy your song archive
-into the source folder as `Cream.zip`, then run these in Ubuntu from that folder:
+The existing owner ZIP was used to build the full recording with395Easy heads
+and78sustains. Ten full-song gameplay scenarios pass; the mixed reactive waveform
+analysis has one unresolved window at232.665s. Do not treat this as stable signoff.
+There is no verified private chat-file uploader here. Mission010 does not publish
+new third-party recordings/chart data; historical public Cream builds need a
+separate permissions review.
 
-```bash
-python3 tools/prepare_song.py Cream.zip --reactive --guitar-stem guitar --backing-stem rhythm --backing-stem song --output-dir imports/output/mission009
-bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/mission009/imported_chart.hpp" "AUDIO_DIR=imports/output/mission009/audio"
-```
-
-Only continue when each command succeeds. Open the resulting
-**guitar-boy-advance-expanded.gba** in the source folder. Select Imported Easy
-Test and check that the lower menu line says **LOCAL / AUDIO**. The public
-fixture says **SYNTH / AUDIO**. Load the new ROM directly, without restoring an
-old save state. No programming or source edits are needed.
-
-## Developer build and checks
-
-The project uses C++, devkitARM, Tonc, Maxmod, Grit and the original chart converter.
-The Docker script pins the official devkitARM image by digest. For a public
-synthetic build, run `bash scripts/build-docker.sh` from the source folder.
-Native builds need devkitPRO with those tools/libraries, GNU Make 4.3+, Python 3,
-and a desktop C++ compiler. Set DEVKITPRO/DEVKITARM and add their bin directories
-to PATH, then run `make -j2`. FFmpeg is needed for private song preparation.
-
-Make compiles the supplied chart reader for the host platform; the old Windows
-converter executables remain but are not used. `note.h` and chart/graphics/audio
-headers, assembly, soundbank, ELF and ROM are generated under `build/`/the root.
-The local `Cream.zip`, imported song outputs and generated ROMs are Git-ignored.
-
-`bash tests/check.sh` runs 98 Python tests and C++ memory/undefined-behavior
-sanitizer checks. With mGBA development headers/library and DEVKITARM available:
+[Windows11 one-time setup and local build guide](docs/RELEASE_PROCESS.md#windows-11--build-the-owners-cream-zip-locally).
+After WSL/Ubuntu, Docker Desktop and FFmpeg setup, put the owner's ZIP in the
+source folder as `Cream.zip`. Run these two commands in Ubuntu from that folder:
 
 ```bash
-bash tests/run_audio_emulator.sh sustain-perfect 1800 /tmp/sustain-perfect
-bash tests/run_audio_emulator.sh sustain-release 1800 /tmp/sustain-release
-bash tests/run_emulator.sh perfect
+python3 tools/prepare_song.py Cream.zip --reactive --guitar-stem guitar --backing-stem rhythm --backing-stem song --output-dir imports/output/mission010
+bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/mission010/imported_chart.hpp" "AUDIO_DIR=imports/output/mission010/audio"
 ```
 
-The audio runner checks actual composed HUD/results pixels, tail pixels, scoring,
-replay and menu navigation. Real-song runs need 16,400 frames and the matching
-private build; the short 1,800-frame run is for the public synthetic fixture.
-NumPy is an optional developer dependency for waveform analysis, not building.
+Continue only if both succeed. Open **guitar-boy-advance-expanded.gba** in that
+source folder. Check **M010 QA / LOCAL / AUDIO**, select Imported Easy Test, and
+start fresh without an old save state. The public build says SYNTH / AUDIO.
+The commands were exercised in a clean Linux export and reproduced the private
+ROM byte for byte here; Windows installation and human play were not tested.
 
-Read [sustain design and edge policies](docs/SUSTAIN_GAMEPLAY.md),
-[Mission 009 validation](docs/MISSION_009_RESULTS.md),
-[project status](docs/PROJECT_STATUS.md), and
-[chart import instructions](docs/CHART_IMPORT_GUIDE.md).
-[Review Mission 009 source changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-008-hotfix-hud-completion...mission-009-sustain-gameplay).
+## Developer build and evidence
+
+C++, devkitARM, Tonc, Maxmod and Grit; pinned Docker image in
+`scripts/build-docker.sh`. Public default: `bash scripts/build-docker.sh`.
+Native: set DEVKITPRO/DEVKITARM, add their bin directories to PATH, then `make -j2`.
+GNU Make4.3+, Python3 and a host C++ compiler are needed; FFmpeg for song conversion.
+The host converter is compiled from source; retained Windows converter EXEs are
+not used. Make generates note.h, chart/graphics/audio headers, assembly, soundbank,
+ELF and ROM. Cream.zip, imports/output and build products stay ignored.
+
+`bash tests/check.sh`:98Python tests and8C++ sanitizer programs. With libmgba-dev
+and DEVKITARM, `bash tests/run_input_emulator.sh perfect /tmp/input` checks actual
+composed diagnostics; existing audio/original runners remain available. Builds
+and supported runners reject mismatched ROM/ELF and chart counts.
+See [QA matrix](docs/QA_TEST_PLAN.md), [stabilization evidence](docs/MISSION_010_STABILIZATION.md),
+[known issues](docs/KNOWN_ISSUES.md), [release/consolidation plan](docs/RELEASE_PROCESS.md),
+[project architecture/status](docs/PROJECT_STATUS.md),
+[sustain rules](docs/SUSTAIN_GAMEPLAY.md) and [importer guide](docs/CHART_IMPORT_GUIDE.md).
+[Review source changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-009-sustain-gameplay...mission-010-stabilization).
 
 ## Credits and asset rights
 
-Original game: startfliing. The Mode 7 files retain J Vijn's attribution and the
-existing Tonc-based code. The included original-demo track is `careless_whisper.mod`;
-its embedded credits mention Basil Fawlty / Scope-1990. This checkout does not
-supply a project license or complete artwork/music permissions. Existing credits
-and assets are retained; no new third-party license grants are inferred.
-The new Cream ROM, source song archive, audio and chart are not included in the
-public Mission 009 review bundle.
+Original game: startfliing. Mode7 files retain J Vijn's Tonc-based attribution.
+Original-demo careless_whisper.mod credits Basil Fawlty / Scope-1990. No project
+LICENSE or complete art/music permissions were found. Preserve assets/credits;
+no third-party redistribution rights are inferred. Public review additions use
+synthetic chart/audio and retain the unchanged original demo. No new Cream ROM,
+source ZIP, audio or chart is included in the Mission010 public review package.
