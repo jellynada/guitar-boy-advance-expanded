@@ -1,4 +1,5 @@
 #include "sprite.hpp"
+#include "gameSession.hpp"
 
 #include "notes.h"
 
@@ -33,9 +34,17 @@ void update_sprites()
 	M7_SPRITE *spr= m7_level.sprites;
 
 	const int recent = recent_sprite; // Main-thread visual lookahead cursor.
-	const int count = nm->getNoteCount();
+	const int count = activeNoteCount();
 	//check the next 30 sprites,
-	if(first_sprite != recent+SPR_COUNT-2){
+	if (gameMode == 2) {
+        for (ii=0; ii<SPR_COUNT; ++ii) {
+            loaded_notes[ii] = UINT32_MAX;
+            obj_hide(&spr[ii].obj);
+        }
+        // Adaptation rejects charts exceeding this complete visible-window budget.
+        for (u32 index=importedFirstVisible; index<importedEndVisible && index-importedFirstVisible<SPR_COUNT; ++index)
+            init_sprite(index-importedFirstVisible, importedSprite(index), index);
+    } else if(first_sprite != recent+SPR_COUNT-2){
 		noteSprite* positions = nm->getNoteSprites();
 		for(ii=first_sprite; ii<recent+SPR_COUNT-2 && ii<count; ii++){
 			init_sprite(ii%SPR_COUNT, positions[ii], ii);
@@ -48,7 +57,7 @@ void update_sprites()
         // Keep the chart identity of each recycled slot. A judged note may be
         // behind the lookahead cursor and therefore not reloaded this frame.
         if (loaded_notes[ii] < (u32)count) {
-            const u32 tile = nm->wasHit(loaded_notes[ii]) ? 65 : 1;
+            const u32 tile = activeWasHit(loaded_notes[ii]) ? 65 : 1;
             spr[ii].obj.attr2 = (spr[ii].obj.attr2 & ~ATTR2_ID_MASK) | ATTR2_ID(tile);
             m7_prep_sprite(&m7_level, &spr[ii]);
         } else {
@@ -76,7 +85,7 @@ void init_sprites()
 	// Notes
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
-		if(ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii], ii);
+		if(gameMode != 2 && ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii], ii);
         else {
             loaded_notes[ii] = UINT32_MAX;
             obj_hide(&m7_level.sprites[ii].obj);

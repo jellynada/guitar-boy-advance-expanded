@@ -1,3 +1,9 @@
+> Mission 005 adds an explicit **silent Easy gameplay adapter** after import.
+> The original demo clock and judgment formulas remain unchanged. Inspection
+> reports alone still do not make arbitrary packages playable. See
+> [GBA_CHART_ADAPTATION.md](GBA_CHART_ADAPTATION.md) for the opt-in runtime,
+> three-lane controls, preparation rules and current limits.
+
 > Mission 004: this page describes the preserved chart-only command. For MIDI,
 > ZIPs, folders, INI metadata and audio discovery use [SONG_PACKAGE_IMPORT.md](SONG_PACKAGE_IMPORT.md).
 > Limitations below refer to the old command, not the new package inspector.

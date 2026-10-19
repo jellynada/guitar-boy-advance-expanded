@@ -7,6 +7,9 @@
 #include "noteManager.hpp"
 #include "sprite.hpp"
 #include "gameControls.hpp"
+#include "gameSession.hpp"
+#include "importedRuntime.hpp"
+#include "imported_chart.hpp"
 #include "textDisplay.hpp"
 #include "notes.h"
 
@@ -21,10 +24,25 @@
 
 #define CONTROLS_ENABLED false
 
-NoteManager<careless_expertsingle_count>* nm = new NoteManager<careless_expertsingle_count>(
-	careless_expertsingle_data,
-	careless_BPM
-);
+static NoteManager<careless_expertsingle_count> originalNotes(careless_expertsingle_data, careless_BPM);
+NoteManager<careless_expertsingle_count>* nm = &originalNotes;
+static ImportedRuntime<imported_note_count> importedNotes(imported_notes);
+volatile u32 gameMode = 0;
+u32 importedFirstVisible = 0, importedEndVisible = 0;
+u64 importedNowCycles = 0;
+u64 importedMaxErrorCycles = 0;
+u32 importedEventCount = 0;
+u32 activeNoteCount() { return gameMode == 2 ? imported_note_count : careless_expertsingle_count; }
+bool activeWasHit(u32 index) { return gameMode == 2 ? importedNotes.wasHit(index) : nm->wasHit(index); }
+noteSprite importedSprite(u32 index) {
+    noteSprite sprite{};
+    if (index >= imported_note_count) return sprite;
+    const Note& note = imported_notes[index];
+    sprite.pal = note.lane + 1;
+    sprite.pos.x = ImportedTiming::laneX(note.lane);
+    sprite.pos.z = m7_level.camera->pos.z + ImportedTiming::relativeZ(int64_t(note.tick) - int64_t(importedNowCycles));
+    return sprite;
+}
 
 FIXED VEL_H = CONTROLS_ENABLED ? 0x200 : careless_BPM;
 
@@ -60,7 +78,7 @@ void input_game()
 //blue button 	(21, 16)
 void drawButton(int b, bool active){
 	int palette = b+1;
-	int start_x = (b*6)+3;
+	int start_x = gameMode == 2 ? (b*9)+3 : (b*6)+3;
 	int start_ind = 32*13 + start_x;
 	//y
 	for(int i = 0; i < 3; i++){
@@ -74,16 +92,39 @@ void drawButton(int b, bool active){
 	}
 }
 
+void configureFloor() {
+    LZ77UnCompVram(imageTiles, tile_mem[2]);
+    memcpy16(&se_mem[24], imageMap, imageMapLen/2);
+    if (gameMode != 2) return;
+    const u8* map = reinterpret_cast<const u8*>(imageMap);
+    const u8* tiles = reinterpret_cast<const u8*>(tile_mem[2]);
+    const u8 edge = tiles[map[64 + 28] * 64];
+    const u8 fill = tiles[map[64 + 28] * 64 + 1];
+    // Existing 64-pixel-wide highway, now divided into three logical stripes.
+    for (int column=0; column<8; ++column) {
+        u16* tile = reinterpret_cast<u16*>(tile_mem[2]) + (6+column)*32;
+        for (int y=0; y<8; ++y) for (int pair=0; pair<4; ++pair) {
+            int x=column*8+pair*2;
+            auto color = [edge, fill](int p) { return p == 0 || p == 21 || p == 42 || p == 63 ? edge : fill; };
+            tile[y*4+pair] = color(x) | (u16(color(x+1)) << 8);
+        }
+    }
+    u16* floor = reinterpret_cast<u16*>(&se_mem[24]);
+    // Affine maps use byte tile IDs; VRAM writes must be halfword-sized.
+    for (int row=0; row<64; ++row) if (row % 32) for (int pair=0; pair<4; ++pair)
+        floor[row*32+14+pair] = (6+pair*2) | ((7+pair*2) << 8);
+}
+
 void drawButtons(){
 	//iterate through buttons
-	for(int b = 0; b < 4; b++){
+	for(int b = 0; b < (gameMode == 2 ? 3 : 4); b++){
 		drawButton(b, false);
 	}
 }
 
 void updateButtons(u16 hit, u16 released){
-	const u16* buttons = LANE_BUTTONS;
-	for(int i = 0; i < 4; i ++){
+	const u16* buttons = gameMode == 2 ? EASY_BUTTONS : LANE_BUTTONS;
+	for(int i = 0; i < (gameMode == 2 ? 3 : 4); i ++){
 		if( buttons[i] & hit ){
 			drawButton(i, true);
 		}
@@ -109,6 +150,13 @@ bool wrongVisible = false;
 u32 wrongUntilFrame = 0;
 
 void onGameplayEvent(void*, const GameplayEvent& event) {
+    if (gameMode == 2) {
+        ++importedEventCount;
+        if (event.kind == GameplayEventKind::PerfectHit || event.kind == GameplayEventKind::GoodHit) {
+            const u64 error = event.gameplayTick >= event.chartTick ? event.gameplayTick - event.chartTick : event.chartTick - event.gameplayTick;
+            if (error > importedMaxErrorCycles) importedMaxErrorCycles = error;
+        }
+    }
     switch (event.kind) {
         case GameplayEventKind::PerfectHit: lastJudgment = "PERFECT"; break;
         case GameplayEventKind::GoodHit: lastJudgment = "GOOD"; break;
@@ -127,7 +175,7 @@ void refreshFeedback() {
         feedbackDirty = true;
     }
     if (!feedbackDirty) return;
-    displayedStats = nm->judgment().stats();
+    displayedStats = gameMode == 2 ? importedNotes.stats() : nm->judgment().stats();
     judgmentText.updateText(lastJudgment);
     hitText.updateLabel("H:", displayedStats.hits());
     missText.updateLabel("M:", displayedStats.missed);
@@ -137,11 +185,12 @@ void refreshFeedback() {
 
 void update(){
     mmVBlank();
-    ++gameplayFrames;
+    if (gameMode) ++gameplayFrames;
 }
 
 int main(){
 
+    const M7_CAM initialCamera = m7_cam_default;
     // Init mode 7
 	m7_init(&m7_level, &m7_cam_default, m7_bgaffs, m7_sprites,
 		BG_CBB(2) | BG_SBB(24) | BG_AFF_64x64 | BG_WRAP | BG_PRIO(2));
@@ -198,18 +247,91 @@ int main(){
     
     //Setup is done. Lets put it into action!
     //Terminal::log("Hello World! %%", careless_expertsingle_data[0].tick);
-    mmStart( MOD_CARELESS_WHISPER, MM_PLAY_LOOP );
+    // Audio starts only after choosing Original Demo. Imported mode is silent.
+    textDisplay menuTitle(28, 28, 32);
+    textDisplay menuOriginal(16, 58, 48);
+    textDisplay menuImported(16, 82, 64, true, 24);
+    textDisplay menuHelp(16, 112, 96, true, 24);
+    textDisplay menuInfo(16, 136, 112);
+    textDisplay modeLabel(4, 40, 96);
+    int selection = 1;
+    bool menuDirty = true;
 
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
+        if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
+            mmStop();
+            gameMode = 0;
+            menuDirty = true;
+            oam_init(oam_mem, 128);
+        }
+        if (!gameMode) {
+            if (key_hit(KEY_UP | KEY_DOWN)) { selection = 3 - selection; menuDirty = true; }
+            if (menuDirty) {
+                REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
+                menuTitle.updateText("MODE TEST");
+                menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
+                menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
+                menuHelp.updateText("Up/Down A:Start");
+                menuInfo.updateText(imported_is_synthetic ? "SYNTH / SILENT" : "LOCAL / SILENT");
+                pal_bg_mem[0] = 0;
+                menuDirty = false;
+            }
+            if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
+            // Fresh mode epoch: counters, camera, visuals and held-key history.
+            const u16 interrupts = REG_IME;
+            REG_IME = 0;
+            gameplayFrames = 0;
+            gameMode = selection;
+            REG_IME = interrupts;
+            currentGameFrame = 0;
+            curr_z = 0;
+            m7_cam_default = initialCamera;
+            m7_rotate(&m7_cam_default, initialCamera.phi, initialCamera.theta);
+            importedNowCycles = importedMaxErrorCycles = 0;
+            importedEventCount = 0;
+            importedFirstVisible = importedEndVisible = 0;
+            nm->reset(laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
+            importedNotes.reset(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));
+            importedNotes.judgment().setEventSink(onGameplayEvent);
+            lastJudgment = "READY";
+            displayedStats = {};
+            wrongVisible = false;
+            wrongUntilFrame = 0;
+            feedbackDirty = true;
+            recent_sprite = 0;
+            first_sprite = SPR_COUNT;
+            oam_init(oam_mem, 128);
+            init_sprites();
+            memset16(&se_mem[30][32*13], 0, 32*3);
+            pal_bg_mem[0] = palettePal[0];
+            configureFloor();
+            drawButtons();
+            REG_DISPCNT = DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
+            if (gameMode == 1) mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP);
+            else mmStop();
+            modeLabel.updateText(gameMode == 1 ? "" : imported_is_synthetic ? "SYNTH / SILENT" : "LOCAL / SILENT");
+        }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
-        recent_sprite = nm->update(currentGameFrame,
-            laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
-        updateButtons(key_hit(GAME_BUTTONS), key_released(GAME_BUTTONS));
+        const u16 mask = gameMode == 2 ? EASY_GAME_BUTTONS : GAME_BUTTONS;
+        if (gameMode == 2) {
+            importedNotes.update(currentGameFrame, easyLaneMaskFromButtons(key_is_down(mask)));
+            importedNowCycles = importedNotes.now();
+            importedFirstVisible = importedNotes.firstVisible();
+            importedEndVisible = importedNotes.endVisible();
+            recent_sprite = importedEndVisible;
+        } else {
+            recent_sprite = nm->update(currentGameFrame, laneMaskFromButtons(key_is_down(mask)));
+        }
+        updateButtons(key_hit(mask), key_released(mask));
         refreshFeedback();
 
-        input_game();
+        if (gameMode == 1) input_game();
+        else {
+            // Background wraps by one full texture; note coordinates stay local.
+            m7_level.camera->pos.z = -40000 - int((u64(currentGameFrame) * 83330 * 16 / 871) % (512 * 256));
+        }
 
         m7_prep_horizon(&m7_level);
 		m7_update_sky(&m7_level);

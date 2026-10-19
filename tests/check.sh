@@ -35,3 +35,8 @@ ASAN_OPTIONS=detect_leaks=1 "$tmp/full_chart"
 python3 -m unittest discover -s tests -p test_chart_importer.py -v
 
 python3 -m unittest discover -s tests -p test_song_package.py -v
+
+python3 -m unittest discover -s tests -p test_adapt_chart.py -v
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all \
+    -Itests/host -Iinclude -I"$tmp/generated" tests/imported_runtime.cpp -o "$tmp/imported_runtime"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/imported_runtime"

@@ -23,7 +23,7 @@ class textDisplay{
 
 
     public:
-        textDisplay(u16 x, u16 y, u16 index, bool left_aligned = true);
+        textDisplay(u16 x, u16 y, u16 index, bool left_aligned = true, u16 capacity = 16);
 
         ~textDisplay();
 

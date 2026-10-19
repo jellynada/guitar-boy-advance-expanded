@@ -1,3 +1,9 @@
+> Mission 005 adds an explicit **silent Easy gameplay adapter** after import.
+> The original demo clock and judgment formulas remain unchanged. Inspection
+> reports alone still do not make arbitrary packages playable. See
+> [GBA_CHART_ADAPTATION.md](GBA_CHART_ADAPTATION.md) for the opt-in runtime,
+> three-lane controls, preparation rules and current limits.
+
 # Import a Clone Hero song package — Mission 004
 
 This tool inspects and prepares song data on your computer. **It does not turn a

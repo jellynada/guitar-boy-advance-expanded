@@ -21,7 +21,7 @@ static void log_message(struct mLogger* logger, int category, enum mLogLevel lev
 static int crashed;
 static void on_crash(void* context) { (void)context; crashed = 1; }
 int main(int argc, char** argv) {
-    if (argc != 6 && argc != 11) return 2;
+    if (argc != 6 && argc != 11 && argc != 12) return 2;
     struct mLogger logger = {.log = log_message};
     mLogSetDefaultLogger(&logger);
     struct mCore* core = mCoreFind(argv[1]);
@@ -39,13 +39,23 @@ int main(int argc, char** argv) {
     unsigned cursor_address = strtoul(argv[2], NULL, 16);
     unsigned notes = strtoul(argv[3], NULL, 10);
     unsigned frames = strtoul(argv[4], NULL, 10);
-    const char* mode = argc == 11 ? argv[6] : "smoke";
-    unsigned clock_address = argc == 11 ? strtoul(argv[7], NULL, 16) : 0;
-    unsigned stats_address = argc == 11 ? strtoul(argv[8], NULL, 16) : 0;
-    unsigned chart_address = argc == 11 ? strtoul(argv[9], NULL, 16) : 0;
-    unsigned bpm = argc == 11 ? strtoul(argv[10], NULL, 10) : 0;
+    const char* mode = argc >= 11 ? argv[6] : "smoke";
+    unsigned clock_address = argc >= 11 ? strtoul(argv[7], NULL, 16) : 0;
+    unsigned stats_address = argc >= 11 ? strtoul(argv[8], NULL, 16) : 0;
+    unsigned chart_address = argc >= 11 ? strtoul(argv[9], NULL, 16) : 0;
+    unsigned bpm = argc >= 11 ? strtoul(argv[10], NULL, 10) : 0;
     assert(!strcmp(mode, "smoke") || !strcmp(mode, "miss") || !strcmp(mode, "perfect") || !strcmp(mode, "mixed"));
     const unsigned buttons[] = {32, 16, 1, 2}; // Left, Right, A, B.
+    if (argc == 12) {
+        unsigned mode_address = strtoul(argv[11], NULL, 16);
+        for (unsigned i=0; i<90; ++i) core->runFrame(core);
+        assert(core->busRead32(core, mode_address) == 0);
+        core->setKeys(core, 8); // Start: Original Demo, default selection.
+        for (unsigned i=0; i<2; ++i) core->runFrame(core);
+        core->setKeys(core, 0);
+        core->runFrame(core);
+        assert(core->busRead32(core, mode_address) == 1);
+    }
     unsigned next_note = 0;
     unsigned long nonzero_samples = 0, changed_frames = 0, hit_tile_frames = 0;
     unsigned previous_hash = 0;
@@ -74,7 +84,7 @@ int main(int argc, char** argv) {
         assert(!crashed);
         unsigned cursor = core->busRead32(core, cursor_address);
         assert(cursor <= notes);
-        if (argc == 11) {
+        if (argc >= 11) {
             unsigned perfect = core->busRead32(core, stats_address);
             unsigned good = core->busRead32(core, stats_address + 4);
             unsigned missed = core->busRead32(core, stats_address + 8);
@@ -113,7 +123,7 @@ int main(int argc, char** argv) {
     assert(changed_frames > 100 && nonzero_samples > 1000);
     printf("PASS: %u frames, final cursor %u, %lu changing frames, %lu nonzero audio samples, no core crash\n",
            frames, notes, changed_frames, nonzero_samples);
-    if (argc == 11) {
+    if (argc >= 11) {
         unsigned perfect = core->busRead32(core, stats_address);
         unsigned good = core->busRead32(core, stats_address + 4);
         unsigned missed = core->busRead32(core, stats_address + 8);

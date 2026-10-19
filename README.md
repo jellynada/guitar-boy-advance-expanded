@@ -1,39 +1,44 @@
-# Guitar Boy Advance Expanded — Mission 004
+# Guitar Boy Advance Expanded — Mission 005
 
-A four-lane Game Boy Advance rhythm-game prototype based on
-[startfliing's Guitar Boy Advance](https://github.com/startfliing/guitar-boy-advance).
-Mission 004 adds MIDI and safe Clone Hero song-package inspection. It reads ZIPs,
-folders, `.chart`, `.mid` and `.midi`, discovers metadata/audio and prepares exact
-song data. The existing demo, graphics, music and **Left / Right / A / B** controls
-remain unchanged. Imported songs are **not yet playable**.
+A Game Boy Advance rhythm prototype based on [startfliing's original project](https://github.com/startfliing/guitar-boy-advance).
+Mission 005 adds a playable **silent three-lane imported Easy test**, alongside the
+preserved original four-lane demo. The public build uses25 original synthetic notes.
+Your real Cream/WaveGroup Easy chart was tested privately with all395 notes.
+New imported audio is not played or converted yet.
 
-## Inspect a song — no programming needed
+## Start here — no programming needed
 
-Install Python 3.10+ from https://www.python.org/downloads/. No extra packages.
-Open a terminal in the extracted review bundle folder and try:
+Download/unzip the [Mission 005 review bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-005-download/downloads/mission005-review.zip).
+It includes a ready-made ROM, complete source/tools and a plain-English guide.
+Open `guitar-boy-advance-mission-005.gba` in mGBA. Use GBA Up/Down, then A or Start,
+to choose Original Demo or Imported Easy Test. Start+Select returns to the selector.
 
-```text
-python3 tools/import_song.py tests/fixtures/midi
-```
+**Original Demo:** Left / Right / A / B, existing music and699 notes.
+**Imported Easy Test:** Left / A / B, silence, no held-note scoring.
+Map GBA buttons to convenient computer keys in mGBA settings.
 
-Open `imports/output/packages/midi/report.txt`. This original synthetic example
-has no audio, so a missing-audio warning is expected. For your own authorized ZIP:
+For your private Cream ZIP and **Windows 11** build steps, read
+[the adaptation guide](docs/GBA_CHART_ADAPTATION.md). No Python/C++ editing or Git
+commands are needed when using the full source bundle. A matching recording and
+audio engine are future work; MIDI playback is not music playback.
+
+Existing `.chart`, MIDI, ZIP and folder inspection remains supported:
 
 ```text
 python3 tools/import_song.py "path/to/song.zip"
 ```
 
-Or put a ZIP in `imports/incoming` and run `python3 tools/import_song.py`.
-Windows can use `py -3` instead of `python3`. There is no need to edit source files.
-The [song-package guide](docs/SONG_PACKAGE_IMPORT.md) explains terminal setup,
-folders, file choices, warnings and privately testing the Cream package.
-That package was not available here; no target-song compatibility is claimed.
+The one-command Easy preparation stage is:
 
-The old `python3 tools/import_chart.py tests/fixtures/charts/tempo_changes.chart`
-command remains supported. Its output is under `imports/output/tempo_changes`.
-Read the [chart-only guide](docs/CHART_IMPORT_GUIDE.md),
-[song-data format](docs/SONG_DATA_ARCHITECTURE.md) and
-[Mission 004 results](docs/MISSION_004_RESULTS.md).
+```text
+python3 tools/prepare_easy.py "path/to/song.zip"
+```
+
+This generates reports and an opt-in build header under `imports/output/easy-runtime`.
+It does not change the default synthetic build until you select IMPORTED_HEADER.
+Python3.10+, standard library only. Windows Python can use `py -3`.
+Read [Mission 005 results](docs/MISSION_005_RESULTS.md),
+[package inspection](docs/SONG_PACKAGE_IMPORT.md), and [judgment rules](docs/NOTE_JUDGMENT.md).
 
 ## Play the ROM (no programming needed)
 
@@ -41,10 +46,10 @@ Read the [chart-only guide](docs/CHART_IMPORT_GUIDE.md),
    Windows: extract the downloaded ZIP and open mGBA. macOS: open the disk image
    and drag mGBA into Applications. Linux: install mGBA using your distribution's
    software manager (Ubuntu/Debian package: `mgba-qt`).
-2. Download the [Mission 004 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-004-download/downloads/mission004-review.zip)
-   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-004-download/downloads/mission004-review.zip)
+2. Download the [Mission 005 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-005-download/downloads/mission005-review.zip)
+   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-005-download/downloads/mission005-review.zip)
    and click the **Download raw file** arrow. The game inside is named
-   `guitar-boy-advance-mission-004.gba`, but its game bytes match Mission 002 exactly.
+   `guitar-boy-advance-mission-005.gba`, and includes the selector and synthetic three-lane test.
 3. In mGBA, choose **File → Load ROM** and select that `.gba` file. A separately
    downloaded Nintendo BIOS is not required for this workflow.
 4. Open mGBA's keyboard/controller settings and assign convenient keys to the
@@ -53,10 +58,10 @@ Read the [chart-only guide](docs/CHART_IMPORT_GUIDE.md),
 
 | Lane, from left to right | GBA button |
 | --- | --- |
-| Green | D-pad Left |
-| Red | D-pad Right |
-| Yellow | A |
-| Blue | B |
+| Green (Original / Easy) | D-pad Left |
+| Red (Original) | D-pad Right |
+| Yellow (Original) / Red (Easy) | A |
+| Blue (Original) / Yellow (Easy) | B |
 
 A suggested computer-keyboard mapping is **D, F, J, K**: assign GBA Left to D,
 Right to F, A to J, and B to K in mGBA's controls settings. These are suggestions,
@@ -74,28 +79,28 @@ To check the new behavior yourself:
 1. Let several notes pass without pressing anything: M should increase.
 2. Press the correct lane near its circle: H should increase once and show
    PERFECT or GOOD. Hold that button: H should not keep increasing.
-3. Press an unrelated button: WRONG should flash. The valid upcoming note should
+3. Press an incorrect active lane button: WRONG should flash. The valid upcoming note should
    still be playable. A correct button plus an extra wrong button can show both
    a hit and WRONG; the valid hit is kept.
-4. Play through the song, or let it finish: H + M should end at **699**.
+4. Play through the song, or let it finish: H + M should end at **699** in Original Demo, **25** in the public Easy fixture, or **395** in the privately prepared Cream Easy test.
 
 Chords are handled note by note; a partial chord can earn hits for pressed members
 while the others miss. The existing demo contains no chords. A physical D-pad
 normally cannot press Left and Right together, so future charts must consider
 that limitation.
 
-The song starts automatically. There is no menu, pause or results screen.
-Reset/reload the ROM to replay. Music loops but the chart does not reset.
+Choose a mode at the initial selector. Start+Select returns there to replay.
+There is no pause or results screen. Original music loops but its chart does not reset.
 Automated mGBA runs verify the game and counters; please also judge the sound,
 alignment and button response yourself. We have not manually played or listened
 to this build. Your working Mission 001 and Mission 002 downloads remain unchanged.
 
 ## Build it using Docker (recommended for a repeatable build)
 
-These build commands require the complete source repository on
-`mission-004-universal-import`. The review bundle includes the playable ROM and
-standalone import tools/examples, not every original game build asset. Import
-inspection commands above work directly from the extracted bundle.
+These build commands require the complete Mission 005 source, included in
+the review bundle or available on `mission-005-first-playable-import`. The review bundle includes the playable ROM and
+complete source, original build assets and tools. Import and build commands
+work from its extracted project folder.
 
 A build turns the source code and assets into the `.gba` cartridge file.
 Install Docker Desktop from https://www.docker.com/products/docker-desktop/
@@ -111,7 +116,7 @@ bash scripts/build-docker.sh
 ```
 
 The second command creates `guitar-boy-advance-expanded.gba` in the project
-folder (the download bundle gives its copy the clearer Mission 004 filename). Internet access is needed to download the image initially. The script
+folder (the download bundle gives its copy the clearer Mission 005 filename). Internet access is needed to download the image initially. The script
 pins the official devkitPro image by its content digest, rather than using a
 moving `latest` tag. It includes devkitARM GCC 16.1.0, libtonc, libgba/Maxmod,
 `grit`, `mmutil`, `gbafix`, GNU Make 4.3 and desktop GCC 12.2.0. The game uses
@@ -134,7 +139,7 @@ make -j2
 For another native Linux installation, install the official devkitPro `gba-dev`
 toolchain (https://devkitpro.org/wiki/Getting_Started), desktop `g++` with C++17,
 and GNU Make **4.3 or newer**, then set `DEVKITPRO`/`DEVKITARM` to its locations.
-The Docker recipe is the tested version reference; other versions are unverified.
+Native builds also need Python 3.10+. The Docker recipe is the tested version reference; other versions are unverified.
 `HOSTCXX=clang++` or another host compiler can be passed to Make if necessary.
 
 Make automatically compiles `bin/chart_reader.cpp` for your computer and caches
@@ -166,10 +171,10 @@ run `bash tests/run_emulator.sh perfect`, then the same command with `miss` or
 for developers; you can simply load the downloaded ROM in mGBA.
 
 See [project status](docs/PROJECT_STATUS.md), [import instructions](docs/CHART_IMPORT_GUIDE.md),
-[judgment rules](docs/NOTE_JUDGMENT.md), [Mission 004 results](docs/MISSION_004_RESULTS.md)
+[judgment rules](docs/NOTE_JUDGMENT.md), [Mission 005 results](docs/MISSION_005_RESULTS.md)
 and [historical Mission 002 results](docs/MISSION_002_RESULTS.md).
-Source branch: `mission-004-universal-import`; no automatic merge into main.
-[Review Mission 004 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-003-chart-importer...mission-004-universal-import).
+Source branch: `mission-005-first-playable-import`; no automatic merge into main.
+[Review Mission 005 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-004-universal-import...mission-005-first-playable-import).
 
 ## Credits and asset rights
 

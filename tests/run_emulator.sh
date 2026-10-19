@@ -17,4 +17,4 @@ symbol() {
 }
 "$tmp/emulator_smoke" "$PWD/guitar-boy-advance-expanded.gba" "$(symbol recent_sprite)" \
     699 "$frames" "$output" "$mode" "$(symbol gameplayFrames)" \
-    "$(symbol displayedStats)" "$(symbol careless_expertsingle_data)" 83330
+    "$(symbol displayedStats)" "$(symbol careless_expertsingle_data)" 83330 "$(symbol gameMode)"

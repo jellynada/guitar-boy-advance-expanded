@@ -1,6 +1,50 @@
+# Project status — Mission 005
+
+Started from Mission 004 `1487532557a1e98b1c99c6628e5d65c291268cd2`, containing
+Missions001–004. New branch `mission-005-first-playable-import`. Main remains
+original; no automatic merges. Historical status follows below.
+
+New:explicit Easy adaptation, separate original/adapted JSON and generated header,
+release/sustain classification, CPU-cycle runtime adapter reusing NoteJudgment,
+three-lane Left/A/B Mode7 test, and a two-choice selector with clean mode restarts.
+Imported mode is silent; original four-lane controls/content/formulas remain.
+Default public build uses a clearly labeled original25-note synthetic fixture.
+Host Python3 is now required for builds, including inside the pinned Docker image.
+
+Real owner-supplied Cream/WaveGroup package was inspected privately:Easy395 notes,
+lanes0/1/2, no chords,329 tempo points; Medium686/11 D-pad onset conflicts,
+Hard878/20. Easy adaptation preserves395 notes:317 short releases,78 genuine
+sustains at the documented160 tick threshold (PPQ480). INI cutoff0 retained,
+explicit test classification overrides it without changing any native lengths.
+Private395-note ROM passed all-hit/all-miss mGBA tests in silence. No actual chart,
+normalized notes, audio or private chart-containing ROM is committed/published.
+
+Architecture:tools/prepare_easy.py combines package import and adapt_chart.py;
+prepare_runtime.py chooses the build's explicit local header or default synthetic.
+ImportedRuntime uses CPU-cycle NoteJudgment units and two visibility cursors.
+gameSession exposes mode-aware sprite count/appearance; main owns selector,
+mode reset and audio start/stop. Three-lane floor derives from the original
+palette/texture; switching back restores original assets. No per-frame allocation.
+Original manager is now static rather than heap-allocated. NoteJudgment itself
+and original NoteManager timing/math are unchanged.
+
+Remaining:audio clock/decoding/format and alignment, true sustain/HOPO/tap rules,
+imported Medium/Hard and renderer policies, scoring, menus beyond the test selector,
+reactive mixing. No manual play/listening, hardware or human latency calibration
+claimed. Real chart is playable as silent onsets only, not completed music playback.
+See GBA_CHART_ADAPTATION.md for Windows 11 steps, timing limits and future audio
+contract; MISSION_005_RESULTS.md records actual validation/build/review outcomes.
+
+Recommended Mission 006:an authorized synthetic audio playback/sample-clock proof,
+with measured memory/CPU/latency and beginning/middle/end alignment; retain legacy
+demo and silence fallback. Establish actual cover-recording alignment and a
+supported GBA audio format before considering reactive stems or new features.
+
+---
+
 # Project status — Mission 004
 
-Mission004 starts from tested Mission003 `135a55c2a0de50a4c68610f1aeb288924508bb54`
+Mission 004 starts from tested Mission003 `135a55c2a0de50a4c68610f1aeb288924508bb54`
 on `mission-004-universal-import`. Git ancestry confirms Missions001→002→003.
 Live remote main remains original `6c4e63460fab10733d8ff011045ee246e7201952`;
 none are merged. Source review branches and separate download branches remain
@@ -42,7 +86,7 @@ approved difficulty selection. Reactive mixing follows validated audio playback.
 See [MISSION_004_RESULTS.md](MISSION_004_RESULTS.md) for actual checks/review state.
 
 The Mission003 status below is historical, including its then-unsupported list
-and its recommendation for Mission004. Current support is described above.
+and its recommendation for Mission 004. Current support is described above.
 
 ---
 

@@ -1,13 +1,13 @@
 #include "tonc.h"
 #include "textDisplay.hpp"
 
-textDisplay::textDisplay(u16 x, u16 y, u16 index, bool left_aligned){
+textDisplay::textDisplay(u16 x, u16 y, u16 index, bool left_aligned, u16 capacity){
     this->xLevel = x;
     this->yLevel = y;
     this->index = index;
     this->endSprite = 0;
     this->left_aligned = left_aligned;
-    this->limit = index + 16 < 128 ? index + 16 : 128;
+    this->limit = index + capacity < 128 ? index + capacity : 128;
 }
 
 textDisplay::~textDisplay(){

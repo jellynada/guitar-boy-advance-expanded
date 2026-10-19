@@ -43,6 +43,8 @@ CHARTS		:= charts
 CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
+PYTHON ?= python3
+IMPORTED_HEADER ?=
 HOSTCXX ?= g++
 # Keep native/container helper binaries separate: their C++ runtimes can differ.
 HOST_TOOL_ID := $(shell $(HOSTCXX) -dumpmachine)-$(shell $(HOSTCXX) -dumpversion)
@@ -129,7 +131,7 @@ export OFILES_GRAPHICS := $(PNGFILES:.png=.o)
 
 export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(OFILES_GRAPHICS)
 
-export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
+export HFILES := imported_chart.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -143,7 +145,12 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 $(CHART_READER): bin/chart_reader.cpp
 	$(HOSTCXX) -std=c++17 -O2 -Wall -Wextra $< -o $@
 
-$(BUILD): $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+# The default is original synthetic data. Private adapted headers are opt-in.
+.PHONY: runtime_input
+$(BUILD)/imported_chart.hpp: runtime_input tools/prepare_runtime.py tools/adapt_chart.py tools/chart_importer.py tests/fixtures/runtime/easy.chart $(IMPORTED_HEADER)
+	$(PYTHON) tools/prepare_runtime.py --output $@ $(if $(IMPORTED_HEADER),--header "$(IMPORTED_HEADER)")
+
+$(BUILD): $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
