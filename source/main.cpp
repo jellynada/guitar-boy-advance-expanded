@@ -10,6 +10,8 @@
 #include "gameSession.hpp"
 #include "importedRuntime.hpp"
 #include "imported_chart.hpp"
+#include "imported_audio.hpp"
+#include "pcmPlayback.hpp"
 #include "textDisplay.hpp"
 #include "notes.h"
 
@@ -32,6 +34,9 @@ u32 importedFirstVisible = 0, importedEndVisible = 0;
 u64 importedNowCycles = 0;
 u64 importedMaxErrorCycles = 0;
 u32 importedEventCount = 0;
+u32 importedFrameWorkMaxCycles = 0;
+u64 importedFrameWorkTotalCycles = 0;
+u32 importedFrameWorkCount = 0;
 u32 activeNoteCount() { return gameMode == 2 ? imported_note_count : careless_expertsingle_count; }
 bool activeWasHit(u32 index) { return gameMode == 2 ? importedNotes.wasHit(index) : nm->wasHit(index); }
 noteSprite importedSprite(u32 index) {
@@ -138,6 +143,7 @@ void updateButtons(u16 hit, u16 released){
 // The interrupt owns only the frame clock and Maxmod DMA service. All note
 // judgments and presentation happen together on the main thread.
 volatile u32 gameplayFrames = 0;
+volatile bool gameClockRunning = false;
 u32 currentGameFrame = 0;
 JudgmentStats displayedStats;
 textDisplay judgmentText(4, 4, 32);
@@ -184,8 +190,9 @@ void refreshFeedback() {
 }
 
 void update(){
-    mmVBlank();
-    if (gameMode) ++gameplayFrames;
+    if (gameMode == 2) pcmService();
+    else if (legacyAudioReady) mmVBlank();
+    if (gameMode && gameClockRunning) ++gameplayFrames;
 }
 
 int main(){
@@ -235,7 +242,7 @@ int main(){
 	refreshFeedback();
 
 	// Initialise audio before any VBlank handler can call mmVBlank().
-	mmInitDefault((mm_addr)soundbank_bin, 16);
+	legacyAudioInit();
 
 	// Maxmod requires the vblank interrupt to reset sound DMA. 
 	irq_set( II_VBLANK, update, 0);
@@ -262,9 +269,12 @@ int main(){
         key_poll();
         if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
             mmStop();
+            pcmStop();
+            gameClockRunning = false;
             gameMode = 0;
             menuDirty = true;
             oam_init(oam_mem, 128);
+            vid_vsync(); continue; // Return chord must not also confirm the selector.
         }
         if (!gameMode) {
             if (key_hit(KEY_UP | KEY_DOWN)) { selection = 3 - selection; menuDirty = true; }
@@ -274,7 +284,7 @@ int main(){
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
                 menuHelp.updateText("Up/Down A:Start");
-                menuInfo.updateText(imported_is_synthetic ? "SYNTH / SILENT" : "LOCAL / SILENT");
+                menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
                 pal_bg_mem[0] = 0;
                 menuDirty = false;
             }
@@ -282,6 +292,7 @@ int main(){
             // Fresh mode epoch: counters, camera, visuals and held-key history.
             const u16 interrupts = REG_IME;
             REG_IME = 0;
+            gameClockRunning = false;
             gameplayFrames = 0;
             gameMode = selection;
             REG_IME = interrupts;
@@ -291,6 +302,8 @@ int main(){
             m7_rotate(&m7_cam_default, initialCamera.phi, initialCamera.theta);
             importedNowCycles = importedMaxErrorCycles = 0;
             importedEventCount = 0;
+            importedFrameWorkMaxCycles = importedFrameWorkCount = 0;
+            importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
             nm->reset(laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
             importedNotes.reset(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));
@@ -309,14 +322,24 @@ int main(){
             configureFloor();
             drawButtons();
             REG_DISPCNT = DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-            if (gameMode == 1) mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP);
-            else mmStop();
-            modeLabel.updateText(gameMode == 1 ? "" : imported_is_synthetic ? "SYNTH / SILENT" : "LOCAL / SILENT");
+            if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
+            else { mmStop(); pcmStart(); }
+            const u16 startIrq = REG_IME; REG_IME=0;
+            gameplayFrames=0; gameClockRunning=true;
+            REG_IME=startIrq;
+            REG_TM3CNT=0; REG_TM3D=0; REG_TM3CNT=TM_ENABLE|1; // profile at64CPUcycles/tick
+            modeLabel.updateText(gameMode == 1 ? "" : imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
         }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
+        const u16 workStart = REG_TM3D;
         const u16 mask = gameMode == 2 ? EASY_GAME_BUTTONS : GAME_BUTTONS;
         if (gameMode == 2) {
-            importedNotes.update(currentGameFrame, easyLaneMaskFromButtons(key_is_down(mask)));
+            if (imported_audio_enabled) {
+                const u64 sampleTick=pcmSnapshotTick();
+                if (audioState!=PcmClock::Fault) importedNotes.updateTick(sampleTick, easyLaneMaskFromButtons(key_is_down(mask)));
+            }
+            else importedNotes.update(currentGameFrame, easyLaneMaskFromButtons(key_is_down(mask)));
+            if (audioState == PcmClock::Fault) modeLabel.updateText("AUDIO ERROR");
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();
@@ -330,7 +353,7 @@ int main(){
         if (gameMode == 1) input_game();
         else {
             // Background wraps by one full texture; note coordinates stay local.
-            m7_level.camera->pos.z = -40000 - int((u64(currentGameFrame) * 83330 * 16 / 871) % (512 * 256));
+            m7_level.camera->pos.z = ImportedTiming::floorZ(importedNowCycles);
         }
 
         m7_prep_horizon(&m7_level);
@@ -342,11 +365,16 @@ int main(){
 		//if(key_hit(KEY_START)) Terminal::log("Tick = %%", m7_level.camera->pos.z);
 
         //update song
-        mmFrame();
+        if (gameMode != 2) mmFrame();
 
         //update random nunmber
         qran();
 
+        if (gameMode == 2) {
+            const u32 cycles = u16(REG_TM3D-workStart)*64u;
+            importedFrameWorkTotalCycles += cycles; ++importedFrameWorkCount;
+            if (cycles > importedFrameWorkMaxCycles) importedFrameWorkMaxCycles=cycles;
+        }
         //helps with visual tearing
         vid_vsync();
     }

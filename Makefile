@@ -44,6 +44,7 @@ CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
 PYTHON ?= python3
+AUDIO_DIR ?=
 IMPORTED_HEADER ?=
 HOSTCXX ?= g++
 # Keep native/container helper binaries separate: their C++ runtimes can differ.
@@ -109,6 +110,8 @@ ifneq ($(strip $(MUSIC)),)
 	BINFILES += soundbank.bin
 endif
 
+BINFILES += imported_audio.bin
+
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -131,7 +134,7 @@ export OFILES_GRAPHICS := $(PNGFILES:.png=.o)
 
 export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(OFILES_GRAPHICS)
 
-export HFILES := imported_chart.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
+export HFILES := imported_chart.hpp imported_audio.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -150,9 +153,13 @@ $(CHART_READER): bin/chart_reader.cpp
 $(BUILD)/imported_chart.hpp: runtime_input tools/prepare_runtime.py tools/adapt_chart.py tools/chart_importer.py tests/fixtures/runtime/easy.chart $(IMPORTED_HEADER)
 	$(PYTHON) tools/prepare_runtime.py --output $@ $(if $(IMPORTED_HEADER),--header "$(IMPORTED_HEADER)")
 
-$(BUILD): $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+$(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp &: runtime_input $(BUILD)/imported_chart.hpp tools/build_audio.py tools/audio_prepare.py
+	$(PYTHON) tools/build_audio.py --output-dir $(BUILD) $(if $(AUDIO_DIR),--audio-dir "$(AUDIO_DIR)") $(if $(IMPORTED_HEADER),--private-chart)
+
+$(BUILD): $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@$(PYTHON) tools/check_rom_size.py "$(OUTPUT).gba"
 
 #---------------------------------------------------------------------------------
 clean:

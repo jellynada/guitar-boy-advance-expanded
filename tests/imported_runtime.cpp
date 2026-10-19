@@ -17,7 +17,10 @@ int main() {
     assert(frameTick(UINT32_MAX) == uint64_t(UINT32_MAX) * 280896);
     assert(relativeZ(INT64_MAX) == relativeZ(AHEAD));
     assert(relativeZ(INT64_MIN) == relativeZ(-int64_t(BEHIND)));
-    assert(relativeZ(0) == -25000);
+    assert(relativeZ(0) == -21000);
+    assert(floorZ(0) == -40000);
+    assert(floorZ(UINT64_MAX) == floorZ(frameTick(MAX_FRAME)));
+    assert(floorZ(frameTick(215016)) <= -40000 && floorZ(frameTick(215016)) > -171072);
     assert(laneX(0) < laneX(1) && laneX(1) < laneX(2));
     assert(laneX(99) == 0);
     assert(easyLaneMaskFromButtons(KEY_LEFT) == 1);

@@ -1,44 +1,45 @@
-# Guitar Boy Advance Expanded — Mission 005
+# Guitar Boy Advance Expanded — Mission 006
 
 A Game Boy Advance rhythm prototype based on [startfliing's original project](https://github.com/startfliing/guitar-boy-advance).
-Mission 005 adds a playable **silent three-lane imported Easy test**, alongside the
-preserved original four-lane demo. The public build uses25 original synthetic notes.
-Your real Cream/WaveGroup Easy chart was tested privately with all395 notes.
-New imported audio is not played or converted yet.
+Imported Easy Test now **plays prepared audio**, with notes timed from the GBA
+sample timer. The public ROM has an original 25-note triangle-tone exercise.
+The owner's matching Cream/WaveGroup cover was decoded, mixed and tested privately
+with all 395 Easy notes. Private charts, recordings and their ROM are excluded
+from the public bundle. No sustain mechanics, reactive mixing or scoring added.
 
-## Start here — no programming needed
+## Start here
 
-Download/unzip the [Mission 005 review bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-005-download/downloads/mission005-review.zip).
-It includes a ready-made ROM, complete source/tools and a plain-English guide.
-Open `guitar-boy-advance-mission-005.gba` in mGBA. Use GBA Up/Down, then A or Start,
-to choose Original Demo or Imported Easy Test. Start+Select returns to the selector.
+[Download the Mission 006 review bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-006-download/downloads/mission006-review.zip),
+unzip it and load `guitar-boy-advance-mission-006.gba` in mGBA. Use GBA Up/Down,
+then A or Start, to choose **Original Demo** or **Imported Easy Test**.
+Start+Select returns to the selector for a clean restart.
 
-**Original Demo:** Left / Right / A / B, existing music and699 notes.
-**Imported Easy Test:** Left / A / B, silence, no held-note scoring.
-Map GBA buttons to convenient computer keys in mGBA settings.
+- Original Demo: **Left / Right / A / B**, existing music and 699 notes.
+- Imported Easy Test: **Left / A / B**, matching synthetic audio and 25 notes.
 
-For your private Cream ZIP and **Windows 11** build steps, read
-[the adaptation guide](docs/GBA_CHART_ADAPTATION.md). No Python/C++ editing or Git
-commands are needed when using the full source bundle. A matching recording and
-audio engine are future work; MIDI playback is not music playback.
+Map those GBA buttons to convenient computer keys in mGBA settings. The public
+synthetic test has a two-second pre-roll. Read `READ_ME_FIRST.txt` in the bundle.
 
-Existing `.chart`, MIDI, ZIP and folder inspection remains supported:
+For **Windows 11**, use [GBA_AUDIO_PIPELINE.md](docs/GBA_AUDIO_PIPELINE.md).
+After the documented Ubuntu/WSL, Docker and FFmpeg installation, put your private
+Cream ZIP in imports/incoming and run these two commands in Ubuntu:
 
-```text
-python3 tools/import_song.py "path/to/song.zip"
+```bash
+python3 tools/prepare_song.py "imports/incoming/Cream (WaveGroup) - Sunshine of Your Love (Neversoft).zip" --stem guitar --stem rhythm --stem song
+bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/song-runtime/imported_chart.hpp" "AUDIO_DIR=imports/output/song-runtime/audio"
 ```
 
-The one-command Easy preparation stage is:
+Open the resulting `guitar-boy-advance-expanded.gba` in mGBA and select Imported
+Easy Test. No source editing or Git commands are needed with the full-source
+bundle. The explicit stems include guitar, rhythm and song; preview is excluded.
 
-```text
-python3 tools/prepare_easy.py "path/to/song.zip"
-```
-
-This generates reports and an opt-in build header under `imports/output/easy-runtime`.
-It does not change the default synthetic build until you select IMPORTED_HEADER.
-Python3.10+, standard library only. Windows Python can use `py -3`.
-Read [Mission 005 results](docs/MISSION_005_RESULTS.md),
-[package inspection](docs/SONG_PACKAGE_IMPORT.md), and [judgment rules](docs/NOTE_JUDGMENT.md).
+Existing chart/package inspectors and `tools/prepare_easy.py` still work. A private
+chart built without prepared audio uses a labeled **SILENT FALLBACK**. Supplying
+missing/corrupt AUDIO_DIR data fails; it cannot substitute the original soundtrack.
+Python3.10+ and FFmpeg/ffprobe are host-conversion dependencies. Public synthetic
+builds need only Python and the existing pinned GBA toolchain/container.
+See [results](docs/MISSION_006_RESULTS.md) for measured limits; perceived sync,
+physical hardware and sound quality still need a person to test.
 
 ## Play the ROM (no programming needed)
 
@@ -46,10 +47,10 @@ Read [Mission 005 results](docs/MISSION_005_RESULTS.md),
    Windows: extract the downloaded ZIP and open mGBA. macOS: open the disk image
    and drag mGBA into Applications. Linux: install mGBA using your distribution's
    software manager (Ubuntu/Debian package: `mgba-qt`).
-2. Download the [Mission 005 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-005-download/downloads/mission005-review.zip)
-   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-005-download/downloads/mission005-review.zip)
+2. Download the [Mission 006 ZIP bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-006-download/downloads/mission006-review.zip)
+   and unzip it. If clicking does not download, [open the file page](https://github.com/jellynada/guitar-boy-advance-expanded/blob/mission-006-download/downloads/mission006-review.zip)
    and click the **Download raw file** arrow. The game inside is named
-   `guitar-boy-advance-mission-005.gba`, and includes the selector and synthetic three-lane test.
+   `guitar-boy-advance-mission-006.gba`, and includes the selector and synthetic three-lane test.
 3. In mGBA, choose **File → Load ROM** and select that `.gba` file. A separately
    downloaded Nintendo BIOS is not required for this workflow.
 4. Open mGBA's keyboard/controller settings and assign convenient keys to the
@@ -97,8 +98,8 @@ to this build. Your working Mission 001 and Mission 002 downloads remain unchang
 
 ## Build it using Docker (recommended for a repeatable build)
 
-These build commands require the complete Mission 005 source, included in
-the review bundle or available on `mission-005-first-playable-import`. The review bundle includes the playable ROM and
+These build commands require the complete Mission 006 source, included in
+the review bundle or available on `mission-006-audio-sync`. The review bundle includes the playable ROM and
 complete source, original build assets and tools. Import and build commands
 work from its extracted project folder.
 
@@ -116,7 +117,7 @@ bash scripts/build-docker.sh
 ```
 
 The second command creates `guitar-boy-advance-expanded.gba` in the project
-folder (the download bundle gives its copy the clearer Mission 005 filename). Internet access is needed to download the image initially. The script
+folder (the download bundle gives its copy the clearer Mission 006 filename). Internet access is needed to download the image initially. The script
 pins the official devkitPro image by its content digest, rather than using a
 moving `latest` tag. It includes devkitARM GCC 16.1.0, libtonc, libgba/Maxmod,
 `grit`, `mmutil`, `gbafix`, GNU Make 4.3 and desktop GCC 12.2.0. The game uses
@@ -166,15 +167,16 @@ generated-header compilation checks (GBA check is explicitly skipped if devkitAR
 is absent).
 
 With mGBA development headers/library installed, `DEVKITARM` set and a built ROM,
-run `bash tests/run_emulator.sh perfect`, then the same command with `miss` or
+run `bash tests/run_audio_emulator.sh perfect 1800 /tmp/synthetic` for the public audio test;
+run `bash tests/run_emulator.sh perfect` for the original demo, then the same command with `miss` or
 `mixed`. Each runs about ten minutes of emulated time. These are optional tools
 for developers; you can simply load the downloaded ROM in mGBA.
 
 See [project status](docs/PROJECT_STATUS.md), [import instructions](docs/CHART_IMPORT_GUIDE.md),
-[judgment rules](docs/NOTE_JUDGMENT.md), [Mission 005 results](docs/MISSION_005_RESULTS.md)
+[judgment rules](docs/NOTE_JUDGMENT.md), [Mission 006 results](docs/MISSION_006_RESULTS.md)
 and [historical Mission 002 results](docs/MISSION_002_RESULTS.md).
-Source branch: `mission-005-first-playable-import`; no automatic merge into main.
-[Review Mission 005 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-004-universal-import...mission-005-first-playable-import).
+Source branch: `mission-006-audio-sync`; no automatic merge into main.
+[Review Mission 006 changes](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-005-first-playable-import...mission-006-audio-sync).
 
 ## Credits and asset rights
 

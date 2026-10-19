@@ -1,8 +1,14 @@
+> Mission 006 update: imported audio is now supported. For the current Windows 11
+> **one preparation command + one build command with matching sound**, follow
+> [GBA_AUDIO_PIPELINE.md](GBA_AUDIO_PIPELINE.md). The chart-only commands below
+> remain available as a labeled silent fallback. The private Cream chart/audio
+> have both been played end to end in the emulator; neither is published.
+
 # Mission 005: play an imported Easy chart
 
-**Imported Easy Test is silent, onset-only gameplay.** It is not a finished song
-conversion: no imported music, held-note scoring, sustain tails or reactive audio.
-The public ROM contains an original25-note synthetic chart, clearly labeled.
+**Imported Easy Test is onset-only gameplay.** Mission006 adds prepared PCM sound;
+chart-only builds use SILENT FALLBACK. No held-note scoring, sustain tails or reactive audio.
+The current public ROM contains an original25-note synthetic chart and matching audio, clearly labeled.
 The owner's actual395-note Cream/WaveGroup Easy chart was built/tested privately;
 its source, normalized notes and chart-containing ROM are not published.
 
@@ -10,11 +16,11 @@ its source, normalized notes and chart-containing ROM are not published.
 
 Download/unzip the Mission 005 review bundle. Install mGBA from
 https://mgba.io/downloads.html. In mGBA choose File → Load ROM and open
-`guitar-boy-advance-mission-005.gba`.
+`guitar-boy-advance-mission-006.gba`.
 
 The selector has **Original Demo** and **Imported Easy Test**. Use GBA Up/Down to
-choose, then A or Start. Imported mode displays SYNTH/SILENT (default), or
-LOCAL/SILENT for an explicitly prepared local chart. Map these GBA controls in
+choose, then A or Start. Audio-enabled builds display SYNTH/AUDIO or LOCAL/AUDIO. The chart-only
+commands on this page select the explicitly labeled SILENT FALLBACK. Map these GBA controls in
 mGBA settings; computer keyboard defaults vary:
 
 | Mode | Buttons, left to right | Suggested computer keys |
@@ -29,7 +35,7 @@ to return to the selector. Choosing either mode starts a fresh clock, counts,
 note states, held-input history, camera, floor, fret circles and audio state.
 Original music starts only in Original Demo. Imported mode stays silent.
 
-## Windows 11: build your private Cream chart, without editing code
+## Windows 11: chart-only silent fallback, without editing code
 
 The review bundle contains the complete tracked source, tools and original build
 assets, so no Git commands are needed. New third-party chart/audio is excluded.
@@ -190,10 +196,10 @@ is a derived three-stripe version of the original64 pixel-wide texture, restored
 unchanged when Original Demo is selected. Fret centers are screen x48/120/192.
 
 Imported sprites use bounded relative distance, avoiding overflowing world
-coordinates late in long songs. World x is0xE300/0x10000/0x11600. World z is:
+coordinates late in long songs. World x is0xE380/0xFC00/0x11480. World z is:
 
 ```text
-camera_z -25000 - trunc(delta_cycles ×83330×16 /(280896×871))
+camera_z -21000 - trunc(delta_cycles ×83330×16 /(280896×871))
 ```
 
 Here83330/871 reproduces the existing demo's visual travel rate as a fixed test

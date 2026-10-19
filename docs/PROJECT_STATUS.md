@@ -1,3 +1,61 @@
+# Project status — Mission 006
+
+Base:Mission005 `f23cb6b4039fec93811b80f557a85518b2f626d1`; all five earlier
+missions are present. Source branch `mission-006-audio-sync`; source and download
+branches stay separate. Main remains original, with no automatic merges.
+
+Imported Easy now plays16,384Hz signed8 mono PCM directly from ROM via FIFO A
+and DMA1. Cascaded counters driven by the same sample timer provide a monotonic
+timer-derived playback position. Notes and rendering share that snapshot.
+This is not speaker feedback. Start/end, pre-roll, replay, disabled-resource fault
+freeze and a labeled silent fallback are implemented. Original module playback,
+699-note data, judgment windows, four controls and projection are preserved.
+
+Host tools:audio_prepare.py decodes/mixes explicitly selected sources with FFmpeg;
+prepare_song.py combines validated Easy chart + selected audio; build_audio.py
+validates asset/hash/chart binding and builds deterministic synthetic defaults.
+AUDIO_DIR and IMPORTED_HEADER opt in to private prepared content. The public
+build includes an original25-note tone exercise with sound. No OPUS/runtime
+codec or multi-song framework was added. Cartridge size is capped at32MiB.
+
+A pixel/OAM check found Mission005 imported notes crossed the fret line about54ms
+late despite correct judgments. Imported contact depth/lane centers are corrected
+and tested at the actual line. Original four-lane math/assets remain unchanged.
+The return chord no longer also confirms a selector item. Maxmod is reinitialized
+through public mmInit using retained buffers, avoiding repeated allocation; its
+clock epoch starts after initialization finishes.
+
+Owner's actual WaveGroup cover package was converted privately, selecting guitar,
+rhythm and song OPUS stems. Complete267.27s playback and395Easy notes passed in
+mGBA, including visual line checks. Captured waveform matching at first/middle/
+final notes shows sub-millisecond offsets and no resolved cumulative drift beyond
+the method's timing variation. Three-lane controls remain Left/A/B. See
+MISSION_006_RESULTS.md for exact measurements and tests. No human listening,
+physical hardware/latency or subjective-quality claim is made.
+
+Private ZIP, chart data, normalized/adapted files, audio and private ROM are not
+committed/published. Public review bundle contains full tracked source, the
+synthetic audio/chart ROM and aggregate test evidence only. Original asset
+permission caveats remain; new synthetic audio contains no recorded samples.
+
+Current limits:lo-fi8bit mono, one mixed recording, no reactive stem volumes,
+no sustain/HOPO/tap mechanics, no scoring, imported Medium/Hard or full menus.
+Foreground work is measured separately from full CPU utilization. Sample FIFO
+identity/physical output is not directly observable by software; timer and sound
+resource checks catch disabled playback, and emulator waveform validation supports
+the nominal timing model. No calibration slider or in-game pause is implemented.
+
+Ten4-minute songs exceed conventional32MiB at the chosen format. Ten3-minute
+songs might fit narrowly; separate packs/lower rate or a qualified compressed
+codec are practical future options, not implemented packaging. Recommended
+Mission007:human/hardware calibration plus measured compressed-audio feasibility
+and quality/CPU budget before expanding reactive mixing or song libraries.
+
+Current Windows11 workflow and detailed storage/clock contract:
+[GBA_AUDIO_PIPELINE.md](GBA_AUDIO_PIPELINE.md). Historical mission status follows.
+
+---
+
 # Project status — Mission 005
 
 Started from Mission 004 `1487532557a1e98b1c99c6628e5d65c291268cd2`, containing

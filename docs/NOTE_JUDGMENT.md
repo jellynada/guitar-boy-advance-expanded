@@ -1,3 +1,8 @@
+> Mission 006: prepared PCM playback and a sample-timer clock now support the
+> opt-in Easy path. Inspection alone still does not certify arbitrary charts.
+> See [GBA_AUDIO_PIPELINE.md](GBA_AUDIO_PIPELINE.md) for audio preparation,
+> current Windows commands, measured synchronization and remaining limits.
+
 > Mission 005 adds an explicit **silent Easy gameplay adapter** after import.
 > The original demo clock and judgment formulas remain unchanged. Inspection
 > reports alone still do not make arbitrary packages playable. See
