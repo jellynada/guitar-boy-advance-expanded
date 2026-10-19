@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect package, select Easy and explicit matching audio stems; prepare one ROM mix."""
+"""Inspect package, select Easy and explicit matching audio stems; prepare fixed-mix or separate-stream ROM audio."""
 import argparse
 import json
 from pathlib import Path
@@ -24,17 +24,28 @@ def main():
     selection=parser.add_mutually_exclusive_group(required=True)
     selection.add_argument('--stem',action='append',help='Explicit unique role: song, guitar, rhythm; repeat. Preview prohibited.')
     selection.add_argument('--audio',action='append',help='Explicit relative audio file inside package; repeat to resolve ambiguity.')
+    selection.add_argument('--reactive',action='store_true',help='Prepare separate guitar and backing; explicit role options required.')
+    parser.add_argument('--guitar-stem')
+    parser.add_argument('--backing-stem',action='append')
     parser.add_argument('--chart')
     parser.add_argument('--offset-policy',choices=['add','ini','chart'])
     parser.add_argument('--output-dir',type=Path,default=Path('imports/output/song-runtime'))
     args=parser.parse_args();out=args.output_dir;out.mkdir(parents=True,exist_ok=True)
-    for path in (out/'imported_chart.hpp',out/'adapted.json',out/'audio/audio.json',out/'audio/imported_audio.bin',out/'audio/audio_report.txt',out/'audio_error.txt',out/'adaptation_report.txt'):path.unlink(missing_ok=True)
+    for path in (out/'imported_chart.hpp',out/'adapted.json',out/'audio/audio.json',out/'audio/imported_audio.bin',out/'audio/imported_backing.bin',out/'audio/audio_report.txt',out/'audio_error.txt',out/'adaptation_report.txt'):path.unlink(missing_ok=True)
     try:
         if not import_song(args.package,out/'source',args.chart,args.audio,args.offset_policy):raise ValueError('Package invalid; read source report.')
         source=json.loads((out/'source'/args.package.stem/'song.json').read_text())
         adapted=adapt(source,difficulty='Easy',instrument='five_fret_lead_guitar')
         chosen=[]
-        if args.stem:
+        if args.reactive:
+            roles=[args.guitar_stem]+(args.backing_stem or [])
+            if not args.guitar_stem or not args.backing_stem or len(set(roles))!=len(roles) or 'preview' in roles:raise ValueError('Reactive mode requires one --guitar-stem and distinct --backing-stem selections; no preview.')
+            for role in roles:
+                matches=[s for s in source['package']['audio_streams'] if s['role']==role]
+                if len(matches)!=1:raise ValueError(f'Reactive role {role!r}: require exactly one file, found {len(matches)}.')
+                chosen.append(matches[0]['file'])
+        elif args.guitar_stem or args.backing_stem:raise ValueError('Role options require --reactive.')
+        elif args.stem:
             if len(set(args.stem))!=len(args.stem) or 'preview' in args.stem:raise ValueError('Select unique gameplay stems; preview is not gameplay audio.')
             for role in args.stem:
                 matches=[s for s in source['package']['audio_streams'] if s['role']==role]
@@ -51,7 +62,11 @@ def main():
             for i,name in enumerate(chosen):
                 path=Path(temp)/f'{i}-{Path(name).name}'
                 path.write_bytes(package.read(name,128*1024*1024));paths.append(path)
-            audio=convert_files(paths,out/'audio')
+            if args.reactive:
+                try:from .reactive_prepare import convert_reactive
+                except ImportError:from reactive_prepare import convert_reactive
+                audio=convert_reactive(paths[:1],paths[1:],out/'audio')
+            else:audio=convert_files(paths,out/'audio')
         if max(n['start_us'] for n in adapted['notes']) > audio['source_samples']*1000000//RATE:
             raise ValueError('Selected audio ends before the final note onset; verify matching stems/offsets.')
         import hashlib
@@ -68,7 +83,7 @@ def main():
         print(f'bash scripts/build-docker.sh "IMPORTED_HEADER={out}/imported_chart.hpp" "AUDIO_DIR={out}/audio"')
         return 0
     except (OSError,ValueError,KeyError,TypeError,__import__('subprocess').SubprocessError) as error:
-        for path in (out/'imported_chart.hpp',out/'adapted.json',out/'audio/audio.json',out/'audio/imported_audio.bin'):path.unlink(missing_ok=True)
+        for path in (out/'imported_chart.hpp',out/'adapted.json',out/'audio/audio.json',out/'audio/imported_audio.bin',out/'audio/imported_backing.bin',out/'audio/audio_report.txt'):path.unlink(missing_ok=True)
         save_text(out/'audio_error.txt',str(error)+'\n');save_text(out/'adaptation_report.txt','INVALID: audio/chart preparation failed; see audio_error.txt.\n');print(f'PREPARATION FAILED: {error}');return 1
 
 

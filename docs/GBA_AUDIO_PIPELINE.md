@@ -1,3 +1,5 @@
+> Mission007 update: [Reactive guitar guide](REACTIVE_GUITAR_AUDIO.md) describes the current two-stream mixer, gating, timer resources and Windows commands. The Mission006/fixed-mix measurements below remain historical.
+
 # Mission 006: imported audio playback and synchronization
 
 The public ROM now **plays original synthetic audio** with its matching 25-note

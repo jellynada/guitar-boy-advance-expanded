@@ -110,7 +110,7 @@ ifneq ($(strip $(MUSIC)),)
 	BINFILES += soundbank.bin
 endif
 
-BINFILES += imported_audio.bin
+BINFILES += imported_audio.bin imported_backing.bin
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -153,10 +153,10 @@ $(CHART_READER): bin/chart_reader.cpp
 $(BUILD)/imported_chart.hpp: runtime_input tools/prepare_runtime.py tools/adapt_chart.py tools/chart_importer.py tests/fixtures/runtime/easy.chart $(IMPORTED_HEADER)
 	$(PYTHON) tools/prepare_runtime.py --output $@ $(if $(IMPORTED_HEADER),--header "$(IMPORTED_HEADER)")
 
-$(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp &: runtime_input $(BUILD)/imported_chart.hpp tools/build_audio.py tools/audio_prepare.py
+$(BUILD)/imported_audio.bin $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.hpp &: runtime_input $(BUILD)/imported_chart.hpp tools/build_audio.py tools/audio_prepare.py tools/reactive_prepare.py
 	$(PYTHON) tools/build_audio.py --output-dir $(BUILD) $(if $(AUDIO_DIR),--audio-dir "$(AUDIO_DIR)") $(if $(IMPORTED_HEADER),--private-chart)
 
-$(BUILD): $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+$(BUILD): $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@$(PYTHON) tools/check_rom_size.py "$(OUTPUT).gba"

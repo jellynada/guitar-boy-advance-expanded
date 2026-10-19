@@ -20,10 +20,15 @@ static unsigned address(const char* filename,const char* name){
 static uint64_t read64(struct mCore* c,unsigned a){return c->busRead32(c,a)|((uint64_t)c->busRead32(c,a+4)<<32);}
 static void frame(struct mCore* c,unsigned keys){c->setKeys(c,keys);c->runFrame(c);assert(!crashed);}
 static void drain(struct mCore* c){for(int ch=0;ch<2;++ch){short v[4096];while(blip_read_samples(c->getAudioChannel(c,ch),v,4096,0)>0){}}}
+static void screenshot(const char* prefix,const char* suffix,const color_t* pixels){
+    char name[1024];snprintf(name,sizeof(name),"%s.%s.ppm",prefix,suffix);FILE* out=fopen(name,"wb");assert(out);fprintf(out,"P6\n240 160\n255\n");
+    for(unsigned i=0;i<240*160;++i){unsigned char rgb[]={pixels[i]&255,(pixels[i]>>8)&255,(pixels[i]>>16)&255};fwrite(rgb,1,3,out);}fclose(out);
+}
 int main(int argc,char** argv){
-    assert(argc==7);const char* syms=argv[2];unsigned count=strtoul(argv[3],0,10),frames=strtoul(argv[4],0,10);const char* mode=argv[5];int isFault=!strncmp(mode,"fault",5);
+    assert(argc==7);const char* syms=argv[2];unsigned count=strtoul(argv[3],0,10),frames=strtoul(argv[4],0,10);const char* mode=argv[5];int isFault=!strncmp(mode,"fault",5); int reactiveMixed=!strcmp(mode,"reactive"); int reactiveWrong=!strcmp(mode,"wrong");
     unsigned modeaddr=address(syms,"gameMode"),clockaddr=address(syms,"importedNowCycles"),statsaddr=address(syms,"displayedStats"),chartaddr=address(syms,"imported_notes");
     unsigned stateaddr=address(syms,"audioState"),consaddr=address(syms,"audioSamplesConsumed"),maxaddr=address(syms,"importedFrameWorkMaxCycles"),totaladdr=address(syms,"importedFrameWorkTotalCycles"),workcount=address(syms,"importedFrameWorkCount");
+    unsigned serialaddr=address(syms,"guitarEventSerial"),traceaddr=address(syms,"guitarEventTrace"),gateaddr=address(syms,"guitarAudible"),gainaddr=address(syms,"guitarGain"),refilladdr=address(syms,"audioRefillCount"),irqmaxaddr=address(syms,"audioRefillMaxCycles"),irqtotaladdr=address(syms,"audioRefillTotalCycles"),underrunaddr=address(syms,"audioUnderruns");
     struct mLogger logger={.log=log_message};mLogSetDefaultLogger(&logger);
     struct mCore* c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
     color_t pixels[240*160]={0};c->setVideoBuffer(c,pixels,240);c->setAudioBufferSize(c,4096);
@@ -32,20 +37,25 @@ int main(int argc,char** argv){
     for(unsigned i=0;i<90;++i){frame(c,0);drain(c);}assert(c->busRead32(c,modeaddr)==0);
     for(unsigned i=0;i<2;++i){frame(c,128);drain(c);}frame(c,0);drain(c);
     char filename[1024];snprintf(filename,sizeof(filename),"%s.raw",argv[6]);FILE* audio=fopen(filename,"wb");assert(audio);
-    snprintf(filename,sizeof(filename),"%s.csv",argv[6]);FILE* csv=fopen(filename,"w");assert(csv);fprintf(csv,"frame,tick,consumed,hardware_consumed,capture_samples,perfect,good,miss,state\n");
+    snprintf(filename,sizeof(filename),"%s.csv",argv[6]);FILE* csv=fopen(filename,"w");assert(csv);fprintf(csv,"frame,tick,consumed,hardware_consumed,capture_samples,perfect,good,miss,state,gate,gain,refills,underruns\n");
+    snprintf(filename,sizeof(filename),"%s.events.csv",argv[6]);FILE* events=fopen(filename,"w");assert(events);fprintf(events,"serial,sample,kind,gain,gameplay_tick\n");unsigned eventSerial=0;int mutedSaved=0,recoveredSaved=0;
     unsigned firstaddr=address(syms,"importedFirstVisible"),endaddr=address(syms,"importedEndVisible");
     int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
     uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,1,2};
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;
         uint64_t now=read64(c,clockaddr);
-        if(!strcmp(mode,"perfect")&&f>2)while(next<count){uint64_t target=read64(c,chartaddr+next*16);if(target>now+280896)break;unsigned lane=c->busRead32(c,chartaddr+next*16+8);assert(lane<3);keys|=buttons[lane];++next;}
+        if((!strcmp(mode,"perfect")||reactiveMixed||reactiveWrong)&&f>2)while(next<count){uint64_t target=read64(c,chartaddr+next*16);if(target>now+280896)break;unsigned lane=c->busRead32(c,chartaddr+next*16+8);assert(lane<3);if(!reactiveMixed||next%3!=1)keys|=buttons[lane];++next;}
+        if(reactiveWrong&&f>10&&f%30==0)keys=32|1|2;
         if(isFault&&f==400){
-            if(!strcmp(mode,"fault_dma"))c->busWrite32(c,0x040000c4,0);
+            if(!strcmp(mode,"fault_dma"))c->busWrite16(c,0x04000106,0);
             else if(!strcmp(mode,"fault_sound"))c->busWrite16(c,0x04000084,0);
+            else if(!strcmp(mode,"fault_irq"))c->busWrite16(c,0x04000200,c->busRead16(c,0x04000200)&~16);
+            else if(!strcmp(mode,"fault_underrun"))c->busWrite16(c,0x04000208,0);
             else c->busWrite16(c,0x04000102,0);
         }
         if(isFault&&f>405&&f%2)keys=32|1|2; // inputs cannot judge after an audio fault
+        if(!strcmp(mode,"fault_underrun")&&f==401)c->busWrite16(c,0x04000208,1);
         frame(c,keys);
         if(f>4)assert(c->busRead32(c,modeaddr)==2);
         short left[4096],right[4096];int n=blip_read_samples(c->getAudioChannel(c,0),left,4096,0),r=blip_read_samples(c->getAudioChannel(c,1),right,4096,0);assert(n==r);
@@ -54,8 +64,12 @@ int main(int argc,char** argv){
         uint64_t tick=read64(c,clockaddr);assert(tick>=previous);previous=tick;
         unsigned p=c->busRead32(c,statsaddr),g=c->busRead32(c,statsaddr+4),m=c->busRead32(c,statsaddr+8),state=c->busRead32(c,stateaddr);
         assert(p+g+m<=count);
-        unsigned hw=c->busRead16(c,0x04000104)|(unsigned)c->busRead16(c,0x04000108)<<16;
-        fprintf(csv,"%u,%llu,%u,%u,%llu,%u,%u,%u,%u\n",f,(unsigned long long)tick,c->busRead32(c,consaddr),hw,(unsigned long long)written,p,g,m,state);
+        static unsigned epoch=0,oldraw=0; unsigned raw=((unsigned)c->busRead16(c,0x04000108)<<4)|(c->busRead16(c,0x04000104)-65520); if(raw<oldraw)epoch+=1u<<20; oldraw=raw; unsigned hw=epoch+raw;
+        fprintf(csv,"%u,%llu,%u,%u,%llu,%u,%u,%u,%u,%u,%u,%u,%u\n",f,(unsigned long long)tick,c->busRead32(c,consaddr),hw,(unsigned long long)written,p,g,m,state,c->busRead32(c,gateaddr),c->busRead32(c,gainaddr),c->busRead32(c,refilladdr),c->busRead32(c,underrunaddr));
+        if(!mutedSaved&&!c->busRead32(c,gateaddr)&&!c->busRead32(c,gainaddr)){screenshot(argv[6],"muted",pixels);mutedSaved=1;}
+        if(mutedSaved&&!recoveredSaved&&c->busRead32(c,gateaddr)&&c->busRead32(c,gainaddr)==256){screenshot(argv[6],"recovered",pixels);recoveredSaved=1;}
+        unsigned latest=c->busRead32(c,serialaddr);assert(latest-eventSerial<=16);
+        while(eventSerial<latest){unsigned a=traceaddr+(eventSerial%16)*24;assert(c->busRead32(c,a+12)==eventSerial);fprintf(events,"%u,%u,%u,%u,%llu\n",eventSerial,c->busRead32(c,a),c->busRead32(c,a+4),c->busRead32(c,a+8),(unsigned long long)read64(c,a+16));++eventSerial;}
         for(unsigned ref=0;ref<5;++ref) if(!lineSeen[ref]) {
             unsigned index=refIds[ref];if(index>=count){lineSeen[ref]=1;continue;}
             unsigned first=c->busRead32(c,firstaddr),end=c->busRead32(c,endaddr);
@@ -80,15 +94,20 @@ int main(int argc,char** argv){
         if(isFault&&f==405){frozen=tick;frozenJudged=p+g+m;}
         if(isFault&&f>405){assert(state==3);assert(tick==frozen);assert(p+g+m==frozenJudged);assert(c->busRead32(c,statsaddr+12)==0);}
     }
-    fclose(audio);fclose(csv);
+    fclose(audio);fclose(csv);fclose(events);
     if(!strcmp(mode,"perfect")||!strcmp(mode,"miss")||!strcmp(mode,"silent"))for(unsigned r=0;r<5;++r)assert(lineSeen[r]);
     unsigned p=c->busRead32(c,statsaddr),g=c->busRead32(c,statsaddr+4),m=c->busRead32(c,statsaddr+8),w=c->busRead32(c,statsaddr+12),state=c->busRead32(c,stateaddr);
     if(!strcmp(mode,"perfect"))assert(p==count&&g==0&&m==0&&w==0);
     if(!strcmp(mode,"miss"))assert(m==count&&p==0&&g==0&&w==0);
+    if(reactiveMixed)assert(p+g>0&&m>0&&w==0);
+    if(reactiveWrong)assert(p+g>0&&w>0);
+    if(!isFault)assert(c->busRead32(c,underrunaddr)==0);
     if(isFault)assert(state==3&&p+g+m<count);
     else if(!strcmp(mode,"silent"))assert(state==0&&nonzero==0);
+    else if(!strcmp(mode,"preview"))assert(state==1&&nonzero>1000&&c->busRead32(c,gateaddr)==1&&eventSerial==0);
     else assert(state==2&&nonzero>1000);
     printf("PASS: %s frames%u notes%u Perfect%u Good%u Miss%u Wrong%u nonzero_samples%u audio_state%u; foreground max%u avg%.1f CPUcycles/frame\n",mode,frames,count,p,g,m,w,nonzero,state,c->busRead32(c,maxaddr),read64(c,totaladdr)/(double)c->busRead32(c,workcount));
+    printf("IRQ: refills%u max%u mean%.1f cycles, underruns%u gate%u gain%u\n",c->busRead32(c,refilladdr),c->busRead32(c,irqmaxaddr),c->busRead32(c,refilladdr)?read64(c,irqtotaladdr)/(double)c->busRead32(c,refilladdr):0,c->busRead32(c,underrunaddr),c->busRead32(c,gateaddr),c->busRead32(c,gainaddr));
     // Rapid return/replay: exact counts start at0, timer position starts near0.
     for(unsigned repeat=0;repeat<4;++repeat){
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);assert(c->busRead32(c,modeaddr)==0);
@@ -99,7 +118,7 @@ int main(int argc,char** argv){
         for(unsigned i=0;i<2;++i){frame(c,128);}frame(c,0);
         for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);assert(c->busRead32(c,modeaddr)==2);
         assert(c->busRead32(c,statsaddr)==0&&c->busRead32(c,statsaddr+8)==0);
-        assert(c->busRead32(c,consaddr)<1500);drain(c);
+        assert(c->busRead32(c,consaddr)<1500);assert(c->busRead32(c,gateaddr)==1&&c->busRead32(c,gainaddr)==256);drain(c);
     }
     printf("PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash\n");
     c->deinit(c);mLogSetDefaultLogger(NULL);return 0;

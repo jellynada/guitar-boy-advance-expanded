@@ -1,3 +1,55 @@
+# Project status — Mission 007
+
+Started from verified Mission006 `4fa9e6f8b2558a129075c9815c8bb2ac68e6421b`,
+including the earlier mission chain. New source branch:
+`mission-007-reactive-guitar-audio`. No automatic merge to main.
+
+Imported Easy now has independently prepared guitar/backing PCM, a64sample
+anti-click fade and a two-state gate driven by unchanged NoteJudgment events.
+Miss/WrongInput target zero; Perfect/Good restore full gain; no timeout. Event
+emission order is preserved (misses, hits, WrongInput; last event wins).
+Backing does not depend on gate state. GUITAR ON/MUTED debug text shows target.
+
+New reactive_prepare.py decodes explicit candidate roles with the existing
+FFmpeg workflow, zero-pads to matching lengths and applies common headroom before
+separate signed8 quantization. Build validation binds both hashes and chart.
+Default builds generate original two-track synthetic audio without external
+recordings. Legacy fixed-mix and labeled silent fallback paths remain supported.
+
+Playback uses one tiny software mixer and FIFO A, primed with32samples and
+refilled16samples at a time. Both ROM streams share one index. Timer0 still
+runs16384Hz; Timer1 refill IRQ and Timer2 plus epoch preserve an authoritative
+output-request clock beyond64s. DMA1/2 are free while imported; original Maxmod
+regains its original resources on mode return. No per-sample IRQ, heap allocation,
+whole-song RAM copy or independent guitar clock is introduced.
+
+All395private Cream Easy notes and the complete267.27s recording were exercised
+with all-hit, no-input, hit/miss/hit and wrong/hit input scripts, plus mode replay.
+Captured synthetic/private outputs are compared against independently generated
+sample mixes, including backing-only and fade/recovery windows. Original699-note
+regressions remain. See MISSION_007_RESULTS.md for final evidence and limitations.
+
+Stem inspection establishes distinct, aligned recordings and bass-like rhythm
+spectra; it cannot establish no guitar bleed or replace human audition. Selected
+guitar samples reach exact digital zero; other guitar already in backing would
+remain. Owner listening and physical hardware are outstanding.
+
+Private Mission007 inputs, converted streams, traces and ROM stay ignored/local.
+No working private artifact attachment tool is available in this session. The
+public review bundle contains only original synthetic imported content, tracked
+source and aggregate private findings. Windows reproduction and retrieval paths
+are documented in REACTIVE_GUITAR_AUDIO.md. No new private download is claimed.
+
+Limits:mono8bit quality, two-stream ROM cost, frame-polled event delivery, tiny
+FIFO deadlines and emulator-only performance/sync validation. No scoring, health,
+Medium/Hard imported mode, holds, reactive multistem library or full menus added.
+Two-stream4minute audio costs7.5MiB; ten songs exceed32MiB substantially. Proposed
+Mission008:human stem/feel checks, hardware validation, then compression budget.
+
+[Owner guide and architecture](REACTIVE_GUITAR_AUDIO.md). Historical status follows.
+
+---
+
 # Project status — Mission 006
 
 Base:Mission005 `f23cb6b4039fec93811b80f557a85518b2f626d1`; all five earlier

@@ -158,6 +158,7 @@ u32 wrongUntilFrame = 0;
 void onGameplayEvent(void*, const GameplayEvent& event) {
     if (gameMode == 2) {
         ++importedEventCount;
+        pcmGameplayEvent(event);
         if (event.kind == GameplayEventKind::PerfectHit || event.kind == GameplayEventKind::GoodHit) {
             const u64 error = event.gameplayTick >= event.chartTick ? event.gameplayTick - event.chartTick : event.chartTick - event.gameplayTick;
             if (error > importedMaxErrorCycles) importedMaxErrorCycles = error;
@@ -340,6 +341,7 @@ int main(){
             }
             else importedNotes.update(currentGameFrame, easyLaneMaskFromButtons(key_is_down(mask)));
             if (audioState == PcmClock::Fault) modeLabel.updateText("AUDIO ERROR");
+            else if (imported_audio_reactive) modeLabel.updateText(guitarAudible ? "GUITAR ON" : "GUITAR MUTED");
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();

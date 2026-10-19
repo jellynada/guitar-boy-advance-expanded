@@ -45,3 +45,7 @@ python3 -m unittest discover -s tests -p test_audio_prepare.py -v
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all \
     -Itests/host -Iinclude -I"$tmp/generated" tests/audio_clock.cpp -o "$tmp/audio_clock"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/audio_clock"
+
+python3 -m unittest discover -s tests -p test_reactive_prepare.py -v
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/guitar_gate.cpp -o "$tmp/guitar_gate"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/guitar_gate"

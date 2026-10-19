@@ -1,3 +1,5 @@
+> Mission007 update: [Reactive guitar guide](REACTIVE_GUITAR_AUDIO.md) describes the current two-stream mixer, gating, timer resources and Windows commands. The Mission006/fixed-mix measurements below remain historical.
+
 > Mission 006: prepared PCM playback and a sample-timer clock now support the
 > opt-in Easy path. Inspection alone still does not certify arbitrary charts.
 > See [GBA_AUDIO_PIPELINE.md](GBA_AUDIO_PIPELINE.md) for audio preparation,

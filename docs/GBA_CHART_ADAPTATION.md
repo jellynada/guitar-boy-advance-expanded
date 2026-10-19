@@ -1,3 +1,5 @@
+> Mission007 update: [Reactive guitar guide](REACTIVE_GUITAR_AUDIO.md) describes the current two-stream mixer, gating, timer resources and Windows commands. The Mission006/fixed-mix measurements below remain historical.
+
 > Mission 006 update: imported audio is now supported. For the current Windows 11
 > **one preparation command + one build command with matching sound**, follow
 > [GBA_AUDIO_PIPELINE.md](GBA_AUDIO_PIPELINE.md). The chart-only commands below

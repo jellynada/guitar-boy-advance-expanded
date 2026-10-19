@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 import re
 import tempfile
-from audio_prepare import synthetic_audio,RATE,PRE_ROLL,TAIL,GUARD,MAX_ROM_AUDIO
+from audio_prepare import RATE,PRE_ROLL,TAIL,GUARD,MAX_ROM_AUDIO
 from chart_importer import normalize
+from reactive_prepare import synthetic_reactive
 
 
 def write_if_changed(path,data):
@@ -22,6 +23,8 @@ def main():
     args=parser.parse_args();out=args.output_dir;out.mkdir(parents=True,exist_ok=True)
     if args.audio_dir and str(args.audio_dir)!='none':
         manifest=json.loads((args.audio_dir/'audio.json').read_text())
+        if manifest.get('schema_version') not in ('gba-audio-v1','gba-reactive-audio-v1'):raise ValueError('Unsupported prepared audio schema.')
+        reactive=manifest['schema_version']=='gba-reactive-audio-v1'
         blob=(args.audio_dir/'imported_audio.bin').read_bytes()
         for key in ('sample_rate','channels','pre_roll_samples','tail_samples','guard_samples','byte_size','playback_samples','source_samples'):
             if type(manifest.get(key)) is not int or manifest[key]<0:raise ValueError(f'Invalid integer audio metadata:{key}')
@@ -35,24 +38,32 @@ def main():
         if manifest.get('prepared_chart_sha256') and hashlib.sha256(chart).hexdigest()!=manifest['prepared_chart_sha256']:raise ValueError('Audio was prepared for a different chart header.')
         ticks=[int(t) for t in re.findall(rb'\{(\d+)ULL,',chart)]
         if not ticks or max(ticks)+1426063 > (manifest['playback_samples']-1)*1024:raise ValueError('Audio ends before chart final late window.')
+        backing=(args.audio_dir/'imported_backing.bin').read_bytes() if reactive else bytes(16)
+        if reactive:
+            if len(backing)!=len(blob) or len(blob)*2>MAX_ROM_AUDIO or hashlib.sha256(backing).hexdigest()!=manifest.get('backing_sha256') or manifest.get('total_byte_size')!=len(blob)*2:raise ValueError('Reactive backing size/hash/budget mismatch.')
+            if any(backing[:PRE_ROLL]) or any(backing[PRE_ROLL+manifest['source_samples']:]):raise ValueError('Backing padding must be silence.')
+            signed=lambda x:x if x<128 else x-256
+            if any(abs(signed(x))+abs(signed(y))>127 for x,y in zip(blob,backing)):raise ValueError('Unsafe reactive mix headroom.')
         enabled=True
     elif args.private_chart or args.audio_dir:
-        blob=bytes(16);manifest={'source_samples':0,'playback_samples':0};enabled=False
+        blob=backing=bytes(16);manifest={'source_samples':0,'playback_samples':0};enabled=reactive=False
     else:
         root=Path(__file__).resolve().parents[1]
         song=normalize((root/'tests/fixtures/runtime/easy.chart').read_text(),'Synthetic Easy Test')
         with tempfile.TemporaryDirectory() as tmp:
-            manifest=synthetic_audio(song,tmp);blob=(Path(tmp)/'imported_audio.bin').read_bytes()
-        enabled=True
+            manifest=synthetic_reactive(song,tmp);blob=(Path(tmp)/'imported_audio.bin').read_bytes();backing=(Path(tmp)/'imported_backing.bin').read_bytes()
+        enabled=reactive=True
     text=f'''// Generated, validated audio metadata. No runtime decoder.
 #pragma once
 #include <cstdint>
+inline constexpr bool imported_audio_reactive = {str(reactive).lower()};
 inline constexpr bool imported_audio_enabled = {str(enabled).lower()};
 inline constexpr uint32_t imported_audio_rate = {RATE};
 inline constexpr uint32_t imported_audio_source_samples = {manifest['source_samples']};
 inline constexpr uint32_t imported_audio_playback_samples = {manifest['playback_samples']};
 '''
     write_if_changed(out/'imported_audio.bin',blob)
+    write_if_changed(out/'imported_backing.bin',backing)
     write_if_changed(out/'imported_audio.hpp',text.encode())
 
 
