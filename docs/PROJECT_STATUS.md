@@ -1,3 +1,51 @@
+# Project status — Mission 004
+
+Mission004 starts from tested Mission003 `135a55c2a0de50a4c68610f1aeb288924508bb54`
+on `mission-004-universal-import`. Git ancestry confirms Missions001→002→003.
+Live remote main remains original `6c4e63460fab10733d8ff011045ee246e7201952`;
+none are merged. Source review branches and separate download branches remain
+separate. No main merge is performed.
+
+Implemented: bounded dependency-free MIDI Type0/1 PPQ parser, exact tempo timing,
+four independent five-fret difficulties, native sustains/chords, marker separation,
+raw unsupported event preservation, unified ZIP/folder/file inspection, INI metadata
+and explicit offsets, audio/art discovery, clear validation/compatibility reports,
+onset and sustained D-pad conflict checks. MIDI and chart share normalized spans
+and timing/compatibility code. Existing chart-only command/header output remains.
+
+Architecture: `midi_importer.py` parses/normalizes MIDI; `song_package.py` discovers
+and validates packages/metadata; `import_song.py` writes reports/normalized JSON.
+`chart_importer.py` continues to own shared math and compatibility. New synthetic
+MIDI fixture/tests contain no third-party content. No GBA source, Makefile,
+judgment windows, controls, art, chart or audio changed.
+
+Actually playable: original699-note demo only, Left/Right/A/B, Mission002 judgment.
+Imported data is prepared, not playable; Easy3/Hard5 fretboards do not exist.
+No lane collapse, Expert relabeling, menus, scores, compression or reactive audio.
+The named Cream/WaveGroup ZIP was not present; use the private command in
+[SONG_PACKAGE_IMPORT.md](SONG_PACKAGE_IMPORT.md). No target-song analysis claimed.
+
+Remaining limitations: SysEx open/tap effects, player HOPO/sustain cutoff and INI
+mechanical overrides retained but not applied; Type2/SMPTE unsupported; no audio
+decoding/codec validation or copyright verification; no imported absolute-time
+runtime, recording calibration or lane adapter. Sustain counts preserve all MIDI
+release lengths. Stem roles are filename conventions, not proof of isolation.
+Human listening, hardware playability and latency remain untested. Music still
+loops without resetting chart judgment. Original code/music/art permissions are
+not newly established.
+
+Next sequence: privately inspect targetpackage and review warnings; establish
+exact audio-origin/sample-clock/pre-roll and explicit difficulty/marker policies;
+prove a synthetic imported song through a separate opt-in adapter; qualify audio
+memory/CPU and matching recording synchronization; then extend renderers and
+approved difficulty selection. Reactive mixing follows validated audio playback.
+See [MISSION_004_RESULTS.md](MISSION_004_RESULTS.md) for actual checks/review state.
+
+The Mission003 status below is historical, including its then-unsupported list
+and its recommendation for Mission004. Current support is described above.
+
+---
+
 # Project status — Mission 003
 
 ## Branches and preserved baseline

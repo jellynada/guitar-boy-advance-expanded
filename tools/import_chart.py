@@ -6,7 +6,10 @@ import json
 from pathlib import Path
 import sys
 
-from chart_importer import InvalidChart, compatibility, cpp_assets, diagnostic, normalize
+try:
+    from .chart_importer import InvalidChart, compatibility, cpp_assets, diagnostic, normalize
+except ImportError:
+    from chart_importer import InvalidChart, compatibility, cpp_assets, diagnostic, normalize
 
 ROOT = Path(__file__).resolve().parents[1]
 

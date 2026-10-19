@@ -1,3 +1,7 @@
+> Mission 004: this page describes the preserved chart-only command. For MIDI,
+> ZIPs, folders, INI metadata and audio discovery use [SONG_PACKAGE_IMPORT.md](SONG_PACKAGE_IMPORT.md).
+> Limitations below refer to the old command, not the new package inspector.
+
 # Importing community charts — Mission 003
 
 A `.chart` file is a text description of where notes belong in a song. It is
