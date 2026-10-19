@@ -1,0 +1,4 @@
+bd4ced3a9d801d5835059ce60db4a8a2969a4253dfd183bc6462257e562eded5  Guitar-Boy-Advance-Mission-008-Hotfix-Synthetic.gba
+72603829c9c0c80a4d3908685002492c2f56b60e6dc29a73b1e7db8d2e0eab87  Mission-008-Hotfix-Review.zip
+5a96221dcc74df8905f3beeba70115c8287d99db048acb4b6c0238b983ff85e0  Sunshine-of-Your-Love-Mission-008-Hotfix.gba
+dfec3b997749a24e8f32e398dfd25786c13852e0e6b77e10222edf451534fd81  Sunshine-of-Your-Love-Mission-008-Hotfix.zip
