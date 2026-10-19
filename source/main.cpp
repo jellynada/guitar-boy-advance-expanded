@@ -18,6 +18,7 @@
 #include "sustainDisplay.hpp"
 #include "importedCompletion.hpp"
 #include "textDisplay.hpp"
+#include "inputDiagnostic.hpp"
 #include "notes.h"
 
 #include "image.h"
@@ -289,8 +290,9 @@ int main(){
     textDisplay menuTitle(28, 28, 32, true, 16);
     textDisplay menuOriginal(16, 58, 48);
     textDisplay menuImported(16, 82, 64, true, 24);
-    textDisplay menuHelp(16, 112, 96, true, 24);
-    textDisplay menuInfo(16, 136, 112);
+    textDisplay menuDiagnostic(16, 106, 88, true, 24);
+    textDisplay menuHelp(16, 128, 112, true, 16);
+    textDisplay menuInfo(16, 146, 0);
     textDisplay modeLabel(4, 40, 96);
     int selection = 1;
     bool menuDirty = true;
@@ -319,13 +321,22 @@ int main(){
                 pcmStop();gameMode=0;selection=2; // reuse the existing fresh-mode initialization below
             } else {vid_vsync();continue;}
         }
+        if(gameMode==3) {
+            if(InputDiagnostic::finished()) {
+                if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;menuDirty=true;gameClockRunning=false;irq_enable(II_HBLANK);oam_init(oam_mem,128);ScoreDisplay::clear();}
+                else if(key_hit(KEY_A|KEY_START)){gameplayFrames=0;InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
+            }
+            if(gameMode==3){vid_vsync();InputDiagnostic::update(gameplayFrames,easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));continue;}
+        }
         if (!gameMode) {
-            if (key_hit(KEY_UP | KEY_DOWN)) { selection = 3 - selection; menuDirty = true; }
+            if (key_hit(KEY_DOWN)) { selection=selection%3+1;menuDirty=true; }
+            if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
             if (menuDirty) {
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-                menuTitle.updateText("M009 HOLDS");
+                menuTitle.updateText("M010 QA");
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
+                menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
                 menuHelp.updateText("Up/Down A:Start");
                 menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
                 pal_bg_mem[0] = 0;
@@ -374,12 +385,14 @@ int main(){
             REG_BLDCNT=BLD_BUILD(BLD_BG1,BLD_OBJ|BLD_BG2,1);
             if(gameMode==2){ScoreDisplay::initialize();SustainDisplay::initialize();}else {ScoreDisplay::clear();REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);}
             if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
-            else { mmStop(); pcmStart(); }
+            else if(gameMode==2) { mmStop(); pcmStart(); }
+            else {mmStop();pcmStop();irq_disable(II_HBLANK);InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
             const u16 startIrq = REG_IME; REG_IME=0;
             gameplayFrames=0; gameClockRunning=true;
             REG_IME=startIrq;
             REG_TM3CNT=0; REG_TM3D=0; REG_TM3CNT=TM_ENABLE|1; // profile at64CPUcycles/tick
             modeLabel.updateText("");
+            if(gameMode==3){vid_vsync();continue;}
         }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
         const u16 workStart = REG_TM3D;

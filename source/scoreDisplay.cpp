@@ -19,6 +19,9 @@ static void number(unsigned x,unsigned y,uint32_t value) {
     buffer[n]=0;text(x,y,buffer);
 }
 static void row(unsigned y,const char* label,uint32_t value) {text(1,y,label);number(18,y,value);}
+void page(){map=31;memset16(&se_mem[31],FIRST_TILE,1024);}
+void line(unsigned x,unsigned y,const char* value){if(y<20)text(x,y,value);}
+void value(unsigned x,unsigned y,uint32_t value){if(y<20)number(x,y,value);}
 void clear() {
     // Restore the existing black depth mask and only the HUD rows of BG0.
     memset16(&tile_mem[0][1],0x6666,16);memset16(&se_mem[31],1,1024);
