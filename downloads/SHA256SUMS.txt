@@ -1,0 +1,2 @@
+3ec79e0c209b84d2b78f3941c62220c16a209da3e7bf8bff5a3d917ef2e7e713  downloads/mission008-review.zip
+96ec67ef3f8705e3ffd0d5390cad8fd2f5df5bcae2c166cb88e69775ce512e81  downloads/guitar-boy-advance-mission-008.gba
