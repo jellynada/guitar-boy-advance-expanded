@@ -52,3 +52,5 @@ imports/incoming/*
 imports/output/*
 !imports/output/README.md
 __pycache__/
+# Owner-local input used by the documented Mission009 build commands.
+/Cream.zip

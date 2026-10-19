@@ -117,7 +117,7 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
 
 def header(data):
     # Only runtime essentials go into ROM. Original+adapted JSON remain separate.
-    lines=['// Generated Easy onset-test data; no audio or sustain gameplay.',
+    lines=['// Generated Easy heads and genuine sustain durations; raw lengths remain in JSON.',
            '#pragma once', '#include "note.h"', '#include <cstdint>',
            f'inline constexpr uint32_t imported_note_count = {data["note_count"]};',
            f'inline constexpr bool imported_is_synthetic = {str(data["synthetic"]).lower()};',
@@ -126,7 +126,7 @@ def header(data):
            'inline constexpr uint64_t imported_pre_roll_us = 2000000;',
            'inline constexpr Note imported_notes[] = {']
     lines += [f'    {{{n["runtime_tick"]}ULL, {n["lane"]}U, 0U}},' for n in data['notes']]
-    lines += ['};', '// Genuine native sustain durations kept for a future adapter, not judged.',
+    lines += ['};', '// Genuine native sustain durations in microseconds, parallel to imported_notes.',
               'inline constexpr uint64_t imported_sustain_us[] = {']
     lines += [f'    {n["sustain_us"]}ULL,' for n in data['notes']]
     lines += ['};','']

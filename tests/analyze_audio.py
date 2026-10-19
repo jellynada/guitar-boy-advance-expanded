@@ -26,34 +26,46 @@ if not playing:raise SystemExit('No actual playing counter samples recorded.')
 # capture start epoch, not a fitted audio delay or a VBlank song clock.
 origins=np.array([int(r['capture_samples'])-2*max(0,int(r['hardware_consumed'])-1) for r in playing])
 origin=int(np.median(origins))
+hardware_indices=np.array([max(0,int(r['hardware_consumed'])-1) for r in playing])
 points=[]
 for time in map(float,args.times.split(',')):
     start=round(time*32768)-256
     template=reference[start:start+8000].copy();template-=template.mean()
     if len(template)<1024 or np.dot(template,template)<1:raise SystemExit('Reference window must contain actual sound.')
-    guess=start+origin;lo=max(0,guess-1000)
+    # Match the nearest independently observed hardware/capture pair, as the
+    # reactive analyzer already does. A single median includes buffer-phase
+    # variation and cannot measure sub-millisecond drift across a whole song.
+    local_origin=int(origins[int(np.argmin(np.abs(hardware_indices-start//2)))])
+    guess=start+local_origin;lo=max(0,guess-1000)
     search=actual[lo:guess+1000+len(template)]
     if len(search)<len(template):raise SystemExit('Capture does not cover reference window.')
     dot=np.correlate(search,template,'valid')
     sums=np.convolve(search,np.ones(len(template)),'valid')
     squares=np.convolve(search*search,np.ones(len(template)),'valid')
     scores=dot/np.sqrt(np.maximum(1,squares-sums*sums/len(template))*np.dot(template,template))
-    best=int(np.argmax(scores));lag=lo+best-start;error=(lag-origin)*1000/32768
+    best=int(np.argmax(scores));lag=lo+best-start;error=(lag-local_origin)*1000/32768
     if scores[best]<0.94:raise SystemExit(f'Waveform mismatch at{time}s: correlation{scores[best]}')
     if abs(error)>3:raise SystemExit(f'Waveform/clock error{error}ms exceeds3ms.')
-    points.append(dict(runtime_seconds=time,expected_event_capture_sample=round(time*32768)+origin,
+    points.append(dict(runtime_seconds=time,expected_event_capture_sample=round(time*32768)+local_origin,
                        matched_event_capture_sample=round(time*32768)+lag,
-                       template_start_expected_sample=start+origin,
+                       template_start_expected_sample=start+local_origin,
+                       capture_epoch_at_reference=local_origin,global_epoch_error_ms=(lag-origin)*1000/32768,
                        matched_capture_sample=lo+best,error_ms=error,correlation=float(scores[best])))
 ended=[r for r in rows if r['state']=='2']
 if ended:
-    final=int(ended[-1]['tick'])
-    if any(int(r['tick'])!=final for r in ended):raise SystemExit('EOF clock continued after stop.')
+    consumed=int(ended[-1]['consumed']);final=max(0,consumed-1)*1024
+    # Timer IRQ may report EOF after the foreground took its note snapshot.
+    # The existing completion guard catches up exactly once on the next frame;
+    # hardware consumption must already be frozen, and later ticks must match.
+    if any(int(r['consumed'])!=consumed for r in ended):raise SystemExit('Audio samples continued after EOF.')
+    if not 0<=final-int(ended[0]['tick'])<=280896 or any(int(r['tick'])!=final for r in ended[1:]) or int(ended[-1]['tick'])!=final:
+        raise SystemExit('EOF clock continued after its final snapshot settled.')
 drift=max(p['error_ms'] for p in points)-min(p['error_ms'] for p in points)
 if drift>0.2:raise SystemExit(f'Observed waveform drift{drift}ms exceeds0.2ms.')
 report=dict(capture_rate=32768,hardware_rate=16384,capture_epoch_samples=origin,
             epoch_variation_samples=int(origins.max()-origins.min()),references=points,
-            maximum_observed_drift_ms=drift,peak_output=int(np.abs(actual).max()),
+            maximum_observed_drift_ms=drift,
+            global_epoch_drift_ms=max(p['global_epoch_error_ms'] for p in points)-min(p['global_epoch_error_ms'] for p in points),peak_output=int(np.abs(actual).max()),
             clipping_samples=int(np.count_nonzero(np.abs(actual)>=32767)),
             last_second_nonzero_samples=int(np.count_nonzero(actual[-32768:])))
 if report['clipping_samples']:raise SystemExit('Captured output clips.')

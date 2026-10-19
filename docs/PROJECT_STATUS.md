@@ -1,4 +1,31 @@
-# Project status — Mission 008
+# Project status — Mission 009
+
+
+Current branch: **mission-009-sustain-gameplay**, based on the verified owner-tested
+hotfix `71f0152`. All Missions001–008 are ancestors; main remains unmerged.
+
+Imported Easy now has a fixed-storage hold controller, genuine-duration tails,
+integer quarter-second bonuses at the onset's captured multiplier, release grace,
+and completed/early-release/bonus result statistics. Head scoring, combo rules,
+FC/AP eligibility, controls, original demo, PCM audio/guitar gate are preserved.
+The actual395-note/78-hold Cream chart and full recording are tested privately.
+The public25-head fixture includes six holds, A+B overlap, and same-lane retirement.
+
+[Sustain design and Windows build](SUSTAIN_GAMEPLAY.md) ·
+[Mission009 test evidence and delivery](MISSION_009_RESULTS.md).
+
+Cream delivery follows Mission009's current restriction: no public new Cream ROM
+without redistribution confirmation. No private artifact transfer is connected;
+the supported owner delivery is the verified local two-command build, using the
+existing uploaded/source ZIP. The public synthetic ROM/review ZIP are downloadable.
+
+Remaining features: further curated songs, imported Medium/Hard, song library,
+star power and failure/health remain unimplemented. No such expansion is part of
+this mission. Recommended next work is owner sustain playtesting and focused
+polish of the existing horizon/sprite glitches before song-library expansion.
+No manual Windows listening/playing or physical-GBA test is claimed here.
+
+## Historical Mission008 status
 
 Current hotfix: `mission-008-hotfix-hud-completion`. Larger Tonc system font,
 explicit SCORE/COMBO/MULT HUD, visible build identifier, and bounded EOF

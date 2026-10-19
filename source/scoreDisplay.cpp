@@ -61,6 +61,7 @@ void results(const ScoreSnapshot& s,const char* title,uint32_t sessionState,uint
         else text(1,13,"SONG COMPLETE");
     } else text(1,13,sessionState==ImportedCompletion::AudioError?"SESSION INTERRUPTED":"UNRESOLVED / STATS MISMATCH");
     if(diagnostic)text(1,14,diagnostic==1?"CLOCK DID NOT SETTLE":diagnostic==2?"UNRESOLVED NOTES":"STATS MISMATCH");
+    row(12,"HOLDS DONE",s.holdsCompleted);if(!diagnostic)row(14,"EARLY RELEASES",s.holdsReleased);row(15,"HOLD BONUS",s.sustainBonus);
     text(1,16,"A / START: REPLAY");text(1,18,"B / SELECT: MODE SELECT");
 }
 }

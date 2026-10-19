@@ -37,28 +37,36 @@ static void visible(struct mCore* c,const color_t* pixels,unsigned font,unsigned
 }
 int main(int argc,char** argv){
     assert(argc==7);const char* syms=argv[2];unsigned count=strtoul(argv[3],0,10),frames=strtoul(argv[4],0,10);const char* mode=argv[5];int isFault=!strncmp(mode,"fault",5); int reactiveMixed=!strcmp(mode,"reactive"); int reactiveWrong=!strcmp(mode,"wrong");int scoringMixed=!strcmp(mode,"scoring");int inconsistent=!strcmp(mode,"inconsistent");int allGood=!strcmp(mode,"good");int silentPerfect=!strcmp(mode,"silent-perfect");
+    int sustainMode=!strcmp(mode,"sustain-perfect")||!strcmp(mode,"sustain-release");int releaseMode=!strcmp(mode,"sustain-release");
     unsigned modeaddr=address(syms,"gameMode"),clockaddr=address(syms,"importedNowCycles"),statsaddr=address(syms,"displayedStats"),chartaddr=address(syms,"imported_notes");
     unsigned stateaddr=address(syms,"audioState"),consaddr=address(syms,"audioSamplesConsumed"),maxaddr=address(syms,"importedFrameWorkMaxCycles"),totaladdr=address(syms,"importedFrameWorkTotalCycles"),workcount=address(syms,"importedFrameWorkCount");
     unsigned serialaddr=address(syms,"guitarEventSerial"),traceaddr=address(syms,"guitarEventTrace"),gateaddr=address(syms,"guitarAudible"),gainaddr=address(syms,"guitarGain"),refilladdr=address(syms,"audioRefillCount"),irqmaxaddr=address(syms,"audioRefillMaxCycles"),irqtotaladdr=address(syms,"audioRefillTotalCycles"),underrunaddr=address(syms,"audioUnderruns");
     unsigned scoreaddr=address(syms,"displayedScore"),sessionaddr=address(syms,"importedSessionState");
+    unsigned tailaddr=address(syms,"sustainTailSprites"),overflowaddr=address(syms,"sustainTailOverflow"),tailChecks=0,peakTails=0;
+    unsigned lengthsaddr=address(syms,"imported_sustain_us");uint64_t heldUntil[3]={0};
     unsigned fontaddr=address(syms,"sys8Glyphs"),visibleChecks=0,stableScore=~0u,stableCombo=~0u,stableFrames=0;
     struct mLogger logger={.log=log_message};mLogSetDefaultLogger(&logger);
     struct mCore* c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
+    unsigned firstHold=0,firstMult=0,bonusBefore=0,bonusAfter=0;uint64_t firstHit=0;
     color_t pixels[240*160]={0};c->setVideoBuffer(c,pixels,240);c->setAudioBufferSize(c,4096);
     for(int ch=0;ch<2;++ch)blip_set_rates(c->getAudioChannel(c,ch),c->frequency(c),32768);
     struct mCoreCallbacks cb={.coreCrashed=crash};c->addCoreCallbacks(c,&cb);assert(mCoreLoadFile(c,argv[1]));c->reset(c);
+    while(firstHold<count&&!read64(c,lengthsaddr+firstHold*8))++firstHold;
     for(unsigned i=0;i<90;++i){frame(c,0);drain(c);}assert(c->busRead32(c,modeaddr)==0);screenshot(argv[6],"menu",pixels);
     for(unsigned i=0;i<2;++i){frame(c,128);drain(c);}frame(c,0);drain(c);
     char filename[1024];snprintf(filename,sizeof(filename),"%s.raw",argv[6]);FILE* audio=fopen(filename,"wb");assert(audio);
     snprintf(filename,sizeof(filename),"%s.csv",argv[6]);FILE* csv=fopen(filename,"w");assert(csv);fprintf(csv,"frame,tick,consumed,hardware_consumed,capture_samples,perfect,good,miss,state,gate,gain,refills,underruns\n");
     snprintf(filename,sizeof(filename),"%s.events.csv",argv[6]);FILE* events=fopen(filename,"w");assert(events);fprintf(events,"serial,sample,kind,gain,gameplay_tick\n");unsigned lastEventFrame=0,lastKind=0;unsigned eventSerial=0;int mutedSaved=0,recoveredSaved=0,resultSaved=0;unsigned refScore=0,refCombo=0,refMax=0,refHighest=1;
     unsigned firstaddr=address(syms,"importedFirstVisible"),endaddr=address(syms,"importedEndVisible");
-    int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
+    unsigned simultaneousFrames=0;int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
     uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,1,2};
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;
         uint64_t now=read64(c,clockaddr);
-        if((!strcmp(mode,"perfect")||reactiveMixed||reactiveWrong||scoringMixed||allGood||silentPerfect)&&f>2)while(next<count){uint64_t target=read64(c,chartaddr+next*16);if(allGood||(scoringMixed&&next%4==1))target+=671088;if(target>now+280896)break;unsigned lane=c->busRead32(c,chartaddr+next*16+8);assert(lane<3);if((!reactiveMixed||next%3!=1)&&(!scoringMixed||next%4!=2))keys|=buttons[lane];++next;}
+        if(sustainMode&&f>2)for(unsigned lane=0;lane<3;++lane)if(heldUntil[lane]>now)keys|=buttons[lane];
+        if(sustainMode&&next<count){unsigned lane=c->busRead32(c,chartaddr+next*16+8);uint64_t target=read64(c,chartaddr+next*16);if(target>now+280896&&target<=now+2*280896&&(keys&buttons[lane])){keys&=~buttons[lane];heldUntil[lane]=0;}}
+        if((sustainMode||!strcmp(mode,"perfect")||reactiveMixed||reactiveWrong||scoringMixed||allGood||silentPerfect)&&f>2)while(next<count){uint64_t target=read64(c,chartaddr+next*16);if(allGood||(scoringMixed&&next%4==1))target+=671088;if(target>now+280896)break;unsigned lane=c->busRead32(c,chartaddr+next*16+8);assert(lane<3);if((!reactiveMixed||next%3!=1)&&(!scoringMixed||next%4!=2)){keys|=buttons[lane];if(sustainMode){uint64_t us=read64(c,lengthsaddr+next*8);heldUntil[lane]=target+(us*16777216ULL+500000)/1000000/(releaseMode?2:1);}}++next;}
+        if(sustainMode&&(keys&3)==3)++simultaneousFrames;
         if(reactiveWrong&&f>10&&f%30==0)keys=32|1|2;
         if(inconsistent&&f==400)c->busWrite32(c,stateaddr,2);
         if(isFault&&f==400){
@@ -97,9 +105,36 @@ int main(int argc,char** argv){
         if(mutedSaved&&!recoveredSaved&&c->busRead32(c,gateaddr)&&c->busRead32(c,gainaddr)==256){screenshot(argv[6],"recovered",pixels);recoveredSaved=1;}
         unsigned latest=c->busRead32(c,serialaddr);if(inconsistent&&latest<eventSerial)eventSerial=latest;assert(latest-eventSerial<=16);
         while(eventSerial<latest){unsigned a=traceaddr+(eventSerial%16)*24;assert(c->busRead32(c,a+12)==eventSerial);fprintf(events,"%u,%u,%u,%u,%llu\n",eventSerial,c->busRead32(c,a),c->busRead32(c,a+4),c->busRead32(c,a+8),(unsigned long long)read64(c,a+16));unsigned kind=c->busRead32(c,a+4);lastKind=kind;lastEventFrame=f;
-            if(kind<2){++refCombo;unsigned mult=refCombo<10?1:refCombo<20?2:refCombo<30?3:4;refScore+=(kind==0?10:5)*mult;if(refCombo>refMax)refMax=refCombo;if(mult>refHighest)refHighest=mult;}else refCombo=0;
+            if(kind<2){++refCombo;unsigned mult=refCombo<10?1:refCombo<20?2:refCombo<30?3:4;refScore+=(kind==0?10:5)*mult;if(eventSerial==firstHold){firstHit=read64(c,a+16);firstMult=mult;}if(refCombo>refMax)refMax=refCombo;if(mult>refHighest)refHighest=mult;}else refCombo=0;
             ++eventSerial;}
-        if(eventSerial){assert(c->busRead32(c,scoreaddr)==refScore);assert(c->busRead32(c,scoreaddr+4)==refCombo);assert(c->busRead32(c,scoreaddr+8)==refMax);assert(c->busRead32(c,scoreaddr+16)==refHighest);}
+        if(eventSerial){assert(c->busRead32(c,scoreaddr)==refScore+c->busRead32(c,scoreaddr+56));assert(c->busRead32(c,scoreaddr+4)==refCombo);assert(c->busRead32(c,scoreaddr+8)==refMax);assert(c->busRead32(c,scoreaddr+16)==refHighest);}
+        unsigned tailCount=c->busRead32(c,tailaddr);if(tailCount>peakTails)peakTails=tailCount;
+        assert(c->busRead32(c,overflowaddr)==0);
+        if(tailCount&&f%17==0){
+            int seen=0;
+            for(unsigned obj=32;obj<128&&!seen;++obj){
+                unsigned a0=c->busRead16(c,0x07000000+obj*8),a1=c->busRead16(c,0x07000002+obj*8),a2=c->busRead16(c,0x07000004+obj*8);
+                unsigned y=a0&255,x=a1&511,tile=a2&1023,bank=a2>>12;
+                if((a0&0x300)||y<60||y>92||x>=224||tile<192||tile>=384)continue;
+                unsigned rgb=c->busRead16(c,0x05000200+(bank*16+1)*2);
+                for(unsigned col=0;col<16;++col){unsigned byte=c->busRead8(c,0x06010000+(tile+col/8)*32+3*4+(col%8)/2);if(!((byte>>((col%2)*4))&15))continue;
+                    unsigned pixel=pixels[(y+3)*240+x+col];
+                    if(abs((int)(pixel&255)-(int)((rgb&31)*8))<=8&&abs((int)((pixel>>8)&255)-(int)(((rgb>>5)&31)*8))<=8&&abs((int)((pixel>>16)&255)-(int)(((rgb>>10)&31)*8))<=8){seen=1;break;}
+                }
+            }
+            tailChecks+=seen;
+        }
+        if(f==180||f==240||f==350||f==600||f==900||f==4800||f==9000||f==15000){char label[32];snprintf(label,sizeof(label),"tails-%u",f);screenshot(argv[6],label,pixels);}
+        if(sustainMode&&!releaseMode&&firstHit&&eventSerial==firstHold+1){
+            uint64_t scheduled=read64(c,chartaddr+firstHold*16),start=firstHit>scheduled?firstHit:scheduled;
+            uint64_t end=scheduled+(read64(c,lengthsaddr+firstHold*8)*16777216ULL+500000)/1000000;
+            if(!bonusBefore&&tick>=start+4*280896&&tick<start+4194304){assert(c->busRead32(c,scoreaddr+56)==0);screenshot(argv[6],"bonus-before",pixels);bonusBefore=1;}
+            if(!bonusAfter&&tick>=start+4194304+6*280896&&tick<end){
+                assert(c->busRead32(c,scoreaddr+56)==firstMult&&c->busRead32(c,scoreaddr)==refScore+firstMult);
+                char value[32];snprintf(value,sizeof(value),"%u",refScore+firstMult);visible(c,pixels,fontaddr,6,0,value);
+                visible(c,pixels,fontaddr,0,2,"       ");screenshot(argv[6],"bonus-after",pixels);bonusAfter=1;
+            }
+        }
         unsigned session=c->busRead32(c,sessionaddr);if(state==1)assert(session!=1);
         unsigned liveScore=c->busRead32(c,scoreaddr),liveCombo=c->busRead32(c,scoreaddr+4);
         if(liveScore==stableScore&&liveCombo==stableCombo)++stableFrames;else stableFrames=0;
@@ -157,9 +192,15 @@ int main(int argc,char** argv){
     printf("PASS: %s frames%u notes%u Perfect%u Good%u Miss%u Wrong%u nonzero_samples%u audio_state%u; foreground max%u avg%.1f CPUcycles/frame\n",mode,frames,count,p,g,m,w,nonzero,state,c->busRead32(c,maxaddr),read64(c,totaladdr)/(double)c->busRead32(c,workcount));
     unsigned session=c->busRead32(c,sessionaddr);unsigned score=c->busRead32(c,scoreaddr),combo=c->busRead32(c,scoreaddr+4),maximum=c->busRead32(c,scoreaddr+8),highest=c->busRead32(c,scoreaddr+16),accuracy=c->busRead32(c,scoreaddr+40),finalized=c->busRead32(c,scoreaddr+44),fc=c->busRead32(c,scoreaddr+48),ap=c->busRead32(c,scoreaddr+52);
     if(isFault||inconsistent){assert(session==(inconsistent?3:2)&&!finalized&&!fc&&!ap);}else if(strcmp(mode,"preview")){assert(session==1&&finalized);if(state==2)assert(read64(c,clockaddr)==((uint64_t)c->busRead32(c,consaddr)-1)*1024);assert(c->busRead32(c,scoreaddr+20)==p&&c->busRead32(c,scoreaddr+24)==g&&c->busRead32(c,scoreaddr+28)==m&&c->busRead32(c,scoreaddr+32)==w);assert(accuracy==((uint64_t)(p+g)*10000+count/2)/count);assert(fc==(m==0&&w==0)&&ap==(p==count&&w==0));}
-    if(!strcmp(mode,"perfect")||silentPerfect||allGood){unsigned independent=0;for(unsigned n=1;n<=count;++n)independent+=n<10?10:n<20?20:n<30?30:40;if(allGood)independent/=2;assert(score==independent&&combo==count&&maximum==count);if(count==395)assert(score==(allGood?7615:15230));}
+    if(sustainMode||!strcmp(mode,"perfect")||silentPerfect||allGood){unsigned independent=0;for(unsigned n=1;n<=count;++n)independent+=n<10?10:n<20?20:n<30?30:40;if(allGood)independent/=2;assert(score==independent+c->busRead32(c,scoreaddr+56)&&combo==count&&maximum==count);if(count==395)assert(score-c->busRead32(c,scoreaddr+56)==(allGood?7615:15230));}
+    if(sustainMode&&!releaseMode)assert(bonusBefore&&bonusAfter);
     assert(visibleChecks>3);printf("PASS: %u composite framebuffer HUD checks\n",visibleChecks);
     printf("SCORE: score%u combo%u maximum%u highest%u accuracy%u FC%u AP%u session%u\n",score,combo,maximum,highest,accuracy,fc,ap,session);
+    if(sustainMode&&count==25)assert(simultaneousFrames>1);
+    printf("SIMULTANEOUS: A+B held for %u frames\n",simultaneousFrames);
+    printf("TAILS: peak%u composite_checks%u overflow%u\n",peakTails,tailChecks,c->busRead32(c,overflowaddr));if(sustainMode)assert(tailChecks>5&&peakTails>0);
+    printf("HOLDS: total%u completed%u released%u missed%u bonus%u\n",c->busRead32(c,scoreaddr+72),c->busRead32(c,scoreaddr+60),c->busRead32(c,scoreaddr+64),c->busRead32(c,scoreaddr+68),c->busRead32(c,scoreaddr+56));
+    if(sustainMode){assert(p==count&&g==0&&m==0&&w==0&&c->busRead32(c,gateaddr)==1);assert(c->busRead32(c,scoreaddr+56)>0);if(releaseMode)assert(c->busRead32(c,scoreaddr+64)>0);else assert(c->busRead32(c,scoreaddr+60)>0);}
     printf("IRQ: refills%u max%u mean%.1f cycles, underruns%u gate%u gain%u\n",c->busRead32(c,refilladdr),c->busRead32(c,irqmaxaddr),c->busRead32(c,refilladdr)?read64(c,irqtotaladdr)/(double)c->busRead32(c,refilladdr):0,c->busRead32(c,underrunaddr),c->busRead32(c,gateaddr),c->busRead32(c,gainaddr));
     if(isFault||inconsistent){for(unsigned i=0;i<3;++i){frame(c,0);drain(c);}visible(c,pixels,fontaddr,1,0,isFault?"AUDIO ERROR":"DATA ERROR");visible(c,pixels,fontaddr,1,16,"A / START: REPLAY");visible(c,pixels,fontaddr,1,18,"B / SELECT: MODE SELECT");screenshot(argv[6],"error-visible",pixels);}
     // Results replay uses existing A, and must reset score/clock/guitar.
@@ -177,13 +218,20 @@ int main(int argc,char** argv){
             snprintf(value,sizeof(value),"%u",v);visible(c,pixels,fontaddr,18,row,value);
         }
         snprintf(value,sizeof(value),"%u.%02u%%",accuracy/100,accuracy%100);visible(c,pixels,fontaddr,18,5,value);
+        visible(c,pixels,fontaddr,1,12,"HOLDS DONE");visible(c,pixels,fontaddr,1,14,"EARLY RELEASES");visible(c,pixels,fontaddr,1,15,"HOLD BONUS");
+        for(unsigned row=12;row<=15;++row){if(row==13)continue;unsigned v=c->busRead32(c,scoreaddr+(row==12?60:row==14?64:56));snprintf(value,sizeof(value),"%u",v);visible(c,pixels,fontaddr,18,row,value);}
         visible(c,pixels,fontaddr,1,13,ap?"ALL PERFECT / FULL COMBO":fc?"FULL COMBO":"SONG COMPLETE");
         screenshot(argv[6],"results-visible",pixels);puts("PASS: composed results heading, score, statistics labels and navigation instructions");
         frame(c,0);
         if(!strcmp(mode,"returnmenu")||!strcmp(mode,"returnselect")){
             frame(c,!strcmp(mode,"returnmenu")?2:4);frame(c,0);assert(c->busRead32(c,modeaddr)==0);screenshot(argv[6],"return-menu",pixels);
             frame(c,8);frame(c,0);assert(c->busRead32(c,modeaddr)==2);
-        }else {frame(c,!strcmp(mode,"replaystart")?8:1);frame(c,0);}assert(c->busRead32(c,sessionaddr)==0&&c->busRead32(c,scoreaddr)==0&&c->busRead32(c,scoreaddr+4)==0&&c->busRead32(c,scoreaddr+16)==1);assert(c->busRead32(c,gateaddr)==1&&c->busRead32(c,gainaddr)==256);for(unsigned i=0;i<120;++i){frame(c,0);drain(c);}if(state==2)assert(c->busRead32(c,consaddr)>16000&&c->busRead32(c,stateaddr)==1);else assert(c->busRead32(c,stateaddr)==0);visible(c,pixels,fontaddr,0,0,"SCORE:0");screenshot(argv[6],"replay",pixels);printf("PASS: results %s action resets score, combo, multiplier, audio and guitar\n",!strcmp(mode,"returnmenu")?"B menu + Start":!strcmp(mode,"returnselect")?"Select menu + Start":!strcmp(mode,"replaystart")?"Start replay":"A replay");}
+        }else {frame(c,!strcmp(mode,"replaystart")?8:1);frame(c,0);}assert(c->busRead32(c,sessionaddr)==0&&c->busRead32(c,scoreaddr)==0&&c->busRead32(c,scoreaddr+4)==0&&c->busRead32(c,scoreaddr+16)==1);assert(c->busRead32(c,gateaddr)==1&&c->busRead32(c,gainaddr)==256);assert(c->busRead32(c,scoreaddr+56)==0&&c->busRead32(c,scoreaddr+60)==0&&c->busRead32(c,scoreaddr+64)==0&&c->busRead32(c,scoreaddr+68)==0);for(unsigned i=0;i<120;++i){frame(c,0);drain(c);}if(state==2)assert(c->busRead32(c,consaddr)>16000&&c->busRead32(c,stateaddr)==1);else assert(c->busRead32(c,stateaddr)==0);visible(c,pixels,fontaddr,0,0,"SCORE:0");screenshot(argv[6],"replay",pixels);
+        unsigned replaySound=0;
+        for(unsigned i=0;i<360;++i){frame(c,0);short data[4096];int n=blip_read_samples(c->getAudioChannel(c,0),data,4096,0);for(int j=0;j<n;++j)replaySound+=data[j]!=0;blip_clear(c->getAudioChannel(c,1));}
+        if(state==2)assert(replaySound>1000);else assert(replaySound==0);
+        printf("PASS: replay produces %u new nonzero audio samples after fresh pre-roll\n",replaySound);
+        printf("PASS: results %s action resets score, combo, multiplier, audio and guitar\n",!strcmp(mode,"returnmenu")?"B menu + Start":!strcmp(mode,"returnselect")?"Select menu + Start":!strcmp(mode,"replaystart")?"Start replay":"A replay");}
     // Rapid return/replay: exact counts start at0, timer position starts near0.
     for(unsigned repeat=0;repeat<4;++repeat){
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);assert(c->busRead32(c,modeaddr)==0);

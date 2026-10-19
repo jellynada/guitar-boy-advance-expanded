@@ -13,6 +13,7 @@ struct ScoreSnapshot {
     uint32_t score=0,combo=0,maxCombo=0,multiplier=1,highestMultiplier=1;
     uint32_t perfect=0,good=0,missed=0,wrong=0,total=0,accuracy=0;
     uint32_t finalized=0,fullCombo=0,allPerfect=0;
+    uint32_t sustainBonus=0,holdsCompleted=0,holdsReleased=0,holdsMissed=0,holdsTotal=0;
 };
 template<uint32_t N> class NoteScore {
 public:
@@ -36,6 +37,7 @@ public:
         state_.accuracy=ScoreRules::accuracy(state_.perfect+state_.good,N);
         return true;
     }
+    void addSustainBonus(uint32_t bonus) {if(!state_.finalized){state_.score=ScoreRules::add(state_.score,bonus);state_.sustainBonus=ScoreRules::add(state_.sustainBonus,bonus);}}
     bool coherent(const JudgmentStats& j) const {
         return state_.perfect==j.perfect&&state_.good==j.good&&state_.missed==j.missed&&state_.wrong==j.wrongInputs;
     }

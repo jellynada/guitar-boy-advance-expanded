@@ -158,6 +158,7 @@ $(BUILD)/imported_audio.bin $(BUILD)/imported_backing.bin $(BUILD)/imported_audi
 
 $(BUILD): $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
+	@$(PYTHON) tools/validate_holds.py $(BUILD)/imported_chart.hpp --audio-header $(BUILD)/imported_audio.hpp
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@$(PYTHON) tools/check_rom_size.py "$(OUTPUT).gba"
 

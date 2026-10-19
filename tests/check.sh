@@ -52,3 +52,7 @@ ASAN_OPTIONS=detect_leaks=1 "$tmp/guitar_gate"
 
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/scoring.cpp -o "$tmp/scoring"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/scoring"
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/sustain.cpp -o "$tmp/sustain"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/sustain"
+python3 -m unittest discover -s tests -p test_hold_data.py -v
