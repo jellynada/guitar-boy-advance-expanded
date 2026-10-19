@@ -191,7 +191,7 @@ separate ROM packs are options, not implemented multisong support.
 Review base:mission-005-first-playable-import. Source head:mission-006-audio-sync.
 The exact source commit is recorded in the bundle. Public downloads use a separate
 mission-006-download branch; it must not be merged into source/main. PR creation
-outcome is recorded after the actual attempt below.
+attempt returned `Post "https://api.github.com/graphql": Forbidden`. No PR was created. Source push succeeded; review or create a PR using [the compare page](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-005-first-playable-import...mission-006-audio-sync). The prepared PR description is included in the bundle. Main was not merged.
 
 Limits:one mixed recording, lo-fi mono8bit, no runtime OPUS/MP3/ADPCM decoder,
 no reactive stems, imported Medium/Hard, scoring, sustain mechanics or full song
