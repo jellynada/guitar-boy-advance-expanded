@@ -204,3 +204,10 @@ hash; subsequent compatibility testing uses its matching original prepared heade
 A stale leftover-ROM test attempt was rejected by the existing head-observation
 assertion; the new build-pair guard now catches this class before emulation.
 No result from that stale attempt is counted as a passed fixed-mix test.
+
+A draft PR was attempted against mission-009-sustain-gameplay using the completed
+source/review description. GitHub returned
+`Post "https://api.github.com/graphql": Forbidden`. **No PR was created.**
+The pushed source remains reviewable through the README comparison link; the
+prepared PR description is included in the public review ZIP. API requests were
+not retried after this denial. Main remains unchanged.
