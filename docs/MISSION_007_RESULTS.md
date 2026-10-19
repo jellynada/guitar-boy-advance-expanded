@@ -155,7 +155,10 @@ The public bundle contains complete tracked source and a synthetic reactive ROM,
 not the Cream package or reactive recording/ROM. A private artifact tool is not
 available in this session. See REACTIVE_GUITAR_AUDIO.md for precise local retrieval
 and Windows reproduction; no nonworking sandbox link is advertised as delivery.
-Draft PR status and the final compare link are recorded after the actual attempt.
+Source push succeeded. Draft PR creation was attempted and returned
+`Post "https://api.github.com/graphql": Forbidden`; **no PR was created**.
+Review or create the PR using [this compare page](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-006-audio-sync...mission-007-reactive-guitar-audio).
+The prepared description is included in the review bundle. Main remains unchanged.
 
 No manual listening, physical GBA test, subjective-quality or complete
 instrument-isolation claim. Recommended Mission008:owner listening/feel and
