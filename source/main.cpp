@@ -4,6 +4,7 @@
 
 #include "terminal.hpp"
 #include "mode7.hpp"
+#include "scanline.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
 #include "gameControls.hpp"
@@ -301,6 +302,7 @@ int main(){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
         if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
+            Scanline::stop();
             mmStop();
             pcmStop();
             importedSessionState=ImportedCompletion::Playing;
@@ -314,11 +316,11 @@ int main(){
         }
         if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
             if(key_hit(KEY_B|KEY_SELECT)) {
-                pcmStop();gameMode=0;gameClockRunning=false;menuDirty=true;
+                Scanline::stop();pcmStop();gameMode=0;gameClockRunning=false;menuDirty=true;
                 importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
                 oam_init(oam_mem,128);ScoreDisplay::clear();
             } else if(key_hit(KEY_A|KEY_START)) {
-                pcmStop();gameMode=0;selection=2; // reuse the existing fresh-mode initialization below
+                Scanline::stop();pcmStop();gameMode=0;selection=2; // reuse the existing fresh-mode initialization below
             } else {vid_vsync();continue;}
         }
         if(gameMode==3) {
@@ -333,7 +335,7 @@ int main(){
             if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
             if (menuDirty) {
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-                menuTitle.updateText("M010 QA");
+                menuTitle.updateText("M011 TIMING");
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
                 menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
@@ -343,6 +345,7 @@ int main(){
                 menuDirty = false;
             }
             if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
+            Scanline::stop();
             // Fresh mode epoch: counters, camera, visuals and held-key history.
             const u16 interrupts = REG_IME;
             REG_IME = 0;
@@ -384,6 +387,10 @@ int main(){
             irq_enable(II_HBLANK);
             REG_BLDCNT=BLD_BUILD(BLD_BG1,BLD_OBJ|BLD_BG2,1);
             if(gameMode==2){ScoreDisplay::initialize();SustainDisplay::initialize();}else {ScoreDisplay::clear();REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);}
+            if(gameMode==2){
+                m7_level.camera->pos.z=ImportedTiming::floorZ(0);
+                m7_prep_horizon(&m7_level);m7_prep_affines(&m7_level);Scanline::start();
+            }
             if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
             else if(gameMode==2) { mmStop(); pcmStart(); }
             else {mmStop();pcmStop();irq_disable(II_HBLANK);InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
@@ -431,7 +438,7 @@ int main(){
                 if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
                 else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
                 displayedStats=importedNotes.stats();displayedScore=scoreSnapshot();
-                gameClockRunning=false;irq_disable(II_HBLANK);oam_init(oam_mem,128);
+                gameClockRunning=false;Scanline::stop();irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
                 ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
                 vid_vsync();continue;
@@ -454,6 +461,7 @@ int main(){
 		update_sprites();
         if(gameMode==2)SustainDisplay::draw(importedNowCycles);
 		m7_prep_affines(&m7_level);
+        if(gameMode==2)Scanline::prepare();
 
 		//if(key_hit(KEY_START)) Terminal::log("Tick = %%", m7_level.camera->pos.z);
 
@@ -468,7 +476,9 @@ int main(){
             importedFrameWorkTotalCycles += cycles; ++importedFrameWorkCount;
             if (cycles > importedFrameWorkMaxCycles) importedFrameWorkMaxCycles=cycles;
         }
-        //helps with visual tearing
+        // Poll the VBlank edge: do not rely on a callback that can lose an
+        // interrupt simultaneous with the audio IRQ in Tonc's master handler.
         vid_vsync();
+        Scanline::vblank();
     }
 }

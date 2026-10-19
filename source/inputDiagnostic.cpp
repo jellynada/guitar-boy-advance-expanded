@@ -14,7 +14,7 @@ void start(uint8_t held){session.reset(held);recentPress=0;ScoreDisplay::initial
 void update(unsigned frame,uint8_t held){
     session.update(frame,held);diagnosticSnapshot=session.state;
     for(unsigned i=0;i<COUNT;++i)diagnosticResults[i]=uint32_t(session.result(i));
-    ScoreDisplay::page();ScoreDisplay::line(0,0,"INPUT / CHORD TEST - M010");
+    ScoreDisplay::page();ScoreDisplay::line(0,0,"INPUT / CHORD TEST - M011");
     if(session.finished()){
         for(unsigned i=0;i<COUNT;++i){ScoreDisplay::line(0,i+2,targets[i].label);ScoreDisplay::line(21,i+2,label(session.result(i)));}
         ScoreDisplay::line(0,16,"A/START RETRY B/SELECT EXIT");return;

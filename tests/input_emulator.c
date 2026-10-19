@@ -65,7 +65,7 @@ int main(int argc,char** argv){
         }
         frame(c,keys);drain(c);assert(c->busRead32(c,game)==3);
         unsigned observed=c->busRead32(c,snapshot),test=c->busRead32(c,snapshot+4),held=c->busRead32(c,snapshot+8),pressed=c->busRead32(c,snapshot+12),active=c->busRead32(c,snapshot+28);
-        if(observed>5&&observed%37==0){visible(c,pixels,font,0,0,"INPUT / CHORD TEST - M010");++rawChecks;}
+        if(observed>5&&observed%37==0){visible(c,pixels,font,0,0,"INPUT / CHORD TEST");++rawChecks;}
         if(pressed)++pressedChecks;
         if(test>=3&&test<=6&&held&&(held&(held-1)))++chordChecks;
         if(keys==oldKeys)++stableKeys;else stableKeys=0;oldKeys=keys;
