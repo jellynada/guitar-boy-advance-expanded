@@ -71,6 +71,11 @@ static void completion() {
     assert(poll(false,PcmClock::Disabled,end-1,end,true)==Playing);
     assert(poll(false,PcmClock::Disabled,end,end,true)==Complete);
     assert(poll(false,PcmClock::Disabled,end,end,false)==Inconsistent);
+    uint32_t waited=0;
+    for(unsigned i=0;i<119;++i)assert(boundedPoll(true,PcmClock::Ended,100,0,true,101,waited)==Playing);
+    assert(boundedPoll(true,PcmClock::Ended,100,0,true,101,waited)==Inconsistent);
+    assert(boundedPoll(true,PcmClock::Ended,101,0,true,101,waited)==Complete&&waited==0);
+    assert(boundedPoll(true,PcmClock::Ended,101,0,false,101,waited)==Inconsistent);
     assert(silentEnd(0,false)==PRE_ROLL&&silentEnd(UINT64_MAX,true)==UINT64_MAX);
 }
 int main(){basic();engineEvents();reference();completion();puts("PASS: scoring10/20/30 thresholds, Good/Perfect, identity dedup, real held/chord/miss/hit/wrong order with audio gate,395Perfect=15230,8192notes, saturation, accuracy, empty charts, finalization, replay reset, audio end/fault/silent consistency");}

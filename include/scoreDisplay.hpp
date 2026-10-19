@@ -5,6 +5,6 @@ namespace ScoreDisplay {
 void initialize();
 void clear();
 void hud(const ScoreSnapshot&,const char* judgment,const char* guitar);
-void results(const ScoreSnapshot&,const char* title,uint32_t sessionState);
+void results(const ScoreSnapshot&,const char* title,uint32_t sessionState,uint32_t diagnostic=0);
 }
 #endif

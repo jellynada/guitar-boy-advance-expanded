@@ -18,5 +18,15 @@ inline State poll(bool enabled,uint32_t audio,uint64_t now,uint64_t silentDeadli
     const bool ended=enabled?audio==PcmClock::Ended:now>=silentDeadline;
     return ended?(resolvedAndCoherent?Complete:Inconsistent):Playing;
 }
+// A stale snapshot is normally caught up on the next frame. Never leave a
+// permanently stale snapshot waiting on an empty highway without an error.
+inline State boundedPoll(bool enabled,uint32_t audio,uint64_t now,uint64_t deadline,bool coherent,uint64_t finalTick,uint32_t& waited) {
+    const State result=poll(enabled,audio,now,deadline,coherent,finalTick);
+    if(enabled&&audio==PcmClock::Ended&&result==Playing) {
+        if(waited<120)++waited;
+        return waited>=120?Inconsistent:Playing;
+    }
+    waited=0;return result;
+}
 }
 #endif

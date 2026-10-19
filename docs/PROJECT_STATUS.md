@@ -1,5 +1,15 @@
 # Project status — Mission 008
 
+Current hotfix: `mission-008-hotfix-hud-completion`. Larger Tonc system font,
+explicit SCORE/COMBO/MULT HUD, visible build identifier, and bounded EOF
+diagnostic. Composed-framebuffer tests supersede internal-only acceptance.
+The owner-reported Windows softlock remains unconfirmed in Linux mGBA.
+See [hotfix findings](MISSION_008_HOTFIX.md) and
+[validation evidence](MISSION_008_HOTFIX_RESULTS.md).
+Main remains unmerged. Owner authorized public Cream playtest ROM delivery.
+
+The following describes the pre-hotfix Mission 008 baseline.
+
 Base:verified Mission007 source `90aaed9f2d7624258ff3485d6a0dc7858c126929`,
 containing the prior chain. New branch:mission-008-scoring-results. Main is not
 merged. The original demo remains the unscored699-note four-lane flow.

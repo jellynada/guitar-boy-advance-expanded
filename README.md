@@ -6,10 +6,21 @@ Perfect earns10base points; Good earns5. Streaks reach2x/3x/4x at10/20/30hits.
 Misses and wrong buttons reset the combo. Approved reactive guitar audio remains.
 The public ROM has an original25-note two-track exercise. The owner's actual
 Cream/WaveGroup package was prepared and tested privately with395Easy notes.
-Private recordings, charts and the reactive ROM are excluded from public downloads.
+The owner subsequently authorized public playtest ROM downloads. See the hotfix
+notes below for the current build; source review bundles use synthetic audio.
 Original Demo remains available; no sustain scoring or unrelated gameplay added.
 
-## Start here
+## Mission 008 hotfix
+
+The owner reported missing score/results during a manual playtest. The hotfix
+uses clearer SCORE/COMBO/MULT labels and a larger font, with bounded EOF error
+handling and composed-framebuffer acceptance checks. Confirm **M008 HOTFIX 1**
+on the selector. [Findings, limits and Windows instructions](docs/MISSION_008_HOTFIX.md).
+[Validation evidence](docs/MISSION_008_HOTFIX_RESULTS.md).
+The older freeze is not reproduced in the Linux test core; Windows acceptance
+is still required. The hotfix delivery bundle contains the newly built ROM.
+
+## Previous Mission 008 review build
 
 [Download the Mission 008 review bundle](https://github.com/jellynada/guitar-boy-advance-expanded/raw/refs/heads/mission-008-download/downloads/mission008-review.zip),
 unzip it and load `guitar-boy-advance-mission-008.gba` in mGBA. Use GBA Up/Down,

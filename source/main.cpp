@@ -36,6 +36,8 @@ volatile u32 gameMode = 0;
 static NoteScore<imported_note_count> importedScoring;
 ScoreSnapshot displayedScore;
 volatile u32 importedSessionState=ImportedCompletion::Playing;
+volatile u32 importedCompletionDiagnostic=0;
+static u32 completionWaitFrames=0;
 static u32 feedbackUntilFrame=0;
 u32 importedFirstVisible = 0, importedEndVisible = 0;
 u64 importedNowCycles = 0;
@@ -310,7 +312,7 @@ int main(){
             if (key_hit(KEY_UP | KEY_DOWN)) { selection = 3 - selection; menuDirty = true; }
             if (menuDirty) {
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-                menuTitle.updateText("MODE TEST");
+                menuTitle.updateText("M008 HOTFIX 1");
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
                 menuHelp.updateText("Up/Down A:Start");
@@ -334,6 +336,7 @@ int main(){
             importedEventCount = 0;
             importedScoring.reset();displayedScore=importedScoring.snapshot();
             importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
+            importedCompletionDiagnostic=completionWaitFrames=0;
             importedFrameWorkMaxCycles = importedFrameWorkCount = 0;
             importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
@@ -382,15 +385,22 @@ int main(){
             const u64 silentDeadline=ImportedCompletion::silentEnd(imported_note_count?imported_notes[imported_note_count-1].tick:0,imported_note_count!=0);
             const u32 completionAudioState=audioState;
             const u64 finalAudioTick=PcmClock::tick(audioSamplesConsumed);
-            importedSessionState=ImportedCompletion::poll(imported_audio_enabled,completionAudioState,importedNowCycles,silentDeadline,
-                importedScoring.resolved()&&importedScoring.coherent(importedNotes.stats()),finalAudioTick);
+            importedSessionState=ImportedCompletion::boundedPoll(imported_audio_enabled,completionAudioState,importedNowCycles,silentDeadline,
+                importedScoring.resolved()&&importedScoring.coherent(importedNotes.stats()),finalAudioTick,completionWaitFrames);
+            if(imported_audio_enabled&&completionAudioState==PcmClock::Ended) {
+                if(completionWaitFrames) {
+                    importedCompletionDiagnostic=1; // stale final-clock snapshot
+                } else if(importedSessionState==ImportedCompletion::Inconsistent) {
+                    importedCompletionDiagnostic=importedScoring.resolved()?3:2;
+                } else importedCompletionDiagnostic=0;
+            }
             if(importedSessionState!=ImportedCompletion::Playing) {
                 if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
                 else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
                 displayedStats=importedNotes.stats();displayedScore=importedScoring.snapshot();
                 gameClockRunning=false;irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
-                ScoreDisplay::results(displayedScore,imported_title,importedSessionState);
+                ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
                 vid_vsync();continue;
             }
         } else {
