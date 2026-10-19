@@ -164,3 +164,11 @@ need fresh visual/performance acceptance against finite sprite and memory budget
 No imported Medium/Hard, new codec, song library, star power, health/failure or
 new multiplier rules are implemented. Suggested next work: owner sustain
 playtesting and focused graphics polish before multi-song planning.
+
+## Source review handoff
+
+Implementation commit: `85c637d4cf1c1029fbf8d2413ba0a63274ef234b`.
+A draft pull request was attempted with the prepared body and returned
+`Post "https://api.github.com/graphql": Forbidden`. **No PR was created.**
+[Review the source comparison](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-008-hotfix-hud-completion...mission-009-sustain-gameplay).
+The prepared description is included in the downloadable review bundle.
