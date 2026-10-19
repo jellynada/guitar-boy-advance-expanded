@@ -1,3 +1,5 @@
+> Mission008: see [scoring/results guide](SCORING_AND_RESULTS.md) for the current HUD, end screen and Windows workflow. Audio and judgment rules below remain valid; earlier measurements are historical.
+
 > Mission007 update: [Reactive guitar guide](REACTIVE_GUITAR_AUDIO.md) describes the current two-stream mixer, gating, timer resources and Windows commands. The Mission006/fixed-mix measurements below remain historical.
 
 # Mission 006: imported audio playback and synchronization

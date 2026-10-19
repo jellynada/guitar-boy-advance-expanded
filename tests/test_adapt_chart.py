@@ -17,6 +17,17 @@ def prepare(song):return adapt(song,difficulty='Easy',instrument='five_fret_lead
 
 
 class AdaptTests(unittest.TestCase):
+    def test_result_title_escaped_bounded_and_notes_preserved(self):
+        s=source();before=prepare(s)
+        s['metadata']['Name']='Title "quoted" \\ café\n'+'x'*120
+        a=prepare(s);h=header(a)
+        line=next(x for x in h.splitlines() if 'imported_title[]' in x)
+        title=json.loads(line.split(' = ',1)[1][:-1])
+        self.assertEqual(len(title),96)
+        self.assertTrue(all(32<=ord(c)<=126 for c in title))
+        self.assertEqual(before['notes'],a['notes'])
+        self.assertIn('\\"quoted\\"',line)
+
     def test_no_notes_or_source_mutated(self):
         s=source();original=copy.deepcopy(s);a=prepare(s)
         self.assertEqual(s,original)

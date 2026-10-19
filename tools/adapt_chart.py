@@ -103,6 +103,7 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
                  'Genuine sustain durations retained; no tails, held-note scoring or release judgment.',
                  'Only Easy native lanes0/1/2 map to Left/A/B; no collapsing or difficulty relabeling.']
     return dict(schema_version='gba-adapted-easy-v1', source_name=song['source_name'],
+                title=song.get('metadata',{}).get('Name') or song['source_name'],
                 source_sha256=song.get('source_sha256'), synthetic=synthetic,
                 difficulty=difficulty, instrument=instrument, controls=['Left','A','B'],
                 clock_hz=CLOCK_HZ, frame_cycles=FRAME_CYCLES, pre_roll_us=PRE_ROLL_US,
@@ -120,6 +121,7 @@ def header(data):
            '#pragma once', '#include "note.h"', '#include <cstdint>',
            f'inline constexpr uint32_t imported_note_count = {data["note_count"]};',
            f'inline constexpr bool imported_is_synthetic = {str(data["synthetic"]).lower()};',
+           'inline constexpr char imported_title[] = '+json.dumps(''.join(c if 32<=ord(c)<=126 else '?' for c in str(data.get('title',data['source_name'])))[:96],ensure_ascii=True)+';',
            'inline constexpr uint32_t imported_ticks_per_frame = 280896;',
            'inline constexpr uint64_t imported_pre_roll_us = 2000000;',
            'inline constexpr Note imported_notes[] = {']

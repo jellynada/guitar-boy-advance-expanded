@@ -1,3 +1,47 @@
+# Project status — Mission 008
+
+Base:verified Mission007 source `90aaed9f2d7624258ff3485d6a0dc7858c126929`,
+containing the prior chain. New branch:mission-008-scoring-results. Main is not
+merged. The original demo remains the unscored699-note four-lane flow.
+
+Imported Easy adds a graphics/audio-independent fixed-storage scoring consumer,
+chart-identity deduplication, combos and1x–4x multipliers. Perfect10/Good5base;
+combo increments before award. Miss/WrongInput reset combo; max combo/highest
+multiplier persist. Accuracy is successful notes/selected chart count in0.01%
+units. FC/AP require completed nonempty sessions and zero wrong inputs.
+
+HUD reuses existing8x8font on two BG0rows above incoming notes, preserving the
+BG1 depth mask/highway. Results reuse BG1 after audio EOF and coherent judgment
+completion. Replay and mode selection restore the existing audio/camera/layer
+initialization. Audio faults and unresolved end states show interrupted/data
+errors with partial statistics and no completion awards. Silent fallback has
+an explicit last-note+late-window+frame endpoint. Titles come from bounded
+sanitized metadata. New result states do not replace the judgment engine.
+
+Mission007 PCM/mixing/gate code, source samples, timing windows and imported
+contact geometry are unchanged. Scoring uses the same synchronous event order,
+with no effect on guitar volume or playback position. Audio gating remains
+Miss/WrongInput→zero, Perfect/Good→audible,64sample fade, no timeout.
+
+Automated rules cover395Perfect=15230, all-Good=7615, threshold boundaries,
+identities/chords/holds, event order,8192notes, saturation, accuracy/empty charts
+and safe finalization. Real private/public/full-song and original regressions,
+measurements and exact delivery status are recorded in MISSION_008_RESULTS.md.
+No human/physical-hardware playtest of the new scoring/results is claimed.
+
+Private Mission008 audio/chart/ROM/full traces remain ignored/local. Public
+review content uses original synthetic imported audio/chart and tracked source.
+A private attachment/export tool is unavailable; exact Windows reproduction and
+workspace paths are documented without claiming a path is a download link.
+
+Limits:no scoring/results retrofit for Original Demo, saves, sustain scoring,
+new difficulties, codec/mixing changes or full menus. Next:owner HUD/results
+feedback, physical hardware and focused design priorities for Mission009.
+
+[Scoring rules and owner guide](SCORING_AND_RESULTS.md). Historical status follows.
+
+---
+
 # Project status — Mission 007
 
 Started from verified Mission006 `4fa9e6f8b2558a129075c9815c8bb2ac68e6421b`,

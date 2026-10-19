@@ -1,3 +1,5 @@
+> Mission008: see [scoring/results guide](SCORING_AND_RESULTS.md) for the current HUD, end screen and Windows workflow. Audio and judgment rules below remain valid; earlier measurements are historical.
+
 # Mission 007 — reactive guitar audio
 
 A missed note or wrong button now removes the **selected guitar recording** from

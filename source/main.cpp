@@ -12,6 +12,9 @@
 #include "imported_chart.hpp"
 #include "imported_audio.hpp"
 #include "pcmPlayback.hpp"
+#include "scoring.hpp"
+#include "scoreDisplay.hpp"
+#include "importedCompletion.hpp"
 #include "textDisplay.hpp"
 #include "notes.h"
 
@@ -30,6 +33,10 @@ static NoteManager<careless_expertsingle_count> originalNotes(careless_expertsin
 NoteManager<careless_expertsingle_count>* nm = &originalNotes;
 static ImportedRuntime<imported_note_count> importedNotes(imported_notes);
 volatile u32 gameMode = 0;
+static NoteScore<imported_note_count> importedScoring;
+ScoreSnapshot displayedScore;
+volatile u32 importedSessionState=ImportedCompletion::Playing;
+static u32 feedbackUntilFrame=0;
 u32 importedFirstVisible = 0, importedEndVisible = 0;
 u64 importedNowCycles = 0;
 u64 importedMaxErrorCycles = 0;
@@ -159,6 +166,8 @@ void onGameplayEvent(void*, const GameplayEvent& event) {
     if (gameMode == 2) {
         ++importedEventCount;
         pcmGameplayEvent(event);
+        importedScoring.consume(event);
+        feedbackUntilFrame=currentGameFrame+18;
         if (event.kind == GameplayEventKind::PerfectHit || event.kind == GameplayEventKind::GoodHit) {
             const u64 error = event.gameplayTick >= event.chartTick ? event.gameplayTick - event.chartTick : event.chartTick - event.gameplayTick;
             if (error > importedMaxErrorCycles) importedMaxErrorCycles = error;
@@ -169,6 +178,7 @@ void onGameplayEvent(void*, const GameplayEvent& event) {
         case GameplayEventKind::GoodHit: lastJudgment = "GOOD"; break;
         case GameplayEventKind::Miss: lastJudgment = "MISS"; break;
         case GameplayEventKind::WrongInput:
+            if(gameMode==2)lastJudgment="WRONG";
             wrongVisible = true;
             wrongUntilFrame = currentGameFrame + 24;
             break;
@@ -177,12 +187,19 @@ void onGameplayEvent(void*, const GameplayEvent& event) {
 }
 
 void refreshFeedback() {
+    if(gameMode==2&&feedbackUntilFrame&&currentGameFrame>=feedbackUntilFrame) {feedbackUntilFrame=0;feedbackDirty=true;}
     if (wrongVisible && currentGameFrame >= wrongUntilFrame) {
         wrongVisible = false;
         feedbackDirty = true;
     }
     if (!feedbackDirty) return;
     displayedStats = gameMode == 2 ? importedNotes.stats() : nm->judgment().stats();
+    if(gameMode==2) {
+        displayedScore=importedScoring.snapshot();
+        ScoreDisplay::hud(displayedScore,feedbackUntilFrame?lastJudgment:"",
+            !imported_audio_enabled?"SILENT":!imported_audio_reactive?"FIXED MIX":guitarAudible?"GUITAR ON":"GUITAR MUTED");
+        feedbackDirty=false;return;
+    }
     judgmentText.updateText(lastJudgment);
     hitText.updateLabel("H:", displayedStats.hits());
     missText.updateLabel("M:", displayedStats.missed);
@@ -255,7 +272,7 @@ int main(){
     
     //Setup is done. Lets put it into action!
     //Terminal::log("Hello World! %%", careless_expertsingle_data[0].tick);
-    // Audio starts only after choosing Original Demo. Imported mode is silent.
+    // Audio starts after a mode is chosen.
     textDisplay menuTitle(28, 28, 32);
     textDisplay menuOriginal(16, 58, 48);
     textDisplay menuImported(16, 82, 64, true, 24);
@@ -271,11 +288,23 @@ int main(){
         if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
             mmStop();
             pcmStop();
+            importedSessionState=ImportedCompletion::Playing;
+            irq_enable(II_HBLANK);
+            ScoreDisplay::clear();
             gameClockRunning = false;
             gameMode = 0;
             menuDirty = true;
             oam_init(oam_mem, 128);
             vid_vsync(); continue; // Return chord must not also confirm the selector.
+        }
+        if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
+            if(key_hit(KEY_B|KEY_SELECT)) {
+                pcmStop();gameMode=0;gameClockRunning=false;menuDirty=true;
+                importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
+                oam_init(oam_mem,128);ScoreDisplay::clear();
+            } else if(key_hit(KEY_A|KEY_START)) {
+                pcmStop();gameMode=0;selection=2; // reuse the existing fresh-mode initialization below
+            } else {vid_vsync();continue;}
         }
         if (!gameMode) {
             if (key_hit(KEY_UP | KEY_DOWN)) { selection = 3 - selection; menuDirty = true; }
@@ -303,6 +332,8 @@ int main(){
             m7_rotate(&m7_cam_default, initialCamera.phi, initialCamera.theta);
             importedNowCycles = importedMaxErrorCycles = 0;
             importedEventCount = 0;
+            importedScoring.reset();displayedScore=importedScoring.snapshot();
+            importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
             importedFrameWorkMaxCycles = importedFrameWorkCount = 0;
             importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
@@ -323,13 +354,16 @@ int main(){
             configureFloor();
             drawButtons();
             REG_DISPCNT = DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
+            irq_enable(II_HBLANK);
+            REG_BLDCNT=BLD_BUILD(BLD_BG1,BLD_OBJ|BLD_BG2,1);
+            if(gameMode==2)ScoreDisplay::initialize();else {ScoreDisplay::clear();REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);}
             if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
             else { mmStop(); pcmStart(); }
             const u16 startIrq = REG_IME; REG_IME=0;
             gameplayFrames=0; gameClockRunning=true;
             REG_IME=startIrq;
             REG_TM3CNT=0; REG_TM3D=0; REG_TM3CNT=TM_ENABLE|1; // profile at64CPUcycles/tick
-            modeLabel.updateText(gameMode == 1 ? "" : imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
+            modeLabel.updateText("");
         }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
         const u16 workStart = REG_TM3D;
@@ -340,12 +374,25 @@ int main(){
                 if (audioState!=PcmClock::Fault) importedNotes.updateTick(sampleTick, easyLaneMaskFromButtons(key_is_down(mask)));
             }
             else importedNotes.update(currentGameFrame, easyLaneMaskFromButtons(key_is_down(mask)));
-            if (audioState == PcmClock::Fault) modeLabel.updateText("AUDIO ERROR");
-            else if (imported_audio_reactive) modeLabel.updateText(guitarAudible ? "GUITAR ON" : "GUITAR MUTED");
+
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();
             recent_sprite = importedEndVisible;
+            const u64 silentDeadline=ImportedCompletion::silentEnd(imported_note_count?imported_notes[imported_note_count-1].tick:0,imported_note_count!=0);
+            const u32 completionAudioState=audioState;
+            const u64 finalAudioTick=PcmClock::tick(audioSamplesConsumed);
+            importedSessionState=ImportedCompletion::poll(imported_audio_enabled,completionAudioState,importedNowCycles,silentDeadline,
+                importedScoring.resolved()&&importedScoring.coherent(importedNotes.stats()),finalAudioTick);
+            if(importedSessionState!=ImportedCompletion::Playing) {
+                if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
+                else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
+                displayedStats=importedNotes.stats();displayedScore=importedScoring.snapshot();
+                gameClockRunning=false;irq_disable(II_HBLANK);oam_init(oam_mem,128);
+                pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
+                ScoreDisplay::results(displayedScore,imported_title,importedSessionState);
+                vid_vsync();continue;
+            }
         } else {
             recent_sprite = nm->update(currentGameFrame, laneMaskFromButtons(key_is_down(mask)));
         }
