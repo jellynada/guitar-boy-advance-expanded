@@ -209,3 +209,10 @@ independent CPU percentages. Timer3 resolution is64CPUcycles.
 Worst refill1472cycles remains below the16384cycle interval. No normal-run
 underruns or captured clipping. These are emulator measurements; full physical
 CPU/interrupt/bus costs remain unverified.
+
+## Source review status
+
+Source push succeeded. Draft PR creation was attempted and returned
+`Post "https://api.github.com/graphql": Forbidden`; **no PR was created**.
+[Review/create PR here](https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-007-reactive-guitar-audio...mission-008-scoring-results).
+The prepared description is included in the review bundle. Main remains unchanged.
