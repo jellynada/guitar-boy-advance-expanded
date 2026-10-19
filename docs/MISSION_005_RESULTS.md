@@ -152,3 +152,15 @@ then matching-cover calibration before reactive audio.
 Review base `mission-004-universal-import`, head `mission-005-first-playable-import`.
 No automatic merge. Public download branch must remain separate. Actual PR
 creation outcome is recorded below after the attempt; a compare link is not a PR.
+
+Implementation `1a6db8d` was committed and pushed. Actual draft PR attempt:
+`gh pr create --draft --base mission-004-universal-import --head mission-005-first-playable-import`
+returned `Post "https://api.github.com/graphql": Forbidden`. **No PR was opened.**
+Git push works; no new secret/token was requested. Prepared description is included
+as PULL_REQUEST.md in the full-source review bundle.
+
+Review/create page:
+https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-004-universal-import...mission-005-first-playable-import
+
+The separate `mission-005-download` branch contains only the public synthetic-ROM
+review bundle and download copies. It must not be merged into source/main.
