@@ -1,0 +1,10 @@
+{
+  "mission": 11,
+  "outcome": "B: stable promotion blocked",
+  "source_commit": "a6c0328b319ce1bf48e08371c2db770ac5a5008a",
+  "rom": "Guitar-Boy-Advance-Mission-011-Synthetic.gba",
+  "rom_sha256": "a59989d631183bc02272866022ad5e03347b2a177f2b0cb6a7143c1950658f09",
+  "private_assets_included": false,
+  "ordinary_audio_extra_comparisons": "scoring and wrong still fail; diagnostic emulator correction is not acceptance",
+  "pull_request": "API Forbidden; source branch pushed, review description included"
+}
