@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${DEVKITARM:?Set DEVKITARM}"
+python3 tools/verify_build.py guitar-boy-advance-expanded.gba guitar-boy-advance-expanded.elf --header build/imported_chart.hpp
 mode=${1:-perfect}
 prefix=${2:-/tmp/mission010-input}
 tmp=$(mktemp -d)

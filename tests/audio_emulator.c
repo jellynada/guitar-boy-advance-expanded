@@ -198,7 +198,7 @@ int main(int argc,char** argv){
         if((isFault||inconsistent)&&f>405){assert(state==(inconsistent?0:3));assert(tick==frozen);assert(p+g+m==frozenJudged);assert(c->busRead32(c,statsaddr+12)==0);}
     }
     fclose(audio);fclose(csv);fclose(events);
-    if(!strcmp(mode,"perfect")||silentPerfect||allGood||!strcmp(mode,"miss")||!strcmp(mode,"silent"))for(unsigned r=0;r<5;++r)assert(lineSeen[r]);
+    if(!strcmp(mode,"perfect")||silentPerfect||allGood||!strcmp(mode,"miss")||!strcmp(mode,"silent"))for(unsigned r=0;r<5;++r){if(!lineSeen[r])fprintf(stderr,"Missing head-line observation: index%u in mode %s\n",refIds[r],mode);assert(lineSeen[r]);}
     unsigned p=c->busRead32(c,statsaddr),g=c->busRead32(c,statsaddr+4),m=c->busRead32(c,statsaddr+8),w=c->busRead32(c,statsaddr+12),state=c->busRead32(c,stateaddr);
     if(!strcmp(mode,"perfect")||silentPerfect)assert(p==count&&g==0&&m==0&&w==0);
     if(allGood)assert(p==0&&g==count&&m==0&&w==0);

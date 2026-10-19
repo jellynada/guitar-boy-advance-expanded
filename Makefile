@@ -161,6 +161,7 @@ $(BUILD): $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imp
 	@$(PYTHON) tools/validate_holds.py $(BUILD)/imported_chart.hpp --audio-header $(BUILD)/imported_audio.hpp
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@$(PYTHON) tools/check_rom_size.py "$(OUTPUT).gba"
+	@$(PYTHON) tools/verify_build.py "$(OUTPUT).gba" "$(OUTPUT).elf" --header $(BUILD)/imported_chart.hpp
 
 #---------------------------------------------------------------------------------
 clean:

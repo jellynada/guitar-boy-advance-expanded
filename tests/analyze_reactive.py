@@ -47,7 +47,7 @@ def match(start,length,label):
     if len(search)<len(template):return None
     dots=np.correlate(search,template,'valid');s=np.convolve(search,np.ones(len(template)),'valid');sq=np.convolve(search*search,np.ones(len(template)),'valid')
     scores=dots/np.sqrt(np.maximum(1,sq-s*s/len(template))*np.dot(template,template));best=int(np.argmax(scores));error=(lo+best-start-local_origin)*1000/32768;score=float(scores[best])
-    assert score>.94,(label,score);assert abs(error)<1,(label,error)
+    assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error)
     result=dict(label=label,runtime_seconds=start/32768,correlation=score,error_ms=error,global_epoch_error_ms=(lo+best-start-origin)*1000/32768,capture_epoch_at_reference=local_origin)
     if label in ('guitar-on','backing-only'):
         # Include backing derivatives as nuisance terms for PWM/resampler
