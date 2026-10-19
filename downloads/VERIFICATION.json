@@ -1,0 +1,11 @@
+{
+  "download_commit": "efeacf1b65399160b13559b9a22d9fc17a55c335",
+  "source_commit": "a6c0328b319ce1bf48e08371c2db770ac5a5008a",
+  "anonymous_http_download": true,
+  "source_matches_archive": true,
+  "archive_crc_ok": true,
+  "rom_sha256": "a59989d631183bc02272866022ad5e03347b2a177f2b0cb6a7143c1950658f09",
+  "downloaded_rom_emulator_sustain_perfect": "PASS: 25 heads, 42 hold bonus, results/replay and four mode switches",
+  "downloaded_rom_emulator_input": "PASS: perfect diagnostic, composed output and scene resets",
+  "main_unchanged": "6c4e63460fab10733d8ff011045ee246e7201952"
+}
