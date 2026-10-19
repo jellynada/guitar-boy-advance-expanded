@@ -1,17 +1,18 @@
 # Review builds, licensing and stable integration
 
-Mission010 is a **review candidate**, not a stable release. Owner acceptance and
-QA-010-004 remain open. Do not merge or label it stable on automated counts alone.
+Mission011 is an **Outcome B review candidate**, not a stable release. Graphics repair is verified; owner acceptance and ordinary-emulator strict audio comparisons
+(QA-010-004) remain open. Do not merge or label it stable on automated counts alone.
 
-## Source and branch policy
+## Source and branch policy (integration proposal retained from Mission010; not executed in Mission011)
 
 - Original upstream initial revision: `c27bd247a06561330a84773203772199fa210cdf`.
 - Historical project main: `6c4e63460fab10733d8ff011045ee246e7201952`.
 - M008 HUD/results hotfix: `71f0152c29d7008acd310808861643d5018e65a7`.
 - Final M009 source: `f589e62a225651c7bd8a39ad27f517e3890cd1fb`
   (gameplay implementation `85c637d4cf1c1029fbf8d2413ba0a63274ef234b`).
-- Current work: `mission-010-stabilization`, derived from that M009 source.
-- `mission-010-download` holds review binaries; do not merge it into source.
+- Verified M010 source: `233112a072e5a0e90e5a766207761474130f75a6`.
+- Current work: `mission-011-audio-graphics-stability`, derived from M010; no consolidation in this mission.
+- `mission-011-download` holds current review binaries; do not merge it into source.
 - All earlier `*-download` / `*-playtest-download` branches are delivery history,
   not development branches. Full inventory is in MISSION_010_STABILIZATION.
 
@@ -33,7 +34,7 @@ Proposed consolidation, **only after explicit owner authorization**:
    branch deletion or history rewrite is performed in this mission.
 
 The source is reviewable and independently buildable, but **not approved for
-stable promotion** while an unexpected required waveform check fails.
+stable promotion** while the ordinary-emulator strict comparison gate and owner/platform acceptance remain open.
 
 ## Reproducible public build
 
@@ -72,23 +73,23 @@ One-time setup:
    Integration. Start Docker Desktop before building.
 4. In Ubuntu run `sudo apt update` then `sudo apt install -y python3 ffmpeg`.
 5. Extract the public review ZIP. Move its `guitar-boy-advance-expanded` folder
-   into `C:\gba\mission010` so Makefile is at
-   `C:\gba\mission010\guitar-boy-advance-expanded\Makefile`.
+   into `C:\gba\mission011` so Makefile is at
+   `C:\gba\mission011\guitar-boy-advance-expanded\Makefile`.
 6. Copy the original owner song ZIP into that source folder and name it
    `Cream.zip`. Enable Explorer's View → Show → File name extensions to avoid
    accidentally naming it `Cream.zip.zip`.
-7. In Ubuntu: `cd /mnt/c/gba/mission010/guitar-boy-advance-expanded`.
+7. In Ubuntu: `cd /mnt/c/gba/mission011/guitar-boy-advance-expanded`.
 
 Then run exactly these two commands in Ubuntu:
 
 ```bash
-python3 tools/prepare_song.py Cream.zip --reactive --guitar-stem guitar --backing-stem rhythm --backing-stem song --output-dir imports/output/mission010
-bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/mission010/imported_chart.hpp" "AUDIO_DIR=imports/output/mission010/audio"
+python3 tools/prepare_song.py Cream.zip --reactive --guitar-stem guitar --backing-stem rhythm --backing-stem song --output-dir imports/output/mission011
+bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/mission011/imported_chart.hpp" "AUDIO_DIR=imports/output/mission011/audio"
 ```
 
 Stop if either command reports failure; do not open an older ROM left behind.
-Open `C:\gba\mission010\guitar-boy-advance-expanded\guitar-boy-advance-expanded.gba`
-in mGBA. Confirm **M010 QA / LOCAL / AUDIO**, then choose Imported Easy Test.
+Open `C:\gba\mission011\guitar-boy-advance-expanded\guitar-boy-advance-expanded.gba`
+in mGBA. Confirm **M011 TIMING / LOCAL / AUDIO**, then choose Imported Easy Test.
 The diagnostic mode is also present. Easy lane order: Left / A / B. Results:
 A/Start replay, B/Select selection. Start+Select returns during play.
 Ubuntu FFmpeg versions can produce different bytes; the recorded identical hash
@@ -99,9 +100,9 @@ A default build afterward replaces this output with the synthetic version.
 
 The owner ZIP remains available; the current real build contains the original
 WaveGroup cover, all395heads and78sustains, with matching reactive stems. Private
-ROM hash: `c48ca749df60522402cc77204e5100c1f3c7121244c97f2df8539892f62b8c5d`.
-Size9,178,392bytes. Full-song gameplay scenarios pass; one strict reactive
-waveform analysis remains open, so this is not a fully accepted stable build.
+ROM hash: `c6112dbc98baa5643ea631fa5a02b9fd2a793e46d46b420e67c4e2f331ceac03`.
+Size9,184,976bytes. Full-song gameplay scenarios pass; two additional strict ordinary-emulator
+backing comparisons remain open, so this is not a fully accepted stable build.
 
 There is no supported private attachment uploader or connected private file
 location in this workspace. Historical chat download links failed for the owner.
@@ -123,7 +124,7 @@ subject to that historical provenance review.
 ## Release checklist
 
 - [x] Source baseline and mission ancestry verified; download branches separated.
-- [x] Host suite98Python tests and8C++ sanitizer programs passed.
+- [x] Host suite108Python tests and8C++ sanitizer programs passed.
 - [x] Composed frames checked; hidden-layer failures rejected.
 - [x] Thirteen chord/hold cases and negative-input scenarios exercised.
 - [x] Ten real full-song gameplay scenarios and three original-demo runs checked.

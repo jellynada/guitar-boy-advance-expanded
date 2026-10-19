@@ -1,4 +1,46 @@
-# Project status — Mission 010 review candidate
+# Project status — Mission 011 review candidate
+
+**Outcome B: graphics repair verified; audio emulator compatibility still blocks
+stable promotion. Owner Windows/physical-GBA acceptance is pending.**
+
+Source: `mission-011-audio-graphics-stability`, based on verified remote M010
+`233112a072e5a0e90e5a766207761474130f75a6`. All previous fixes, playable sustains,
+INPUT / CHORD TEST, framebuffer tests and build-pair verification are ancestors.
+Main remains historical6c4e634; no repository consolidation or merge.
+
+Imported Easy now publishes the unchanged affine/fog scanline tables into two
+EWRAM buffers. DMA0/3 transfer them on time independently of the CPU audio IRQ;
+foreground polls VBlank to rearm them even if Tonc drops that IRQ callback.
+Buffers/channels are released before results/diagnostics/selection/Original Demo.
+Original Maxmod DMA1/2 and CPU scanline path remain. BG0HUD/receptors, BG1mask/results,
+BG2floor, note/hold sprites and the sample-clock/scoring/gate/hold classes remain.
+No new difficulty, song library, codec, animation or score policy.
+
+Full Cream graphics regression:0/16086frames flagged after repair versus
+16085/16085before; zero late final affine/fog writes or rearm misses. Native
+synthetic before/after60-frame sequences are available.108Python tests and8C++
+sanitizer programs pass;10real full-song,17synthetic/error,5input and3original
+699-note runs pass, plus fixed/silent compatibility and intentional corruptions.
+395Perfect/78completed holds still earns15815. Digital FIFO words/samples exactly
+match the independent source/gain model. All8ordinary primary real waveform
+models pass unchanged limits. Two additional unmodified-emulator strict backing
+comparisons still fail; an emulator-only timestamp correction resolves them with
+identical event/clock traces. This is diagnostic evidence, not a shipped emulator
+patch or a reason to hide failed checks. QA-010-004 stays open as a platform gate.
+
+Public build ID: **M011 TIMING**; synthetic review ROM/source/visual sequences
+linked from README. Real Cream ROM privately built/reproduced; direct private
+transfer unavailable, verified [Windows two-command workflow](RELEASE_PROCESS.md).
+No new public Cream music/chart/ROM. Original assets and historical public Cream
+history retain separate permissions-review requirements.
+
+Next: owner full-song/chord/replay playtest, qualified emulator/capture validation
+and physical-GBA/stack measurements before stable integration or visual polish.
+Full evidence: [MISSION_011_AUDIO_GRAPHICS](MISSION_011_AUDIO_GRAPHICS.md),
+[KNOWN_ISSUES](KNOWN_ISSUES.md), [QA_TEST_PLAN](QA_TEST_PLAN.md).
+
+## Historical Mission010 status (superseded)
+
 
 Current source: **mission-010-stabilization**, based on final M009 `f589e62`.
 All Mission001–009 source tips and hotfix `71f0152` are verified ancestors.
