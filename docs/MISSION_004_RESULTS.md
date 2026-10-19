@@ -110,3 +110,17 @@ Source review base: `mission-003-chart-importer`; head:
 `mission-004-universal-import`. Download branch: `mission-004-download`, kept
 separate from source and never merged. PR creation outcome is recorded below
 after the actual attempt. A compare page is not an opened pull request.
+
+Source implementation `4fa807c` was committed and pushed successfully. Actual
+`gh pr create --draft --base mission-003-chart-importer --head mission-004-universal-import`
+returned `Post "https://api.github.com/graphql": Forbidden`. **No pull request
+was opened.** Git push works; no extra credential was requested. Prepared title
+and description are in the review bundle's `PULL_REQUEST.md`.
+
+Review/create page:
+https://github.com/jellynada/guitar-boy-advance-expanded/compare/mission-003-chart-importer...mission-004-universal-import
+
+Choose Create pull request and paste the prepared description if your GitHub
+account permits it. This reviews Mission004 on top of Mission003; it does not
+merge the dependency chain into main. The separate download branch contains the
+same tested ROM and standalone importer/tools/examples plus evidence logs.
