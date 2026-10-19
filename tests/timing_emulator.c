@@ -57,6 +57,7 @@ int main(int argc,char** argv){
     unsigned mode=address(syms,"gameMode"),clock=address(syms,"importedNowCycles"),chart=address(syms,"imported_notes"),lengths=address(syms,"imported_sustain_us");
     unsigned maxWork=address(syms,"importedFrameWorkMaxCycles"),totalWork=address(syms,"importedFrameWorkTotalCycles"),workCount=address(syms,"importedFrameWorkCount");
     unsigned tail=address(syms,"sustainTailSprites"),underruns=address(syms,"audioUnderruns"),refillMax=address(syms,"audioRefillMaxCycles"),refillCount=address(syms,"audioRefillCount"),refillTotal=address(syms,"audioRefillTotalCycles");
+    unsigned deadline=optional_address(syms,"scanlineDeadlineMisses"),latest=optional_address(syms,"scanlineVblankLatestLine"),armCost=optional_address(syms,"scanlineVblankMaxCycles");
     unsigned table=address(syms,"m7_bgaffs"),activeTable=optional_address(syms,"scanlineActiveData");
     struct mLogger logger={.log=log_message};mLogSetDefaultLogger(&logger);struct mCore* c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
     color_t pixels[240*160]={0};c->setVideoBuffer(c,pixels,240);c->setAudioBufferSize(c,4096);
@@ -74,19 +75,23 @@ int main(int argc,char** argv){
             while(next<count){uint64_t target=read64(c,chart+next*16);if(target>now+280896)break;unsigned l=c->busRead32(c,chart+next*16+8);assert(l<3);keys|=buttons[l];heldUntil[l]=target+(read64(c,lengths+next*8)*16777216ULL+500000)/1000000;++next;}
         }
         frame(c,keys);drain(c);if(f>4)assert(c->busRead32(c,mode)==(original?1:2));
+        if(!original&&activeTable&&f>30&&(c->busRead16(c,0x04000000)&1024)&&!getenv("GBA_TEST_DISABLE_SCANLINE_DMA")){
+            assert(c->busRead32(c,0x040000b8)&0x80000000u);assert(c->busRead32(c,0x040000dc)&0x80000000u);
+        }
         unsigned tails=c->busRead32(c,tail);if(tails>peakTails)peakTails=tails;unsigned bad=0;
         if(!original&&oracle&&f>30&&(c->busRead16(c,0x04000000)&1024)){
             unsigned current=activeTable?c->busRead32(c,activeTable):0;if(!current)current=table;
             bad=defects(c,pixels,current,&totalFloor);++checked;badFrames+=bad!=0;totalBad+=bad;if(bad>worst)worst=bad;
         }
         fprintf(csv,"%u,%llu,%u,%u\n",f,(unsigned long long)read64(c,clock),tails,bad);
-        if((f>=180&&f<240)||(f>=420&&f<480)||(f>=900&&f<960)||(f>=1500&&f<1560)){
+        if((f>=180&&f<240)||(f>=420&&f<480)||(f>=900&&f<960)||(f>=1500&&f<1560)||(f>=4800&&f<4860)||(f>=9000&&f<9060)||(f>=15000&&f<15060)||(f>=15800&&f<15860)){
             char suffix[64];snprintf(suffix,sizeof(suffix),"frame-%05u",f);screenshot(argv[6],suffix,pixels);
         }
     }
     fclose(csv);unsigned wc=c->busRead32(c,workCount),rc=c->busRead32(c,refillCount);
     snprintf(name,sizeof(name),"%s.timing.json",argv[6]);FILE* out=fopen(name,"w");assert(out);
     fprintf(out,"{\"frames\":%u,\"frames_checked\":%u,\"defect_frames\":%u,\"worst_displaced_pixels\":%u,\"total_displaced_pixels\":%llu,\"floor_pixels\":%u,\"peak_tails\":%u,\"foreground_max\":%u,\"foreground_mean\":%.3f,\"refill_max\":%u,\"refill_mean\":%.3f,\"underruns\":%u}\n",frames,checked,badFrames,worst,(unsigned long long)totalBad,totalFloor,peakTails,c->busRead32(c,maxWork),wc?read64(c,totalWork)/(double)wc:0,c->busRead32(c,refillMax),rc?read64(c,refillTotal)/(double)rc:0,c->busRead32(c,underruns));fclose(out);
+    if(deadline){printf("DMA rearm: missed%u latest_VCOUNT%u maximum%u CPUcycles\n",c->busRead32(c,deadline),c->busRead32(c,latest),c->busRead32(c,armCost));assert(c->busRead32(c,deadline)==0);}
     assert(c->busRead32(c,underruns)==0);if(getenv("GBA_REQUIRE_CLEAN_HIGHWAY")){assert(checked>100&&totalFloor>100000&&badFrames==0);}
     printf("PASS: observation completed; checked%u defect_frames%u worst_pixels%u tails%u\n",checked,badFrames,worst,peakTails);c->deinit(c);return 0;
 }

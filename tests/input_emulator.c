@@ -43,7 +43,7 @@ int main(int argc,char** argv){
     for(int ch=0;ch<2;++ch)blip_set_rates(c->getAudioChannel(c,ch),c->frequency(c),32768);
     struct mCoreCallbacks cb={.coreCrashed=crash};c->addCoreCallbacks(c,&cb);assert(mCoreLoadFile(c,argv[1]));c->reset(c);
     for(unsigned i=0;i<90;++i){frame(c,0);drain(c);}
-    frame(c,128);frame(c,0);frame(c,128);frame(c,0);frame(c,8);frame(c,0);assert(c->busRead32(c,game)==3);
+    frame(c,128);frame(c,0);frame(c,128);frame(c,0);frame(c,8);frame(c,0);assert(c->busRead32(c,game)==3);assert(!(c->busRead32(c,0x040000b8)&0x80000000u)&&!(c->busRead32(c,0x040000dc)&0x80000000u));
     unsigned rawChecks=0,chordChecks=0,holdChecks=0,pressedChecks=0,oldKeys=~0u,stableKeys=0;int captured[13]={0};
     // Independent hardware-key script. No writes to game input or judgment RAM.
     unsigned masks[]={32,1,2,33,34,3,35,32,32,3,3,1,32};
@@ -63,7 +63,7 @@ int main(int argc,char** argv){
             if(early&&t==9&&dt>=20&&dt<90)keys=0;
             if(stuck&&t==11&&dt<=20)keys=1;
         }
-        frame(c,keys);drain(c);assert(c->busRead32(c,game)==3);
+        frame(c,keys);drain(c);assert(c->busRead32(c,game)==3);assert(!(c->busRead32(c,0x040000b8)&0x80000000u)&&!(c->busRead32(c,0x040000dc)&0x80000000u));
         unsigned observed=c->busRead32(c,snapshot),test=c->busRead32(c,snapshot+4),held=c->busRead32(c,snapshot+8),pressed=c->busRead32(c,snapshot+12),active=c->busRead32(c,snapshot+28);
         if(observed>5&&observed%37==0){visible(c,pixels,font,0,0,"INPUT / CHORD TEST");++rawChecks;}
         if(pressed)++pressedChecks;

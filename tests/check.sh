@@ -59,3 +59,5 @@ python3 -m unittest discover -s tests -p test_hold_data.py -v
 
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/input_diagnostic.cpp -o "$tmp/input_diagnostic"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/input_diagnostic"
+
+python3 -m unittest discover -s tests -p test_fifo_oracle.py -v

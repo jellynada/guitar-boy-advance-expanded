@@ -157,7 +157,7 @@ int main(int argc,char** argv){
                 visible(c,pixels,fontaddr,0,2,"       ");screenshot(argv[6],"bonus-after",pixels);bonusAfter=1;
             }
         }
-        unsigned session=c->busRead32(c,sessionaddr);if(state==1)assert(session!=1);
+        unsigned session=c->busRead32(c,sessionaddr);if(session){assert(!(c->busRead32(c,0x040000b8)&0x80000000u));assert(!(c->busRead32(c,0x040000dc)&0x80000000u));}if(state==1)assert(session!=1);
         unsigned liveScore=c->busRead32(c,scoreaddr),liveCombo=c->busRead32(c,scoreaddr+4);
         if(liveScore==stableScore&&liveCombo==stableCombo)++stableFrames;else stableFrames=0;
         stableScore=liveScore;stableCombo=liveCombo;
@@ -258,7 +258,7 @@ int main(int argc,char** argv){
     for(unsigned repeat=0;repeat<4;++repeat){
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);assert(c->busRead32(c,modeaddr)==0);
         for(unsigned i=0;i<2;++i){frame(c,64);}frame(c,0); // Up: Original, without entering diagnostics
-        for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);assert(c->busRead32(c,modeaddr)==1);
+        for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);assert(c->busRead32(c,modeaddr)==1);assert(!(c->busRead32(c,0x040000b8)&0x80000000u)&&!(c->busRead32(c,0x040000dc)&0x80000000u));
         unsigned sounding=0;for(unsigned i=0;i<90;++i){frame(c,0);short samples[4096];int n=blip_read_samples(c->getAudioChannel(c,0),samples,4096,0);for(int j=0;j<n;++j)sounding+=samples[j]!=0;blip_clear(c->getAudioChannel(c,1));}assert(sounding>100);
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);
         for(unsigned i=0;i<2;++i){frame(c,128);}frame(c,0);

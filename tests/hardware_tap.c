@@ -11,7 +11,8 @@ static FILE *fifoLog,*sampleLog,*pwmLog,*metaLog;
 static uint32_t sampleNumber;
 static int capturePcm=1;
 static unsigned modeAddress,stateAddress,fillAddress,segment,graphicsMode=2,ioDepth;
-static uint64_t affineWrites,lateWrites,lineWrites[160],lateLines[160];
+static uint64_t affineWrites,lateWrites,lineWrites[160],lateLines[160],lastWordWrites,lateLastWords,blendWrites,lateBlendWrites;
+static int32_t blankRemainingMin=0x7fffffff;
 static int initialized;
 static uint32_t ram(struct GBA* gba,unsigned a){
     if((a>>24)==3)return gba->memory.iwram[(a&32767)/4];
@@ -63,7 +64,13 @@ void GBAAudioSampleFIFO(struct GBAAudio* audio,int fifoId,int32_t cycles){
         if(segment==1)++sampleNumber;
         fwrite(&s,sizeof(s),1,sampleLog);
     }
+    // Optional diagnostic correction of mGBA0.10.1's uncompensated FIFO
+    // event lateness. Not enabled for normal observations or delivered ROMs.
+    int32_t oldWhen=audio->sampleEvent.when;
+    int correct=getenv("GBA_TAP_CORRECT_FIFO_LATENESS")&&ram(audio->p,modeAddress)==2&&ram(audio->p,stateAddress)==1;
+    if(correct)audio->sampleEvent.when=(int32_t)((uint32_t)oldWhen+(uint32_t)cycles);
     real(audio,fifoId,cycles);
+    if(correct)audio->sampleEvent.when=oldWhen;
 }
 void GBAAudioSample(struct GBAAudio* audio,int32_t timestamp){
     static void (*real)(struct GBAAudio*,int32_t);
@@ -83,6 +90,15 @@ void GBAAudioSample(struct GBAAudio* audio,int32_t timestamp){
 static void observe(struct GBA* gba,uint32_t address,uint32_t value){
     if(!fifoLog)return;
     if(address==REG_TM0CNT_HI&&(value&0x80)&&ram(gba,modeAddress)==2)++segment;
+    if(ram(gba,modeAddress)==graphicsMode&&(address==REG_BG2Y_LO||address==REG_BLDALPHA)){
+        unsigned line=gba->memory.io[REG_VCOUNT/2];
+        if(line<160){
+            int hblank=gba->memory.io[REG_DISPSTAT/2]&2;
+            if(address==REG_BG2Y_LO){++lastWordWrites;lateLastWords+=!hblank;}
+            else {++blendWrites;lateBlendWrites+=!hblank;}
+            if(hblank){int32_t remaining=mTimingUntil(&gba->timing,&gba->video.event);if(remaining<blankRemainingMin)blankRemainingMin=remaining;}
+        }
+    }
     if(ram(gba,modeAddress)==graphicsMode&&address==REG_BG2X_LO){
         unsigned line=gba->memory.io[REG_VCOUNT/2];
         if(line<160){++affineWrites;++lineWrites[line];if(!(gba->memory.io[REG_DISPSTAT/2]&2)){++lateWrites;++lateLines[line];}}
@@ -96,12 +112,15 @@ void GBAIOWrite(struct GBA* gba,uint32_t address,uint16_t value){
 void GBAIOWrite32(struct GBA* gba,uint32_t address,uint32_t value){
     static void (*real)(struct GBA*,uint32_t,uint32_t);
     if(!real)real=dlsym(RTLD_NEXT,"GBAIOWrite32");
-    init();observe(gba,address,value);++ioDepth;real(gba,address,value);--ioDepth;
+    init();
+    if(address==REG_DMA0SAD_LO&&getenv("GBA_TEST_SHIFT_SCANLINE_DMA"))value+=16;
+    if(address==REG_DMA0CNT_LO&&getenv("GBA_TEST_DISABLE_SCANLINE_DMA"))value&=~0x80000000u;
+    observe(gba,address,value);++ioDepth;real(gba,address,value);--ioDepth;
 }
 __attribute__((destructor)) static void finish(void){
     const char* prefix=getenv("GBA_HARDWARE_TAP");if(!prefix||!fifoLog)return;
     fclose(fifoLog);fclose(sampleLog);fclose(pwmLog);fclose(metaLog);char path[1024];snprintf(path,sizeof(path),"%s.hardware.json",prefix);FILE* out=fopen(path,"w");if(!out)abort();
     fprintf(out,"{\"affine_writes\":%llu,\"late_affine_writes\":%llu,\"late_by_line\":[",(unsigned long long)affineWrites,(unsigned long long)lateWrites);
     for(unsigned i=0;i<160;++i)fprintf(out,"%s%llu",i?",":"",(unsigned long long)lateLines[i]);
-    fprintf(out,"]}\n");fclose(out);
+    fprintf(out,"],\"last_word_writes\":%llu,\"late_last_words\":%llu,\"blend_writes\":%llu,\"late_blend_writes\":%llu,\"minimum_hblank_remaining_cycles\":%d}\n",(unsigned long long)lastWordWrites,(unsigned long long)lateLastWords,(unsigned long long)blendWrites,(unsigned long long)lateBlendWrites,blankRemainingMin);fclose(out);
 }
