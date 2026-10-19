@@ -35,6 +35,16 @@ static void visible(struct mCore* c,const color_t* pixels,unsigned font,unsigned
         }
     }
 }
+// Invert the perspective Y equation independently, then check the lane center.
+static double lane_center(struct mCore* c,unsigned camera,unsigned lane,double screenY) {
+    const int positions[]={58240,64512,70784};
+    double pos[3],u[3],v[3],w[3];
+    for(unsigned k=0;k<3;++k){pos[k]=(int32_t)c->busRead32(c,camera+k*4);u[k]=(int32_t)c->busRead32(c,camera+20+k*4)/256.0;v[k]=(int32_t)c->busRead32(c,camera+32+k*4)/256.0;w[k]=(int32_t)c->busRead32(c,camera+44+k*4)/256.0;}
+    double dx=positions[lane]-pos[0],dy=-pos[1];
+    double ax=dx*u[0]+dy*u[1]+1024,ay=-dx*v[0]-dy*v[1]+128,az=-dx*w[0]-dy*w[1];
+    double rel=(256*ay-(screenY-80)*az)/(-(screenY-80)*w[2]+256*v[2]);
+    return 120+256*(ax+rel*u[2])/(az-rel*w[2]);
+}
 int main(int argc,char** argv){
     assert(argc==7);const char* syms=argv[2];unsigned count=strtoul(argv[3],0,10),frames=strtoul(argv[4],0,10);const char* mode=argv[5];int isFault=!strncmp(mode,"fault",5); int reactiveMixed=!strcmp(mode,"reactive"); int reactiveWrong=!strcmp(mode,"wrong");int scoringMixed=!strcmp(mode,"scoring");int inconsistent=!strcmp(mode,"inconsistent");int allGood=!strcmp(mode,"good");int silentPerfect=!strcmp(mode,"silent-perfect");
     int sustainMode=!strcmp(mode,"sustain-perfect")||!strcmp(mode,"sustain-release");int releaseMode=!strcmp(mode,"sustain-release");
@@ -42,6 +52,7 @@ int main(int argc,char** argv){
     unsigned stateaddr=address(syms,"audioState"),consaddr=address(syms,"audioSamplesConsumed"),maxaddr=address(syms,"importedFrameWorkMaxCycles"),totaladdr=address(syms,"importedFrameWorkTotalCycles"),workcount=address(syms,"importedFrameWorkCount");
     unsigned serialaddr=address(syms,"guitarEventSerial"),traceaddr=address(syms,"guitarEventTrace"),gateaddr=address(syms,"guitarAudible"),gainaddr=address(syms,"guitarGain"),refilladdr=address(syms,"audioRefillCount"),irqmaxaddr=address(syms,"audioRefillMaxCycles"),irqtotaladdr=address(syms,"audioRefillTotalCycles"),underrunaddr=address(syms,"audioUnderruns");
     unsigned scoreaddr=address(syms,"displayedScore"),sessionaddr=address(syms,"importedSessionState");
+    unsigned camera=address(syms,"m7_cam_default");
     unsigned tailaddr=address(syms,"sustainTailSprites"),overflowaddr=address(syms,"sustainTailOverflow"),tailChecks=0,peakTails=0;
     unsigned lengthsaddr=address(syms,"imported_sustain_us");uint64_t heldUntil[3]={0};
     unsigned fontaddr=address(syms,"sys8Glyphs"),visibleChecks=0,stableScore=~0u,stableCombo=~0u,stableFrames=0;
@@ -58,6 +69,7 @@ int main(int argc,char** argv){
     snprintf(filename,sizeof(filename),"%s.csv",argv[6]);FILE* csv=fopen(filename,"w");assert(csv);fprintf(csv,"frame,tick,consumed,hardware_consumed,capture_samples,perfect,good,miss,state,gate,gain,refills,underruns\n");
     snprintf(filename,sizeof(filename),"%s.events.csv",argv[6]);FILE* events=fopen(filename,"w");assert(events);fprintf(events,"serial,sample,kind,gain,gameplay_tick\n");unsigned lastEventFrame=0,lastKind=0;unsigned eventSerial=0;int mutedSaved=0,recoveredSaved=0,resultSaved=0;unsigned refScore=0,refCombo=0,refMax=0,refHighest=1;
     unsigned firstaddr=address(syms,"importedFirstVisible"),endaddr=address(syms,"importedEndVisible");
+    unsigned previousReleased=0,previousCompleted=0;int eofSaved=0;
     unsigned simultaneousFrames=0;int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
     uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,1,2};
     for(unsigned f=0;f<frames;++f){
@@ -84,6 +96,7 @@ int main(int argc,char** argv){
         if(!strcmp(mode,"fault_underrun")&&f==401)c->busWrite16(c,0x04000208,1);
         if(c->busRead32(c,sessionaddr)!=0)keys=0;
         frame(c,keys);
+        if(getenv("GBA_TEST_HIDE_TAILS")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~4096);
         if(getenv("GBA_TEST_HIDE_HUD")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~256);
         if(f>4)assert(c->busRead32(c,modeaddr)==2);
         short left[4096],right[4096];int n=blip_read_samples(c->getAudioChannel(c,0),left,4096,0),r=blip_read_samples(c->getAudioChannel(c,1),right,4096,0);assert(n==r);
@@ -116,6 +129,10 @@ int main(int argc,char** argv){
                 unsigned a0=c->busRead16(c,0x07000000+obj*8),a1=c->busRead16(c,0x07000002+obj*8),a2=c->busRead16(c,0x07000004+obj*8);
                 unsigned y=a0&255,x=a1&511,tile=a2&1023,bank=a2>>12;
                 if((a0&0x300)||y<60||y>92||x>=224||tile<192||tile>=384)continue;
+                assert(bank>=1&&bank<=3);
+                int firstPixel=-1,lastPixel=-1;
+                for(unsigned col=0;col<16;++col){unsigned byte=c->busRead8(c,0x06010000+(tile+col/8)*32+3*4+(col%8)/2);if((byte>>((col%2)*4))&15){if(firstPixel<0)firstPixel=col;lastPixel=col;}}
+                if(firstPixel>=0){double expected=lane_center(c,camera,bank-1,y+3);double center=x+(firstPixel+lastPixel)/2.0;assert(center-expected<5&&expected-center<5);}
                 unsigned rgb=c->busRead16(c,0x05000200+(bank*16+1)*2);
                 for(unsigned col=0;col<16;++col){unsigned byte=c->busRead8(c,0x06010000+(tile+col/8)*32+3*4+(col%8)/2);if(!((byte>>((col%2)*4))&15))continue;
                     unsigned pixel=pixels[(y+3)*240+x+col];
@@ -124,6 +141,11 @@ int main(int argc,char** argv){
             }
             tailChecks+=seen;
         }
+        unsigned released=c->busRead32(c,scoreaddr+64),completed=c->busRead32(c,scoreaddr+60);
+        if(released&&!previousReleased)screenshot(argv[6],"hold-release",pixels);
+        if(completed&&!previousCompleted)screenshot(argv[6],"hold-complete",pixels);
+        previousReleased=released;previousCompleted=completed;
+        if(state==2&&!eofSaved){screenshot(argv[6],"audio-eof",pixels);eofSaved=1;printf("EOF at frame%u tick%llu session%u\n",f,(unsigned long long)tick,c->busRead32(c,sessionaddr));}
         if(f==180||f==240||f==350||f==600||f==900||f==4800||f==9000||f==15000){char label[32];snprintf(label,sizeof(label),"tails-%u",f);screenshot(argv[6],label,pixels);}
         if(sustainMode&&!releaseMode&&firstHit&&eventSerial==firstHold+1){
             uint64_t scheduled=read64(c,chartaddr+firstHold*16),start=firstHit>scheduled?firstHit:scheduled;
@@ -235,7 +257,7 @@ int main(int argc,char** argv){
     // Rapid return/replay: exact counts start at0, timer position starts near0.
     for(unsigned repeat=0;repeat<4;++repeat){
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);assert(c->busRead32(c,modeaddr)==0);
-        for(unsigned i=0;i<2;++i){frame(c,128);}frame(c,0); // Original
+        for(unsigned i=0;i<2;++i){frame(c,64);}frame(c,0); // Up: Original, without entering diagnostics
         for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);assert(c->busRead32(c,modeaddr)==1);
         unsigned sounding=0;for(unsigned i=0;i<90;++i){frame(c,0);short samples[4096];int n=blip_read_samples(c->getAudioChannel(c,0),samples,4096,0);for(int j=0;j<n;++j)sounding+=samples[j]!=0;blip_clear(c->getAudioChannel(c,1));}assert(sounding>100);
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);

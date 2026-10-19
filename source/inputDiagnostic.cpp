@@ -31,8 +31,8 @@ void update(unsigned frame,uint8_t held){
     mask(12,"VALID HOLD",session.state.active);
     ScoreDisplay::line(0,13,"BONUS:");ScoreDisplay::value(7,13,session.state.bonus);
     ScoreDisplay::line(15,13,"DONE:");ScoreDisplay::value(21,13,session.state.completed);
-    ScoreDisplay::line(0,14,"LAST HIT LANE:");ScoreDisplay::value(15,14,session.state.lastLane);
-    ScoreDisplay::line(19,14,session.state.lastKind==0?"PERFECT":session.state.lastKind==1?"GOOD":session.state.lastKind==2?"MISS":"WRONG");
+    mask(14,"EVENT LANE",session.state.lastLane);
+    ScoreDisplay::line(0,15,!session.state.lastLane?"READY":session.state.lastKind==0?"PERFECT":session.state.lastKind==1?"GOOD":session.state.lastKind==2?"MISS":"WRONG");
     const unsigned t=session.state.test;
     ScoreDisplay::line(0,16,t==7?"LEFT NOW A AFTER 0.5S":t==8?"HOLD LEFT 1.5S TAP A +0.75S":t==9?"HOLD BOTH FOR 1.5S":t==10?"RELEASE A +0.5S KEEP B 1.5S":t==11?"TAP A AT 0 / 0.17 / 0.34S":t==12?"LEFT A B EACH 0.34S":"TAP TARGET AT ZERO");
     ScoreDisplay::line(0,18,"START+SELECT: EXIT");
