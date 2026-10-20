@@ -22,6 +22,17 @@ public:
     uint32_t active(unsigned lane)const{return lane<3?lanes_[lane].id:UINT32_MAX;}
     const Stats& stats()const{return stats_;}
     bool resolved()const {return stats_.completed+stats_.released+stats_.missed==stats_.total;}
+    // No time/bonus advancement. Missing resume keys begin the existing50ms
+    // release rule at frozen musical time; down keys continue without new heads.
+    void resumeInput(uint64_t now,uint8_t held){
+        for(unsigned lane=0;lane<3;++lane){auto& l=lanes_[lane];if(l.id==UINT32_MAX)continue;
+            const bool down=held&(1u<<lane);
+            if(!down&&l.down)l.releasedAt=now;
+            l.down=down;
+            const uint64_t tick=now<end(l.id)?now:end(l.id);
+            if(tick>l.previous)l.previous=tick;
+        }
+    }
     uint64_t end(unsigned i)const{return notes_[i].tick+duration(lengths_[i]);}
     void event(const GameplayEvent& e,uint32_t multiplier){
         if(e.kind==GameplayEventKind::WrongInput||e.noteIndex>=N)return;

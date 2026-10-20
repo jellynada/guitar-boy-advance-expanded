@@ -5,6 +5,7 @@
 #include "terminal.hpp"
 #include "mode7.hpp"
 #include "scanline.hpp"
+#include "playTransport.hpp"
 #include "build_identity.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
@@ -229,6 +230,11 @@ void update(){
     if (gameMode && gameClockRunning) ++gameplayFrames;
 }
 
+extern "C" {
+PlayTransport::Controller importedTransport;
+volatile u32 importedPauseCount=0,importedResumeCount=0;
+}
+
 int main(){
 
     const M7_CAM initialCamera = m7_cam_default;
@@ -302,7 +308,13 @@ int main(){
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
-        if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
+        const auto systemCommand=gameMode==2&&importedSessionState==ImportedCompletion::Playing
+            ?importedTransport.poll(key_is_down(KEY_START|KEY_SELECT)):PlayTransport::Command::None;
+        const bool oldExitChord=gameMode&&(gameMode!=2||importedSessionState!=ImportedCompletion::Playing)&&
+            key_is_down(KEY_START|KEY_SELECT)==(KEY_START|KEY_SELECT);
+        if (oldExitChord||systemCommand==PlayTransport::Command::Exit) {
+            importedTransport.apply(PlayTransport::Command::Exit);
+            importedTransport.reset();
             Scanline::stop();
             mmStop();
             pcmStop();
@@ -315,9 +327,21 @@ int main(){
             oam_init(oam_mem, 128);
             vid_vsync(); continue; // Return chord must not also confirm the selector.
         }
+        if(gameMode==2&&importedTransport.phase==PlayTransport::Phase::Paused) {
+            if(systemCommand!=PlayTransport::Command::Resume){vid_vsync();Scanline::vblank();continue;}
+            // UI changes are made in VBlank while audio/time are still frozen.
+            vid_vsync();Scanline::vblank();ScoreDisplay::pauseHide();
+            const u8 held=easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS));
+            importedNotes.judgment().seedInput(held);
+            importedHolds.resumeInput(importedNowCycles,held);
+            for(unsigned lane=0;lane<3;++lane)drawButton(lane,held&(1u<<lane));
+            const bool resumed=!imported_audio_enabled||pcmResume();
+            importedTransport.apply(PlayTransport::Command::Resume);
+            ++importedResumeCount;gameClockRunning=resumed;feedbackDirty=true;
+        }
         if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
             if(key_hit(KEY_B|KEY_SELECT)) {
-                Scanline::stop();pcmStop();gameMode=0;gameClockRunning=false;menuDirty=true;
+                Scanline::stop();pcmStop();importedTransport.reset();gameMode=0;gameClockRunning=false;menuDirty=true;
                 importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
                 oam_init(oam_mem,128);ScoreDisplay::clear();
             } else if(key_hit(KEY_A|KEY_START)) {
@@ -353,6 +377,8 @@ int main(){
             gameClockRunning = false;
             gameplayFrames = 0;
             gameMode = selection;
+            if(gameMode==2)importedTransport.begin(key_is_down(KEY_START|KEY_SELECT));else importedTransport.reset();
+            importedPauseCount=importedResumeCount=0;
             REG_IME = interrupts;
             currentGameFrame = 0;
             curr_z = 0;
@@ -402,6 +428,11 @@ int main(){
             modeLabel.updateText("");
             if(gameMode==3){vid_vsync();continue;}
         }
+        bool pauseNow=false;
+        if(gameMode==2&&systemCommand==PlayTransport::Command::Pause){
+            const bool beforeSilentEnd=ImportedTiming::frameTick(gameplayFrames)<ImportedCompletion::silentEnd(importedLastEnd,imported_note_count!=0);
+            if(imported_audio_enabled?pcmPause():beforeSilentEnd){gameClockRunning=false;pauseNow=true;}
+        }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
         const u16 workStart = REG_TM3D;
         const u16 mask = gameMode == 2 ? EASY_GAME_BUTTONS : GAME_BUTTONS;
@@ -423,6 +454,7 @@ int main(){
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();
             recent_sprite = importedEndVisible;
+            if(!pauseNow){
             const u64 silentDeadline=ImportedCompletion::silentEnd(importedLastEnd,imported_note_count!=0);
             const u32 completionAudioState=audioState;
             const u64 finalAudioTick=PcmClock::tick(audioSamplesConsumed);
@@ -439,11 +471,13 @@ int main(){
                 if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
                 else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
                 displayedStats=importedNotes.stats();displayedScore=scoreSnapshot();
+                importedTransport.finish();
                 gameClockRunning=false;Scanline::stop();irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
                 ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
                 vid_vsync();continue;
             }
+            } // No end-of-song transition during a successful freeze.
         } else {
             recent_sprite = nm->update(currentGameFrame, laneMaskFromButtons(key_is_down(mask)));
         }
@@ -481,5 +515,9 @@ int main(){
         // interrupt simultaneous with the audio IRQ in Tonc's master handler.
         vid_vsync();
         Scanline::vblank();
+        if(pauseNow){
+            ScoreDisplay::pauseShow();
+            importedTransport.apply(PlayTransport::Command::Pause);++importedPauseCount;
+        }
     }
 }

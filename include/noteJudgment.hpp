@@ -64,6 +64,8 @@ public:
     }
 
     const JudgmentStats& stats() const { return stats_; }
+    // Resume boundary only: preserve every judgment/stat while seeding input.
+    void seedInput(uint8_t heldLanes){previousHeld_=heldLanes&0x0f;}
     NoteState state(uint32_t index) const { return states_[index]; }
 
     void step(uint64_t now, uint8_t heldLanes) {

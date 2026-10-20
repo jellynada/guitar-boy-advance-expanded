@@ -8,9 +8,11 @@
 #include <mgba/internal/gba/io.h>
 #include <mgba/core/timing.h>
 static FILE *fifoLog,*sampleLog,*pwmLog,*metaLog;
+static FILE *transportLog;
+static uint64_t pausedFifoRequests;
 static uint32_t sampleNumber;
 static int capturePcm=1;
-static unsigned modeAddress,stateAddress,fillAddress,segment,graphicsMode=2,ioDepth;
+static unsigned modeAddress,stateAddress,fillAddress,countAddress,segment,graphicsMode=2,ioDepth;
 static uint64_t affineWrites,lateWrites,lineWrites[160],lateLines[160],lastWordWrites,lateLastWords,blendWrites,lateBlendWrites;
 static int32_t blankRemainingMin=0x7fffffff;
 static int initialized;
@@ -28,10 +30,13 @@ static void init(void){
     modeAddress=strtoul(getenv("GBA_TAP_MODE_ADDR"),0,16);
     stateAddress=strtoul(getenv("GBA_TAP_STATE_ADDR"),0,16);
     fillAddress=strtoul(getenv("GBA_TAP_FILL_ADDR"),0,16);
+    if(getenv("GBA_TAP_COUNT_ADDR"))countAddress=strtoul(getenv("GBA_TAP_COUNT_ADDR"),0,16);
     char path[1024];snprintf(path,sizeof(path),"%s.fifo",prefix);fifoLog=fopen(path,"wb");
     snprintf(path,sizeof(path),"%s.samples",prefix);sampleLog=fopen(path,"wb");
     snprintf(path,sizeof(path),"%s.pwm",prefix);pwmLog=fopen(path,"wb");
     snprintf(path,sizeof(path),"%s.samplemeta",prefix);metaLog=fopen(path,"wb");
+    snprintf(path,sizeof(path),"%s.transport.csv",prefix);transportLog=fopen(path,"w");
+    if(transportLog)fprintf(transportLog,"cycle,enabled,consumed,fill,state\n");
     if(!fifoLog||!sampleLog||!pwmLog||!metaLog)abort();
     setvbuf(fifoLog,NULL,_IOFBF,1048576);setvbuf(sampleLog,NULL,_IOFBF,1048576);
 }
@@ -55,6 +60,7 @@ void GBAAudioSampleFIFO(struct GBAAudio* audio,int fifoId,int32_t cycles){
     static void (*real)(struct GBAAudio*,int,int32_t);
     if(!real)real=dlsym(RTLD_NEXT,"GBAAudioSampleFIFO");
     init();
+    if(fifoId==0&&ram(audio->p,modeAddress)==2&&ram(audio->p,stateAddress)==4)++pausedFifoRequests;
     if(capturePcm&&sampleLog&&fifoId==0&&ram(audio->p,modeAddress)==2&&ram(audio->p,stateAddress)==1){
         struct GBAAudioFIFO* ch=&audio->chA;
         uint32_t value=ch->internalSample;
@@ -89,7 +95,10 @@ void GBAAudioSample(struct GBAAudio* audio,int32_t timestamp){
 }
 static void observe(struct GBA* gba,uint32_t address,uint32_t value){
     if(!fifoLog)return;
-    if(address==REG_TM0CNT_HI&&(value&0x80)&&ram(gba,modeAddress)==2)++segment;
+    if(address==REG_TM0CNT_HI&&ram(gba,modeAddress)==2){
+        if(transportLog)fprintf(transportLog,"%llu,%u,%u,%u,%u\n",(unsigned long long)mTimingGlobalTime(&gba->timing),!!(value&0x80),ram(gba,countAddress),ram(gba,fillAddress),ram(gba,stateAddress));
+        if(value&0x80){if(!getenv("GBA_TAP_SINGLE_PLAYBACK")||!segment)++segment;}
+    }
     if(ram(gba,modeAddress)==graphicsMode&&(address==REG_BG2Y_LO||address==REG_BLDALPHA)){
         unsigned line=gba->memory.io[REG_VCOUNT/2];
         if(line<160){
@@ -119,8 +128,8 @@ void GBAIOWrite32(struct GBA* gba,uint32_t address,uint32_t value){
 }
 __attribute__((destructor)) static void finish(void){
     const char* prefix=getenv("GBA_HARDWARE_TAP");if(!prefix||!fifoLog)return;
-    fclose(fifoLog);fclose(sampleLog);fclose(pwmLog);fclose(metaLog);char path[1024];snprintf(path,sizeof(path),"%s.hardware.json",prefix);FILE* out=fopen(path,"w");if(!out)abort();
+    fclose(fifoLog);fclose(sampleLog);fclose(pwmLog);fclose(metaLog);if(transportLog)fclose(transportLog);char path[1024];snprintf(path,sizeof(path),"%s.hardware.json",prefix);FILE* out=fopen(path,"w");if(!out)abort();
     fprintf(out,"{\"affine_writes\":%llu,\"late_affine_writes\":%llu,\"late_by_line\":[",(unsigned long long)affineWrites,(unsigned long long)lateWrites);
     for(unsigned i=0;i<160;++i)fprintf(out,"%s%llu",i?",":"",(unsigned long long)lateLines[i]);
-    fprintf(out,"],\"last_word_writes\":%llu,\"late_last_words\":%llu,\"blend_writes\":%llu,\"late_blend_writes\":%llu,\"minimum_hblank_remaining_cycles\":%d}\n",(unsigned long long)lastWordWrites,(unsigned long long)lateLastWords,(unsigned long long)blendWrites,(unsigned long long)lateBlendWrites,blankRemainingMin);fclose(out);
+    fprintf(out,"],\"last_word_writes\":%llu,\"late_last_words\":%llu,\"blend_writes\":%llu,\"late_blend_writes\":%llu,\"minimum_hblank_remaining_cycles\":%d,\"paused_fifo_requests\":%llu}\n",(unsigned long long)lastWordWrites,(unsigned long long)lateLastWords,(unsigned long long)blendWrites,(unsigned long long)lateBlendWrites,blankRemainingMin,(unsigned long long)pausedFifoRequests);fclose(out);
 }

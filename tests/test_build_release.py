@@ -116,13 +116,13 @@ class ReleaseTests(unittest.TestCase):
 
     def artifact(self, profile='public'):
         folder = Path(self.temp.name) / 'artifact';folder.mkdir()
-        filename = 'Guitar-Boy-Advance-M013-Synthetic.gba' if profile == 'public' else 'Guitar-Boy-Advance-M013-Cream-Private.gba'
+        filename = 'Guitar-Boy-Advance-M014-Synthetic.gba' if profile == 'public' else 'Guitar-Boy-Advance-M014-Cream-Private.gba'
         label = 'public-synthetic' if profile == 'public' else 'cream-private'
         (folder / 'runtime').mkdir()
         for name, data in [('imported_chart.hpp', b'fixture chart'), ('imported_audio.hpp', b'fixture metadata'),
                            ('imported_audio.bin', b'fixture guitar'), ('imported_backing.bin', b'fixture backing')]:
             (folder / 'runtime' / name).write_bytes(data)
-        rom = f'GBA_BUILD:M013:{label}:'.encode() + b'a' * 40 + b'\0fixture guitarfixture backing'
+        rom = f'GBA_BUILD:M014:{label}:'.encode() + b'a' * 40 + b'\0fixture guitarfixture backing'
         (folder / filename).write_bytes(rom);(folder / filename.replace('.gba', '.elf')).write_bytes(b'unit fixture elf')
         names = [filename, filename.replace('.gba', '.elf')] + ['runtime/' + p.name for p in (folder / 'runtime').iterdir()]
         m = {'schema': 'gba-build-v1', 'status': 'success', 'profile': profile, 'source_commit': 'a' * 40,

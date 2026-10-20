@@ -66,3 +66,6 @@ python3 -m unittest discover -s tests -p test_build_release.py -v
 
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude tests/physical_input.cpp -o "$tmp/physical_input"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/physical_input"
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/pause_policy.cpp -o "$tmp/pause_policy"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/pause_policy"

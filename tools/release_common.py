@@ -10,8 +10,8 @@ import zipfile
 PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
                'music', 'scripts', 'source', 'tests', 'tools'}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
-PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M013-Synthetic.gba'),
-            'cream': ('cream-private', 'Guitar-Boy-Advance-M013-Cream-Private.gba')}
+PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
+            'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba')}
 
 
 def digest(data):
@@ -182,7 +182,7 @@ def verify_result(folder, public_only=False):
         if file_hash(folder / name) != expected:
             raise ValueError('Stale or damaged build output: ' + name)
     data = (folder / filename).read_bytes()
-    marker = f'GBA_BUILD:M013:{label}:{m["source_commit"]}'.encode() + b'\0'
+    marker = f'GBA_BUILD:M014:{label}:{m["source_commit"]}'.encode() + b'\0'
     if data.count(marker) != 1 or len(data) != m['rom_bytes'] or file_hash(folder / filename) != m['rom_sha256']:
         raise ValueError('ROM identity/hash/size does not match manifest')
     for stem, key in [('imported_chart.hpp', 'chart_sha256'), ('imported_audio.bin', 'guitar_sha256'), ('imported_backing.bin', 'backing_sha256')]:

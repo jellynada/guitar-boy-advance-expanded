@@ -24,7 +24,7 @@ try {
     $buildFolder = Join-Path (Join-Path $projectRoot 'builds\private') $versionFolder
     $manifest = Get-Content -LiteralPath (Join-Path $buildFolder 'manifest.json') -Raw | ConvertFrom-Json
     if ($manifest.status -ne 'success' -or $manifest.profile -ne 'cream' -or
-        $manifest.rom -ne 'Guitar-Boy-Advance-M013-Cream-Private.gba') {
+        $manifest.rom -ne 'Guitar-Boy-Advance-M014-Cream-Private.gba') {
         throw 'The completed manifest does not describe the requested private ROM.'
     }
     $romPath = Join-Path $buildFolder $manifest.rom
