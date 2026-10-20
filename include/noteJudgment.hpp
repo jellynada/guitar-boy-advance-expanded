@@ -71,6 +71,16 @@ public:
     void seedInput(uint8_t heldLanes){previousHeld_=heldLanes&MASK;}
     NoteState state(uint32_t index) const { return states_[index]; }
 
+    // Explicit finite arcade EOF only: remaining heads become ordinary misses
+    // at the real final clock. No fabricated hits or advancement beyond audio.
+    void finishAtEof(uint64_t now) {
+        while(firstPending_ < count_) {
+            if(states_[firstPending_] == NoteState::Pending)
+                judge(firstPending_, NoteState::Missed, now);
+            ++firstPending_;
+        }
+    }
+
     void step(uint64_t now, uint8_t heldLanes) {
         const uint64_t early = windowTicks(GOOD_EARLY_US);
         const uint64_t late = windowTicks(GOOD_LATE_US);

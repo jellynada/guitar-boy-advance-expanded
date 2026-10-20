@@ -504,6 +504,13 @@ int main(){
                 importedNotes.update(currentGameFrame,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));feedbackDirty=true;
             }
 
+#ifdef GBA_IMPORTED_CUT
+            // Only finite cut profiles close pending late windows at real EOF.
+            // The normal update above first settles clipped holds at that clock.
+            if(imported_audio_enabled && audioState==PcmClock::Ended &&
+               importedNotes.now()>=PcmClock::tick(audioSamplesConsumed))
+                importedNotes.judgment().finishAtEof(importedNotes.now());
+#endif
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();

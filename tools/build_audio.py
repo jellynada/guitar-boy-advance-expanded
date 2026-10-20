@@ -30,14 +30,20 @@ def main():
             if type(manifest.get(key)) is not int or manifest[key]<0:raise ValueError(f'Invalid integer audio metadata:{key}')
         if not 0<manifest['source_samples']<=1800*RATE:raise ValueError('Invalid source sample count.')
         if manifest['sample_rate']!=RATE or manifest['channels']!=1 or manifest['format']!='signed8_pcm':raise ValueError('Unsupported prepared audio format.')
-        if manifest['pre_roll_samples']!=PRE_ROLL or manifest['tail_samples']!=TAIL or manifest['guard_samples']!=GUARD:raise ValueError('Prepared timing/padding mismatch.')
+        cut=manifest.get('arcade_cut')
+        tail=0 if cut else TAIL
+        if cut:
+            from arcade_cut import recipe
+            if cut!=recipe(cut['original_source_samples'],cut['max_duration_seconds'],cut['handheld']) or cut['source_samples']!=manifest['source_samples']:raise ValueError('Invalid cut recipe')
+        if manifest['pre_roll_samples']!=PRE_ROLL or manifest['tail_samples']!=tail or manifest['guard_samples']!=GUARD:raise ValueError('Prepared timing/padding mismatch.')
         if len(blob)>MAX_ROM_AUDIO or len(blob)!=manifest['byte_size'] or len(blob)%16 or hashlib.sha256(blob).hexdigest()!=manifest['pcm_sha256']:raise ValueError('Prepared PCM size/hash/alignment mismatch; prepare again.')
-        if manifest['playback_samples']!=PRE_ROLL+manifest['source_samples']+TAIL or len(blob)<manifest['playback_samples']+GUARD:raise ValueError('Prepared audio sample counts disagree.')
+        if manifest['playback_samples']!=PRE_ROLL+manifest['source_samples']+tail or len(blob)<manifest['playback_samples']+GUARD:raise ValueError('Prepared audio sample counts disagree.')
         if any(blob[:PRE_ROLL]) or any(blob[PRE_ROLL+manifest['source_samples']:]):raise ValueError('Pre-roll/tail/guard must be signed8 silence.')
         chart=(out/'imported_chart.hpp').read_bytes()
         if manifest.get('prepared_chart_sha256') and hashlib.sha256(chart).hexdigest()!=manifest['prepared_chart_sha256']:raise ValueError('Audio was prepared for a different chart header.')
         ticks=[int(t) for t in re.findall(rb'\{(\d+)ULL,',chart)]
-        if not ticks or max(ticks)+1426063 > (manifest['playback_samples']-1)*1024:raise ValueError('Audio ends before chart final late window.')
+        if not ticks or (max(ticks) >= manifest['playback_samples']*1024 if cut else max(ticks)+1426063 > (manifest['playback_samples']-1)*1024):raise ValueError('Audio ends before chart final late window/onset.')
+        if cut and b'#define GBA_IMPORTED_CUT 1' not in chart:raise ValueError('Cut audio requires explicit EOF policy in chart')
         backing=(args.audio_dir/'imported_backing.bin').read_bytes() if reactive else bytes(16)
         if reactive:
             if len(backing)!=len(blob) or len(blob)*2>MAX_ROM_AUDIO or hashlib.sha256(backing).hexdigest()!=manifest.get('backing_sha256') or manifest.get('total_byte_size')!=len(blob)*2:raise ValueError('Reactive backing size/hash/budget mismatch.')

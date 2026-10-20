@@ -67,7 +67,10 @@ def selection_adaptation(song,difficulty):
     return result
 
 def runtime_header(data):
-    return bundle_header(data['charts']) if 'charts' in data else header(data)
+    text = bundle_header(data['charts']) if 'charts' in data else header(data)
+    if 'preparation_recipe' in data:
+        text += '\n#define GBA_IMPORTED_CUT 1\n'
+    return text
 
 def runtime_metadata(data):
     result=dict(difficulty=data['difficulty'],instrument='five_fret_lead_guitar',
@@ -75,6 +78,10 @@ def runtime_metadata(data):
                 genuine_sustains=data['genuine_sustain_count'])
     if 'charts' in data:result['difficulties']=[dict(name=c['difficulty'],note_heads=c['note_count'],
         physical_controls=LAYOUTS[c['difficulty']]) for c in data['charts']]
+    if 'preparation_recipe' in data:
+        result['chart_variant'] = 'handheld-derived' if data['preparation_recipe']['handheld'] else 'native-cut'
+        result['score_references'] = {c['difficulty']: c['score_reference'] for c in data.get('charts', [data])}
+        result['genuine_sustains_by_difficulty'] = {c['difficulty']: c['genuine_sustain_count'] for c in data.get('charts', [data])}
     return result
 
 
@@ -98,23 +105,39 @@ def verify_prepared(folder):
             raise ValueError('Prepared directory exceeds file-count/32MiB-per-file limits')
     if any(p.is_symlink() for p in paths):
         raise ValueError('Prepared files cannot contain symlinks')
-    if {p.relative_to(folder).as_posix() for p in paths if p.is_file()} != FILES | {MANIFEST}:
-        raise ValueError('Prepared song has missing or unexpected files; prepare into a new directory')
     m = json.loads((folder / MANIFEST).read_text())
-    if m.get('schema_version') not in {SCHEMA,'gba-prepared-song-v2'} or m.get('status') != 'success' or m.get('distribution') != 'private-only':
+    derived = m.get('schema_version') == 'gba-prepared-song-v3'
+    expected_files = FILES | ({'derivation-report.json'} if derived else set())
+    if {p.relative_to(folder).as_posix() for p in paths if p.is_file()} != expected_files | {MANIFEST}:
+        raise ValueError('Prepared song has missing or unexpected files; prepare into a new directory')
+    if m.get('schema_version') not in {SCHEMA,'gba-prepared-song-v2','gba-prepared-song-v3'} or m.get('status') != 'success' or m.get('distribution') != 'private-only':
         raise ValueError('Unsupported or unsuccessful prepared-song manifest')
-    if set(m['file_sha256']) != FILES:
+    if set(m['file_sha256']) != expected_files:
         raise ValueError('Prepared file inventory mismatch')
     for name, expected in m['file_sha256'].items():
         if file_hash(folder / name) != expected:
             raise ValueError('Prepared song changed or is damaged: ' + name)
     song = json.loads((folder / 'normalized-song.json').read_text())
-    if (m['runtime']['difficulty']=='All') != (m['schema_version']=='gba-prepared-song-v2'):
+    if not derived and (m['runtime']['difficulty']=='All') != (m['schema_version']=='gba-prepared-song-v2'):
         raise ValueError('Menu charts require prepared-song-v2')
     adapted = selection_adaptation(song,m['runtime']['difficulty'])
+    if derived:
+        try:
+            from .arcade_cut import recipe, transform_chart
+        except ImportError:
+            from arcade_cut import recipe, transform_chart
+        policy = m['preparation_recipe']
+        if policy != recipe(policy['original_source_samples'], policy['max_duration_seconds'], policy['handheld']):
+            raise ValueError('Invalid reproducible preparation recipe')
+        adapted, derivation = transform_chart(adapted, policy)
+        if derivation != json.loads((folder / 'derivation-report.json').read_text()):
+            raise ValueError('Derived chart provenance differs from native recipe')
     if adapted != json.loads((folder / 'adapted.json').read_text()) or runtime_header(adapted) != (folder / 'imported_chart.hpp').read_text():
         raise ValueError('Prepared runtime differs from normalized song; prepare again')
     audio = json.loads((folder / 'audio/audio.json').read_text())
+    if derived and (audio.get('arcade_cut') != policy or audio['source_samples'] != policy['source_samples'] or
+                    audio['playback_samples'] != policy['pre_roll_samples'] + policy['source_samples'] or audio['tail_samples'] != 0):
+        raise ValueError('Derived chart/audio cutoff mismatch')
     if (m['runtime'] != runtime_metadata(adapted) or
         m['audio'] != dict(mode='reactive' if audio['schema_version'] == 'gba-reactive-audio-v1' else 'fixed',
                            sample_rate=audio['sample_rate'], source_samples=audio['source_samples'],
@@ -164,7 +187,7 @@ def verify_prepared(folder):
     return m
 
 
-def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None, difficulty="Easy"):
+def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None, difficulty="Easy", max_duration=None, handheld=False):
     source, output = Path(source), Path(output)
     if output.exists():
         raise ValueError('Output must be a new directory; existing prepared songs are never overwritten')
@@ -207,6 +230,16 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
                      convert_reactive([snapshot / guitar], [snapshot / n for n in backing], stage / 'audio'))
             if mix:
                 (stage / 'audio/imported_backing.bin').write_bytes(bytes(16))
+            derived = max_duration is not None or handheld
+            if derived:
+                try:
+                    from .arcade_cut import recipe, transform_chart, trim_audio
+                except ImportError:
+                    from arcade_cut import recipe, transform_chart, trim_audio
+                policy = recipe(audio['source_samples'], max_duration, handheld)
+                adapted, derivation = transform_chart(adapted, policy)
+                audio = trim_audio(stage / 'audio', audio, policy)
+                save(stage / 'derivation-report.json', derivation)
             end = aligned(adapted, audio)
             (stage / 'imported_chart.hpp').write_text(runtime_header(adapted))
             audio.update(prepared_chart_sha256=file_hash(stage / 'imported_chart.hpp'),
@@ -234,7 +267,7 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
             (stage / 'validation-report.txt').write_text('READY: ' + adapted['title'] + '\n' +
                 f"{difficulty} chart selection; capacity {adapted['note_count']} notes; {mode} audio\n" +
                 '\n'.join('WARNING ' + w['code'] + ': ' + w['message'] for w in warnings) + '\n')
-            manifest = dict(schema_version='gba-prepared-song-v2' if difficulty=='All' else SCHEMA, status='success', distribution='private-only',
+            manifest = dict(schema_version='gba-prepared-song-v3' if derived else 'gba-prepared-song-v2' if difficulty=='All' else SCHEMA, status='success', distribution='private-only',
                 source=dict(format=song['source_format'], selected_files_sha256=source_hashes,
                             selected_tree_sha256=tree_digest(source_hashes)),
                 selection=dict(mode=mode, chart=selected_chart, mix=mix, guitar=guitar, backing=backing,
@@ -243,7 +276,8 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
                 runtime=runtime_metadata(adapted),
                 audio=dict(mode=mode, sample_rate=audio['sample_rate'], source_samples=audio['source_samples'],
                            playback_samples=audio['playback_samples'], ffmpeg_version=audio['ffmpeg_version']),
-                file_sha256={n: file_hash(stage / n) for n in sorted(FILES)})
+                file_sha256={n: file_hash(stage / n) for n in sorted(FILES | ({'derivation-report.json'} if derived else set()))})
+            if derived: manifest['preparation_recipe'] = policy
             save(stage / MANIFEST, manifest)
             verify_prepared(stage)
             stage.rename(output)
@@ -267,9 +301,14 @@ def main():
     p.add_argument('--guitar', help='Explicit relative guitar file for reactive audio')
     p.add_argument('--backing', action='append', help='Explicit relative backing file; repeat')
     p.add_argument('--offset-policy', choices=['add', 'ini', 'chart'])
+    p.add_argument('--arcade', action='store_true', help='Arcade defaults: 75 source seconds and GBA-compatible chart derivation')
+    p.add_argument('--max-duration', help='Exact source-time seconds; full length by default; use none to disable arcade cutoff')
+    p.add_argument('--handheld', action='store_true', help='Minimally adapt impossible combinations off-device')
     a = p.parse_args()
     try:
-        m = prepare(a.package, a.output, chart=a.chart, mix=a.mix, guitar=a.guitar, backing=a.backing, offset_policy=a.offset_policy, difficulty=a.difficulty)
+        maximum = (75 if a.arcade else None) if a.max_duration is None else (None if a.max_duration == 'none' else a.max_duration)
+        m = prepare(a.package, a.output, chart=a.chart, mix=a.mix, guitar=a.guitar, backing=a.backing, offset_policy=a.offset_policy, difficulty=a.difficulty,
+                    max_duration=maximum, handheld=a.handheld or a.arcade)
         print(f"READY: {m['runtime']['difficulty']} chart capacity {m['runtime']['note_heads']}, {m['audio']['mode']}; manifest {a.output / MANIFEST}")
     except (OSError, ValueError) as error:
         p.exit(1, 'PREPARATION FAILED: ' + str(error) + '\n')

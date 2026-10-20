@@ -4,7 +4,7 @@ on:
   pull_request:
   workflow_dispatch:
   push:
-    branches: [foundation-audit-2026-10-20, stabilization-post-medium-hard]
+    branches: [foundation-audit-2026-10-20, stabilization-post-medium-hard, arcade75-handheld-chart-adaptation]
 
 permissions:
   contents: read
@@ -43,6 +43,23 @@ jobs:
           python3 tools/ci_public_smoke.py --build "$build" --extracted builds/ci-extracted --output builds/ci-smoke --symbols builds/ci-symbols.txt
           cp builds/ci-smoke/smoke.json builds/ci/emulator-verification.json
           cp "$build/manifest.json" builds/ci/BUILD_MANIFEST.json
+          cd builds/ci
+          sha256sum *.zip > SHA256SUMS.txt
+      - name: Build original Arcade75 multi-difficulty exercise
+        run: |
+          python3 tools/generate_arcade_example.py builds/arcade-original
+          python3 tools/build_profile.py song --input builds/arcade-original
+      - name: Independently authorize, extract and emulate public Arcade75 ZIP
+        run: |
+          set -euo pipefail
+          build="builds/private/songs/$(cat builds/private/songs/LATEST.txt)"
+          revision=$(git rev-parse HEAD)
+          archive="builds/ci/Guitar-Boy-Advance-Arcade75-${revision}-Synthetic.zip"
+          python3 tools/package_arcade_review.py --build "$build" --output "$archive" --extract-to builds/arcade-extracted
+          image=$(cat scripts/toolchain-image.txt)
+          docker run --rm -v "$PWD:/project:ro" "$image" /opt/devkitpro/devkitARM/bin/arm-none-eabi-nm "/project/$build/Guitar-Boy-Advance-M014-Song-Private.elf" > builds/arcade-symbols.txt
+          python3 tools/song_build_smoke.py --build "$build" --extracted-rom builds/arcade-extracted/Guitar-Boy-Advance-M014-Song-Private.gba --output builds/arcade-smoke --symbols builds/arcade-symbols.txt
+          cp builds/arcade-smoke/smoke.json builds/ci/arcade-emulator-verification.json
           cd builds/ci
           sha256sum *.zip > SHA256SUMS.txt
       - name: Upload verified development artifact

@@ -8,18 +8,19 @@ import re
 import subprocess
 
 try:
-    from .release_common import verify_result
+    from .release_common import verify_result, file_hash
 except ImportError:
-    from release_common import verify_result
+    from release_common import verify_result, file_hash
 
 
-def run(root, build, output, symbols):
+def run(root, build, output, symbols, extracted_rom=None):
     root, build, output, symbols = [Path(p).resolve() for p in (root, build, output, symbols)]
     m = verify_result(build)
     if m['profile'] != 'song':
         raise ValueError('Generic smoke runner requires a verified song-profile build')
     output.mkdir(parents=True, exist_ok=False)
-    rom = build / m['rom']
+    rom = Path(extracted_rom).resolve() if extracted_rom else build / m['rom']
+    if file_hash(rom) != m['rom_sha256']: raise ValueError('Extracted ROM differs from verified build')
     for name, source in [('identity', 'build_identity_emulator.c'), ('pause', 'pause_emulator.c')]:
         subprocess.run(['gcc', '-O2', '-Wall', '-Wextra', '-Werror', str(root / 'tests' / source),
                         '-o', str(output / name), '-lmgba'], check=True)
@@ -53,5 +54,6 @@ if __name__ == '__main__':
     p.add_argument('--build', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--symbols', type=Path, required=True, help='nm output from matching ELF')
+    p.add_argument('--extracted-rom', type=Path, help='Run exact extracted ROM after verifying its hash')
     a = p.parse_args()
-    run(a.repo, a.build, a.output, a.symbols)
+    run(a.repo, a.build, a.output, a.symbols, a.extracted_rom)
