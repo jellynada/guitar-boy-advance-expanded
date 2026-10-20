@@ -508,8 +508,13 @@ int main(){
             // Only finite cut profiles close pending late windows at real EOF.
             // The normal update above first settles clipped holds at that clock.
             if(imported_audio_enabled && audioState==PcmClock::Ended &&
-               importedNotes.now()>=PcmClock::tick(audioSamplesConsumed))
+               importedNotes.now()>=PcmClock::tick(audioSamplesConsumed)) {
                 importedNotes.judgment().finishAtEof(importedNotes.now());
+                // A head hit on this final update may have just activated a
+                // clipped hold. Settle it at the SAME tick, never beyond EOF.
+                importedScoring.addSustainBonus(importedHolds.update(importedNotes.now(),
+                    importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount)));
+            }
 #endif
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();

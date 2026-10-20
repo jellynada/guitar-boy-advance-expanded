@@ -65,11 +65,11 @@ def recalculate(chart):
     # Explicit on-time all-Perfect/full-hold reference, not a universal maximum:
     # inherited Perfect hit phase and same-lane replacement can change bonuses.
     head = bonus = 0
-    for i, n in enumerate(notes, 1):
+    for i, n in enumerate(sorted(notes, key=lambda n: (n['runtime_tick'], n['lane'])), 1):
         multiplier = 4 if i >= 30 else 3 if i >= 20 else 2 if i >= 10 else 1
         head += 10 * multiplier
         bonus += (n['sustain_us'] // 250000) * multiplier
-    chart['score_reference'] = dict(policy='on-time Perfect heads; independent full holds; upper reference if native rearticulations remain',
+    chart['score_reference'] = dict(policy='on-time Perfect heads in logical-lane event order; independent full holds; upper bound if rearticulations remain; actual frame/input phase may reduce hold bonus',
                                     heads=head, hold_bonus=bonus, total=head + bonus)
     return chart
 

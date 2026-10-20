@@ -20,5 +20,10 @@ int main(){
     Song b;b.judgment.step(16777216ULL+10,0);assert(b.judgment.stats().missed==0);
     b.judgment.finishAtEof(16777216ULL+11);assert(b.judgment.stats().missed==2&&b.holds.resolved());
     assert(b.score.finalize()&&!b.score.snapshot().fullCombo&&!b.score.snapshot().allPerfect);
+    // Newly activated hold whose head/end are both in the final poll.
+    Song d;d.notes[0].tick=33554000ULL;d.notes[1].tick=33554100ULL;d.lengths[0]=25;d.holds.reset();
+    d.holds.update(33554432ULL,1);d.judgment.step(33554432ULL,1);
+    d.judgment.finishAtEof(33554432ULL);assert(!d.holds.resolved());
+    d.holds.update(33554432ULL,1);assert(d.holds.resolved()&&d.holds.stats().completed==1);
     std::puts("PASS: finite EOF emits each pending miss once, settles holds, no free hits or score");
 }
