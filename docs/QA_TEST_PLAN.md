@@ -1,3 +1,9 @@
+# Mission014 additions
+
+Run `bash tests/check.sh`; compile `tests/pause_emulator.c` against libmgba and run `tests/run_pause_matrix.py` with matching profile manifests/symbols. Exercise every case on both actual profiles, including ten minutes, repeated START and both sequential exit orders. Read-only snapshots must freeze sample count, mixer, score, judgments, effects and composed screen. Test current-held resume, independent holds and missing-fret50ms grace. Keep existing uninterrupted regressions/thresholds intact.
+
+Use `tests/hardware_tap.c` with explicit ELF addresses (including GBA_TAP_COUNT_ADDR) and GBA_TAP_SINGLE_PLAYBACK=1 for first-playback pause captures. Run `tests/analyze_pause_audio.py` against matching runtime PCM; no experimental lateness correction. The latter checks declared Timer0 gaps separately, not by relaxing `analyze_fifo.py`. Compare untouched audio/graphics tests, original demo, diagnostic, replay and resources. Owner handheld acceptance remains required; use OWNER_M014_PLAYTEST.md.
+
 # Mission013 physical controls QA
 
 Owner acceptance is **pending** for this mission. Prior Mission011 acceptance

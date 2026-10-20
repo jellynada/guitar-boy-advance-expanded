@@ -1,0 +1,20 @@
+STACK_OBSERVATION user_free=4856 user_touched_from_top=948 irq_touched=40 allocated_user=5804 allocated_irq=160\nLINE index0 expected_tick33554432 displayed_tick33750016 error_ms11.657715 center_x44 center_y122
+REFERENCE index0 expected_tick33554432 actual_tick33750016 abs_error_ms11.657715
+LINE index1 expected_tick41943040 displayed_tick41895936 error_ms2.807617 center_x120 center_y116
+LINE index2 expected_tick50331648 displayed_tick50322432 error_ms0.549316 center_x191 center_y117
+LINE index12 expected_tick156587344 displayed_tick156781568 error_ms11.576653 center_x44 center_y122
+REFERENCE index12 expected_tick156587344 actual_tick156781568 abs_error_ms11.576653
+LINE index24 expected_tick223696208 displayed_tick223916032 error_ms13.102531 center_x44 center_y122
+REFERENCE index24 expected_tick223696208 actual_tick223916032 abs_error_ms13.102531
+EOF at frame887 tick248635392 session0
+PASS: sustain-perfect frames1800 notes25 Perfect25 Good0 Miss0 Wrong0 nonzero_samples407206 audio_state2; foreground max219648 avg130143.6 CPUcycles/frame
+PASS: 11 composite framebuffer HUD checks
+SCORE: score512 combo25 maximum25 highest3 accuracy10000 FC1 AP1 session1
+SIMULTANEOUS: A+B held for 121 frames
+TAILS: peak31 composite_checks16 overflow0
+HOLDS: total6 completed5 released1 missed0 bonus42
+IRQ: refills15189 max1408 mean1384.2 cycles, underruns0 gate1 gain256
+PASS: composed results heading, score, statistics labels and navigation instructions
+PASS: replay produces 197504 new nonzero audio samples after fresh pre-roll
+PASS: results A replay action resets score, combo, multiplier, audio and guitar
+PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash

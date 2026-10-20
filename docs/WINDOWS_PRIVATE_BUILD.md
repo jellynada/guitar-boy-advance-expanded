@@ -1,3 +1,7 @@
+# Mission014 note
+
+The existing launcher is preserved and now names the private output **Guitar-Boy-Advance-M014-Cream-Private.gba**. The cloud exercises its underlying clean build chain; Windows11 double-click execution is untested here. A user who only wants to play should receive the already-built ROM privately, without needing these developer installation steps. That private transfer is currently unavailable; the owner requested local retention. Public synthetic review ZIPs do not contain Cream.
+
 # Build your Cream ROM on Windows 11
 
 Keep the song ZIP on your computer. The launcher never downloads music or uploads

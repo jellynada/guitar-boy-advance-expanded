@@ -1,3 +1,13 @@
+# Current: Mission014 provisional pause/resume
+
+Branch `mission-014-pause-resume` starts from Mission013 `664c83ea624c4cec1c81d4c83f066e8abf0d2d87`. Owner authorized provisional work; Mission013 handheld acceptance is unconfirmed. No develop/main merge. Imported-only pause, sample-preserving FIFO transport, resume input seeding, independent hold policy and static overlay are implemented. Original controls, charts, audio preparation, scoring and Windows build profiles are retained.
+
+See MISSION_014_PAUSE_RESUME.md, evidence/mission014 and OWNER_M014_PLAYTEST.md for current tests and limits. Cream delivery is blocked: keep ROM local until an authorized private route exists. Public encrypted hosting is not used. Owner acceptance and stable baseline designation remain pending. Next sequence: complete private delivery and handheld checks; review/approve dependent integrations; only then plan Mission015.
+
+Current gate: one strict ordinary mGBA0.10.1 backing comparison remains failed; exact FIFO/model continuity passes and an emulator-only lateness diagnostic passes. The correction is not shipped. No all-green audio QA or stable-release claim.
+
+Historical Mission013 report follows.
+
 # Mission013 — physical controls review candidate
 
 Current work: mission-013-physical-controls, based on verified develop

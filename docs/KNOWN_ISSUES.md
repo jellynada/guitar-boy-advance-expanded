@@ -1,3 +1,12 @@
+# Mission014 provisional issues / gates
+
+- Private Cream delivery unavailable; ROM remains local by owner instruction.
+- Mission013 controls and Mission014 pause need separate owner handheld acceptance.
+- Timer0 resumes with a full sample interval; boundary phase <61.04microseconds is explicit. Abrupt silence/unmute can cause a small transient; physical output is not certified click-free.
+- Inherited hold bonus depends on actual head-hit timing, even within Perfect; the established scripted reference15815 is not a universal score for every different input trace.
+- Windows GUI, physical stack/IRQ margins and real handheld audio remain unmeasured.
+- No Mission015/front-end/difficulty/scoring work is authorized by this change.
+
 # Known issues — Mission013 review candidate
 
 Owner reports successful Mission011 Windows/mGBA and physical-GBA playtests:
@@ -36,3 +45,9 @@ fixtures are tests, not a playable difficulty. Historical adapted JSON includes
 obsolete button annotations; runtime logical IDs, gameControls.hpp, build manifest
 and visible labels define current physical mapping (see PHYSICAL_INPUT.md).
 Owner M013 acceptance: **pending**, including LEFT/B/A comfort, chords and holds.
+
+Mission014 ordinary strict backing QA: reactive at204.268494s fails0.999
+correlation (observed0.979593). Exact unmodified FIFO source/mixer check passes;
+host-only mGBA0.10.1 lateness correction makes the comparison pass diagnostically.
+The delivered ROM does not include this correction. This remains an open audio
+compatibility issue; do not describe all audio regressions as clean.

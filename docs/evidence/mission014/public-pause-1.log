@@ -1,0 +1,4 @@
+before timers 0 84 84 consumed 31863 frozen 31863 fill 31888
+resume phase=1 audio=1 mode=2 fault=0
+result score=512 P=25 G=0 M=0 W=0 holds=5 released=1 bonus=42
+PASS case=1 pauses=1 resumes=1 frozen_checks=30 score=512 heads=25

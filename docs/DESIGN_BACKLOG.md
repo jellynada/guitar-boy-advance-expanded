@@ -1,3 +1,7 @@
+# Mission014 gate
+
+Provisional pause/resume is implemented for review. Complete private delivery and owner Mission013/Mission014 handheld acceptance before integration or Mission015 planning. No front end or new difficulty is included. See MISSION_014_PAUSE_RESUME.md.
+
 # Design backlog after Mission013
 
 Easy LEFT/B/A is now implemented on the Mission013 review branch; owner handheld

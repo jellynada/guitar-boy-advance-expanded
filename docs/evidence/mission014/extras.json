@@ -1,0 +1,46 @@
+[
+  {
+    "scenario": "public-physical",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-timing",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-physical",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-timing",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-m013-stack",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-m014-stack",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-m013-stack",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-m014-stack",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-miss",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-mixed",
+    "exit_code": 0
+  }
+]

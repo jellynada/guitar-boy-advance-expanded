@@ -1,3 +1,9 @@
+# Mission014 delivery restriction
+
+Build official public/private profiles from the same clean source. Only synthetic review artifacts may be uploaded publicly. The owner chose to retain the Cream ROM locally until authorized private transfer exists. Do not upload a Cream ROM or encrypted Cream ZIP to a public GitHub branch/release; a password is not access control or redistribution rights. Prepare a fresh-password AES256 ZIP locally, verify extraction/hash/emulator execution, retain the password separately, and report private delivery as blocked. No local path or unsuccessful sandbox link counts as a download test.
+
+Source branch mission-014-pause-resume; no automatic develop/main merge. Preserve Build-Cream-ROM.bat/PowerShell launcher and both profiles. Build identity must be M014 and match the full source commit in manifest. Do not claim owner acceptance, Windows GUI testing or handheld testing from cloud results.
+
 # Source workflow and public/private builds — Mission013
 
 Saving source, accepting a development baseline, and releasing a stable public
