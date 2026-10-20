@@ -83,6 +83,13 @@ class ReleaseTests(unittest.TestCase):
                      '../README.md', '/README.md', 'source\\bad', 'unknown/x.txt']:
             with self.subTest(name=name), self.assertRaises(ValueError):safe_source_name(name)
 
+    def test_only_reviewed_workflow_is_exportable(self):
+        self.assertEqual(safe_source_name('.github/workflows/foundation.yml'), '.github/workflows/foundation.yml')
+        for name in ['.github/workflows/unreviewed.yml', '.github/secrets.txt',
+                     '.github/workflows/Cream.zip', '.github/workflows/private/key.txt']:
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                safe_source_name(name)
+
     def test_source_symlink_rejected(self):
         (self.root / 'docs').mkdir();(self.root / 'docs/link').symlink_to('../README.md')
         subprocess.run(['git', '-C', str(self.root), 'add', 'docs'], check=True)
