@@ -304,6 +304,7 @@ int main(){
     textDisplay modeLabel(4, 40, 96);
     int selection = 1;
     bool menuDirty = true;
+    bool selectorControlsArmed = true;
 
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
@@ -315,6 +316,7 @@ int main(){
         if (oldExitChord||systemCommand==PlayTransport::Command::Exit) {
             importedTransport.apply(PlayTransport::Command::Exit);
             importedTransport.reset();
+            selectorControlsArmed=false; // Require release after exit before another start.
             Scanline::stop();
             mmStop();
             pcmStop();
@@ -368,6 +370,10 @@ int main(){
                 menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
                 pal_bg_mem[0] = 0;
                 menuDirty = false;
+            }
+            if(!selectorControlsArmed){
+                if(key_is_down(KEY_START|KEY_SELECT|KEY_A)){vid_vsync();continue;}
+                selectorControlsArmed=true;
             }
             if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
             Scanline::stop();
