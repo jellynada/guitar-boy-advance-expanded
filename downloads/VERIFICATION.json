@@ -1,0 +1,54 @@
+{
+  "source_commit": "664c83ea624c4cec1c81d4c83f066e8abf0d2d87",
+  "public_download_commit": "c18c979be0c8617f86df8d6b738084e7edbf4ee6",
+  "encrypted_download_commit": "1be1fa4ade23e0f0e78dbba7fed2e65b34e133ad",
+  "urls": {
+    "mission013-review.zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/c18c979be0c8617f86df8d6b738084e7edbf4ee6/downloads/mission013-review.zip",
+    "Guitar-Boy-Advance-M013-Synthetic.gba": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/c18c979be0c8617f86df8d6b738084e7edbf4ee6/downloads/Guitar-Boy-Advance-M013-Synthetic.gba",
+    "Mission-013-Cream-Playtest-AES.zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/1be1fa4ade23e0f0e78dbba7fed2e65b34e133ad/downloads/Mission-013-Cream-Playtest-AES.zip"
+  },
+  "sha256": {
+    "mission013-review.zip": "0ec438596e025cbc08a749ac8327ec891d036a087030304fcbf4af37e6ef3576",
+    "Guitar-Boy-Advance-M013-Synthetic.gba": "ed72ddeff604ed40276389aaa960bbeef1d0bd681ca208f5c5706ab5897fea81",
+    "Mission-013-Cream-Playtest-AES.zip": "4bd17e0b1a6cb60fd4d8243162017213a6fe587eeb91158c24a4c4154ecfb57a"
+  },
+  "anonymous_downloads_verified": true,
+  "complete_source_equals_git": true,
+  "public_zip_crc_ok": true,
+  "public_zip_no_private_payload": true,
+  "canary_absent": true,
+  "private_encryption": "AES-256; correct password required; wrong/missing passwords rejected",
+  "decrypted_rom_sha256": "c1c76aba8edac92e2398eff16b9b307563a79379ba44b249d71b313ee2226932",
+  "game_bytes_comparison": {
+    "public": {
+      "same_game_bytes_outside_revision_marker": true,
+      "rom_sha256": "ed72ddeff604ed40276389aaa960bbeef1d0bd681ca208f5c5706ab5897fea81",
+      "rom_bytes": 821836
+    },
+    "cream": {
+      "same_game_bytes_outside_revision_marker": true,
+      "rom_sha256": "c1c76aba8edac92e2398eff16b9b307563a79379ba44b249d71b313ee2226932",
+      "rom_bytes": 9185256
+    }
+  },
+  "pr_creation": "GraphQL Forbidden; no PR created",
+  "comparison_url": "https://github.com/jellynada/guitar-boy-advance-expanded/compare/develop...mission-013-physical-controls",
+  "owner_handheld_acceptance": "pending",
+  "windows_launcher_execution": "unperformed on Linux",
+  "comparison_http_status": 200,
+  "delivered_rom_tests": {
+    "public-delivered-holds": "PASS",
+    "public-delivered-input": "PASS",
+    "public-delivered-physical": "PASS",
+    "public-delivered-identity": "PASS",
+    "cream-delivered-holds": "PASS",
+    "cream-delivered-input": "PASS",
+    "cream-delivered-physical": "PASS",
+    "cream-delivered-identity": "PASS"
+  },
+  "remote_refs": {
+    "develop": "56f6b7b243dfc710996336b99ac249806e666c85",
+    "main": "6c4e63460fab10733d8ff011045ee246e7201952",
+    "mission-013-physical-controls": "664c83ea624c4cec1c81d4c83f066e8abf0d2d87"
+  }
+}
