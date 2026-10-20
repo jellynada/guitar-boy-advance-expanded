@@ -1,0 +1,40 @@
+{
+  "source_commit": "56f6b7b243dfc710996336b99ac249806e666c85",
+  "download_commit": "c4c466ed3c02768a472485344da8c470e1c4ccdf",
+  "anonymous_http_download": true,
+  "hashes": {
+    "mission012-review.zip": "692086b75de8321617d2c0757937d9d0f68f4f61be68e48e6ee8d93b5d0f2bf9",
+    "Guitar-Boy-Advance-M012-Synthetic.gba": "9e6d2f41a13f5c942946f09180155f9fee6d418893788f64dec7eeda96899c8b"
+  },
+  "zip_crc_ok": true,
+  "complete_public_source_matches_git": true,
+  "archive_build_identity_verified": true,
+  "private_payloads_absent": true,
+  "private_canary_absent": true,
+  "source_files_checked": 255,
+  "game_bytes_comparison": {
+    "public": {
+      "same_executable_and_assets_as_full_regression": true,
+      "only_difference": "40-byte source revision marker",
+      "sha256": "9e6d2f41a13f5c942946f09180155f9fee6d418893788f64dec7eeda96899c8b",
+      "bytes": 821636
+    },
+    "cream": {
+      "same_executable_and_assets_as_full_regression": true,
+      "only_difference": "40-byte source revision marker",
+      "sha256": "009556b3742b633087b8ce422c186e92b28acbb5682de433e601d44d04e1d3b4",
+      "bytes": 9185056
+    }
+  },
+  "pr_creation": "GitHub GraphQL Forbidden; no PR created",
+  "comparison_url": "https://github.com/jellynada/guitar-boy-advance-expanded/compare/main...mission-012-build-release-foundation",
+  "windows_double_click_test": "not performed; Linux pipeline and source archive tested",
+  "comparison_http_status": 200,
+  "downloaded_public_rom_emulator": "PASS: sustain/score/results/replay/mode-switch and input diagnostic",
+  "final_private_rom_emulator": "PASS: all395heads/78holds/full recording/results/replay/input diagnostic",
+  "remote_refs": {
+    "develop": "56f6b7b243dfc710996336b99ac249806e666c85",
+    "main": "6c4e63460fab10733d8ff011045ee246e7201952",
+    "mission-012-build-release-foundation": "56f6b7b243dfc710996336b99ac249806e666c85"
+  }
+}
