@@ -164,3 +164,13 @@ final execution results must be reported from the actual runs, not inferred from
 this record. Generated packages, prepared data, ROMs, ELF files and audio captures
 remain ignored/local and are not source commits. Windows and physical GBA
 acceptance, the known strict audio issue, and inherited-asset rights stay open.
+
+Final execution evidence: [verification.json](evidence/mission016/verification.json).
+Both ROMs were built once from implementation commit `01a78f8` using the unchanged
+pinned toolchain. Original Pulse:6heads/2genuine sustains,460184 ROM bytes;
+Original Tempo Drift:8heads/3genuine sustains,681736 ROM bytes. Both passed
+matching-ROM/ELF checks, prepared-asset binding and visible generic identity.
+Each completed all four metadata-driven existing mGBA0.10.1 scenarios (single
+pause, eight cycles, paused SELECT exit, uninterrupted song),8scenarios total.
+Evidence records the exact tested commit and ROM hashes. This evidence-only
+commit does not rebuild or relabel those already verified ROMs.

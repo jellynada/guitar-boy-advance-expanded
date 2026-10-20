@@ -1,0 +1,88 @@
+{
+  "schema": "gba-mission016-verification-v1",
+  "baseline": "7fee39d93693d4437da188a0b5d9e89e8e9081d2",
+  "tested_source_commit": "01a78f831ee094c514b20101341ef0ac5f4d7880",
+  "host_suite": {
+    "python_tests": 158,
+    "asan_ubsan_programs": 10,
+    "result": "passed"
+  },
+  "runtime_source_changed": false,
+  "legacy_adapter_changed": false,
+  "cream_preparation_changed": false,
+  "physical_hardware_verified": false,
+  "windows_verified": false,
+  "public_release_published": false,
+  "known_strict_audio_comparison_issue": "unchanged; not claimed resolved",
+  "songs": {
+    "pulse": {
+      "profile": "song",
+      "source_commit": "01a78f831ee094c514b20101341ef0ac5f4d7880",
+      "rom_bytes": 460184,
+      "rom_sha256": "84c5f32b790f37542b2e5ef50016d2f52c7ba56f17377115c49f7f581ecb2e31",
+      "prepared_song_sha256": "df3a1972bece91ae14af833e0b34362d409a1e0a7dcba6bef16c479ed5f5e291",
+      "assets": {
+        "note_heads": 6,
+        "genuine_sustains": 2,
+        "chart_sha256": "ef925862cedb22c912f8d508c504a3b383cadbbc207783ec3b305b280a7906d4",
+        "guitar_sha256": "eccfc3830d5b4ee6d2cafbc4dddf2bff359a78bf7abcfab4134c1bc8c54b282a",
+        "backing_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+        "source_samples": 98304,
+        "sample_rate": 16384,
+        "ffmpeg_version": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+        "selected_package_files": [
+          "melody.wav"
+        ]
+      },
+      "smoke": {
+        "source_commit": "01a78f831ee094c514b20101341ef0ac5f4d7880",
+        "rom_sha256": "84c5f32b790f37542b2e5ef50016d2f52c7ba56f17377115c49f7f581ecb2e31",
+        "note_heads": 6,
+        "frames": 628,
+        "cases": [
+          0,
+          12,
+          17,
+          19
+        ],
+        "result": "passed",
+        "physical_hardware_verified": false
+      }
+    },
+    "drift": {
+      "profile": "song",
+      "source_commit": "01a78f831ee094c514b20101341ef0ac5f4d7880",
+      "rom_bytes": 681736,
+      "rom_sha256": "eae0ef0678acf3d89ebeca8c044c919bc7d9e22be8ee63021de651b120aee21b",
+      "prepared_song_sha256": "9eb41609e2797f8c332d14085df61da80d80ea35e1cc5a8de665fbeeeac2fde0",
+      "assets": {
+        "note_heads": 8,
+        "genuine_sustains": 3,
+        "chart_sha256": "2659bb9e0a83cb9a81da038aca04ecf92e9b2c321bb2ba94fb8a924ddd1e6c4e",
+        "guitar_sha256": "62521dd6f073360a2c0be7b7c5ce206f30b25ff3a8157909480551f8831bb9cd",
+        "backing_sha256": "cc61d7e697a10b76a4ee2e4f0aab70b9996cd836e3f3b258a9790d2e9741f010",
+        "source_samples": 131072,
+        "sample_rate": 16384,
+        "ffmpeg_version": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+        "selected_package_files": [
+          "lead.wav",
+          "accompaniment.wav"
+        ]
+      },
+      "smoke": {
+        "source_commit": "01a78f831ee094c514b20101341ef0ac5f4d7880",
+        "rom_sha256": "eae0ef0678acf3d89ebeca8c044c919bc7d9e22be8ee63021de651b120aee21b",
+        "note_heads": 8,
+        "frames": 748,
+        "cases": [
+          0,
+          12,
+          17,
+          19
+        ],
+        "result": "passed",
+        "physical_hardware_verified": false
+      }
+    }
+  }
+}
