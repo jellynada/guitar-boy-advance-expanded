@@ -67,7 +67,7 @@ CFLAGS	+=	$(INCLUDE)
 CXXFLAGS	:=	$(CFLAGS) -std=gnu++17 -fno-rtti -fno-exceptions
 
 ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map)
+LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map) -Wl,--undefined=gameBuildIdentity
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
