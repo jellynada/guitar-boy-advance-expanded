@@ -5,6 +5,7 @@ namespace Scanline {
 void start();
 void stop();
 void prepare();
+void prepareAffines();
 void vblank();
 }
 #endif

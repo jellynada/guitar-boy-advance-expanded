@@ -48,6 +48,14 @@ static bool difficultyReady=false;
 static NoteScore<imported_note_count> importedScoring;
 EWRAM_DATA static Sustain::Holds<imported_note_count,5> importedHolds(imported_notes,imported_sustain_us);
 static u64 importedLastEnd=0;
+static u64 importedLastEnds[imported_choice_count]{};
+extern "C" {volatile u32 importedReady=0;}
+static void prepareImportedBounds(){
+    for(unsigned c=0;c<imported_choice_count;++c){const auto& chart=imported_choices[c];u64 last=0;
+        for(u32 i=0;i<chart.count;++i){const u64 end=chart.notes[i].tick+Sustain::duration(chart.sustains[i]);if(end>last)last=end;}
+        importedLastEnds[c]=last;
+    }
+}
 ScoreSnapshot scoreSnapshot() {
     auto s=importedScoring.snapshot();const auto& h=importedHolds.stats();
     s.holdsCompleted=h.completed;s.holdsReleased=h.released;s.holdsMissed=h.missed;s.holdsTotal=h.total;return s;
@@ -261,6 +269,7 @@ int main(){
 
 	memcpy16(&tile_mem[1], buttonsTiles, buttonsTilesLen/2);
     ScoreDisplay::preparePauseFont();
+    prepareImportedBounds();
 	drawButtons();
 
 	if(ENABLED){
@@ -323,6 +332,7 @@ int main(){
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
+        if(gameMode!=2)importedReady=0;
         if(gameMode==4){
             if(!selectorControlsArmed){if(key_is_down(KEY_A|KEY_START|KEY_SELECT|KEY_B)){vid_vsync();continue;}selectorControlsArmed=true;}
             if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;difficultyReady=false;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
@@ -357,7 +367,7 @@ int main(){
             irq_enable(II_HBLANK);
             ScoreDisplay::clear();
             gameClockRunning = false;
-            gameMode = 0;difficultyReady=false;
+            importedReady=0;gameMode = 0;difficultyReady=false;
             menuDirty = true;
             oam_init(oam_mem, 128);
             vid_vsync(); continue; // Return chord must not also confirm the selector.
@@ -412,6 +422,7 @@ int main(){
             if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
             if(selection==2&&!difficultyReady){gameMode=4;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
             Scanline::stop();
+            importedReady=0;
             // Fresh mode epoch: counters, camera, visuals and held-key history.
             const u16 interrupts = REG_IME;
             REG_IME = 0;
@@ -430,7 +441,7 @@ int main(){
             importedScoring.reset(importedChartCount);
             importedHolds.configure(activeImportedNotes,activeImportedSustains,importedChartCount);
             importedNotes.configure(activeImportedNotes,importedChartCount);
-            importedLastEnd=0;for(u32 i=0;i<importedChartCount;++i)if(importedHolds.end(i)>importedLastEnd)importedLastEnd=importedHolds.end(i);
+            importedLastEnd=importedLastEnds[difficultySelection];
             displayedScore=scoreSnapshot();
             importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
             importedCompletionDiagnostic=completionWaitFrames=0;
@@ -514,7 +525,7 @@ int main(){
                 if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
                 else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
                 displayedStats=importedNotes.stats();displayedScore=scoreSnapshot();
-                importedTransport.finish();
+                importedReady=0;importedTransport.finish();
                 gameClockRunning=false;Scanline::stop();irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
                 ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
@@ -538,7 +549,7 @@ int main(){
 
 		update_sprites();
         if(gameMode==2)SustainDisplay::draw(importedNowCycles);
-		m7_prep_affines(&m7_level);
+        if(gameMode==2)Scanline::prepareAffines();else m7_prep_affines(&m7_level);
         if(gameMode==2)Scanline::prepare();
 
 		//if(key_hit(KEY_START)) Terminal::log("Tick = %%", m7_level.camera->pos.z);
@@ -558,6 +569,7 @@ int main(){
         // interrupt simultaneous with the audio IRQ in Tonc's master handler.
         vid_vsync();
         Scanline::vblank();
+        if(gameMode==2)importedReady=1; // First completed table committed; initialization is over.
         if(pauseNow){
             ScoreDisplay::pauseShow();
             importedTransport.apply(PlayTransport::Command::Pause);++importedPauseCount;

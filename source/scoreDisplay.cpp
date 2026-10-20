@@ -36,6 +36,12 @@ void pauseHide(){
     pauseDrawn=false;
 }
 void preparePauseFont(){
+    for(unsigned glyph=0;glyph<96;++glyph)for(unsigned y=0;y<8;++y) {
+        unsigned bits=reinterpret_cast<const u8*>(sys8Glyphs)[glyph*8+y];
+        u32 row=0;for(unsigned x=0;x<8;++x)if(bits&(1u<<x))row|=1u<<(x*4);
+        tile_mem[0][FIRST_TILE+glyph+1].data[y]=row;
+        tile_mem[1][FIRST_TILE+glyph+1].data[y]=row;
+    }
     const char* label=" PAUSEDSTART: RESUMESELECT: EXIT";
     while(*label){const unsigned c=static_cast<unsigned char>(*label++);
         for(unsigned y=0;y<8;++y){const unsigned bits=reinterpret_cast<const u8*>(sys8Glyphs)[(c-32)*8+y];
@@ -79,12 +85,6 @@ void initialize() {
     pal_bg_mem[15*16+2]=RGB15(0,0,0);
     // Small opaque-font overlay, prepared once before playback. Original
     // transparent HUD/font tiles and highway BG1/BG2 are never modified.
-    for(unsigned glyph=0;glyph<96;++glyph)for(unsigned y=0;y<8;++y) {
-        unsigned bits=reinterpret_cast<const u8*>(sys8Glyphs)[glyph*8+y];
-        u32 row=0;for(unsigned x=0;x<8;++x)if(bits&(1u<<x))row|=1u<<(x*4);
-        tile_mem[0][FIRST_TILE+glyph+1].data[y]=row;
-        tile_mem[1][FIRST_TILE+glyph+1].data[y]=row;
-    }
     REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);REG_BG1HOFS=REG_BG1VOFS=0;
     clear();
     for(unsigned i=0;i<6;++i)savedControlTiles[i]=se_mem[30][controlCells[i]];
