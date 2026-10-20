@@ -40,7 +40,7 @@ int main(int argc,char** argv) {
     for(unsigned f=0;f<2;++f){frame(core,0);}
     for(unsigned f=0;f<2;++f){frame(core,8);} // Start
     frame(core,0);assert(core->busRead32(core,modeaddr)==2);
-    unsigned next=0;unsigned buttons[]={32,1,2};unsigned nonzero=0,visible=0;
+    unsigned next=0;unsigned buttons[]={32,2,1};unsigned nonzero=0,visible=0;
     uint64_t previous=0;
     for(unsigned f=0;f<frames;++f) {
         uint64_t now=(uint64_t)core->busRead32(core,clockaddr)*280896;

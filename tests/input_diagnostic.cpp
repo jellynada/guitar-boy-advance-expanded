@@ -10,11 +10,11 @@ static Session run(int scenario){
         for(unsigned i=0;i<NOTES;++i){
             unsigned onset=notes[i].tick/ImportedTiming::FRAME;
             unsigned duration=lengths[i]?90:1;
-            if(i==18)duration=30; // Deliberate release A while B continues.
+            if(i==18)duration=30; // Deliberate release B while A continues.
             if(frame>=onset&&frame<onset+duration)held|=1u<<notes[i].lane;
         }
-        if(scenario==1&&frame==LEAD+3*GAP)held=1; // A absent in Left+A.
-        if(scenario==2&&frame==LEAD+4*GAP)held=7; // Unmatched extra A.
+        if(scenario==1&&frame==LEAD+3*GAP)held=1; // B absent in Left+B.
+        if(scenario==2&&frame==LEAD+4*GAP)held=7; // Unmatched extra B.
         if(scenario==3&&frame>=LEAD+9*GAP+20&&frame<LEAD+9*GAP+90)held=0;
         if(scenario==4&&frame>=LEAD+11*GAP&&frame<=LEAD+11*GAP+20)held=2; // no fresh edges
         if(scenario==5&&frame>=LEAD+5*GAP&&frame<LEAD+5*GAP+10)held=0;

@@ -65,7 +65,7 @@ int main(int argc,char** argv){
     struct mCoreCallbacks cb={.coreCrashed=crash};c->addCoreCallbacks(c,&cb);assert(mCoreLoadFile(c,argv[1]));c->reset(c);
     for(unsigned f=0;f<90;++f){frame(c,0);drain(c);}
     if(!original){frame(c,128);frame(c,128);frame(c,0);}
-    unsigned next=0,buttons[]={32,1,2};uint64_t heldUntil[3]={0};unsigned checked=0,badFrames=0,worst=0,peakTails=0,totalFloor=0;uint64_t totalBad=0;
+    unsigned next=0,buttons[]={32,2,1};uint64_t heldUntil[3]={0};unsigned checked=0,badFrames=0,worst=0,peakTails=0,totalFloor=0;uint64_t totalBad=0;
     char name[1024];snprintf(name,sizeof(name),"%s.frames.csv",argv[6]);FILE* csv=fopen(name,"w");assert(csv);fprintf(csv,"frame,tick,tails,displaced_floor_pixels\n");
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;uint64_t now=read64(c,clock);

@@ -39,7 +39,7 @@ def package(root, result, output):
             z.write(result / manifest['rom'], manifest['rom'])
             z.writestr('BUILD_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
             z.writestr('READ_ME_FIRST.txt',
-                        'MISSION012 SYNTHETIC REVIEW BUILD\nExtract All. Install mGBA from https://mgba.io/downloads.html.\n'
+                        'MISSION013 SYNTHETIC REVIEW BUILD\nExtract All. Install mGBA from https://mgba.io/downloads.html.\n'
                         'File > Load ROM > ' + manifest['rom'] + '\n'
                         'This public test song is synthetic. No Cream recording/chart is included.\n'
                         'To build privately: open guitar-boy-advance-expanded/docs/WINDOWS_PRIVATE_BUILD.md.\n'

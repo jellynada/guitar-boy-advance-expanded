@@ -71,7 +71,7 @@ int main(int argc,char** argv){
     unsigned firstaddr=address(syms,"importedFirstVisible"),endaddr=address(syms,"importedEndVisible");
     unsigned previousReleased=0,previousCompleted=0;int eofSaved=0;
     unsigned simultaneousFrames=0;int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
-    uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,1,2};
+    uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,2,1};
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;
         uint64_t now=read64(c,clockaddr);
@@ -96,6 +96,7 @@ int main(int argc,char** argv){
         if(!strcmp(mode,"fault_underrun")&&f==401)c->busWrite16(c,0x04000208,1);
         if(c->busRead32(c,sessionaddr)!=0)keys=0;
         frame(c,keys);
+        if(f==180){visible(c,pixels,fontaddr,4,16,"LEFT");visible(c,pixels,fontaddr,14,16,"B");visible(c,pixels,fontaddr,23,16,"A");}
         if(getenv("GBA_TEST_HIDE_TAILS")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~4096);
         if(getenv("GBA_TEST_HIDE_HUD")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~256);
         if(f>4)assert(c->busRead32(c,modeaddr)==2);

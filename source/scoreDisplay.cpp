@@ -1,11 +1,15 @@
 #include "scoreDisplay.hpp"
 #include "importedCompletion.hpp"
 #include "tonc.h"
+#include "gameControls.hpp"
 #include <tonc_tte.h>
 // Tonc system font: readable 8x8 glyphs, using reserved BG tiles only.
 namespace ScoreDisplay {
 constexpr unsigned FIRST_TILE=128;
 static unsigned map=31;
+static constexpr unsigned controlCells[]={16*32+4,16*32+5,16*32+6,16*32+7,16*32+14,16*32+23};
+static u16 savedControlTiles[6];
+static bool controlsDrawn=false;
 static void text(unsigned x,unsigned y,const char* value,unsigned maximum=30) {
     while(*value&&x<30&&maximum--) {
         const unsigned char c=*value++;
@@ -26,6 +30,10 @@ void clear() {
     // Restore the existing black depth mask and only the HUD rows of BG0.
     memset16(&tile_mem[0][1],0x6666,16);memset16(&se_mem[31],1,1024);
     memset16(&se_mem[30],0x004F,96);
+    if(controlsDrawn){
+        for(unsigned i=0;i<6;++i)se_mem[30][controlCells[i]]=savedControlTiles[i];
+        controlsDrawn=false;
+    }
 }
 void initialize() {
     // Expand the bundled Tonc 1bpp font to opaque 4bpp white-on-black.
@@ -41,6 +49,9 @@ void initialize() {
     }
     REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);REG_BG1HOFS=REG_BG1VOFS=0;
     clear();
+    for(unsigned i=0;i<6;++i)savedControlTiles[i]=se_mem[30][controlCells[i]];
+    map=30;text(4,16,EASY_LABELS[0]);text(14,16,EASY_LABELS[1]);text(23,16,EASY_LABELS[2]);
+    controlsDrawn=true;
 }
 void hud(const ScoreSnapshot& s,const char* judgment,const char* guitar) {
     map=30;memset16(&se_mem[30][0],FIRST_TILE,96);

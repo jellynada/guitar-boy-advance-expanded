@@ -73,7 +73,7 @@ def build(root, profile, input_zip=None):
             env.pop(key, None)
         label, rom_name = PROFILES[profile]
         with log_path.open('w') as log:
-            print(f'Building M012 / {label} from {source["source_commit"]}', flush=True)
+            print(f'Building M013 / {label} from {source["source_commit"]}', flush=True)
             checked(['docker', 'info'], cwd=work, log=log, env=env)
             if profile == 'cream':
                 shutil.copyfile(input_zip, work / 'Cream.zip')
@@ -115,13 +115,13 @@ def build(root, profile, input_zip=None):
                 shutil.copy2(work / 'imports/output/cream' / name, runtime / name)
             shutil.copy2(work / 'imports/output/cream/audio/audio.json', runtime / 'audio.json')
         artifact_names = [rom_name, elf_name] + ['runtime/' + p.name for p in runtime.iterdir() if p.suffix not in {'.json', '.txt'}]
-        manifest = {'schema': 'gba-build-v1', 'status': 'success', 'game_version': 'M012',
-                    'profile': profile, 'build_identity': 'M012 / SYNTH' if profile == 'public' else 'M012 / CREAM / LOCAL',
+        manifest = {'schema': 'gba-build-v1', 'status': 'success', 'game_version': 'M013',
+                    'profile': profile, 'build_identity': 'M013 / SYNTH' if profile == 'public' else 'M013 / CREAM / LOCAL',
                     'source_commit': source['source_commit'], 'source_tree_sha256': source['source_tree_sha256'],
                     'created_utc': utc(), 'input_zip_sha256': input_hash, 'assets': assets,
                     'toolchain_image': image, 'compiler': compiler, 'rom': rom_name,
                     'rom_bytes': rom.stat().st_size, 'rom_sha256': file_hash(rom),
-                    'fresh_outputs': True, 'artifact_sha256': {n: file_hash(job / n) for n in artifact_names}}
+                    'physical_controls': ['LEFT', 'B', 'A'], 'fresh_outputs': True, 'artifact_sha256': {n: file_hash(job / n) for n in artifact_names}}
         (job / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         (job / 'SOURCE_MANIFEST.json').write_text(json.dumps(source, indent=2) + '\n')
         verify_result(job, public_only=profile == 'public')
