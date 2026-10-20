@@ -1,0 +1,54 @@
+{
+  "source_commit": "2ae6544f96ad8662fadabd6d5cf373fd6931227d",
+  "download_artifact_commit": "b09dd7269f070cdb4eedb99e79058ea91ad34cd8",
+  "links": {
+    "mission014-review.zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/b09dd7269f070cdb4eedb99e79058ea91ad34cd8/downloads/mission014-review.zip",
+    "Guitar-Boy-Advance-M014-Synthetic.gba": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/b09dd7269f070cdb4eedb99e79058ea91ad34cd8/downloads/Guitar-Boy-Advance-M014-Synthetic.gba"
+  },
+  "anonymous_downloads_match": true,
+  "zip_CRC": true,
+  "source_files_compared": 376,
+  "public_tests": [
+    {
+      "check": "downloaded-identity",
+      "exit_code": 0
+    },
+    {
+      "check": "downloaded-physical",
+      "exit_code": 0
+    },
+    {
+      "check": "downloaded-pause",
+      "exit_code": 0
+    }
+  ],
+  "public_rom_sha256": "f964a0ac252dddf3135a3f132db61cfaf795c74480bb2e449d1c346815304af7",
+  "public_zip_sha256": "47fafec90ce7fe2da24f37a1f728813799742a024c6a8a23a6c3ea636aaa65bc",
+  "private_Cream_uploaded": false,
+  "private_Cream_delivery": "BLOCKED; retained locally by owner instruction",
+  "private_local_extraction_and_emulator": [
+    {
+      "check": "cream-final-extracted-holds",
+      "exit_code": 0
+    },
+    {
+      "check": "cream-final-extracted-pause",
+      "exit_code": 0
+    }
+  ],
+  "engine_comparison": {
+    "public": {
+      "only_revision_marker_changed": true,
+      "rom_sha256": "f964a0ac252dddf3135a3f132db61cfaf795c74480bb2e449d1c346815304af7",
+      "rom_bytes": 824220,
+      "source_commit": "2ae6544f96ad8662fadabd6d5cf373fd6931227d"
+    },
+    "cream": {
+      "only_revision_marker_changed": true,
+      "rom_sha256": "2d0daed36bbc6647dfa6356ee0aefbbd4528cf8c27cd26509e7cae7ffaec1c03",
+      "rom_bytes": 9187576,
+      "source_commit": "2ae6544f96ad8662fadabd6d5cf373fd6931227d"
+    }
+  },
+  "QA_status": "PROVISIONAL: one strict ordinary mGBA backing comparison remains failed; no owner handheld acceptance"
+}
