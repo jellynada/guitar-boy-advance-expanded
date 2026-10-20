@@ -91,7 +91,7 @@ def build(root, profile, input_zip=None):
             assets = validate_assets(work, profile)
             image = (work / 'scripts/toolchain-image.txt').read_text().strip()
             compiler = subprocess.check_output(['docker', 'run', '--rm', image,
-                                                'arm-none-eabi-gcc', '--version'], env=env, text=True).splitlines()[0]
+                                                '/opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc', '--version'], env=env, text=True).splitlines()[0]
             (job / 'toolchain.txt').write_text(compiler + '\n' + image + '\n')
         rom = work / 'guitar-boy-advance-expanded.gba'
         elf = work / 'guitar-boy-advance-expanded.elf'

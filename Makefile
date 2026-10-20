@@ -46,7 +46,7 @@ CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
 PYTHON ?= python3
 AUDIO_DIR ?=
 IMPORTED_HEADER ?=
-BUILD_PROFILE ?= legacy
+BUILD_PROFILE ?= $(if $(IMPORTED_HEADER),legacy,public-synthetic)
 SOURCE_REVISION ?= unversioned
 HOSTCXX ?= g++
 # Keep native/container helper binaries separate: their C++ runtimes can differ.
