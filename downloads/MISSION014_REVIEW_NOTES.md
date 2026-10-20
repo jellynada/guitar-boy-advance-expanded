@@ -1,0 +1,9 @@
+Imported Easy now pauses on a fresh START press, resumes on START, and exits from pause on SELECT. The existing LEFT/B/A mapping, charts, audio assets, score/hold rules, Original Demo and Windows launcher are preserved. The owner explicitly authorized provisional work on Mission013; Mission013 handheld acceptance remains unconfirmed.
+
+The transport freezes the shared FIFO/sample timer without resetting buffered music, mixer/guitar state or source position. Resume seeds held inputs and sustains; the static BG0 overlay leaves scanline DMA running. Exit priority and release guarding prevent accidental pause/replay/restart actions. Pause glyphs prepare at boot to preserve rapid scene input polling.
+
+Validation:127 Python tests +10 ASan/UBSan programs;37 existing behavior/input cases;42 pause/reference cases; Original699-note Perfect/miss/mixed; full Cream395heads/78holds/15815reference. Full highway scan has0displaced pixels; exact full-song sample/mixer continuity passes across8audible pauses, plus18boundary waveform windows per profile. One ordinary strict common-backing comparison remains FAILED at204.268494s (0.979593vs>0.999); exact unmodified FIFO passes and an emulator-only lateness correction passes diagnostically. Correction is not shipped; no all-green audio QA/stable-release claim.
+
+See docs/MISSION_014_PAUSE_RESUME.md and docs/evidence/mission014 for performed checks, memory/stack/timing comparisons and limits. Owner checklist: docs/OWNER_M014_PLAYTEST.md. No Windows GUI or handheld acceptance claimed.
+
+Public synthetic delivery only. Actual Cream build/AES archive remains local by explicit owner instruction until authorized private delivery exists. No Cream/public encrypted download, main/develop merge, new front end or Mission015 work. Review against Mission013 first; integration requires explicit owner acceptance/approval.
