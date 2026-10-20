@@ -2,7 +2,7 @@
 # The image digest pins the compiler, libraries, graphics and audio tools.
 set -euo pipefail
 repo=$(cd "$(dirname "$0")/.." && pwd)
-image=devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5
+image=$(cat "$repo/scripts/toolchain-image.txt")
 docker pull "$image"
 docker run --rm --user "$(id -u):$(id -g)" \
     -v "$repo:/workspace/guitar-boy-advance-expanded" \

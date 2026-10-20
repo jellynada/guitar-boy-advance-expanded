@@ -5,6 +5,7 @@
 #include "terminal.hpp"
 #include "mode7.hpp"
 #include "scanline.hpp"
+#include "build_identity.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
 #include "gameControls.hpp"
@@ -335,7 +336,7 @@ int main(){
             if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
             if (menuDirty) {
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-                menuTitle.updateText("M011 TIMING");
+                menuTitle.updateText(GBA_BUILD_TITLE);
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
                 menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");

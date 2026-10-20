@@ -54,3 +54,8 @@ imports/output/*
 __pycache__/
 # Owner-local input used by the documented Mission009 build commands.
 /Cream.zip
+# Mission012: local input, isolated work, manifests and versioned ROMs.
+/private/
+/builds/
+**/Cream.zip
+/SOURCE_MANIFEST.json
