@@ -32,13 +32,21 @@ def package(root, result, output):
     with tempfile.NamedTemporaryFile(dir=output.parent, suffix='.zip', delete=False) as temp:
         temporary = Path(temp.name)
     try:
+        def write(z, name, data):
+            # Same verified build yields the same ZIP, independent of wall time/umask.
+            entry = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.create_system = 3
+            entry.external_attr = 0o100644 << 16
+            z.writestr(entry, data, compresslevel=9)
+
         with zipfile.ZipFile(temporary, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
             for name, data in sorted(files.items()):
-                z.writestr('guitar-boy-advance-expanded/' + name, data)
-            z.writestr('guitar-boy-advance-expanded/SOURCE_MANIFEST.json', json.dumps(source, indent=2) + '\n')
-            z.write(result / manifest['rom'], manifest['rom'])
-            z.writestr('BUILD_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
-            z.writestr('READ_ME_FIRST.txt',
+                write(z, 'guitar-boy-advance-expanded/' + name, data)
+            write(z, 'guitar-boy-advance-expanded/SOURCE_MANIFEST.json', json.dumps(source, indent=2) + '\n')
+            write(z, manifest['rom'], (result / manifest['rom']).read_bytes())
+            write(z, 'BUILD_MANIFEST.json', json.dumps(manifest, indent=2) + '\n')
+            write(z, 'READ_ME_FIRST.txt',
                         'MISSION014 SYNTHETIC REVIEW BUILD\nExtract All. Install mGBA from https://mgba.io/downloads.html.\n'
                         'File > Load ROM > ' + manifest['rom'] + '\n'
                         'This public test song is synthetic. No Cream recording/chart is included.\n'

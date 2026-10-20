@@ -1,3 +1,12 @@
+# Current foundation release policy
+
+See [Mission015 build and delivery](MISSION_015_BUILD_DELIVERY.md). Public push,
+artifact publication and release creation require owner approval. Public release
+also requires inherited-asset review. The Mission013 encrypted-delivery wording
+below is historical; encryption does not establish distribution permission.
+No private recording, generated private ROM, encrypted private ZIP or password
+may enter the new public CI artifacts. Mission014 private files remain unchanged.
+
 # Mission014 delivery restriction
 
 Build official public/private profiles from the same clean source. Only synthetic review artifacts may be uploaded publicly. The owner chose to retain the Cream ROM locally until authorized private transfer exists. Do not upload a Cream ROM or encrypted Cream ZIP to a public GitHub branch/release; a password is not access control or redistribution rights. Prepare a fresh-password AES256 ZIP locally, verify extraction/hash/emulator execution, retain the password separately, and report private delivery as blocked. No local path or unsuccessful sandbox link counts as a download test.

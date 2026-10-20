@@ -9,6 +9,7 @@ import zipfile
 
 PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
                'music', 'scripts', 'source', 'tests', 'tools'}
+PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml'}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
 PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
             'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba')}
@@ -32,7 +33,7 @@ def safe_source_name(name):
         raise ValueError('Private/generated path cannot enter public source: ' + name)
     if len(parts) == 1 and name not in PUBLIC_ROOT:
         raise ValueError('Unreviewed public root file: ' + name)
-    if len(parts) > 1 and parts[0] not in PUBLIC_DIRS:
+    if len(parts) > 1 and parts[0] not in PUBLIC_DIRS and name not in PUBLIC_WORKFLOWS:
         raise ValueError('Unreviewed source directory: ' + name)
     if parts[0] == 'imports' and name not in {'imports/incoming/README.md', 'imports/output/README.md'}:
         raise ValueError('Imported private/generated payload: ' + name)

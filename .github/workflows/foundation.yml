@@ -1,0 +1,54 @@
+name: Foundation synthetic build
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [foundation-audit-2026-10-20]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install host verification dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ ffmpeg python3-numpy libmgba-dev
+      - name: Host regression suite
+        run: bash tests/check.sh
+      - name: Build committed public synthetic profile
+        run: python3 tools/build_profile.py public
+      - name: Package and verify extraction
+        run: |
+          set -euo pipefail
+          build="builds/public/$(cat builds/public/LATEST.txt)"
+          revision=$(git rev-parse HEAD)
+          mkdir -p builds/ci
+          archive="builds/ci/Guitar-Boy-Advance-Foundation-M015-${revision}-Synthetic.zip"
+          python3 tools/package_public.py --build "$build" --output "$archive"
+          python3 tools/verify_public_package.py "$archive" --build "$build" --extract-to builds/ci-extracted --receipt builds/ci/package-verification.json
+          image=$(cat scripts/toolchain-image.txt)
+          docker run --rm -v "$PWD:/project:ro" "$image" /opt/devkitpro/devkitARM/bin/arm-none-eabi-nm "/project/$build/Guitar-Boy-Advance-M014-Synthetic.elf" > builds/ci-symbols.txt
+          python3 tools/ci_public_smoke.py --build "$build" --extracted builds/ci-extracted --output builds/ci-smoke --symbols builds/ci-symbols.txt
+          cp builds/ci-smoke/smoke.json builds/ci/emulator-verification.json
+          cp "$build/manifest.json" builds/ci/BUILD_MANIFEST.json
+          cd builds/ci
+          sha256sum *.zip > SHA256SUMS.txt
+      - name: Upload verified development artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: foundation-m015-synthetic-${{ github.sha }}
+          path: builds/ci/*
+          if-no-files-found: error
+          retention-days: 30

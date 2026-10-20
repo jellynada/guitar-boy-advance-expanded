@@ -1,3 +1,11 @@
+# Mission 015 foundation work
+
+Repository audit and CI development-artifact workflow are prepared on
+`foundation-audit-2026-10-20`. See [audit and backlog](docs/MISSION_015_FOUNDATION_AUDIT.md)
+and [build/download procedure](docs/MISSION_015_BUILD_DELIVERY.md). GitHub publication,
+real downloads, licensing and physical-hardware acceptance remain separate gates.
+The runtime remains the provisional M014 engine; no gameplay is changed.
+
 # Mission 014 — provisional pause/resume review
 
 Imported Easy uses **LEFT / B / A**. Press **START** to pause/resume; **SELECT** exits while paused. START+SELECT returns to the selector. Original Demo controls remain unchanged.
