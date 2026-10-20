@@ -289,7 +289,7 @@ int main(){
     //Setup is done. Lets put it into action!
     //Terminal::log("Hello World! %%", careless_expertsingle_data[0].tick);
     // Audio starts after a mode is chosen.
-    textDisplay menuTitle(28, 28, 32, true, 16);
+    textDisplay menuTitle(28, 28, 16, true, 24);
     textDisplay menuOriginal(16, 58, 48);
     textDisplay menuImported(16, 82, 64, true, 24);
     textDisplay menuDiagnostic(16, 106, 88, true, 24);
