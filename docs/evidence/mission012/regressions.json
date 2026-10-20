@@ -1,0 +1,150 @@
+[
+  {
+    "scenario": "public-sustain-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-sustain-release",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-good",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-miss",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-scoring",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-wrong",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-reactive",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-returnmenu",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-returnselect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-replaystart",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-fault_dma",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-fault_sound",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-fault_irq",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-fault_underrun",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-fault_timer",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-inconsistent",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-sustain-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-sustain-release",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-good",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-miss",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-scoring",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-wrong",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-reactive",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-returnmenu",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-returnselect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-input-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-input-partial",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-input-wrong",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-input-early",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-input-stuck",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-input-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-input-partial",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-input-wrong",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-input-early",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-input-stuck",
+    "exit_code": 0
+  }
+]

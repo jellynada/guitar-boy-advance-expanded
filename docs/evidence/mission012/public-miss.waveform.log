@@ -1,0 +1,70 @@
+{
+  "format": "16384Hz signed8 mono, two aligned ROM streams",
+  "capture_epoch_samples": 1020,
+  "epoch_variation_samples": 4,
+  "events": 25,
+  "mute_transitions": 1,
+  "recoveries": 0,
+  "exact_backing_only_source_samples": 196227,
+  "fade_samples": 64,
+  "fade_ms": 3.90625,
+  "independent_model_peak": 74,
+  "captured_peak": 13958,
+  "clipped_samples": 0,
+  "underruns": 0,
+  "last_second_nonzero_samples": 0,
+  "checks": [
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 1.9921875,
+      "correlation": 0.9971408456777074,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.67138671875,
+      "capture_epoch_at_reference": 1018
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 9.325531005859375,
+      "correlation": 0.9949053493258354,
+      "error_ms": -0.823974609375,
+      "global_epoch_error_ms": -0.823974609375,
+      "capture_epoch_at_reference": 1020
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 13.325531005859375,
+      "correlation": 0.9949847209226258,
+      "error_ms": -0.823974609375,
+      "global_epoch_error_ms": -0.823974609375,
+      "capture_epoch_at_reference": 1020
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 2.015625,
+      "correlation": 0.9984397961806919,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.701904296875,
+      "capture_epoch_at_reference": 1018,
+      "backing_scale": 190.14040964219913,
+      "guitar_to_backing_scale": 1.0070227825217941
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 2.10931396484375,
+      "correlation": 0.9988123375396376,
+      "error_ms": -0.762939453125,
+      "global_epoch_error_ms": -0.823974609375,
+      "capture_epoch_at_reference": 1018,
+      "backing_scale": 190.95628287026082,
+      "guitar_to_backing_scale": 0.0003107065499853211
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 2.08984375,
+      "correlation": 0.9971356847976579,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.701904296875,
+      "capture_epoch_at_reference": 1018
+    }
+  ]
+}

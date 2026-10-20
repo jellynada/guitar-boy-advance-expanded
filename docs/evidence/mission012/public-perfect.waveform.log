@@ -1,0 +1,52 @@
+{
+  "format": "16384Hz signed8 mono, two aligned ROM streams",
+  "capture_epoch_samples": 1020,
+  "epoch_variation_samples": 4,
+  "events": 25,
+  "mute_transitions": 0,
+  "recoveries": 0,
+  "exact_backing_only_source_samples": 0,
+  "fade_samples": 64,
+  "fade_ms": 3.90625,
+  "independent_model_peak": 76,
+  "captured_peak": 14170,
+  "clipped_samples": 0,
+  "underruns": 0,
+  "last_second_nonzero_samples": 0,
+  "checks": [
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 1.9921875,
+      "correlation": 0.9980012642243131,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.67138671875,
+      "capture_epoch_at_reference": 1018
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 9.325531005859375,
+      "correlation": 0.998167173767952,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.701904296875,
+      "capture_epoch_at_reference": 1020
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 13.325531005859375,
+      "correlation": 0.9981883842312915,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.701904296875,
+      "capture_epoch_at_reference": 1020
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 2.015625,
+      "correlation": 0.9985206555604359,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.701904296875,
+      "capture_epoch_at_reference": 1018,
+      "backing_scale": 190.3979492410394,
+      "guitar_to_backing_scale": 1.0058685257496802
+    }
+  ]
+}

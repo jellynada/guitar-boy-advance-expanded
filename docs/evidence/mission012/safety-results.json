@@ -1,0 +1,17 @@
+{
+  "private_result_rejected": "A private build cannot enter a public package",
+  "stale_chart_rejected": "Stale or damaged build output: runtime/imported_chart.hpp",
+  "canary_absent_from_every_zip_member": true,
+  "public_rebuild_with_canary_byte_identical": true,
+  "private_runtime_matches_accepted_mission011": true,
+  "reactive_raw_matches_mission011": true,
+  "reactive_events_match_mission011": true,
+  "scoring_raw_matches_mission011": true,
+  "scoring_events_match_mission011": true,
+  "wrong_raw_matches_mission011": true,
+  "wrong_events_match_mission011": true,
+  "sustain-perfect_raw_matches_mission011": true,
+  "sustain-perfect_events_match_mission011": true,
+  "sustain-release_raw_matches_mission011": true,
+  "sustain-release_events_match_mission011": true
+}

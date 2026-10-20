@@ -1,4 +1,45 @@
-# Mission 011 QA and owner playtest
+# Mission012 build foundation QA
+
+Owner-reported Mission011 Windows/mGBA and physical-GBA acceptance: flicker fixed,
+good audio, working score/holds/results/replay. This does not constitute agent
+hardware testing or comprehensive certification. Mission012 Windows launcher
+acceptance remains unchecked; see WINDOWS_PRIVATE_BUILD.md.
+
+Run `bash tests/check.sh` (108 existing +19 new Python tests,8 sanitized C++
+programs). Official clean builds use `python3 tools/build_profile.py public` and
+`python3 tools/build_profile.py cream`. Both profiles must report the same full
+source commit. Never use a stale root ROM left from low-level make.
+
+Build a fresh exported source via release_common.source_snapshot/export_source,
+then build both profiles independently. Place a unique fake payload in private/
+before repeating public: require identical ROM hash, no marker in ROM/ZIP, and
+no tracked/staged private/build files. Confirm public packaging rejects an actual
+private result; damaged runtime/ROM rejects; invalid ZIP/missing input/failed
+command yields failure, no new ROM and no latest-success pointer.
+
+The complete selector label is checked against actual OAM and visible glyph
+pixels by tests/build_identity_emulator.c (native libmgba0.10.1):
+
+```bash
+gcc -O2 -Wall -Wextra -Werror tests/build_identity_emulator.c -o /tmp/check-identity -lmgba
+/tmp/check-identity PATH_TO_SYNTH_ROM "M012 / SYNTH"
+/tmp/check-identity PATH_TO_PRIVATE_ROM "M012 / CREAM / LOCAL"
+```
+
+Full fresh results, exact commands/limits and source identities are in
+MISSION_012_BUILD_FOUNDATION.md. Retained gameplay/graphics checks follow below;
+M011-specific counts/times are historical evidence, not automatically attributed
+to every future binary layout. For versioned builds use their matching ELF and
+runtime header with the C harnesses, or copy a verified pair/header for the older
+root-path wrappers. Do not mix profile files.
+
+- [ ] Owner double-clicks Build-Cream-ROM.bat successfully on Windows11.
+- [ ] Owner confirms printed M012 source/checksum and opens the newly built ROM.
+- [ ] Owner checks full song, results/replay and flash-cartridge transfer.
+
+## Retained gameplay and timing plan
+
+### Mission011 reference checks
 
 ## Windows 11 — no programming needed to play the public build
 

@@ -1,0 +1,12 @@
+LINE index0 expected_tick33554432 displayed_tick33752064 error_ms11.779785 center_x44 center_y122
+REFERENCE index0 expected_tick33554432 actual_tick35154944 abs_error_ms95.397949
+LINE index1 expected_tick41943040 displayed_tick41895936 error_ms2.807617 center_x120 center_y116
+LINE index2 expected_tick50331648 displayed_tick50323456 error_ms0.488281 center_x191 center_y117
+PASS: fault_dma frames1800 notes25 Perfect0 Good0 Miss7 Wrong0 nonzero_samples156106 audio_state3; foreground max161344 avg112159.0 CPUcycles/frame
+PASS: 6 composite framebuffer HUD checks
+SCORE: score0 combo0 maximum0 highest1 accuracy0 FC0 AP0 session2
+SIMULTANEOUS: A+B held for 0 frames
+TAILS: peak14 composite_checks2 overflow0
+HOLDS: total6 completed0 released0 missed6 bonus0
+IRQ: refills6826 max1472 mean1383.2 cycles, underruns0 gate0 gain0
+PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash

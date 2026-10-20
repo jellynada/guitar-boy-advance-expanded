@@ -1,0 +1,209 @@
+{
+  "starting_source": "a6c0328b319ce1bf48e08371c2db770ac5a5008a",
+  "historical_main": "6c4e63460fab10733d8ff011045ee246e7201952",
+  "required_ancestors": {
+    "hud/results hotfix": "71f0152c29d7008acd310808861643d5018e65a7",
+    "sustains": "85c637d4cf1c1029fbf8d2413ba0a63274ef234b",
+    "input diagnostic": "1d9210448031d095ba125bcf4c3fe3375bb40c0a",
+    "scanline DMA repair": "d0b20dcb27d40cda0f1556c5bdd1ad42c443ddfd"
+  },
+  "branches": [
+    {
+      "branch": "origin",
+      "commit": "6c4e63460fab10733d8ff011045ee246e7201952",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "main",
+      "commit": "6c4e63460fab10733d8ff011045ee246e7201952",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-001-download",
+      "commit": "43710f8a9762e48d79db946015d17ccfa232cc83",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-001-reproducible-build",
+      "commit": "47d340e105ff3afb899b063683b2ee0dbc5b7943",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-002-download",
+      "commit": "58e65134f2d32e1fc151392c1750b4c05a2f7ca8",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-002-note-judgment",
+      "commit": "533862124079a9dca1f84a6d88f54e40cde189cb",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-003-chart-importer",
+      "commit": "135a55c2a0de50a4c68610f1aeb288924508bb54",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-003-download",
+      "commit": "60d824cfd6241533bbf29caa54f8b64a47ad0c63",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-004-download",
+      "commit": "145496e5179c3dbccbf464bd531ba267a495914a",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-004-universal-import",
+      "commit": "1487532557a1e98b1c99c6628e5d65c291268cd2",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-005-download",
+      "commit": "0640643a844a9fbb0c2fcc4612b090c12512a64b",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-005-first-playable-import",
+      "commit": "f23cb6b4039fec93811b80f557a85518b2f626d1",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-006-audio-sync",
+      "commit": "4fa9e6f8b2558a129075c9815c8bb2ac68e6421b",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-006-download",
+      "commit": "d6e96a2d639479f5dd34a57a3d35c49c396c70d0",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-006-playtest-download",
+      "commit": "90ee15fe548110d23df04836befa0fabfcf7285c",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-007-download",
+      "commit": "0e6a37b941703184f3d76880ac7b8669261a9799",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-007-playtest-download",
+      "commit": "e8b5e6f1362438474e5102835ac3d094708b9d87",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-007-reactive-guitar-audio",
+      "commit": "90aaed9f2d7624258ff3485d6a0dc7858c126929",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-008-download",
+      "commit": "9c35c2fffd0e88bde4c3db4fee2239f6597f381d",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-008-hotfix-download",
+      "commit": "32e80153729d807aab9455f69221bd387a484e3b",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-008-hotfix-hud-completion",
+      "commit": "71f0152c29d7008acd310808861643d5018e65a7",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-008-playtest-download",
+      "commit": "3a1e6a948fd34a5e3de7a78deb6b33fe3ecafc0b",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-008-scoring-results",
+      "commit": "a6b36a22733992b274f352a190c9ec1d39547d1d",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-009-download",
+      "commit": "be1624dc33c9056d07ed5278ed405b43f3363912",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-009-playtest-download",
+      "commit": "9984c0953cc70b41c43390c04aa642a74e7994de",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-009-sustain-gameplay",
+      "commit": "f589e62a225651c7bd8a39ad27f517e3890cd1fb",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-010-download",
+      "commit": "b7266b38290969a039e9381eac111579c55e16a4",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-010-stabilization",
+      "commit": "233112a072e5a0e90e5a766207761474130f75a6",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-011-audio-graphics-stability",
+      "commit": "a6c0328b319ce1bf48e08371c2db770ac5a5008a",
+      "kind": "source",
+      "ancestor_of_mission011": true
+    },
+    {
+      "branch": "mission-011-cream-download",
+      "commit": "85c765f04d883f6f6c0216dadf876b08cded2d43",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    },
+    {
+      "branch": "mission-011-download",
+      "commit": "144ff62d5c175547f1d6df9621d2e4e7e4c36429",
+      "kind": "download-only",
+      "ancestor_of_mission011": false
+    }
+  ],
+  "baseline_roms": {
+    "public": {
+      "bytes": 821556,
+      "sha256": "a59989d631183bc02272866022ad5e03347b2a177f2b0cb6a7143c1950658f09"
+    },
+    "private": {
+      "bytes": 9184976,
+      "sha256": "c6112dbc98baa5643ea631fa5a02b9fd2a793e46d46b420e67c4e2f331ceac03"
+    }
+  },
+  "tracked_generated_payloads": []
+}

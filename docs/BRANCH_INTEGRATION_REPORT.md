@@ -50,3 +50,35 @@ Fetched all remote heads before editing. All source mission branches001–011 ar
 Main must remain at the immutable revision above until owner approval. Review the main-to-Mission012 source comparison; never merge a download branch. After approval, use a normal reviewed merge, preserving all history. If reverting a later merge is necessary, revert that merge in a new commit; do not reset or force-push shared branches. The historical source remains retrievable by its full commit even without a new tag. No stable tag or default-branch change is proposed.
 
 Develop may be created from final Mission012 source only if no existing remote develop exists. A diverged existing develop requires a separate decision, never replacement.
+
+## Proposed main source integration
+
+Comparison: https://github.com/jellynada/guitar-boy-advance-expanded/compare/main...mission-012-build-release-foundation
+
+The exact added/modified file inventory is MAIN_INTEGRATION_FILES.txt (generated
+from the main-to-source diff plus this mission's pending public documentation).
+It includes engine/source fixes from Missions001–011, build/import/test tools,
+public fixtures, documentation and actual historical/public screenshots. Existing
+original art, demo music/chart and historical converter executables are retained;
+they are not new Cream assets. There is no source merge conflict at the verified
+starting point: main is an ancestor. Recheck the remote before any owner-approved
+merge; future divergence must be reviewed rather than forced away.
+
+Excluded from source/main/public packages: all download-branch commits and their
+ZIP/ROM binaries; private/Cream.zip; generated private chart/header/JSON/PCM;
+imports/output generated song directories; builds/private, caches, ELF/map/ROM
+outputs, local captures and owner input archives. All builds/ output is ignored,
+including public outputs; public delivery uses explicitly named files only on a
+separate download branch. A source path allowlist rejects known private payloads
+and tracked private files, rather than relying solely on ignore rules.
+
+Recommended owner decision: approve the audited Mission012 source as the current
+engineering baseline and, after reviewing this source-only comparison, authorize
+main integration separately. Do not label the game a stable public release.
+Develop tracks the completed source revision; future missions branch from it.
+The two numerical emulator comparisons and provenance/hardware work remain
+release gates, not reasons to withhold safe source commits.
+
+If automated draft PR creation is denied, the comparison above remains the
+review route. Record the actual API result in the delivery verification receipt;
+never claim a PR exists merely because a comparison URL was prepared.

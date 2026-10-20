@@ -1,139 +1,107 @@
-# Review builds, licensing and stable integration
+# Source workflow and public/private builds — Mission012
 
-Mission011 is an **Outcome B review candidate**, not a stable release. Graphics repair is verified; owner acceptance and ordinary-emulator strict audio comparisons
-(QA-010-004) remain open. Do not merge or label it stable on automated counts alone.
+Saving source, accepting a development baseline, and releasing a stable public
+game are different decisions. Owner-reported Mission011 hardware acceptance is
+recorded in MISSION_012_BUILD_FOUNDATION.md; emulator and inherited-asset gates
+remain. Source can still be saved and reviewed safely.
 
-## Source and branch policy (integration proposal retained from Mission010; not executed in Mission011)
+## Branch policy
 
-- Original upstream initial revision: `c27bd247a06561330a84773203772199fa210cdf`.
-- Historical project main: `6c4e63460fab10733d8ff011045ee246e7201952`.
-- M008 HUD/results hotfix: `71f0152c29d7008acd310808861643d5018e65a7`.
-- Final M009 source: `f589e62a225651c7bd8a39ad27f517e3890cd1fb`
-  (gameplay implementation `85c637d4cf1c1029fbf8d2413ba0a63274ef234b`).
-- Verified M010 source: `233112a072e5a0e90e5a766207761474130f75a6`.
-- Current work: `mission-011-audio-graphics-stability`, derived from M010; no consolidation in this mission.
-- `mission-011-download` holds current review binaries; do not merge it into source.
-- All earlier `*-download` / `*-playtest-download` branches are delivery history,
-  not development branches. Full inventory is in MISSION_010_STABILIZATION.
+- `main`: reviewed source after explicit owner approval. It is currently historical
+  `6c4e63460fab10733d8ff011045ee246e7201952`, an immutable rollback point.
+- `develop`: current integration baseline from the audited Mission012 source
+  chain, created only if it does not exist. Never overwrite a diverged branch.
+- `mission-XXX-*`: isolated work branched from the accepted development baseline.
+  Commit, test, push and review; retain existing history.
+- `*-download` / `*-playtest-download`: compiled delivery only. Never merge into
+  source. A future GitHub release may replace these when suitable; no stable tag
+  or release is created here.
 
-Proposed consolidation, **only after explicit owner authorization**:
+Full remote inventory/ancestry and rollback plan: BRANCH_INTEGRATION_REPORT.md.
+Main's default-branch setting, historical branches and commit history are unchanged.
 
-1. Review mission ancestry, source comparison and third-party permissions audit.
-2. Resolve QA-010-004, complete owner playtest and physical-hardware risk review.
-3. If separately approved, add a backup tag at historical main; do not rewrite it.
-4. Fetch and confirm main still points to the recorded historical revision, with
-   no new independent work. Create a reviewed source PR/comparison from the mission
-   source chain, never a download branch. No `.gba`, owner ZIP or generated Cream
-   data may enter the source change; retained original music/art needs its own
-   rights review. The existing source chain contains original third-party assets.
-5. With approval, fast-forward main to the accepted source (`git merge --ff-only`
-   of the accepted source revision), or use the owner's reviewed integration
-   choice if GitHub policies require it. Stop on divergence; do not force push.
-6. Create a stable candidate reference only after the gates pass and that action
-   is authorized. No backup tag, stable tag/branch, default-branch change, merge,
-   branch deletion or history rewrite is performed in this mission.
+## Two official profiles, one committed engine
 
-The source is reviewable and independently buildable, but **not approved for
-stable promotion** while the ordinary-emulator strict comparison gate and owner/platform acceptance remain open.
-
-## Reproducible public build
-
-Use the source folder from the public review ZIP, or clone and check out the
-source branch. `bash scripts/build-docker.sh` uses pinned devkitARM image
-`sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5`.
-Native tested compiler is ARM GCC16.1.0. The public default uses original synthetic
-imported data/audio. The unchanged original699-note demo remains in the ROM.
-The build generates note.h, chart assembly, graphics, soundbank, imported headers
-and PCM; host converter source replaces the Windows-only executable.
-`make` now validates chart/hold/EOF bounds, cartridge size, matching ELF/ROM and
-compiled note count. Do not continue packaging after a nonzero build exit.
-
-Version each bundle with source commit, selector identifier, SHA256, toolchain,
-test outcome and known issues. Keep source and binaries separate. Include
-synthetic native screenshots and Windows instructions. Download the public URL
-back without authentication, test ZIP CRC, compare its ROM and source bytes to
-the intended commit, and test the downloaded build. A workspace path or an
-unverified sandbox link is not evidence of successful download delivery.
-
-## Windows 11 — build the owner's Cream ZIP locally
-
-This fallback was exercised in a clean Linux source export with the existing
-owner ZIP and produced the identical private ROM. Windows GUI installation and
-human keyboard play were not tested. Tools and commands are the established
-WSL procedure; no programming changes are required.
-
-One-time setup:
-
-1. Install mGBA from https://mgba.io/downloads.html.
-2. Install Ubuntu using Windows Terminal (administrator):
-   `wsl --install -d Ubuntu`. Restart if Windows requests it; open Ubuntu and
-   finish its initial account setup.
-3. Install Docker Desktop from https://www.docker.com/products/docker-desktop/.
-   Use Linux containers and enable Ubuntu under Settings → Resources → WSL
-   Integration. Start Docker Desktop before building.
-4. In Ubuntu run `sudo apt update` then `sudo apt install -y python3 ffmpeg`.
-5. Extract the public review ZIP. Move its `guitar-boy-advance-expanded` folder
-   into `C:\gba\mission011` so Makefile is at
-   `C:\gba\mission011\guitar-boy-advance-expanded\Makefile`.
-6. Copy the original owner song ZIP into that source folder and name it
-   `Cream.zip`. Enable Explorer's View → Show → File name extensions to avoid
-   accidentally naming it `Cream.zip.zip`.
-7. In Ubuntu: `cd /mnt/c/gba/mission011/guitar-boy-advance-expanded`.
-
-Then run exactly these two commands in Ubuntu:
+Use Python3 and Docker with the pinned image in scripts/toolchain-image.txt.
+Public needs no FFmpeg or private package. Private additionally needs FFmpeg on
+the WSL/Linux host. In an exported source folder, SOURCE_MANIFEST.json replaces
+Git metadata; do not delete it or modify its recorded source files.
 
 ```bash
-python3 tools/prepare_song.py Cream.zip --reactive --guitar-stem guitar --backing-stem rhythm --backing-stem song --output-dir imports/output/mission011
-bash scripts/build-docker.sh "IMPORTED_HEADER=imports/output/mission011/imported_chart.hpp" "AUDIO_DIR=imports/output/mission011/audio"
+# Public original synthetic chart/audio, from public committed source only:
+python3 tools/build_profile.py public
+
+# Private owner-local Cream package; never downloads or uploads music:
+python3 tools/build_profile.py cream
 ```
 
-Stop if either command reports failure; do not open an older ROM left behind.
-Open `C:\gba\mission011\guitar-boy-advance-expanded\guitar-boy-advance-expanded.gba`
-in mGBA. Confirm **M011 TIMING / LOCAL / AUDIO**, then choose Imported Easy Test.
-The diagnostic mode is also present. Easy lane order: Left / A / B. Results:
-A/Start replay, B/Select selection. Start+Select returns during play.
-Ubuntu FFmpeg versions can produce different bytes; the recorded identical hash
-applies to this environment's FFmpeg7.1.5 conversion and pinned compiler.
-A default build afterward replaces this output with the synthetic version.
+Private default input is `private/Cream.zip`. An explicit existing local ZIP may
+be selected with `--input /path/to/Cream.zip`. No automatic fallback to synthetic
+is allowed for this profile. Windows users double-click Build-Cream-ROM.bat; see
+[WINDOWS_PRIVATE_BUILD.md](WINDOWS_PRIVATE_BUILD.md) for one-time setup.
 
-## Third-party content and actual delivery limits
+Outputs are isolated and versioned under `builds/public/` or `builds/private/`.
+Each successful directory contains a descriptively named ROM, matching ELF,
+manifest, source-file manifest, log and validated runtime assets. Private runtime
+assets stay private. LATEST.txt selects only a successful latest attempt;
+LAST_ATTEMPT.json records success/failure. A new attempt removes the pointer,
+retains older dated builds and only publishes fresh verified files on success.
 
-The owner ZIP remains available; the current real build contains the original
-WaveGroup cover, all395heads and78sustains, with matching reactive stems. Private
-ROM hash: `c6112dbc98baa5643ea631fa5a02b9fd2a793e46d46b420e67c4e2f331ceac03`.
-Size9,184,976bytes. Full-song gameplay scenarios pass; two additional strict ordinary-emulator
-backing comparisons remain open, so this is not a fully accepted stable build.
+Build manifests identify full source commit/tree, profile, chart/PCM hashes,
+explicit stem choices, input ZIP hash (private only), compiler image/version,
+FFmpeg version, ROM size and SHA-256. The ELF/ROM program/data guard and embedded
+profile/commit marker reject stale pairs and wrong profiles. Input hashes are
+rechecked after compilation; output timestamps must follow compilation and input
+files. Dirty tracked source is rejected. Different FFmpeg releases may produce
+different PCM bytes; tool/version hashes document this limitation.
 
-There is no supported private attachment uploader or connected private file
-location in this workspace. Historical chat download links failed for the owner.
-No local pathname is offered as a verified download. The local workflow above is
-the supported fallback, not a claim that a chat attachment was delivered.
+Low-level `bash scripts/build-docker.sh` / `make` remain for developers and legacy
+fixed/silent compatibility tests. Use the official driver for deliverable ROMs.
+It forces explicit profile inputs and clears inherited make override variables.
+Never select a ROM left over after a failed low-level make.
 
-Earlier owner requests resulted in publicly committed Cream ROMs in M006–009
-playtest/download branches, including M009 commit
-`9984c0953cc70b41c43390c04aa642a74e7994de`. These ROMs embed recording/chart data;
-archive/source packages on historical branches also need review. A request to
-upload them does not itself establish music/chart redistribution rights. This
-mission does not remove or rewrite that history, or publish a new Cream ROM.
-Source tracks original careless.chart, careless_whisper.mod, art and Tonc-derived
-rendering code; no repository-wide LICENSE file was found. Preserve attribution
-and separately confirm permissions before a broader public release. New public
-review additions use synthetic chart/audio; the retained original demo is still
-subject to that historical provenance review.
+## Safe public review packaging
 
-## Release checklist
+```bash
+python3 tools/package_public.py --build builds/public/NAME_FROM_LATEST --output builds/public/packages/mission012-review.zip
+```
 
-- [x] Source baseline and mission ancestry verified; download branches separated.
-- [x] Host suite108Python tests and8C++ sanitizer programs passed.
-- [x] Composed frames checked; hidden-layer failures rejected.
-- [x] Thirteen chord/hold cases and negative-input scenarios exercised.
-- [x] Ten real full-song gameplay scenarios and three original-demo runs checked.
-- [x] Results/replay/menu and fresh replay audio confirmed in mGBA.
-- [ ] All required audio analyses pass (QA-010-004 remains open).
-- [x] Public synthetic download published and downloaded back for verification
-  (exact link/commit/hash in final handoff and bundle manifest).
-- [x] Private reproducible workflow exercised; direct private delivery unavailable.
-- [ ] Owner Windows11 manual acceptance received.
-- [ ] Physical GBA acceptance / stack high-water measurements completed.
-- [ ] Third-party permissions review completed.
-- [ ] Owner approved final source integration.
+Only a verified public-profile build matching the exact committed source is
+accepted. Packaging regenerates and verifies the original synthetic fixture,
+then includes the ROM, build manifest, complete audited source/launcher/docs and
+source manifest. No working-folder recursion or `git add -f .` is used. Runtime
+private directories are never an input to public packaging. Tests/evidence are
+recorded in the committed Mission012 report.
+
+Source path checks reject private/, builds/, downloads/, generated imports,
+private headers/audio metadata, ROM/ELF/PCM/ZIP/recording payloads and symlinks.
+A tracked private file is rejected even if .gitignore would otherwise ignore it.
+The ignore rules cover local private inputs and all build outputs. For source
+commits, stage explicit source paths; inspect `git diff --cached --name-only` and
+`git diff --cached --check` before committing. Never stage private output manually.
+
+Delivery branches may contain **only the allowlisted synthetic ZIP/ROM**, hashes
+and verification receipt. Download it anonymously, check hashes/ZIP CRC, inspect
+all members and compare its source-file manifest before offering the URL.
+
+## Integration proposal and stable gates
+
+Recommend Mission012 as the reviewed **development baseline**, not an approved
+stable public release. After owner approval, integrate the source branch into
+main with a normal reviewed merge/fast-forward, preserving full ancestry. If
+main diverges, compare independent work and resolve explicitly; no force push.
+No merge into main, default-branch change, branch deletion or stable tag is
+performed automatically. Audio compatibility does not prevent safe source saves.
+
+Stable/public game release separately requires remaining emulator comparisons,
+platform timing/stack validation, owner acceptance for subsequent changes, and
+permissions review. Retain original demo/music/art/chart in their existing
+historical arrangement; no repository-wide LICENSE was found. Do not imply these
+assets have been cleared for unrestricted distribution.
+
+Historical M006–011 Cream download branches include previously owner-requested
+public binaries. Ignoring files now does not remove history or establish rights.
+They remain untouched and require a separate legal/provenance review. Mission012
+publishes no new Cream recording, chart, converted audio or ROM. Owner-side local
+building is the supported private delivery workflow; local cloud paths are not
+presented as downloadable attachments.

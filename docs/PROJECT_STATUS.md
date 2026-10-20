@@ -1,4 +1,43 @@
-# Project status — Mission 011 review candidate
+# Project status — Mission012 build/release foundation
+
+Current source: `mission-012-build-release-foundation`, descended only from
+verified Mission011 `a6c0328b319ce1bf48e08371c2db770ac5a5008a`. The source-only
+integration baseline is develop; historical main remains
+`6c4e63460fab10733d8ff011045ee246e7201952` until owner approval. No download
+branch, stable tag, branch deletion or default-branch change enters this source.
+
+Both official profiles build the same committed engine in fresh isolated folders.
+Public: M012 / SYNTH, original synthetic fixture plus inherited Original Demo and
+INPUT / CHORD TEST. Private: M012 / CREAM / LOCAL, owner's local ZIP,395 Easy
+heads/78 genuine sustains/reactive stems. Versioned outputs/manifests/checksums
+and exact ROM/ELF guards reject stale pairs. Public packaging reads only audited
+committed source and a verified synthetic-profile result. private/ and builds/
+are ignored; tracked private payloads are rejected even if ignored by name.
+
+Windows owner workflow: one-time WSL Ubuntu + Docker Desktop + Python/FFmpeg;
+place ZIP in private/Cream.zip, double-click Build-Cream-ROM.bat. Linux pipeline
+is tested; actual Windows double-click execution remains owner validation.
+No automatic music download/upload and no new public Cream build in Mission012.
+
+Owner-reported Mission011 acceptance: flicker gone in Windows/mGBA and on physical
+GBA, good music and working score/holds/results/replay. This is scoped acceptance,
+not comprehensive hardware certification. Two additional strict emulator audio
+comparisons, measured physical DMA margins/stack, inherited asset provenance and
+historical download rights remain release concerns. Engineering source saves and
+development-baseline review need not wait for every stable-release question.
+
+No gameplay/control/scoring/audio/projection changes beyond build labels and the
+selector's reserved label sprites. Left/A/B stays current; Left/B/A and other
+future mappings, white sustain feedback and audio compression/storage are backlog.
+
+See MISSION_012_BUILD_FOUNDATION.md for performed checks, build identities/hashes,
+negative leakage/stale tests, clean reproduction and remaining limitations.
+WINDOWS_PRIVATE_BUILD.md is the owner guide; RELEASE_PROCESS.md and
+BRANCH_INTEGRATION_REPORT.md describe review/approval/rollback.
+
+## Historical Mission011 handoff (superseded by the status above)
+
+### Mission011 status at its handoff
 
 **Outcome B: graphics repair verified; audio emulator compatibility still blocks
 stable promotion. Owner Windows/physical-GBA acceptance is pending.**

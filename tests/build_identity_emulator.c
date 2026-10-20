@@ -1,12 +1,19 @@
 // Verify the complete profile label is actually composed, not just stored in ROM.
 #include <mgba/core/core.h>
+#include <mgba/core/log.h>
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
+static void log_message(struct mLogger* logger,int category,enum mLogLevel level,const char* format,va_list args){
+    (void)logger;(void)category;
+    if(level&(mLOG_FATAL|mLOG_ERROR|mLOG_WARN)){vfprintf(stderr,format,args);fputc('\n',stderr);}
+}
+
 int main(int argc,char** argv){
     assert(argc==3);
     const char* text=argv[2];assert(strlen(text)<=24);
+    struct mLogger logger={.log=log_message};mLogSetDefaultLogger(&logger);
     struct mCore* c=mCoreFind(argv[1]);assert(c&&c->init(c));mCoreInitConfig(c,NULL);
     color_t pixels[240*160]={0};c->setVideoBuffer(c,pixels,240);
     assert(mCoreLoadFile(c,argv[1]));c->reset(c);
