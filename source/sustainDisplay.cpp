@@ -12,7 +12,7 @@ void initialize(){sustainTailOverflow=0;}
 struct Point {int x,y;};
 static Point project(uint32_t lane,int64_t delta){
     const auto* cam=m7_level.camera;
-    VECTOR vr={ImportedTiming::laneX(lane)-cam->pos.x,-cam->pos.y,ImportedTiming::relativeZ(delta)};
+    VECTOR vr={ImportedTiming::laneX(lane,importedLaneCount)-cam->pos.x,-cam->pos.y,ImportedTiming::relativeZ(delta)};
     const int x=vec_dot(&vr,&cam->u),y=-vec_dot(&vr,&cam->v),z=-vec_dot(&vr,&cam->w);
     if(z<=0)return {120,120};
     const int scale=DivSafe(M7_D<<16,z);
@@ -24,15 +24,15 @@ void draw(uint64_t now){
     // At most32 visible heads plus3 older active holds. Long tails never
     // force a scan over historical chart records on every frame.
     const unsigned visible=importedEndVisible-importedFirstVisible;
-    for(unsigned candidate=0;candidate<3+visible;++candidate){
+    for(unsigned candidate=0;candidate<importedLaneCount+visible;++candidate){
         unsigned i;
-        if(candidate<3){i=sustainActiveNote(candidate);if(i>=importedFirstVisible)continue;}
-        else i=importedFirstVisible+candidate-3;
-        if(i>=imported_note_count)continue;
-        const auto& n=imported_notes[i];if(n.tick>now&&n.tick-now>ImportedTiming::AHEAD)break;
+        if(candidate<importedLaneCount){i=sustainActiveNote(candidate);if(i>=importedFirstVisible)continue;}
+        else i=importedFirstVisible+candidate-importedLaneCount;
+        if(i>=importedChartCount)continue;
+        const auto& n=activeImportedNotes[i];if(n.tick>now&&n.tick-now>ImportedTiming::AHEAD)break;
         const auto state=sustainState(i);
-        if(!imported_sustain_us[i]||(state!=Sustain::State::Pending&&state!=Sustain::State::Active))continue;
-        const uint64_t end=n.tick+Sustain::duration(imported_sustain_us[i]);if(end<=now)continue;
+        if(!activeImportedSustains[i]||(state!=Sustain::State::Pending&&state!=Sustain::State::Active))continue;
+        const uint64_t end=n.tick+Sustain::duration(activeImportedSustains[i]);if(end<=now)continue;
         const uint64_t start=n.tick>now?n.tick:now;
         Point a=project(n.lane,int64_t(start)-int64_t(now)),b=project(n.lane,int64_t(end)-int64_t(now));
         if(a.y<=b.y)continue;

@@ -1,3 +1,5 @@
+Custom songs now have a [difficulty selection screen](docs/MEDIUM_HARD_DIFFICULTIES.md) with native Easy/Medium/Hard charts and the owner-confirmed controls.
+
 # Mission 016 song pipeline
 
 Generic package preparation and private builds are documented in

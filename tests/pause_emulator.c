@@ -36,13 +36,23 @@ int main(int argc,char**argv){assert(argc==8);const char*sy=argv[2];unsigned cou
 #ifdef GBA_STACK_INSTRUMENT
  initProbe(c,sy);
 #endif
- step(c,128);step(c,0);step(c,8);step(c,0);assert(c->busRead32(c,gameMode)==2);
+ step(c,128);step(c,0);step(c,8);step(c,0);
+ assert(c->busRead32(c,gameMode)==4);shot(argv[7],"difficulty-menu",pixels);
+ unsigned choice=getenv("GBA_DIFFICULTY")?atoi(getenv("GBA_DIFFICULTY")):0;
+ for(unsigned i=0;i<choice;i++){step(c,128);step(c,0);}
+ step(c,1);step(c,0);assert(c->busRead32(c,gameMode)==2);
+ unsigned lanes=c->busRead32(c,sym(sy,"importedLaneCount"));assert(lanes>=3&&lanes<=5);
+ assert(c->busRead32(c,sym(sy,"importedChartCount"))==count);
+ imported_notes=c->busRead32(c,sym(sy,"activeImportedNotes"));
+ imported_sustain_us=c->busRead32(c,sym(sy,"activeImportedSustains"));
  char file[1024];snprintf(file,sizeof file,"%s.raw",argv[7]);captured=fopen(file,"wb");assert(captured);snprintf(file,sizeof file,"%s.csv",argv[7]);captureCsv=fopen(file,"w");assert(captureCsv);fprintf(captureCsv,"frame,tick,consumed,hardware_consumed,capture_samples,perfect,good,miss,state,gate,gain,refills,underruns\n");captureState=audioState;captureCount=audioSamplesConsumed;captureClock=importedNowCycles;snprintf(file,sizeof file,"%s.events.csv",argv[7]);FILE* events=fopen(file,"w");assert(events);fprintf(events,"serial,sample,kind,gain,gameplay_tick\n");unsigned event=0;
- uint64_t until[3]={0};unsigned next=0,buttons[]={32,2,1},pauses=0,resumes=0,cycles=test==19?0:test==12?8:1;int exiting=test>=13&&test<=17;unsigned pauseAt=test==0?8:test==1?100:test==2?220:test==3?420:test==18?limit-90:180;uint64_t first=r64(c,imported_notes);if(test==1)pauseAt=first/280896-3;if(test==12)pauseAt=first/280896+120;if(test==18)pauseAt=r64(c,imported_notes+(count-1)*16)/280896;
+ uint64_t until[5]={0};unsigned next=0,buttons[]={32,2,1,0,0},pauses=0,resumes=0,cycles=test==19?0:test==12?8:1;int exiting=test>=13&&test<=17;unsigned pauseAt=test==0?8:test==1?100:test==2?220:test==3?420:test==18?limit-90:180;uint64_t first=r64(c,imported_notes);if(test==1)pauseAt=first/280896-3;if(test==12)pauseAt=first/280896+120;if(test==18)pauseAt=r64(c,imported_notes+(count-1)*16)/280896;
+ if(lanes==4){unsigned b[]={32,16,2,1};memcpy(buttons,b,sizeof b);}
+ if(lanes==5){unsigned b[]={32,64,16,2,1};memcpy(buttons,b,sizeof b);}
  unsigned long frozenChecks=0;unsigned postSnapshotFrame=~0u;
  for(unsigned frame=0;frame<limit;frame++){
   uint64_t now=r64(c,importedNowCycles);unsigned keys=0;
-  for(unsigned l=0;l<3;l++)if(until[l]>now)keys|=buttons[l];
+  for(unsigned l=0;l<lanes;l++)if(until[l]>now)keys|=buttons[l];
   if(next<count){unsigned l=c->busRead32(c,imported_notes+next*16+8);uint64_t t=r64(c,imported_notes+next*16);if(t>now+280896&&t<=now+561792&&(keys&buttons[l])){keys&=~buttons[l];until[l]=0;}}
   while(next<count){uint64_t t=r64(c,imported_notes+next*16);if(t>now+280896)break;unsigned l=c->busRead32(c,imported_notes+next*16+8);assert(l<3);if(test!=4){keys|=buttons[l];until[l]=t+(r64(c,imported_sustain_us+next*8)*16777216ULL+500000)/1000000;}next++;}
   int trigger=frame>=pauseAt&&pauses<cycles&&c->busRead32(c,importedTransport)==1;
@@ -50,6 +60,7 @@ int main(int argc,char**argv){assert(argc==8);const char*sy=argv[2];unsigned cou
   if(test==20){assert(getenv("GBA_PAUSE_PLAYBACK_SAMPLES"));trigger=trigger&&c->busRead32(c,audioSamplesConsumed)>=strtoul(getenv("GBA_PAUSE_PLAYBACK_SAMPLES"),0,10)-4096;}
   if(test==2||test==3){unsigned l=test==2?1:2;trigger=trigger&&until[l]>now+561792;}
   if(test==8)trigger=trigger&&(until[0]>now+561792||until[1]>now+561792||until[2]>now+561792);
+  if(lanes==5&&(keys&192)){unsigned alias[]={64,192,128};keys=(keys&~192)|alias[frame%3];}
   if(frame==postSnapshotFrame)shot(argv[7],"two-seconds-later",pixels);
   if(trigger){
    shot(argv[7],"before",pixels);
@@ -68,7 +79,7 @@ int main(int argc,char**argv){assert(argc==8);const char*sy=argv[2];unsigned cou
   unsigned serial=c->busRead32(c,guitarEventSerial);assert(serial-event<=16);while(event<serial){unsigned a=guitarEventTrace+(event%16)*24;assert(c->busRead32(c,a+12)==event);fprintf(events,"%u,%u,%u,%u,%llu\n",event,c->busRead32(c,a),c->busRead32(c,a+4),c->busRead32(c,a+8),(unsigned long long)r64(c,a+16));event++;}
   if(c->busRead32(c,importedSessionState)!=0)break;
  }
- assert(pauses==cycles);if(!exiting){assert(resumes==cycles);assert(c->busRead32(c,audioUnderruns)==0);assert(c->busRead32(c,importedSessionState)==1);fprintf(stderr,"result score=%u P=%u G=%u M=%u W=%u holds=%u released=%u bonus=%u\n",c->busRead32(c,displayedScore),c->busRead32(c,displayedStats),c->busRead32(c,displayedStats+4),c->busRead32(c,displayedStats+8),c->busRead32(c,displayedStats+12),c->busRead32(c,displayedScore+60),c->busRead32(c,displayedScore+64),c->busRead32(c,displayedScore+56));if(test!=4){assert(c->busRead32(c,displayedStats)+c->busRead32(c,displayedStats+4)==count);assert(c->busRead32(c,displayedStats+8)==0);}shot(argv[7],"end",pixels);}
+ assert(pauses==cycles);if(!exiting){assert(resumes==cycles);assert(c->busRead32(c,audioUnderruns)==0);assert(c->busRead32(c,importedSessionState)==1);fprintf(stderr,"result score=%u P=%u G=%u M=%u W=%u holds=%u released=%u bonus=%u\n",c->busRead32(c,displayedScore),c->busRead32(c,displayedStats),c->busRead32(c,displayedStats+4),c->busRead32(c,displayedStats+8),c->busRead32(c,displayedStats+12),c->busRead32(c,displayedScore+60),c->busRead32(c,displayedScore+64),c->busRead32(c,displayedScore+56));if(test!=4){assert(c->busRead32(c,displayedStats)+c->busRead32(c,displayedStats+4)==count);assert(c->busRead32(c,displayedStats+8)==0);assert(c->busRead32(c,displayedStats+12)==0);}shot(argv[7],"end",pixels);}
  printf("PASS case=%u pauses=%u resumes=%u frozen_checks=%lu score=%u heads=%u\n",test,pauses,resumes,frozenChecks,c->busRead32(c,displayedScore),next);assert(c->busRead32(c,importedPauseCount)==(exiting?c->busRead32(c,importedPauseCount):pauses));if(!exiting)assert(c->busRead32(c,importedResumeCount)==resumes);fclose(captured);fclose(captureCsv);fclose(events);
 #ifdef GBA_STACK_INSTRUMENT
  endProbe(c);

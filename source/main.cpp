@@ -13,6 +13,7 @@
 #include "gameSession.hpp"
 #include "importedRuntime.hpp"
 #include "imported_chart.hpp"
+#include "importedSelection.hpp"
 #include "imported_audio.hpp"
 #include "pcmPlayback.hpp"
 #include "scoring.hpp"
@@ -37,10 +38,15 @@
 
 static NoteManager<careless_expertsingle_count> originalNotes(careless_expertsingle_data, careless_BPM);
 NoteManager<careless_expertsingle_count>* nm = &originalNotes;
-static ImportedRuntime<imported_note_count> importedNotes(imported_notes);
+static ImportedRuntime<imported_note_count,5> importedNotes(imported_notes);
 volatile u32 gameMode = 0;
+u32 importedLaneCount=imported_choices[0].lanes,importedChartCount=imported_choices[0].count;
+const Note* activeImportedNotes=imported_choices[0].notes;
+const uint64_t* activeImportedSustains=imported_choices[0].sustains;
+static unsigned difficultySelection=0;
+static bool difficultyReady=false;
 static NoteScore<imported_note_count> importedScoring;
-EWRAM_DATA static Sustain::Holds<imported_note_count> importedHolds(imported_notes,imported_sustain_us);
+EWRAM_DATA static Sustain::Holds<imported_note_count,5> importedHolds(imported_notes,imported_sustain_us);
 static u64 importedLastEnd=0;
 ScoreSnapshot scoreSnapshot() {
     auto s=importedScoring.snapshot();const auto& h=importedHolds.stats();
@@ -60,14 +66,14 @@ u32 importedEventCount = 0;
 u32 importedFrameWorkMaxCycles = 0;
 u64 importedFrameWorkTotalCycles = 0;
 u32 importedFrameWorkCount = 0;
-u32 activeNoteCount() { return gameMode == 2 ? imported_note_count : careless_expertsingle_count; }
+u32 activeNoteCount() { return gameMode == 2 ? importedChartCount : careless_expertsingle_count; }
 bool activeWasHit(u32 index) { return gameMode == 2 ? importedNotes.wasHit(index) : nm->wasHit(index); }
 noteSprite importedSprite(u32 index) {
     noteSprite sprite{};
-    if (index >= imported_note_count) return sprite;
-    const Note& note = imported_notes[index];
+    if (index >= importedChartCount) return sprite;
+    const Note& note = activeImportedNotes[index];
     sprite.pal = note.lane + 1;
-    sprite.pos.x = ImportedTiming::laneX(note.lane);
+    sprite.pos.x = ImportedTiming::laneX(note.lane,importedLaneCount);
     sprite.pos.z = m7_level.camera->pos.z + ImportedTiming::relativeZ(int64_t(note.tick) - int64_t(importedNowCycles));
     return sprite;
 }
@@ -106,14 +112,14 @@ void input_game()
 //blue button 	(21, 16)
 void drawButton(int b, bool active){
 	int palette = b+1;
-	int start_x = gameMode == 2 ? (b*9)+3 : (b*6)+3;
+	int start_x = gameMode == 2 ? receptorX(b,importedLaneCount) : (b*6)+3;
 	int start_ind = 32*13 + start_x;
 	//y
 	for(int i = 0; i < 3; i++){
 		int row_start = start_ind + (i*32);
 		//x
-		for(int j = 0; j < 6; j++){
-			u16 map_start = active ? buttonsMap[(i*6)+j] + 18 : buttonsMap[(i*6)+j];
+		for(int j = 0; j < int(gameMode==2?receptorWidth(importedLaneCount):6); j++){
+			u16 map_start = active ? buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?j*6/5:j)] + 18 : buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?j*6/5:j)];
 			se_mem[30][row_start+j] = map_start | SE_PALBANK(palette);
 		}
 
@@ -133,7 +139,7 @@ void configureFloor() {
         u16* tile = reinterpret_cast<u16*>(tile_mem[2]) + (6+column)*32;
         for (int y=0; y<8; ++y) for (int pair=0; pair<4; ++pair) {
             int x=column*8+pair*2;
-            auto color = [edge, fill](int p) { return p == 0 || p == 21 || p == 42 || p == 63 ? edge : fill; };
+            auto color = [edge, fill](int p) { return p == 0 || p == 63 || (importedLaneCount==3?(p==21||p==42):((p*importedLaneCount)%64<importedLaneCount)) ? edge : fill; };
             tile[y*4+pair] = color(x) | (u16(color(x+1)) << 8);
         }
     }
@@ -145,14 +151,16 @@ void configureFloor() {
 
 void drawButtons(){
 	//iterate through buttons
-	for(int b = 0; b < (gameMode == 2 ? 3 : 4); b++){
+	for(int b = 0; b < (gameMode == 2 ? importedLaneCount : 4); b++){
 		drawButton(b, false);
 	}
 }
 
 void updateButtons(u16 hit, u16 released){
-	const u16* buttons = gameMode == 2 ? EASY_BUTTONS : LANE_BUTTONS;
-	for(int i = 0; i < (gameMode == 2 ? 3 : 4); i ++){
+    if(gameMode==2){const u8 held=importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount);
+        for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,held&(1u<<lane));return;}
+	const u16* buttons = gameMode == 2 ? importedButtons(importedLaneCount) : LANE_BUTTONS;
+	for(int i = 0; i < (gameMode == 2 ? importedLaneCount : 4); i ++){
 		if( buttons[i] & hit ){
 			drawButton(i, true);
 		}
@@ -271,6 +279,11 @@ int main(){
     REG_DISPCNT = DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
 
 	memcpy16(pal_obj_mem, palettePal, palettePalLen/2);
+    for(unsigned i=0;i<16;++i){
+        const unsigned c=palettePal[4*16+i],r=c&31,g=(c>>5)&31,b=(c>>10)&31;
+        const unsigned level=r>g?(r>b?r:b):(g>b?g:b);
+        pal_bg_mem[5*16+i]=pal_obj_mem[5*16+i]=i?RGB15(level,level/2,0):c;
+    }
 	memcpy16(tile_mem_obj, notesTiles, notesTilesLen/2);
 	memcpy16(&tile_mem_obj[1], text_spritesTiles, text_spritesTilesLen/2);
 
@@ -310,6 +323,24 @@ int main(){
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
+        if(gameMode==4){
+            if(!selectorControlsArmed){if(key_is_down(KEY_A|KEY_START|KEY_SELECT|KEY_B)){vid_vsync();continue;}selectorControlsArmed=true;}
+            if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;difficultyReady=false;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
+            if(key_hit(KEY_DOWN)){difficultySelection=(difficultySelection+1)%imported_choice_count;menuDirty=true;}
+            if(key_hit(KEY_UP)){difficultySelection=(difficultySelection+imported_choice_count-1)%imported_choice_count;menuDirty=true;}
+            if(menuDirty){
+                menuTitle.updateText("DIFFICULTY");menuInfo.updateText(imported_title);
+                menuOriginal.updateText(imported_choice_count>0?(difficultySelection==0?">":" "):"");
+                menuImported.updateText("");menuDiagnostic.updateText("");
+                textDisplay* rows[]={&menuOriginal,&menuImported,&menuDiagnostic};
+                for(unsigned i=0;i<imported_choice_count;++i){char label[16];unsigned j=0;label[j++]=i==difficultySelection?'>':' ';const char* name=imported_choices[i].difficulty;while(*name&&j<15)label[j++]=*name++;label[j]=0;rows[i]->updateText(label);}
+                menuHelp.updateText("A:Choose B:Back");menuDirty=false;
+            }
+            if(!key_hit(KEY_A|KEY_START)){vid_vsync();continue;}
+            const auto& chosen=imported_choices[difficultySelection];
+            importedLaneCount=chosen.lanes;importedChartCount=chosen.count;activeImportedNotes=chosen.notes;activeImportedSustains=chosen.sustains;
+            difficultyReady=true;gameMode=0;selection=2;
+        }
         const auto systemCommand=gameMode==2&&importedSessionState==ImportedCompletion::Playing
             ?importedTransport.poll(key_is_down(KEY_START|KEY_SELECT)):PlayTransport::Command::None;
         const bool oldExitChord=gameMode&&(gameMode!=2||importedSessionState!=ImportedCompletion::Playing)&&
@@ -325,7 +356,7 @@ int main(){
             irq_enable(II_HBLANK);
             ScoreDisplay::clear();
             gameClockRunning = false;
-            gameMode = 0;
+            gameMode = 0;difficultyReady=false;
             menuDirty = true;
             oam_init(oam_mem, 128);
             vid_vsync(); continue; // Return chord must not also confirm the selector.
@@ -334,17 +365,17 @@ int main(){
             if(systemCommand!=PlayTransport::Command::Resume){vid_vsync();Scanline::vblank();continue;}
             // UI changes are made in VBlank while audio/time are still frozen.
             vid_vsync();Scanline::vblank();ScoreDisplay::pauseHide();
-            const u8 held=easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS));
+            const u8 held=importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount);
             importedNotes.judgment().seedInput(held);
             importedHolds.resumeInput(importedNowCycles,held);
-            for(unsigned lane=0;lane<3;++lane)drawButton(lane,held&(1u<<lane));
+            for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,held&(1u<<lane));
             const bool resumed=!imported_audio_enabled||pcmResume();
             importedTransport.apply(PlayTransport::Command::Resume);
             ++importedResumeCount;gameClockRunning=resumed;feedbackDirty=true;
         }
         if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
             if(key_hit(KEY_B|KEY_SELECT)) {
-                Scanline::stop();pcmStop();importedTransport.reset();gameMode=0;gameClockRunning=false;menuDirty=true;
+                Scanline::stop();pcmStop();importedTransport.reset();gameMode=0;difficultyReady=false;gameClockRunning=false;menuDirty=true;
                 importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
                 oam_init(oam_mem,128);ScoreDisplay::clear();
             } else if(key_hit(KEY_A|KEY_START)) {
@@ -365,7 +396,7 @@ int main(){
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
                 menuTitle.updateText(GBA_BUILD_TITLE);
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
-                menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
+                menuImported.updateText(selection == 2 ? ">Custom song" : " Custom song");
                 menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
                 menuHelp.updateText("Up/Down A:Start");
                 menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
@@ -377,6 +408,7 @@ int main(){
                 selectorControlsArmed=true;
             }
             if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
+            if(selection==2&&!difficultyReady){gameMode=4;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
             Scanline::stop();
             // Fresh mode epoch: counters, camera, visuals and held-key history.
             const u16 interrupts = REG_IME;
@@ -393,8 +425,10 @@ int main(){
             m7_rotate(&m7_cam_default, initialCamera.phi, initialCamera.theta);
             importedNowCycles = importedMaxErrorCycles = 0;
             importedEventCount = 0;
-            importedScoring.reset();importedHolds.reset();
-            importedLastEnd=0;for(u32 i=0;i<imported_note_count;++i)if(importedHolds.end(i)>importedLastEnd)importedLastEnd=importedHolds.end(i);
+            importedScoring.reset(importedChartCount);
+            importedHolds.configure(activeImportedNotes,activeImportedSustains,importedChartCount);
+            importedNotes.configure(activeImportedNotes,importedChartCount);
+            importedLastEnd=0;for(u32 i=0;i<importedChartCount;++i)if(importedHolds.end(i)>importedLastEnd)importedLastEnd=importedHolds.end(i);
             displayedScore=scoreSnapshot();
             importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
             importedCompletionDiagnostic=completionWaitFrames=0;
@@ -402,7 +436,7 @@ int main(){
             importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
             nm->reset(laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
-            importedNotes.reset(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));
+            importedNotes.reset(importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount));
             importedNotes.judgment().setEventSink(onGameplayEvent);
             lastJudgment = "READY";
             displayedStats = {};
@@ -437,24 +471,24 @@ int main(){
         }
         bool pauseNow=false;
         if(gameMode==2&&systemCommand==PlayTransport::Command::Pause){
-            const bool beforeSilentEnd=ImportedTiming::frameTick(gameplayFrames)<ImportedCompletion::silentEnd(importedLastEnd,imported_note_count!=0);
+            const bool beforeSilentEnd=ImportedTiming::frameTick(gameplayFrames)<ImportedCompletion::silentEnd(importedLastEnd,importedChartCount!=0);
             if(imported_audio_enabled?pcmPause():beforeSilentEnd){gameClockRunning=false;pauseNow=true;}
         }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
         const u16 workStart = REG_TM3D;
-        const u16 mask = gameMode == 2 ? EASY_GAME_BUTTONS : GAME_BUTTONS;
+        const u16 mask = gameMode == 2 ? importedGameButtons(importedLaneCount) : GAME_BUTTONS;
         if (gameMode == 2) {
             if (imported_audio_enabled) {
                 const u64 sampleTick=pcmSnapshotTick();
                 if (audioState!=PcmClock::Fault) {
-                    const u32 bonus=importedHolds.update(sampleTick,easyLaneMaskFromButtons(key_is_down(mask)));
+                    const u32 bonus=importedHolds.update(sampleTick,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));
                     importedScoring.addSustainBonus(bonus);if(bonus)feedbackDirty=true;
-                    importedNotes.updateTick(sampleTick, easyLaneMaskFromButtons(key_is_down(mask)));
+                    importedNotes.updateTick(sampleTick, importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));
                 }
             }
             else {
-                importedScoring.addSustainBonus(importedHolds.update(ImportedTiming::frameTick(currentGameFrame),easyLaneMaskFromButtons(key_is_down(mask))));
-                importedNotes.update(currentGameFrame,easyLaneMaskFromButtons(key_is_down(mask)));feedbackDirty=true;
+                importedScoring.addSustainBonus(importedHolds.update(ImportedTiming::frameTick(currentGameFrame),importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount)));
+                importedNotes.update(currentGameFrame,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));feedbackDirty=true;
             }
 
             importedNowCycles = importedNotes.now();
@@ -462,7 +496,7 @@ int main(){
             importedEndVisible = importedNotes.endVisible();
             recent_sprite = importedEndVisible;
             if(!pauseNow){
-            const u64 silentDeadline=ImportedCompletion::silentEnd(importedLastEnd,imported_note_count!=0);
+            const u64 silentDeadline=ImportedCompletion::silentEnd(importedLastEnd,importedChartCount!=0);
             const u32 completionAudioState=audioState;
             const u64 finalAudioTick=PcmClock::tick(audioSamplesConsumed);
             importedSessionState=ImportedCompletion::boundedPoll(imported_audio_enabled,completionAudioState,importedNowCycles,silentDeadline,

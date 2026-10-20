@@ -73,3 +73,7 @@ ASAN_OPTIONS=detect_leaks=1 "$tmp/pause_policy"
 python3 -m unittest discover -s tests -p test_public_package.py -v
 
 python3 -m unittest discover -s tests -p test_song_pipeline.py -v
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/difficulty_core.cpp -o "$tmp/difficulty_core"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/difficulty_core"
+python3 -m unittest discover -s tests -p test_difficulty_pipeline.py -v

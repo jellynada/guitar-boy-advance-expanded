@@ -24,7 +24,11 @@ except ImportError:
     from release_common import digest, file_hash, tree_digest
 
 SCHEMA = 'gba-prepared-song-v1'
-CONTROLS = ['LEFT', 'B', 'A']
+try:
+    from .difficulty_data import LAYOUTS, bundle_header
+except ImportError:
+    from difficulty_data import LAYOUTS, bundle_header
+CONTROLS = LAYOUTS['Easy']
 FILES = {'normalized-song.json', 'adapted.json', 'imported_chart.hpp',
          'audio/audio.json', 'audio/imported_audio.bin', 'audio/imported_backing.bin',
          'audio/audio_report.txt', 'validation-report.json', 'validation-report.txt'}
@@ -35,21 +39,43 @@ def save(path, data):
     Path(path).write_text(json.dumps(data, indent=2, sort_keys=True, ensure_ascii=True) + '\n')
 
 
-def runtime_adaptation(song):
+def runtime_adaptation(song, difficulty="Easy"):
     # Do not change the existing adapter or its Cream/public regression fixtures.
-    data = adapt(song, difficulty='Easy', instrument='five_fret_lead_guitar')
-    data['controls'] = CONTROLS
+    data = adapt(song, difficulty=difficulty, instrument='five_fret_lead_guitar')
+    data['controls'] = LAYOUTS[difficulty]
     data['origin'] = 'Chart audio zero plus two-second pre-roll; authoritative hardware audio clock'
     for note in data['notes']:
-        note['button'] = CONTROLS[note['lane']]
+        note['button'] = LAYOUTS[difficulty][note['lane']]
     data['warnings'] = [w for w in data['warnings'] if not w.startswith((
         'Silence:', 'Genuine sustain durations', 'Only Easy native',
         'HOPO/strum/tap/phrase/text', 'INI sustain_cutoff_threshold')) and 'onset-only play' not in w]
     if data['native_overlap_count']:
         data['warnings'].append('Native same-lane sustain overlaps retained; review existing runtime hold replacement behavior.')
-    data['warnings'] += ['Easy native lanes 0/1/2 map to LEFT/B/A; every onset requires a fresh press.',
+    data['warnings'] += [('Easy native lanes 0/1/2 map to LEFT/B/A; every onset requires a fresh press.' if difficulty=='Easy' else f'{difficulty} controls: '+', '.join(LAYOUTS[difficulty])+'; every onset requires a fresh press.'),
                          'Source modifiers/phrases and INI gameplay overrides are retained, not applied.']
     return data
+
+
+def selection_adaptation(song,difficulty):
+    if difficulty!='All':return runtime_adaptation(song,difficulty)
+    available=[d for d in LAYOUTS if any(t['difficulty']==d and t['instrument']=='five_fret_lead_guitar' and t['notes'] for t in song['tracks'])]
+    if not available:raise ValueError('No compatible Easy/Medium/Hard chart')
+    charts=[runtime_adaptation(song,d) for d in available]
+    largest=max(charts,key=lambda c:c['note_count'])
+    result=dict(largest);result['difficulty']='All';result['charts']=charts
+    result['notes']=[n for c in charts for n in c['notes']]
+    return result
+
+def runtime_header(data):
+    return bundle_header(data['charts']) if 'charts' in data else header(data)
+
+def runtime_metadata(data):
+    result=dict(difficulty=data['difficulty'],instrument='five_fret_lead_guitar',
+                physical_controls=LAYOUTS.get(data['difficulty'],[]),note_heads=data['note_count'],
+                genuine_sustains=data['genuine_sustain_count'])
+    if 'charts' in data:result['difficulties']=[dict(name=c['difficulty'],note_heads=c['note_count'],
+        physical_controls=LAYOUTS[c['difficulty']]) for c in data['charts']]
+    return result
 
 
 def aligned(adapted, audio):
@@ -75,7 +101,7 @@ def verify_prepared(folder):
     if {p.relative_to(folder).as_posix() for p in paths if p.is_file()} != FILES | {MANIFEST}:
         raise ValueError('Prepared song has missing or unexpected files; prepare into a new directory')
     m = json.loads((folder / MANIFEST).read_text())
-    if m.get('schema_version') != SCHEMA or m.get('status') != 'success' or m.get('distribution') != 'private-only':
+    if m.get('schema_version') not in {SCHEMA,'gba-prepared-song-v2'} or m.get('status') != 'success' or m.get('distribution') != 'private-only':
         raise ValueError('Unsupported or unsuccessful prepared-song manifest')
     if set(m['file_sha256']) != FILES:
         raise ValueError('Prepared file inventory mismatch')
@@ -83,12 +109,13 @@ def verify_prepared(folder):
         if file_hash(folder / name) != expected:
             raise ValueError('Prepared song changed or is damaged: ' + name)
     song = json.loads((folder / 'normalized-song.json').read_text())
-    adapted = runtime_adaptation(song)
-    if adapted != json.loads((folder / 'adapted.json').read_text()) or header(adapted) != (folder / 'imported_chart.hpp').read_text():
+    if (m['runtime']['difficulty']=='All') != (m['schema_version']=='gba-prepared-song-v2'):
+        raise ValueError('Menu charts require prepared-song-v2')
+    adapted = selection_adaptation(song,m['runtime']['difficulty'])
+    if adapted != json.loads((folder / 'adapted.json').read_text()) or runtime_header(adapted) != (folder / 'imported_chart.hpp').read_text():
         raise ValueError('Prepared runtime differs from normalized song; prepare again')
     audio = json.loads((folder / 'audio/audio.json').read_text())
-    if (m['runtime'] != dict(difficulty='Easy', instrument='five_fret_lead_guitar', physical_controls=CONTROLS,
-                             note_heads=adapted['note_count'], genuine_sustains=adapted['genuine_sustain_count']) or
+    if (m['runtime'] != runtime_metadata(adapted) or
         m['audio'] != dict(mode='reactive' if audio['schema_version'] == 'gba-reactive-audio-v1' else 'fixed',
                            sample_rate=audio['sample_rate'], source_samples=audio['source_samples'],
                            playback_samples=audio['playback_samples'], ffmpeg_version=audio['ffmpeg_version'])):
@@ -137,7 +164,7 @@ def verify_prepared(folder):
     return m
 
 
-def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None):
+def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None, difficulty="Easy"):
     source, output = Path(source), Path(output)
     if output.exists():
         raise ValueError('Output must be a new directory; existing prepared songs are never overwritten')
@@ -175,13 +202,13 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
             # Parse the exact copied bytes subsequently decoded, not live folder files.
             diagnostics = []
             song, _ = inspect(snapshot, diagnostics, selected_chart, names, offset_policy)
-            adapted = runtime_adaptation(song)
+            adapted = selection_adaptation(song,difficulty)
             audio = (convert_files([snapshot / n for n in names], stage / 'audio') if mix else
                      convert_reactive([snapshot / guitar], [snapshot / n for n in backing], stage / 'audio'))
             if mix:
                 (stage / 'audio/imported_backing.bin').write_bytes(bytes(16))
             end = aligned(adapted, audio)
-            (stage / 'imported_chart.hpp').write_text(header(adapted))
+            (stage / 'imported_chart.hpp').write_text(runtime_header(adapted))
             audio.update(prepared_chart_sha256=file_hash(stage / 'imported_chart.hpp'),
                          chart_note_count=adapted['note_count'], chart_source_sha256=song['source_sha256'],
                          selected_package_files=names)
@@ -200,21 +227,20 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
             report = dict(schema_version='gba-song-preparation-report-v1', status='ready', errors=[], warnings=warnings,
                           source_inspection_diagnostics=diagnostics,
                           note_heads=adapted['note_count'], genuine_sustains=adapted['genuine_sustain_count'],
-                          last_required_source_us=end, physical_controls=CONTROLS,
+                          last_required_source_us=end, physical_controls=LAYOUTS.get(difficulty,[]),
                           alignment='All onsets and genuine sustain ends fit decoded audio; human synchronization still needs listening/playtest.',
                           distribution='private-only')
             save(stage / 'validation-report.json', report)
             (stage / 'validation-report.txt').write_text('READY: ' + adapted['title'] + '\n' +
-                f"{adapted['note_count']} Easy notes; {adapted['genuine_sustain_count']} sustains; LEFT/B/A; {mode} audio\n" +
+                f"{difficulty} chart selection; capacity {adapted['note_count']} notes; {mode} audio\n" +
                 '\n'.join('WARNING ' + w['code'] + ': ' + w['message'] for w in warnings) + '\n')
-            manifest = dict(schema_version=SCHEMA, status='success', distribution='private-only',
+            manifest = dict(schema_version='gba-prepared-song-v2' if difficulty=='All' else SCHEMA, status='success', distribution='private-only',
                 source=dict(format=song['source_format'], selected_files_sha256=source_hashes,
                             selected_tree_sha256=tree_digest(source_hashes)),
                 selection=dict(mode=mode, chart=selected_chart, mix=mix, guitar=guitar, backing=backing,
                                offset_policy=offset_policy),
                 normalized=dict(schema_version=song['schema_version'], timing=song['timing']),
-                runtime=dict(difficulty='Easy', instrument='five_fret_lead_guitar', physical_controls=CONTROLS,
-                             note_heads=adapted['note_count'], genuine_sustains=adapted['genuine_sustain_count']),
+                runtime=runtime_metadata(adapted),
                 audio=dict(mode=mode, sample_rate=audio['sample_rate'], source_samples=audio['source_samples'],
                            playback_samples=audio['playback_samples'], ffmpeg_version=audio['ffmpeg_version']),
                 file_sha256={n: file_hash(stage / n) for n in sorted(FILES)})
@@ -236,14 +262,15 @@ def main():
     p.add_argument('package', type=Path)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--chart')
+    p.add_argument('--difficulty',choices=['Easy','Medium','Hard','All'],default='All',help='All includes available charts in the difficulty menu')
     p.add_argument('--mix', action='append', help='Explicit relative audio path; repeat for a fixed mix')
     p.add_argument('--guitar', help='Explicit relative guitar file for reactive audio')
     p.add_argument('--backing', action='append', help='Explicit relative backing file; repeat')
     p.add_argument('--offset-policy', choices=['add', 'ini', 'chart'])
     a = p.parse_args()
     try:
-        m = prepare(a.package, a.output, chart=a.chart, mix=a.mix, guitar=a.guitar, backing=a.backing, offset_policy=a.offset_policy)
-        print(f"READY: {m['runtime']['note_heads']} Easy notes, {m['audio']['mode']}; manifest {a.output / MANIFEST}")
+        m = prepare(a.package, a.output, chart=a.chart, mix=a.mix, guitar=a.guitar, backing=a.backing, offset_policy=a.offset_policy, difficulty=a.difficulty)
+        print(f"READY: {m['runtime']['difficulty']} chart capacity {m['runtime']['note_heads']}, {m['audio']['mode']}; manifest {a.output / MANIFEST}")
     except (OSError, ValueError) as error:
         p.exit(1, 'PREPARATION FAILED: ' + str(error) + '\n')
 

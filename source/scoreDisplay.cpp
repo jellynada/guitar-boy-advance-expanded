@@ -2,6 +2,7 @@
 #include "importedCompletion.hpp"
 #include "tonc.h"
 #include "gameControls.hpp"
+#include "gameSession.hpp"
 #include "buttons.h"
 #include <tonc_tte.h>
 // Tonc system font: readable 8x8 glyphs, using reserved BG tiles only.
@@ -10,6 +11,7 @@ constexpr unsigned FIRST_TILE=128;
 static unsigned map=31;
 static constexpr unsigned controlCells[]={16*32+4,16*32+5,16*32+6,16*32+7,16*32+14,16*32+23};
 static u16 savedControlTiles[6];
+static u16 savedLabelRow[32];
 static bool controlsDrawn=false;
 static_assert(buttonsTilesLen<=128*32,"Pause/font tiles must not overlap receptor graphics");
 constexpr unsigned PAUSE_TILE=224,PAUSE_X=5,PAUSE_Y=5,PAUSE_W=20,PAUSE_H=5;
@@ -63,7 +65,8 @@ void clear() {
     memset16(&tile_mem[0][1],0x6666,16);memset16(&se_mem[31],1,1024);
     memset16(&se_mem[30],0x004F,96);
     if(controlsDrawn){
-        for(unsigned i=0;i<6;++i)se_mem[30][controlCells[i]]=savedControlTiles[i];
+        if(importedLaneCount==3){for(unsigned i=0;i<6;++i)se_mem[30][controlCells[i]]=savedControlTiles[i];}
+        else for(unsigned i=0;i<32;++i)se_mem[30][16*32+i]=savedLabelRow[i];
         controlsDrawn=false;
     }
 }
@@ -85,7 +88,10 @@ void initialize() {
     REG_BG1CNT=BG_BUILD(0,31,0,0,0,0,0);REG_BG1HOFS=REG_BG1VOFS=0;
     clear();
     for(unsigned i=0;i<6;++i)savedControlTiles[i]=se_mem[30][controlCells[i]];
-    map=30;text(4,16,EASY_LABELS[0]);text(14,16,EASY_LABELS[1]);text(23,16,EASY_LABELS[2]);
+    map=30;
+    if(importedLaneCount==3){text(4,16,EASY_LABELS[0]);text(14,16,EASY_LABELS[1]);text(23,16,EASY_LABELS[2]);}
+    else {for(unsigned i=0;i<32;++i)savedLabelRow[i]=se_mem[30][16*32+i];
+        for(unsigned i=0;i<importedLaneCount;++i)text(receptorX(i,importedLaneCount),16,importedLabel(i,importedLaneCount),receptorWidth(importedLaneCount));}
     controlsDrawn=true;
 }
 void hud(const ScoreSnapshot& s,const char* judgment,const char* guitar) {

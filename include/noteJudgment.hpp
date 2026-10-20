@@ -27,8 +27,10 @@ struct JudgmentStats {
 
 // No rendering, hardware input, audio control or dynamic allocation in this engine.
 // Call step once per input poll with monotonic gameplay ticks and HELD lane bits.
-template <uint32_t N>
+template <uint32_t N, unsigned LANES = 4>
 class NoteJudgment {
+    static_assert(LANES>=3 && LANES<=5, "Supported fret count is 3..5");
+    static constexpr uint8_t MASK=(1u<<LANES)-1;
 public:
     static constexpr uint32_t NO_NOTE = UINT32_MAX;
     static constexpr uint32_t PERFECT_US = 25000;
@@ -56,29 +58,30 @@ public:
 
     // Retains the event subscription. Supply held buttons to avoid a phantom
     // press if a future in-game restart occurs while a button is already down.
+    void configure(const Note* notes,uint32_t count){notes_=notes;count_=count<=N?count:N;reset();}
     void reset(uint8_t heldLanes = 0) {
         states_.fill(NoteState::Pending);
         stats_ = {};
         firstPending_ = 0;
-        previousHeld_ = heldLanes & 0x0f;
+        previousHeld_ = heldLanes & MASK;
     }
 
     const JudgmentStats& stats() const { return stats_; }
     // Resume boundary only: preserve every judgment/stat while seeding input.
-    void seedInput(uint8_t heldLanes){previousHeld_=heldLanes&0x0f;}
+    void seedInput(uint8_t heldLanes){previousHeld_=heldLanes&MASK;}
     NoteState state(uint32_t index) const { return states_[index]; }
 
     void step(uint64_t now, uint8_t heldLanes) {
         const uint64_t early = windowTicks(GOOD_EARLY_US);
         const uint64_t late = windowTicks(GOOD_LATE_US);
         const uint64_t perfect = windowTicks(PERFECT_US);
-        heldLanes &= 0x0f;
+        heldLanes &= MASK;
         uint8_t pressed = heldLanes & ~previousHeld_;
         previousHeld_ = heldLanes;
 
         // Late boundary is inclusive. Every expired pending record emits a miss,
         // including when no keys are pressed or several frames were skipped.
-        while (firstPending_ < N) {
+        while (firstPending_ < count_) {
             if (states_[firstPending_] != NoteState::Pending) {
                 ++firstPending_;
                 continue;
@@ -90,12 +93,12 @@ public:
         }
 
         uint8_t unmatched = pressed;
-        for (uint32_t lane = 0; lane < 4; ++lane) {
+        for (uint32_t lane = 0; lane < LANES; ++lane) {
             const uint8_t mask = 1u << lane;
             if (!(pressed & mask)) continue;
             // Earliest eligible pending note in THIS lane. Other lanes cannot
             // consume it. Each press can hit at most one note.
-            for (uint32_t i = firstPending_; i < N; ++i) {
+            for (uint32_t i = firstPending_; i < count_; ++i) {
                 const uint64_t target = notes_[i].tick;
                 if (target > now && target - now > early) break;
                 if (states_[i] != NoteState::Pending || notes_[i].lane != lane) continue;
@@ -130,6 +133,7 @@ private:
     uint32_t ticksPerFrame_;
     std::array<NoteState, N> states_{};
     JudgmentStats stats_{};
+    uint32_t count_=N;
     uint32_t firstPending_ = 0;
     uint8_t previousHeld_ = 0;
     EventSink sink_ = nullptr;

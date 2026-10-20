@@ -35,8 +35,9 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
         raise ValueError('Expected Mission004 normalized gba-song-data-v1 JSON.')
     if song.get('timing', {}).get('unit') != 'microseconds':
         raise ValueError('Normalized timestamps must be in microseconds.')
-    if difficulty != 'Easy' or instrument != 'five_fret_lead_guitar':
+    if difficulty not in ('Easy','Medium','Hard') or instrument != 'five_fret_lead_guitar':
         raise ValueError('This adapter explicitly supports Easy five_fret_lead_guitar only.')
+    lanes={'Easy':3,'Medium':4,'Hard':5}[difficulty]
     selected = [t for t in song['tracks'] if t['difficulty'] == difficulty and t['instrument'] == instrument]
     if len(selected) != 1:
         raise ValueError('Exactly one Easy lead-guitar track must be selected.')
@@ -68,8 +69,8 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
         if start < previous or start + duration != end:
             raise ValueError('Notes must be ordered and start + duration must equal end.')
         previous = start
-        lane = integer(note['lane'], 'Easy native lane', 0, 2)
-        source_lane = integer(note['source_lane'], 'Source lane', 0, 2)
+        lane = integer(note['lane'], 'Native lane', 0, lanes-1)
+        source_lane = integer(note['source_lane'], 'Source lane', 0, lanes-1)
         if note['kind'] != 'fretted' or source_lane != lane:
             raise ValueError('Open/rewritten/unsupported lanes cannot be silently mapped.')
         if (start, lane) in seen:
@@ -81,7 +82,7 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
         if genuine:
             lane_ends[lane] = end
         transformed.append(dict(source_note_index=index, source_tick=note['tick'],
-                                lane=lane, button=('Left', 'A', 'B')[lane],
+                                lane=lane, button=({'Easy':('Left','A','B'),'Medium':('LEFT','RIGHT','B','A'),'Hard':('LEFT','UP/DOWN','RIGHT','B','A')}[difficulty])[lane],
                                 start_us=start, end_us=end, native_duration_us=duration,
                                 native_duration_ticks=duration_ticks, genuine_sustain=genuine,
                                 runtime_tick=cycles(start + PRE_ROLL_US),
@@ -130,13 +131,17 @@ def header(data):
               'inline constexpr uint64_t imported_sustain_us[] = {']
     lines += [f'    {n["sustain_us"]}ULL,' for n in data['notes']]
     lines += ['};','']
+    if data['difficulty']!='Easy':
+        lines += ['#define GBA_IMPORTED_CHOICES 1', '#include "importedChoice.hpp"',
+                  'inline constexpr ImportedChartChoice imported_choices[]={{imported_notes,imported_sustain_us,imported_note_count,'+
+                  str({'Medium':4,'Hard':5}[data['difficulty']])+',"'+data['difficulty']+'"}};']
     return '\n'.join(lines)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('song_json',type=Path)
-    parser.add_argument('--difficulty',required=True,choices=['Easy'])
+    parser.add_argument('--difficulty',required=True,choices=['Easy','Medium','Hard'])
     parser.add_argument('--instrument',required=True,choices=['five_fret_lead_guitar'])
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--synthetic',action='store_true',help='Label only original synthetic fixtures, never real songs')

@@ -149,6 +149,9 @@ def build(root, profile, input_zip=None):
                     'physical_controls': ['LEFT', 'B', 'A'], 'fresh_outputs': True, 'artifact_sha256': {n: file_hash(job / n) for n in artifact_names}}
         if profile == 'song':
             manifest['prepared_song_sha256'] = input_hash
+            song_metadata=verify_prepared(job / 'prepared')['runtime']
+            manifest['physical_controls']=song_metadata['physical_controls']
+            manifest['available_difficulties']=song_metadata.get('difficulties',[dict(name=song_metadata['difficulty'],note_heads=song_metadata['note_heads'],physical_controls=song_metadata['physical_controls'])])
         (job / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         (job / 'SOURCE_MANIFEST.json').write_text(json.dumps(source, indent=2) + '\n')
         verify_result(job, public_only=profile == 'public')
