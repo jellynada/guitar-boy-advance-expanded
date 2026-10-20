@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "default_difficulty.h"
+
 static int crashed;
 static void crash(void* context){(void)context;crashed=1;}
 static void log_message(struct mLogger* logger,int category,enum mLogLevel level,const char* format,va_list args){
@@ -92,7 +94,7 @@ int main(int argc,char** argv){
     frame(c,8);frame(c,0);assert(c->busRead32(c,clock)<10);for(unsigned i=0;i<4;++i){frame(c,0);drain(c);}visible(c,pixels,font,0,5,"GBA HELD");
     frame(c,12);frame(c,0);assert(c->busRead32(c,game)==0);screenshot(argv[4],"menu",pixels);
     // Move from diagnostic to imported, then original, checking both remain available.
-    frame(c,64);frame(c,0);frame(c,8);frame(c,0);assert(c->busRead32(c,game)==2);
+    frame(c,64);frame(c,0);frame(c,8);frame(c,0);selectDefaultDifficulty(c,game);assert(c->busRead32(c,game)==2);
     for(unsigned i=0;i<180;++i){frame(c,0);drain(c);}visible(c,pixels,font,0,0,"SCORE:");
     frame(c,12);frame(c,0);frame(c,64);frame(c,0);frame(c,8);frame(c,0);assert(c->busRead32(c,game)==1);
     unsigned sound=0;for(unsigned i=0;i<120;++i){frame(c,0);short v[4096];int n=blip_read_samples(c->getAudioChannel(c,0),v,4096,0);for(int j=0;j<n;++j)sound+=v[j]!=0;blip_clear(c->getAudioChannel(c,1));}assert(sound>1000);

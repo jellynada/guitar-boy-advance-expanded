@@ -80,6 +80,9 @@ int main(int argc,char**argv){assert(argc==8);const char*sy=argv[2];unsigned cou
   if(c->busRead32(c,importedSessionState)!=0)break;
  }
  assert(pauses==cycles);if(!exiting){assert(resumes==cycles);assert(c->busRead32(c,audioUnderruns)==0);assert(c->busRead32(c,importedSessionState)==1);fprintf(stderr,"result score=%u P=%u G=%u M=%u W=%u holds=%u released=%u bonus=%u\n",c->busRead32(c,displayedScore),c->busRead32(c,displayedStats),c->busRead32(c,displayedStats+4),c->busRead32(c,displayedStats+8),c->busRead32(c,displayedStats+12),c->busRead32(c,displayedScore+60),c->busRead32(c,displayedScore+64),c->busRead32(c,displayedScore+56));if(test!=4){assert(c->busRead32(c,displayedStats)+c->busRead32(c,displayedStats+4)==count);assert(c->busRead32(c,displayedStats+8)==0);assert(c->busRead32(c,displayedStats+12)==0);}shot(argv[7],"end",pixels);}
+ assert(c->busRead32(c,sym(sy,"scanlineDeadlineMisses"))==0);
+ assert(c->busRead32(c,sym(sy,"sustainTailOverflow"))==0);
+ fprintf(stderr,"foreground_peak_cycles=%u\n",c->busRead32(c,sym(sy,"importedFrameWorkMaxCycles")));
  printf("PASS case=%u pauses=%u resumes=%u frozen_checks=%lu score=%u heads=%u\n",test,pauses,resumes,frozenChecks,c->busRead32(c,displayedScore),next);assert(c->busRead32(c,importedPauseCount)==(exiting?c->busRead32(c,importedPauseCount):pauses));if(!exiting)assert(c->busRead32(c,importedResumeCount)==resumes);fclose(captured);fclose(captureCsv);fclose(events);
 #ifdef GBA_STACK_INSTRUMENT
  endProbe(c);

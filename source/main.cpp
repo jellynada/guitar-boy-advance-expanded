@@ -119,7 +119,7 @@ void drawButton(int b, bool active){
 		int row_start = start_ind + (i*32);
 		//x
 		for(int j = 0; j < int(gameMode==2?receptorWidth(importedLaneCount):6); j++){
-			u16 map_start = active ? buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?j*6/5:j)] + 18 : buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?j*6/5:j)];
+			u16 map_start = active ? buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?(j*5+2)/4:j)] + 18 : buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?(j*5+2)/4:j)];
 			se_mem[30][row_start+j] = map_start | SE_PALBANK(palette);
 		}
 
@@ -329,6 +329,7 @@ int main(){
             if(key_hit(KEY_DOWN)){difficultySelection=(difficultySelection+1)%imported_choice_count;menuDirty=true;}
             if(key_hit(KEY_UP)){difficultySelection=(difficultySelection+imported_choice_count-1)%imported_choice_count;menuDirty=true;}
             if(menuDirty){
+                oam_init(oam_mem,128);
                 menuTitle.updateText("DIFFICULTY");menuInfo.updateText(imported_title);
                 menuOriginal.updateText(imported_choice_count>0?(difficultySelection==0?">":" "):"");
                 menuImported.updateText("");menuDiagnostic.updateText("");
@@ -393,6 +394,7 @@ int main(){
             if (key_hit(KEY_DOWN)) { selection=selection%3+1;menuDirty=true; }
             if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
             if (menuDirty) {
+                oam_init(oam_mem,128);
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
                 menuTitle.updateText(GBA_BUILD_TITLE);
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");

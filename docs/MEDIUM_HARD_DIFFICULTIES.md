@@ -63,3 +63,12 @@ necessary for chord ergonomics, five-lane spacing, sound and cartridge behavior.
 The known strict emulator audio comparison issue remains open; no threshold is
 relaxed by this change. No public release or integration into main/develop is
 part of this implementation.
+
+The existing Easy emulator entry points now acknowledge the extra menu screen;
+this changes navigation setup only, not their gameplay or audio thresholds.
+The headless menu test checks held-confirm protection, Back, Original Demo,
+Hard replay/pause/exit and switching back to Easy with an independently reset
+count. A new sanitizer test covers fifth-lane hits/holds, bounded chart counts,
+scoring totals and alias handoff. Four importer tests cover native counts,
+per-difficulty preparation, bundled hold validation and rejection of an invalid
+Medium lane or Expert relabelling.

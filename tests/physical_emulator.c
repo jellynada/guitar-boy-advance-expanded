@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "default_difficulty.h"
+
 static void log_message(struct mLogger* l,int c,enum mLogLevel level,const char* f,va_list a){
     (void)l;(void)c;if(level&(mLOG_FATAL|mLOG_ERROR|mLOG_WARN)){vfprintf(stderr,f,a);fputc('\n',stderr);}
 }
@@ -36,7 +38,7 @@ int main(int argc,char** argv){
     for(unsigned f=0;f<90;++f)frame(c,0);
     const unsigned cells[]={16*32+4,16*32+5,16*32+6,16*32+7,16*32+14,16*32+23};unsigned originalTiles[6];
     for(unsigned i=0;i<6;++i)originalTiles[i]=c->busRead16(c,0x0600F000+cells[i]*2);
-    frame(c,128);frame(c,0);frame(c,8);for(unsigned f=0;f<4;++f)frame(c,0);assert(c->busRead32(c,mode)==2);
+    frame(c,128);frame(c,0);frame(c,8);for(unsigned f=0;f<4;++f)frame(c,0);selectDefaultDifficulty(c,mode);assert(c->busRead32(c,mode)==2);
     glyphs(c,pixels,font,4,"LEFT");glyphs(c,pixels,font,14,"B");glyphs(c,pixels,font,23,"A");
     unsigned inactive[4];for(unsigned l=0;l<3;++l)inactive[l]=receptor(c,l,9);
     for(unsigned mask=0;mask<8;++mask){

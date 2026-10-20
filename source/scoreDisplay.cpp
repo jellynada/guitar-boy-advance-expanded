@@ -91,7 +91,8 @@ void initialize() {
     map=30;
     if(importedLaneCount==3){text(4,16,EASY_LABELS[0]);text(14,16,EASY_LABELS[1]);text(23,16,EASY_LABELS[2]);}
     else {for(unsigned i=0;i<32;++i)savedLabelRow[i]=se_mem[30][16*32+i];
-        for(unsigned i=0;i<importedLaneCount;++i)text(receptorX(i,importedLaneCount),16,importedLabel(i,importedLaneCount),receptorWidth(importedLaneCount));}
+        for(unsigned i=0;i<importedLaneCount;++i){const char* label=importedLabel(i,importedLaneCount);unsigned length=0;while(label[length])++length;
+            text(receptorX(i,importedLaneCount)+(receptorWidth(importedLaneCount)-length)/2,16,label,receptorWidth(importedLaneCount));}}
     controlsDrawn=true;
 }
 void hud(const ScoreSnapshot& s,const char* judgment,const char* guitar) {

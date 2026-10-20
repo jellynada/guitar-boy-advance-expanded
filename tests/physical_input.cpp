@@ -5,7 +5,7 @@
 
 using PhysicalInput::map;
 using PhysicalInput::sample;
-// Future design fixtures ONLY: never compiled into production game selections.
+// Independent expectations also check the production difficulty bindings.
 constexpr uint16_t medium[]={KEY_LEFT,KEY_RIGHT,KEY_B,KEY_A};
 constexpr uint16_t hard[]={KEY_LEFT,KEY_UP|KEY_DOWN,KEY_RIGHT,KEY_B,KEY_A};
 
@@ -20,6 +20,8 @@ int main(){
         const uint8_t original=((keys&32)?1:0)|((keys&16)?2:0)|((keys&1)?4:0)|((keys&2)?8:0);
         assert(easyLaneMaskFromButtons(keys)==easy);
         assert(laneMaskFromButtons(keys)==original);
+        assert(importedLaneMaskFromButtons(keys,4)==map(keys,medium));
+        assert(importedLaneMaskFromButtons(keys,5)==map(keys,hard));
         assert(map(keys,medium)==(((keys&32)?1:0)|((keys&16)?2:0)|((keys&2)?4:0)|((keys&1)?8:0)));
         assert(map(keys,hard)==(((keys&32)?1:0)|((keys&192)?2:0)|((keys&16)?4:0)|((keys&2)?8:0)|((keys&1)?16:0)));
         for(uint8_t previous=0;previous<8;++previous){
