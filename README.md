@@ -1,3 +1,19 @@
+# Stabilization candidate — post Medium/Hard
+
+Current candidate branch: `stabilization-post-medium-hard`, from frozen
+`3ed8be72f9652ada15c32ef4f77bbafddc2615bf`. It fixes measured startup readiness
+and reduces native Hard frame cost without changing controls, charts, audio or
+score rules. Original restart tests pass unchanged. This is **not** a stable
+release, develop/main integration, or owner hardware acceptance.
+
+See [the stabilization report](docs/STABILIZATION_POST_MEDIUM_HARD.md) for before/
+after measurements, exact chord conflicts, audio failures and delivery limits.
+Native Medium/Hard LEFT+RIGHT conflicts remain pending owner-approved adaptation.
+The normal mGBA audio output matrix still has5failed checks; exact digital
+samples pass and emulator-only diagnostics are not shipped. The synthetic
+Actions artifact is a review build; the real Cream ROM must be transferred
+through an authorized private route, currently unavailable in this session.
+
 Custom songs now have a [difficulty selection screen](docs/MEDIUM_HARD_DIFFICULTIES.md) with native Easy/Medium/Hard charts and the owner-confirmed controls.
 
 # Mission 016 song pipeline

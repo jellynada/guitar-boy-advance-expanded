@@ -1,0 +1,1122 @@
+{
+  "baseline": {
+    "Easy": {
+      "completed_foreground_polls": 16114,
+      "mean": 120217.87960779447,
+      "percentiles": {
+        "50": 116160.0,
+        "90": 137792.0,
+        "95": 142976.0,
+        "99": 153335.67999999993,
+        "99.9": 161563.84000000078,
+        "100": 173824.0
+      },
+      "over_280896_polls": 0,
+      "max_by_subsystem": {
+        "judgment": 19200,
+        "HUD": 27712,
+        "camera": 4928,
+        "heads": 29888,
+        "tails": 47104,
+        "affines": 59200,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 12322.811964751148,
+        "HUD": 12801.648256174754,
+        "camera": 3369.7187538786147,
+        "heads": 19778.339332257663,
+        "tails": 13917.966488767532,
+        "affines": 57827.058210251955,
+        "misc": 200.33660171279632
+      },
+      "visible_head_peak": 4,
+      "sustain_strip_peak": 11,
+      "worst": [
+        {
+          "song_seconds": 219.9586181640625,
+          "total_cycles": 173824,
+          "subsystems": {
+            "judgment": 17664,
+            "HUD": 27712,
+            "camera": 3264,
+            "heads": 20032,
+            "tails": 45824,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 10
+        },
+        {
+          "song_seconds": 55.76287841796875,
+          "total_cycles": 169600,
+          "subsystems": {
+            "judgment": 17600,
+            "HUD": 23936,
+            "camera": 3008,
+            "heads": 21760,
+            "tails": 43968,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 10
+        },
+        {
+          "song_seconds": 260.02392578125,
+          "total_cycles": 166656,
+          "subsystems": {
+            "judgment": 15040,
+            "HUD": 27712,
+            "camera": 3008,
+            "heads": 24256,
+            "tails": 38848,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 3,
+          "strips": 6
+        },
+        {
+          "song_seconds": 220.20977783203125,
+          "total_cycles": 166080,
+          "subsystems": {
+            "judgment": 14976,
+            "HUD": 27712,
+            "camera": 3136,
+            "heads": 20352,
+            "tails": 42112,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 8
+        },
+        {
+          "song_seconds": 148.11566162109375,
+          "total_cycles": 164864,
+          "subsystems": {
+            "judgment": 15104,
+            "HUD": 24704,
+            "camera": 4608,
+            "heads": 16576,
+            "tails": 44608,
+            "affines": 59136,
+            "misc": 128
+          },
+          "visible_heads": 1,
+          "strips": 10
+        },
+        {
+          "song_seconds": 260.07427978515625,
+          "total_cycles": 164608,
+          "subsystems": {
+            "judgment": 13504,
+            "HUD": 27072,
+            "camera": 3264,
+            "heads": 25792,
+            "tails": 35648,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 3,
+          "strips": 5
+        },
+        {
+          "song_seconds": 148.1658935546875,
+          "total_cycles": 164352,
+          "subsystems": {
+            "judgment": 15040,
+            "HUD": 25664,
+            "camera": 3200,
+            "heads": 16640,
+            "tails": 46080,
+            "affines": 57600,
+            "misc": 128
+          },
+          "visible_heads": 1,
+          "strips": 10
+        },
+        {
+          "song_seconds": 220.260009765625,
+          "total_cycles": 164224,
+          "subsystems": {
+            "judgment": 14976,
+            "HUD": 25600,
+            "camera": 3200,
+            "heads": 21888,
+            "tails": 39232,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 7
+        },
+        {
+          "song_seconds": 56.0140380859375,
+          "total_cycles": 163712,
+          "subsystems": {
+            "judgment": 14976,
+            "HUD": 23936,
+            "camera": 3008,
+            "heads": 21888,
+            "tails": 40576,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 8
+        },
+        {
+          "song_seconds": 259.7728271484375,
+          "total_cycles": 163008,
+          "subsystems": {
+            "judgment": 17728,
+            "HUD": 27712,
+            "camera": 3072,
+            "heads": 24128,
+            "tails": 31040,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 3,
+          "strips": 8
+        }
+      ],
+      "observed_refill_cycles_per_call": 1353.231192487855
+    },
+    "Medium": {
+      "completed_foreground_polls": 16113,
+      "mean": 144720.02283870167,
+      "percentiles": {
+        "50": 137536.0,
+        "90": 192179.20000000007,
+        "95": 215232.0,
+        "99": 251824.6399999999,
+        "99.9": 259640.83200000017,
+        "100": 262080.0
+      },
+      "over_280896_polls": 0,
+      "max_by_subsystem": {
+        "judgment": 24832,
+        "HUD": 31488,
+        "camera": 4864,
+        "heads": 64896,
+        "tails": 122432,
+        "affines": 59200,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 13001.63991807857,
+        "HUD": 16763.309129274498,
+        "camera": 3460.4247502017006,
+        "heads": 27848.642959101348,
+        "tails": 25232.777508843792,
+        "affines": 58211.14776888227,
+        "misc": 202.08080431949358
+      },
+      "visible_head_peak": 10,
+      "sustain_strip_peak": 20,
+      "worst": [
+        {
+          "song_seconds": 124.41644287109375,
+          "total_cycles": 262080,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 30656,
+            "camera": 3200,
+            "heads": 33536,
+            "tails": 117376,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 124.9522705078125,
+          "total_cycles": 261888,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 30656,
+            "camera": 3072,
+            "heads": 33472,
+            "tails": 117376,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 242.8543701171875,
+          "total_cycles": 261312,
+          "subsystems": {
+            "judgment": 19584,
+            "HUD": 29824,
+            "camera": 4608,
+            "heads": 32960,
+            "tails": 116544,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 243.3734130859375,
+          "total_cycles": 261248,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 31296,
+            "camera": 3072,
+            "heads": 33088,
+            "tails": 116416,
+            "affines": 59136,
+            "misc": 256
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 125.47119140625,
+          "total_cycles": 261184,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 30656,
+            "camera": 3072,
+            "heads": 32896,
+            "tails": 117184,
+            "affines": 59136,
+            "misc": 256
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 126.00701904296875,
+          "total_cycles": 261056,
+          "subsystems": {
+            "judgment": 18048,
+            "HUD": 30720,
+            "camera": 3072,
+            "heads": 32960,
+            "tails": 116928,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 124.8182373046875,
+          "total_cycles": 260608,
+          "subsystems": {
+            "judgment": 19584,
+            "HUD": 14080,
+            "camera": 4608,
+            "heads": 42112,
+            "tails": 122432,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 125.3372802734375,
+          "total_cycles": 260480,
+          "subsystems": {
+            "judgment": 18048,
+            "HUD": 15616,
+            "camera": 3136,
+            "heads": 44032,
+            "tails": 120320,
+            "affines": 59200,
+            "misc": 128
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 243.306396484375,
+          "total_cycles": 260352,
+          "subsystems": {
+            "judgment": 18048,
+            "HUD": 15616,
+            "camera": 4672,
+            "heads": 42304,
+            "tails": 121920,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 242.70367431640625,
+          "total_cycles": 260224,
+          "subsystems": {
+            "judgment": 18176,
+            "HUD": 15616,
+            "camera": 3008,
+            "heads": 43840,
+            "tails": 120256,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        }
+      ],
+      "observed_refill_cycles_per_call": 1353.3885015529636
+    },
+    "Hard": {
+      "completed_foreground_polls": 16107,
+      "mean": 150787.40522754082,
+      "percentiles": {
+        "50": 143296.0,
+        "90": 197824.0,
+        "95": 221804.79999999993,
+        "99": 257320.9600000002,
+        "99.9": 274873.21600000013,
+        "100": 287552.0
+      },
+      "over_280896_polls": 7,
+      "max_by_subsystem": {
+        "judgment": 30656,
+        "HUD": 34624,
+        "camera": 4864,
+        "heads": 74688,
+        "tails": 117056,
+        "affines": 59776,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 13360.563233376794,
+        "HUD": 18383.142732973243,
+        "camera": 3464.197181349724,
+        "heads": 31960.798162289688,
+        "tails": 25114.12926056994,
+        "affines": 58300.36828708015,
+        "misc": 204.20636990128514
+      },
+      "visible_head_peak": 12,
+      "sustain_strip_peak": 27,
+      "worst": [
+        {
+          "song_seconds": 125.814208984375,
+          "total_cycles": 287552,
+          "subsystems": {
+            "judgment": 18624,
+            "HUD": 17088,
+            "camera": 4608,
+            "heads": 73024,
+            "tails": 114240,
+            "affines": 59776,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 70.563232421875,
+          "total_cycles": 287040,
+          "subsystems": {
+            "judgment": 18624,
+            "HUD": 17088,
+            "camera": 4544,
+            "heads": 72576,
+            "tails": 114304,
+            "affines": 59712,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 243.18060302734375,
+          "total_cycles": 286400,
+          "subsystems": {
+            "judgment": 19968,
+            "HUD": 17088,
+            "camera": 3072,
+            "heads": 72384,
+            "tails": 113920,
+            "affines": 59776,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 71.082275390625,
+          "total_cycles": 285824,
+          "subsystems": {
+            "judgment": 18816,
+            "HUD": 17088,
+            "camera": 3008,
+            "heads": 74304,
+            "tails": 114176,
+            "affines": 58240,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 242.64483642578125,
+          "total_cycles": 285760,
+          "subsystems": {
+            "judgment": 18816,
+            "HUD": 17088,
+            "camera": 3136,
+            "heads": 74176,
+            "tails": 114112,
+            "affines": 58240,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 70.04425048828125,
+          "total_cycles": 285760,
+          "subsystems": {
+            "judgment": 18752,
+            "HUD": 17152,
+            "camera": 3072,
+            "heads": 74368,
+            "tails": 113984,
+            "affines": 58240,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 243.6995849609375,
+          "total_cycles": 285440,
+          "subsystems": {
+            "judgment": 18816,
+            "HUD": 17088,
+            "camera": 3200,
+            "heads": 74176,
+            "tails": 113728,
+            "affines": 58240,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 242.695068359375,
+          "total_cycles": 276352,
+          "subsystems": {
+            "judgment": 18496,
+            "HUD": 17152,
+            "camera": 4672,
+            "heads": 64448,
+            "tails": 113792,
+            "affines": 57600,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        },
+        {
+          "song_seconds": 257.72998046875,
+          "total_cycles": 275904,
+          "subsystems": {
+            "judgment": 18688,
+            "HUD": 17088,
+            "camera": 3264,
+            "heads": 64256,
+            "tails": 113280,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        },
+        {
+          "song_seconds": 124.7593994140625,
+          "total_cycles": 275904,
+          "subsystems": {
+            "judgment": 19008,
+            "HUD": 17088,
+            "camera": 4608,
+            "heads": 62656,
+            "tails": 113216,
+            "affines": 59136,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        }
+      ],
+      "observed_refill_cycles_per_call": 1353.300464079118
+    }
+  },
+  "after": {
+    "Easy": {
+      "completed_foreground_polls": 16112,
+      "mean": 83668.83813306852,
+      "percentiles": {
+        "50": 79872.0,
+        "90": 101184.0,
+        "95": 106304.0,
+        "99": 116096.0,
+        "99.9": 124842.6880000002,
+        "100": 137536.0
+      },
+      "over_280896_polls": 0,
+      "max_by_subsystem": {
+        "judgment": 19200,
+        "HUD": 27712,
+        "camera": 4864,
+        "heads": 29888,
+        "tails": 47168,
+        "affines": 22848,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 12332.575968222443,
+        "HUD": 12805.990069513406,
+        "camera": 3374.550148957299,
+        "heads": 19779.36842105263,
+        "tails": 13919.555114200595,
+        "affines": 21250.625620655414,
+        "misc": 206.17279046673286
+      },
+      "visible_head_peak": 4,
+      "sustain_strip_peak": 11,
+      "worst": [
+        {
+          "song_seconds": 219.96978759765625,
+          "total_cycles": 137536,
+          "subsystems": {
+            "judgment": 19200,
+            "HUD": 26176,
+            "camera": 3200,
+            "heads": 21760,
+            "tails": 44224,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 10
+        },
+        {
+          "song_seconds": 55.7572021484375,
+          "total_cycles": 133184,
+          "subsystems": {
+            "judgment": 17600,
+            "HUD": 23936,
+            "camera": 4544,
+            "heads": 20032,
+            "tails": 45632,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 10
+        },
+        {
+          "song_seconds": 260.03497314453125,
+          "total_cycles": 130240,
+          "subsystems": {
+            "judgment": 15040,
+            "HUD": 27648,
+            "camera": 3136,
+            "heads": 25728,
+            "tails": 37312,
+            "affines": 21184,
+            "misc": 192
+          },
+          "visible_heads": 3,
+          "strips": 6
+        },
+        {
+          "song_seconds": 220.22088623046875,
+          "total_cycles": 129920,
+          "subsystems": {
+            "judgment": 15040,
+            "HUD": 26176,
+            "camera": 3136,
+            "heads": 21888,
+            "tails": 40704,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 8
+        },
+        {
+          "song_seconds": 148.1099853515625,
+          "total_cycles": 128704,
+          "subsystems": {
+            "judgment": 15104,
+            "HUD": 26240,
+            "camera": 3200,
+            "heads": 16640,
+            "tails": 46080,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 1,
+          "strips": 10
+        },
+        {
+          "song_seconds": 56.00830078125,
+          "total_cycles": 127488,
+          "subsystems": {
+            "judgment": 14976,
+            "HUD": 23936,
+            "camera": 4480,
+            "heads": 20480,
+            "tails": 40576,
+            "affines": 22848,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 8
+        },
+        {
+          "song_seconds": 259.7838134765625,
+          "total_cycles": 126848,
+          "subsystems": {
+            "judgment": 17728,
+            "HUD": 27712,
+            "camera": 3264,
+            "heads": 25600,
+            "tails": 31104,
+            "affines": 21184,
+            "misc": 256
+          },
+          "visible_heads": 3,
+          "strips": 8
+        },
+        {
+          "song_seconds": 148.1602783203125,
+          "total_cycles": 126656,
+          "subsystems": {
+            "judgment": 15104,
+            "HUD": 24128,
+            "camera": 3136,
+            "heads": 16704,
+            "tails": 46144,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 1,
+          "strips": 10
+        },
+        {
+          "song_seconds": 231.77325439453125,
+          "total_cycles": 126592,
+          "subsystems": {
+            "judgment": 15232,
+            "HUD": 27648,
+            "camera": 3136,
+            "heads": 16640,
+            "tails": 42496,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 1,
+          "strips": 8
+        },
+        {
+          "song_seconds": 220.27105712890625,
+          "total_cycles": 126464,
+          "subsystems": {
+            "judgment": 15040,
+            "HUD": 27072,
+            "camera": 3072,
+            "heads": 20416,
+            "tails": 37888,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 2,
+          "strips": 6
+        }
+      ],
+      "observed_refill_cycles_per_call": 1346.6867646952353
+    },
+    "Medium": {
+      "completed_foreground_polls": 16112,
+      "mean": 108082.92750744786,
+      "percentiles": {
+        "50": 100992.0,
+        "90": 155328.0,
+        "95": 178816.0,
+        "99": 215267.83999999985,
+        "99.9": 223104.0,
+        "100": 225728.0
+      },
+      "over_280896_polls": 0,
+      "max_by_subsystem": {
+        "judgment": 24896,
+        "HUD": 31488,
+        "camera": 4864,
+        "heads": 64832,
+        "tails": 121792,
+        "affines": 22848,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 13035.745779543198,
+        "HUD": 16761.334657398213,
+        "camera": 3456.214498510427,
+        "heads": 27859.09831181728,
+        "tails": 25241.4180734856,
+        "affines": 21523.106256206553,
+        "misc": 206.00993048659384
+      },
+      "visible_head_peak": 10,
+      "sustain_strip_peak": 20,
+      "worst": [
+        {
+          "song_seconds": 124.416748046875,
+          "total_cycles": 225728,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 30720,
+            "camera": 3008,
+            "heads": 35072,
+            "tails": 117504,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 124.9525146484375,
+          "total_cycles": 225152,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 30720,
+            "camera": 3072,
+            "heads": 33280,
+            "tails": 117120,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 243.37371826171875,
+          "total_cycles": 224960,
+          "subsystems": {
+            "judgment": 17984,
+            "HUD": 31296,
+            "camera": 3136,
+            "heads": 33088,
+            "tails": 118080,
+            "affines": 21184,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 125.4715576171875,
+          "total_cycles": 224832,
+          "subsystems": {
+            "judgment": 19520,
+            "HUD": 29184,
+            "camera": 4544,
+            "heads": 33088,
+            "tails": 117056,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 126.00732421875,
+          "total_cycles": 224704,
+          "subsystems": {
+            "judgment": 18112,
+            "HUD": 30656,
+            "camera": 3136,
+            "heads": 32832,
+            "tails": 116928,
+            "affines": 22848,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 242.85467529296875,
+          "total_cycles": 224000,
+          "subsystems": {
+            "judgment": 18112,
+            "HUD": 31296,
+            "camera": 3200,
+            "heads": 33152,
+            "tails": 116800,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 4,
+          "strips": 18
+        },
+        {
+          "song_seconds": 242.7039794921875,
+          "total_cycles": 223872,
+          "subsystems": {
+            "judgment": 19648,
+            "HUD": 15616,
+            "camera": 3136,
+            "heads": 42240,
+            "tails": 121792,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 242.18499755859375,
+          "total_cycles": 223872,
+          "subsystems": {
+            "judgment": 18176,
+            "HUD": 15616,
+            "camera": 3072,
+            "heads": 43840,
+            "tails": 120192,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 125.33758544921875,
+          "total_cycles": 223872,
+          "subsystems": {
+            "judgment": 18048,
+            "HUD": 15616,
+            "camera": 4672,
+            "heads": 42560,
+            "tails": 121536,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        },
+        {
+          "song_seconds": 125.3543701171875,
+          "total_cycles": 223744,
+          "subsystems": {
+            "judgment": 19584,
+            "HUD": 14080,
+            "camera": 4672,
+            "heads": 42240,
+            "tails": 121728,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 6,
+          "strips": 20
+        }
+      ],
+      "observed_refill_cycles_per_call": 1360.9085235623322
+    },
+    "Hard": {
+      "completed_foreground_polls": 16112,
+      "mean": 114208.46871896723,
+      "percentiles": {
+        "50": 106752.0,
+        "90": 161536.0,
+        "95": 185344.0,
+        "99": 221496.95999999996,
+        "99.9": 239025.79200000013,
+        "100": 249856.0
+      },
+      "over_280896_polls": 0,
+      "max_by_subsystem": {
+        "judgment": 30656,
+        "HUD": 34432,
+        "camera": 4864,
+        "heads": 74688,
+        "tails": 117312,
+        "affines": 22848,
+        "misc": 1792
+      },
+      "mean_by_subsystem": {
+        "judgment": 13420.254220456802,
+        "HUD": 18386.375372393246,
+        "camera": 3459.948361469712,
+        "heads": 31985.314796425024,
+        "tails": 25150.625620655414,
+        "affines": 21601.219463753725,
+        "misc": 204.73088381330686
+      },
+      "visible_head_peak": 12,
+      "sustain_strip_peak": 27,
+      "worst": [
+        {
+          "song_seconds": 70.0352783203125,
+          "total_cycles": 249856,
+          "subsystems": {
+            "judgment": 18880,
+            "HUD": 17088,
+            "camera": 3008,
+            "heads": 74432,
+            "tails": 115008,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 243.70733642578125,
+          "total_cycles": 249152,
+          "subsystems": {
+            "judgment": 18624,
+            "HUD": 17088,
+            "camera": 3200,
+            "heads": 74688,
+            "tails": 114112,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 243.69061279296875,
+          "total_cycles": 249152,
+          "subsystems": {
+            "judgment": 18880,
+            "HUD": 17088,
+            "camera": 3328,
+            "heads": 74496,
+            "tails": 113984,
+            "affines": 21184,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 71.09002685546875,
+          "total_cycles": 249024,
+          "subsystems": {
+            "judgment": 18880,
+            "HUD": 17088,
+            "camera": 3008,
+            "heads": 74240,
+            "tails": 114368,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 242.65252685546875,
+          "total_cycles": 248704,
+          "subsystems": {
+            "judgment": 18880,
+            "HUD": 17088,
+            "camera": 3136,
+            "heads": 74432,
+            "tails": 113792,
+            "affines": 21184,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 243.17156982421875,
+          "total_cycles": 247744,
+          "subsystems": {
+            "judgment": 18560,
+            "HUD": 17088,
+            "camera": 4672,
+            "heads": 72320,
+            "tails": 113600,
+            "affines": 21248,
+            "misc": 256
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 70.57098388671875,
+          "total_cycles": 247552,
+          "subsystems": {
+            "judgment": 18688,
+            "HUD": 17088,
+            "camera": 4608,
+            "heads": 72192,
+            "tails": 113536,
+            "affines": 21248,
+            "misc": 192
+          },
+          "visible_heads": 12,
+          "strips": 16
+        },
+        {
+          "song_seconds": 125.8218994140625,
+          "total_cycles": 239744,
+          "subsystems": {
+            "judgment": 18944,
+            "HUD": 17152,
+            "camera": 4608,
+            "heads": 62656,
+            "tails": 113408,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        },
+        {
+          "song_seconds": 70.08544921875,
+          "total_cycles": 239680,
+          "subsystems": {
+            "judgment": 18624,
+            "HUD": 17088,
+            "camera": 3008,
+            "heads": 63936,
+            "tails": 114048,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        },
+        {
+          "song_seconds": 71.14019775390625,
+          "total_cycles": 239296,
+          "subsystems": {
+            "judgment": 18624,
+            "HUD": 17088,
+            "camera": 4672,
+            "heads": 62272,
+            "tails": 113664,
+            "affines": 22784,
+            "misc": 192
+          },
+          "visible_heads": 10,
+          "strips": 16
+        }
+      ],
+      "observed_refill_cycles_per_call": 1384.641804768214
+    }
+  }
+}

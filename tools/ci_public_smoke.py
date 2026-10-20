@@ -20,7 +20,7 @@ def run(root, build, extracted, output, symbols):
     if file_hash(rom) != manifest['rom_sha256']:
         raise ValueError('Extracted ROM differs from successful build')
     output.mkdir(parents=True, exist_ok=False)
-    for name, source in [('identity', 'build_identity_emulator.c'), ('pause', 'pause_emulator.c')]:
+    for name, source in [('identity', 'build_identity_emulator.c'), ('pause', 'pause_emulator.c'), ('readiness', 'readiness_emulator.c')]:
         subprocess.run(['gcc', '-O2', '-Wall', '-Wextra', '-Werror', str(root / 'tests' / source),
                         '-o', str(output / name), '-lmgba'], check=True)
     subprocess.run([str(output / 'identity'), str(rom), 'M014 / SYNTH'], check=True)
@@ -31,6 +31,7 @@ def run(root, build, extracted, output, symbols):
         if key.startswith('GBA_'):
             del env[key]
     env['GBA_PAUSE_PLAYBACK_SAMPLES'] = samples
+    subprocess.run([str(output / 'readiness'), str(rom), str(symbols)], env=env, check=True)
     # Full synthetic song: single pause, eight cycles, SELECT exit, uninterrupted.
     cases = [0, 12, 17, 19]
     for case in cases:
@@ -41,7 +42,7 @@ def run(root, build, extracted, output, symbols):
                            env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
     receipt = dict(schema='gba-ci-smoke-v1', source_commit=manifest['source_commit'],
                    rom_sha256=file_hash(rom), visible_identity='M014 / SYNTH',
-                   pause_cases=cases, result='passed', physical_hardware_verified=False)
+                   pause_cases=cases, readiness_epochs=20, result='passed', physical_hardware_verified=False)
     (output / 'smoke.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(json.dumps(receipt, indent=2))
 

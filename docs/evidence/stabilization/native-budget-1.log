@@ -1,0 +1,4 @@
+result score=27936 P=686 G=0 M=0 W=0 holds=172 released=0 bonus=1066
+foreground_peak_cycles=225152
+AUDIT_METRICS lane_count=4 chart_count=686 foreground_peak=225152 underruns=0 deadline_misses=0 tail_overflows=0 score=27936 holds_done=172 holds_released=0
+PASS case=19 pauses=0 resumes=0 frozen_checks=0 score=27936 heads=686

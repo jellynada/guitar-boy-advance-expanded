@@ -1,0 +1,6 @@
+before timers 0 84 84 consumed 49659 frozen 49659 fill 49680
+resume phase=1 audio=1 mode=2 fault=0
+result score=6461 P=595 G=70 M=213 W=571 holds=119 released=19 bonus=161
+foreground_peak_cycles=256448
+AUDIT_METRICS lane_count=5 chart_count=878 foreground_peak=256448 underruns=0 deadline_misses=0 tail_overflows=0 score=6461 holds_done=119 holds_released=19
+PASS case=22 pauses=1 resumes=1 frozen_checks=30 score=6461 heads=878

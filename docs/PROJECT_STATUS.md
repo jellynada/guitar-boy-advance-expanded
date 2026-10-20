@@ -1,3 +1,18 @@
+# Current: post Medium/Hard stabilization candidate
+
+Frozen base3ed8be72f9652ada15c32ef4f77bbafddc2615bf; new isolated branch
+stabilization-post-medium-hard. Startup readiness is explicit and immutable
+bounds/fonts prepare at boot. Imported affine translation is reused exactly.
+All37original regressions now pass unchanged; measured Hard peak249280perfect /
+256448mixed stress is below280896cycles. Full report and evidence:
+STABILIZATION_POST_MEDIUM_HARD.md and evidence/stabilization.
+
+Open: native opposing-direction chords need owner policy approval; ordinary
+mGBA output comparisons are10/15, while exact digital checks pass. No public
+Cream upload, private download route, Windows GUI or real GBA acceptance is
+claimed. No merge or stable release. Historical reports below remain scoped
+records, not the current acceptance status.
+
 # Current: Mission014 provisional pause/resume
 
 Branch `mission-014-pause-resume` starts from Mission013 `664c83ea624c4cec1c81d4c83f066e8abf0d2d87`. Owner authorized provisional work; Mission013 handheld acceptance is unconfirmed. No develop/main merge. Imported-only pause, sample-preserving FIFO transport, resume input seeding, independent hold policy and static overlay are implemented. Original controls, charts, audio preparation, scoring and Windows build profiles are retained.

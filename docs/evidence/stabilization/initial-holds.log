@@ -1,0 +1,20 @@
+LINE index0 expected_tick106065560 displayed_tick106248192 error_ms10.885715 center_x120 center_y121
+REFERENCE index0 expected_tick106065560 actual_tick106248192 abs_error_ms10.885715
+LINE index1 expected_tick119327949 displayed_tick119450624 error_ms7.312000 center_x120 center_y120
+LINE index2 expected_tick128161153 displayed_tick128158720 error_ms0.145018 center_x191 center_y117
+LINE index197 expected_tick2339314336 displayed_tick2339372032 error_ms3.438950 center_x120 center_y118
+REFERENCE index197 expected_tick2339314336 actual_tick2339372032 abs_error_ms3.438950
+LINE index394 expected_tick4443948974 displayed_tick4444126208 error_ms10.563970 center_x120 center_y121
+REFERENCE index394 expected_tick4443948974 actual_tick4444126208 abs_error_ms10.563970
+EOF at frame16114 tick4525868032 session0
+PASS: sustain-perfect frames16400 notes395 Perfect395 Good0 Miss0 Wrong0 nonzero_samples8511384 audio_state2; foreground max135488 avg83160.0 CPUcycles/frame
+PASS: 228 composite framebuffer HUD checks
+SCORE: score15831 combo395 maximum395 highest4 accuracy10000 FC1 AP1 session1
+SIMULTANEOUS: A+B held for 0 frames
+TAILS: peak11 composite_checks51 overflow0
+HOLDS: total78 completed78 released0 missed0 bonus601
+IRQ: refills276246 max1408 mean1351.1 cycles, underruns0 gate1 gain256
+PASS: composed results heading, score, statistics labels and navigation instructions
+PASS: replay produces 58429 new nonzero audio samples after fresh pre-roll
+PASS: results A replay action resets score, combo, multiplier, audio and guitar
+PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash

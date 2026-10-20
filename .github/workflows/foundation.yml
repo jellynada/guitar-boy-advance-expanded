@@ -4,7 +4,7 @@ on:
   pull_request:
   workflow_dispatch:
   push:
-    branches: [foundation-audit-2026-10-20]
+    branches: [foundation-audit-2026-10-20, stabilization-post-medium-hard]
 
 permissions:
   contents: read

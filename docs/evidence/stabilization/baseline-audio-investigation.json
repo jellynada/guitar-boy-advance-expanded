@@ -1,0 +1,23 @@
+{
+  "source": "3ed8be72f9652ada15c32ef4f77bbafddc2615bf",
+  "captures": [
+    {
+      "capture": "baseline-exact-wrong",
+      "process_exit_code": 134,
+      "known_original_postsong_restart_failure": true
+    },
+    {
+      "capture": "diagnostic-corrected-wrong",
+      "process_exit_code": 134,
+      "known_original_postsong_restart_failure": true
+    },
+    {
+      "capture": "diagnostic-corrected-miss",
+      "process_exit_code": 134,
+      "known_original_postsong_restart_failure": true
+    }
+  ],
+  "unmodified_digital_exit_code": 0,
+  "experimental_emulator_comparison_exit_code": 0,
+  "experimental_correction_shipped": false
+}

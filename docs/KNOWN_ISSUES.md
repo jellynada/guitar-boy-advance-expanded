@@ -1,3 +1,17 @@
+# Stabilization gate: current status
+
+- Original ten Cream restart cases and initial glyph observer now pass unchanged.
+- Exact Z-only affine reuse brings measured native Hard under the deadline;
+  worst measured mixed-input cost256448cycles,24448cycles headroom. New charts /
+  every possible key trace and physical timing are not certified by that sample.
+- Ordinary emulator output:10/15PASS,5FAIL. Exact scoring/wrong/reactive FIFO
+  models pass with zero corruption. Emulator-only lateness diagnostics pass;
+  correction is not shipped. See the stabilization report for exact windows.
+- Native Medium/Hard still have11/14LEFT+RIGHT chords. No adaptation approved.
+- Hold bonus still depends on actual head-hit time inside the Perfect window;
+ 15815is a reproducible reference trace, not a universal all-Perfect score.
+- Private Cream transfer, Windows UI and owner physical GBA acceptance are pending.
+
 # Mission014 provisional issues / gates
 
 - Private Cream delivery unavailable; ROM remains local by owner instruction.
