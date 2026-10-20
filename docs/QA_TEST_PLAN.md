@@ -1,3 +1,44 @@
+# Mission013 physical controls QA
+
+Owner acceptance is **pending** for this mission. Prior Mission011 acceptance
+must not be attributed to the new LEFT/B/A mapping. Current automated coverage:
+127 Python tests,9 sanitized C++ programs;17 synthetic,10 full real,5 diagnostics
+on each profile,3 Original36000frame runs; full real frame oracle and direct
+physical/receptor composition tests. See MISSION_013_PHYSICAL_CONTROLS.md for
+actual outcomes and the owner checklist.
+
+```bash
+bash tests/check.sh
+python3 tools/build_profile.py public
+python3 tools/build_profile.py cream
+# Use each verified profile's matching ROM and ELF-derived symbols:
+gcc -O2 -Wall -Wextra -Werror tests/physical_emulator.c -o /tmp/physical -lmgba
+/tmp/physical PATH_TO_ROM PATH_TO_NM_SYMBOLS
+```
+
+C harnesses use independent physical key bits LEFT32/B2/A1. The old LEFT/A/B
+script must fail the new ROM. Check visible LEFT/B/A labels,8 receptor masks,
+release-B/keep-A, exact scene tile restoration and Original LEFT/RIGHT/A/B.
+Diagnostic live and results labels are verified in actual framebuffer pixels.
+Held inputs must not emit repeated NEW PRESS; partial/wrong/early/stuck scripts
+remain expected outcome tests. Host tests exhaust1024 hardware masks and8192
+logical edge cases plus test-only alias handoffs with no duplicate press/release.
+Medium/Hard must remain unavailable as gameplay selections.
+
+Waveform analyzers and thresholds are unchanged. M013 currently passes all eight
+primary real models, four synthetic models and three additional >0.999 backing
+comparisons. Keep prior M011/M012 failures as compatibility history; do not count
+an experimental emulator correction as normal acceptance. No music/timing patch
+is used to obtain these passes. All chart/audio hashes match Mission012 exactly.
+
+Delivery verification must download the actual synthetic ZIP and encrypted real
+ZIP, reject private payloads in the public source package, require the private
+password, verify extracted ROM SHA against the matching build manifest, and run
+the extracted real ROM in mGBA. Never put the password in public evidence/commits.
+Preserve Mission012 stale/output and packaging negative tests.
+
+## Historical retained Mission012/011 test plans
+
 # Mission012 build foundation QA
 
 Owner-reported Mission011 Windows/mGBA and physical-GBA acceptance: flicker fixed,

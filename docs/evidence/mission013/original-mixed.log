@@ -1,0 +1,3 @@
+PASS: 36000 frames, final cursor 699, 35683 changing frames, 39321461 nonzero audio samples, no core crash
+PASS: mode mixed, Perfect 59, Good 118, Miss 522, WrongInput 1200; every note counted once
+PASS: visible hit-tile feedback present for 1456 frames

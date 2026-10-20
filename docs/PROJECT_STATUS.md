@@ -1,3 +1,32 @@
+# Mission013 — physical controls review candidate
+
+Current work: mission-013-physical-controls, based on verified develop
+56f6b7b243dfc710996336b99ac249806e666c85. Develop and main are not modified.
+Imported Easy logical lanes0/1/2 now bind to LEFT/B/A through an allocation-free
+physical-to-logical layer. Receptor labels/activation and all diagnostic prompts
+agree with that order. Original699-note Demo keeps LEFT/RIGHT/A/B. Menu/results
+A/Start and B/Select navigation remain unchanged.
+
+Chart headers, note positions/times/sustains, PCM, timing windows, scoring rules,
+reactive mixer and scanline DMA code remain unchanged. Six label map cells are
+restored exactly on scene exit. Medium/Hard exist only as future design/test
+fixtures; Up/Down aliases coalesce before logical edge detection. No new playable
+difficulty, song, front end, pause, animation, codec or score feature is added.
+
+Mission012 official public/private profiles and Windows launcher remain, with
+M013 output identities/filenames. Public review uses original synthetic assets;
+real Cream is built/tested locally and delivered by the previously authorized
+AES-password workflow, never as a plaintext public song/ROM. No secret is stored
+in source or public GitHub metadata. See the mission report/download receipt.
+
+Owner acceptance of the new mapping is **pending**. Older Mission011 hardware
+feedback is valuable but does not approve Mission013. Preserve emulator audio
+compatibility, physical DMA margin/stack and inherited asset review gates.
+Detailed tests, known results and owner checklist: MISSION_013_PHYSICAL_CONTROLS.md.
+Architecture: PHYSICAL_INPUT.md. Windows local alternative: WINDOWS_PRIVATE_BUILD.md.
+
+## Historical Mission012 status (superseded for the new mission branch)
+
 # Project status — Mission012 build/release foundation
 
 Current source: `mission-012-build-release-foundation`, descended only from

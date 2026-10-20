@@ -1,0 +1,7 @@
+{
+  "private_package_rejected": true,
+  "public_zip_canary_absent": true,
+  "public_rom_canary_absent": true,
+  "actual_checkout_private_canary_ignored": true,
+  "no_private_build_download_files_tracked": true
+}

@@ -1,4 +1,4 @@
-# Source workflow and public/private builds — Mission012
+# Source workflow and public/private builds — Mission013
 
 Saving source, accepting a development baseline, and releasing a stable public
 game are different decisions. Owner-reported Mission011 hardware acceptance is
@@ -9,8 +9,9 @@ remain. Source can still be saved and reviewed safely.
 
 - `main`: reviewed source after explicit owner approval. It is currently historical
   `6c4e63460fab10733d8ff011045ee246e7201952`, an immutable rollback point.
-- `develop`: current integration baseline from the audited Mission012 source
-  chain, created only if it does not exist. Never overwrite a diverged branch.
+- `develop`: existing Mission012 integration baseline; Mission013 stays isolated
+  until owner approval. It was created from the audited Mission012 source
+  chain. Never overwrite a diverged branch.
 - `mission-XXX-*`: isolated work branched from the accepted development baseline.
   Commit, test, push and review; retain existing history.
 - `*-download` / `*-playtest-download`: compiled delivery only. Never merge into
@@ -63,7 +64,7 @@ Never select a ROM left over after a failed low-level make.
 ## Safe public review packaging
 
 ```bash
-python3 tools/package_public.py --build builds/public/NAME_FROM_LATEST --output builds/public/packages/mission012-review.zip
+python3 tools/package_public.py --build builds/public/NAME_FROM_LATEST --output builds/public/packages/mission013-review.zip
 ```
 
 Only a verified public-profile build matching the exact committed source is
@@ -105,3 +106,19 @@ They remain untouched and require a separate legal/provenance review. Mission012
 publishes no new Cream recording, chart, converted audio or ROM. Owner-side local
 building is the supported private delivery workflow; local cloud paths are not
 presented as downloadable attachments.
+
+## Mission013 delivery and review
+
+Mission013 starts from verified develop56f6b7b and does not merge into develop/main.
+Source work: mission-013-physical-controls. Public synthetic review files are on
+mission-013-download. The real test ROM uses a separate AES-256 encrypted ZIP
+under the previously owner-authorized password workflow. Ciphertext may be hosted
+publicly; the secret stays outside GitHub and is supplied only in the owner chat.
+The public synthetic review ZIP must never include that private encrypted payload,
+plaintext Cream ROM/audio/chart, or password. Download both artifacts back, require
+the password, compare decrypted ROM hash to the manifest and run the delivered ROM.
+Do not call a publicly readable plaintext archive private or publish its key.
+No password belongs in source, logs, commit messages or public receipts.
+
+Actual handheld LEFT/B/A acceptance must come from the owner, separately from
+agent emulator checks or earlier M011 acceptance. See MISSION_013_PHYSICAL_CONTROLS.

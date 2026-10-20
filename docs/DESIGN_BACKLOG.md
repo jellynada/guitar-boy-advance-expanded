@@ -1,3 +1,10 @@
+# Design backlog after Mission013
+
+Easy LEFT/B/A is now implemented on the Mission013 review branch; owner handheld
+acceptance is pending. Medium/Hard are design/test only. Sustain polish, codecs,
+new difficulty gameplay and song libraries remain unimplemented. Historical
+Mission012 proposals below record intent, not the current implementation status.
+
 # Approved directions for later missions — not implemented in Mission012
 
 ## Physical lane order and input conflicts
