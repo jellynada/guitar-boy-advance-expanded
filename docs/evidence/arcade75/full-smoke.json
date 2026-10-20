@@ -1,0 +1,46 @@
+{
+  "source_commit": "fa29d315326c5a06bd0b5dc2939ec6e8ef98a120",
+  "rom_sha256": "b806e992e0c037a2def8f825df586026c10fd4940b66ebeb83ff98b793b38b35",
+  "note_heads": 878,
+  "frames": 16233,
+  "cases": [
+    0,
+    12,
+    17,
+    19
+  ],
+  "difficulties": [
+    {
+      "name": "Easy",
+      "note_heads": 395,
+      "physical_controls": [
+        "LEFT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Medium",
+      "note_heads": 686,
+      "physical_controls": [
+        "LEFT",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Hard",
+      "note_heads": 878,
+      "physical_controls": [
+        "LEFT",
+        "UP/DOWN",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    }
+  ],
+  "result": "passed",
+  "physical_hardware_verified": false
+}

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from tools.adapt_chart import cycles
 from tools.arcade_cut import recipe, transform_chart, fade_pcm, trim_audio, duration_samples
 from tools.handheld_chart import validate, adapt_handheld
@@ -64,6 +65,15 @@ class HandheldTests(unittest.TestCase):
 
 
 class CutTests(unittest.TestCase):
+    def test_public_arcade_packager_rejects_owner_prepared_data(self):
+        from tools.package_arcade_review import package
+        with tempfile.TemporaryDirectory()as t:
+            root=Path(t);(root/'prepared').mkdir();(root/'prepared/song-manifest.json').write_text('{"source":"owner"}')
+            with patch('tools.package_arcade_review.source_snapshot',return_value=({},dict(source_commit='x',source_tree_sha256='y'))), \
+                 patch('tools.package_arcade_review.verify_result',return_value=dict(profile='song',source_commit='x',source_tree_sha256='y')), \
+                 patch('tools.package_arcade_review.prepare_example',return_value={'source':'original-generator'}):
+                with self.assertRaisesRegex(ValueError,'private publication rejected'):package(root,root,root/'out.zip')
+            self.assertFalse((root/'out.zip').exists())
     def test_exact_75_samples(self):
         p=recipe(300*16384);self.assertEqual(p['source_samples'],1228800);self.assertEqual(p['tail_samples'],0)
     def test_just_before_and_exact_boundary(self):

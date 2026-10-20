@@ -1,0 +1,37 @@
+[
+  {
+    "case": 19,
+    "test": "digital",
+    "exit_code": 0
+  },
+  {
+    "case": 19,
+    "test": "output",
+    "exit_code": 0
+  },
+  {
+    "case": 4,
+    "test": "digital",
+    "exit_code": 0
+  },
+  {
+    "case": 4,
+    "test": "output",
+    "exit_code": 0
+  },
+  {
+    "case": 22,
+    "test": "digital",
+    "exit_code": 0
+  },
+  {
+    "case": 22,
+    "test": "output",
+    "exit_code": 0
+  },
+  {
+    "case": 22,
+    "test": "backing",
+    "exit_code": 0
+  }
+]

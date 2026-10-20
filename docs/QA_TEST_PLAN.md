@@ -1,5 +1,22 @@
 # Mission014 additions
 
+## Arcade75 additional gates
+
+Run `bash tests/check.sh`: interval conflicts, protected doubles/triples,
+minimal shifts/deletions/failure, occupied/future holds, re-articulation, rapid
+transition guards, cutoff boundaries, fade/sample identity, provenance and
+repeatable recipes; finite-EOF ASan/UBSan coverage. Keep old full-length tests.
+Build real native-All regression and real derived Arcade75-All separately.
+Exercise every difficulty, alias handoff, 8 pauses, paused exit, near-EOF pause,
+full completion/replay, mixed/miss inputs and Original Demo. Verify graphics,
+DMA/IRQ deadlines, stack margin and zero underruns/overflow. Digital mixer
+checks and ordinary mGBA output checks are separate; thresholds stay unchanged.
+Independent public synthetic packaging must reject any non-generator input,
+verify exact extraction and emulate that extracted ROM. AES private packaging
+uses independent 7-Zip extraction and matching ROM hashes. A local test is not
+a network download or real-GBA acceptance. See ARCADE75_VERIFICATION.md.
+
+
 Run `bash tests/check.sh`; compile `tests/pause_emulator.c` against libmgba and run `tests/run_pause_matrix.py` with matching profile manifests/symbols. Exercise every case on both actual profiles, including ten minutes, repeated START and both sequential exit orders. Read-only snapshots must freeze sample count, mixer, score, judgments, effects and composed screen. Test current-held resume, independent holds and missing-fret50ms grace. Keep existing uninterrupted regressions/thresholds intact.
 
 Use `tests/hardware_tap.c` with explicit ELF addresses (including GBA_TAP_COUNT_ADDR) and GBA_TAP_SINGLE_PLAYBACK=1 for first-playback pause captures. Run `tests/analyze_pause_audio.py` against matching runtime PCM; no experimental lateness correction. The latter checks declared Timer0 gaps separately, not by relaxing `analyze_fifo.py`. Compare untouched audio/graphics tests, original demo, diagnostic, replay and resources. Owner handheld acceptance remains required; use OWNER_M014_PLAYTEST.md.

@@ -1,5 +1,25 @@
 # Current foundation release policy
 
+## Arcade75 development delivery (not a stable release)
+
+Push only `arcade75-handheld-chart-adaptation`. Existing synthetic CI now also
+prepares a two-stem original Arcade75 exercise, builds it with the generic
+profile, independently regenerates/allowlists its exact prepared manifest,
+packages it with source, verifies extraction and runs all difficulty smoke
+cases on the extracted ROM. This narrow public allowlist does not make generic
+owner song builds public. The old synthetic review ZIP remains separate.
+
+The real Cream native-All and Arcade75 ROMs stay in a private AES-256 ZIP with a
+fresh strong password stored separately. Include exact source/build identities,
+ROM SHA-256 values, recipe and full original-to-derived provenance. Verify with
+independent 7-Zip and emulate the extracted owner ROM. Only an authorized private
+upload route can complete delivery. No such route is currently configured; do
+not publish the encrypted recording to public GitHub. Never claim a download
+was verified from a local path alone. Record actual CI/download status separately.
+Owner approval is required for any integration into develop/main and for any
+subsequent mission; emulator evidence cannot declare hardware acceptance.
+
+
 See [Mission015 build and delivery](MISSION_015_BUILD_DELIVERY.md). Public push,
 artifact publication and release creation require owner approval. Public release
 also requires inherited-asset review. The Mission013 encrypted-delivery wording

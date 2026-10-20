@@ -1,0 +1,22 @@
+[
+  {
+    "test": "public-physical",
+    "exit_code": 0
+  },
+  {
+    "test": "public-graphics",
+    "exit_code": 0
+  },
+  {
+    "test": "original-perfect",
+    "exit_code": 0
+  },
+  {
+    "test": "original-miss",
+    "exit_code": 0
+  },
+  {
+    "test": "original-mixed",
+    "exit_code": 0
+  }
+]

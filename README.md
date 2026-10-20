@@ -1,5 +1,23 @@
 # Stabilization candidate — post Medium/Hard
 
+## Arcade75 handheld preparation candidate
+
+Branch `arcade75-handheld-chart-adaptation` starts at stabilization commit
+`6c627e36dc30286575183c10076258d0bc9a7a0a`. Native/full-length profiles remain
+available. New offline `--arcade` preparation cuts source music to 75 seconds
+and minimally repairs impossible D-pad combinations; playable chords stay intact.
+Cream75 contains Easy 110/20, Medium 186/38 and Hard 235/39 heads/holds.
+No multi-song cartridge or stable release is implemented.
+
+Read [chart policy](docs/GBA_COMPATIBLE_CHARTS_V1.md),
+[cut timing](docs/ARCADE_CUT_75_V1.md),
+[verification evidence](docs/ARCADE75_VERIFICATION.md), and
+[owner playtest steps](docs/OWNER_ARCADE75_PLAYTEST.md).
+Public original synthetic review and actual private Cream ROMs are separate.
+Private upload is unavailable in this session; local preparation is not a
+verified download. The Windows one-click launcher is preserved.
+
+
 Current candidate branch: `stabilization-post-medium-hard`, from frozen
 `3ed8be72f9652ada15c32ef4f77bbafddc2615bf`. It fixes measured startup readiness
 and reduces native Hard frame cost without changing controls, charts, audio or

@@ -1,5 +1,17 @@
 # Current: post Medium/Hard stabilization candidate
 
+## Arcade75 / handheld candidate — provisional
+
+Offline versioned cut/adaptation recipes preserve normalized native inputs.
+Cream75: Easy 110 heads/20 holds, Medium 186/38, Hard 235/39; 3/4 shifted heads
+remove the Medium/Hard physical conflicts without deletion. No on-device chart
+rewriting. The only runtime compatibility path is finite EOF settlement for
+cut builds; full-length binaries must match stabilization outside revision.
+See ARCADE75_VERIFICATION.md for measurements, test evidence and open gates.
+Owner handheld acceptance, authorized private transfer and the inherited strict
+full-length audio output issue remain open. No merge or stable release.
+
+
 Frozen base3ed8be72f9652ada15c32ef4f77bbafddc2615bf; new isolated branch
 stabilization-post-medium-hard. Startup readiness is explicit and immutable
 bounds/fonts prepare at boot. Imported affine translation is reused exactly.

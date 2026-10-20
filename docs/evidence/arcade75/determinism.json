@@ -1,0 +1,15 @@
+{
+  "actual_cream_repeated_manifest_identical": true,
+  "file_sha256": {
+    "adapted.json": "e90b22d9e1aa421e68a69470d4c8c5deb8b509a43beba89a8950199b1d4b9711",
+    "audio/audio.json": "99c2177467e7ffef5ce8a0346e0bbf2bb1c1fe9b78ecced3d551d12cb04812fb",
+    "audio/audio_report.txt": "1b85d1ab2cc9a0cb7e5fd1579c6677eed73ceef2351571225330a3736bfea484",
+    "audio/imported_audio.bin": "ee7c9d582c84934b8f39f3a293b04e94436624b7645e584f8f2c2612abf775a2",
+    "audio/imported_backing.bin": "b5fde0c1a567dd53cd39b40f5cc44ee7033f2274f1e7e5ac8c01bb7e5684cb84",
+    "derivation-report.json": "93da55d37523d2a8a11dfd90891d1dfc017f77db0f96ad924771bc5c833fc755",
+    "imported_chart.hpp": "d349653daa8c8f499e03847df64de4840be7e27d3cba127f36a4034daff85244",
+    "normalized-song.json": "fa2a87b2a33de8af9d4b46afb141ec4f1cbad80130fbe4327d9e24a4852bb9ad",
+    "validation-report.json": "6d5e43a019204b0248c636f9077af5fddd21ff28c616f164ca1b9729ab37347f",
+    "validation-report.txt": "f4b262284b3cce8c0fb8b5fc0606f925b95b06abc2c0011a5052e16fe03dc6dc"
+  }
+}

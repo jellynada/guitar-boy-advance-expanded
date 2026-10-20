@@ -1,0 +1,19 @@
+{
+  "single_rom_bytes": 2878020,
+  "source_music_bytes": 2457600,
+  "stored_audio_bytes": 2555904,
+  "source_header_text_bytes": 22877,
+  "chart_note_and_hold_arrays_bytes": 12744,
+  "note_binary_layout": "16-byte Note plus uint64 parallel sustain per head; choices/labels/padding additional",
+  "ten_source_music_bytes": 24576000,
+  "ten_stored_audio_bytes": 25559040,
+  "forecast": {
+    "shared_engine_graphics_reserve_bytes": 1048576,
+    "charts_metadata_reserve_bytes": 1048576,
+    "alignment_reserve_bytes": 65536,
+    "safety_headroom_bytes": 2097152
+  },
+  "budget_bytes": 33554432,
+  "forecast_total_reserved_bytes": 29818880,
+  "unallocated_bytes": 3735552
+}

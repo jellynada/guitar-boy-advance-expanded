@@ -1,5 +1,15 @@
 # Mission014 gate
 
+## Arcade75 candidate follow-up gates
+
+No further mission is authorized automatically. First perform private Cream75
+handheld acceptance, including diagonals/UP-DOWN alias, edited chords, muting,
+pause near EOF and replay. Keep full native charts and frozen references.
+Then explicitly review the inherited emulator output issue and integration.
+Ten-song storage remains a forecast only; no compression/front-end/scoring or
+multi-song storage work is included. See ARCADE75_VERIFICATION.md.
+
+
 Provisional pause/resume is implemented for review. Complete private delivery and owner Mission013/Mission014 handheld acceptance before integration or Mission015 planning. No front end or new difficulty is included. See MISSION_014_PAUSE_RESUME.md.
 
 # Design backlog after Mission013

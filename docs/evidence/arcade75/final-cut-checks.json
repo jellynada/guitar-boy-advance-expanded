@@ -1,0 +1,38 @@
+[
+  {
+    "test": "final-graphics-0",
+    "exit_code": 0
+  },
+  {
+    "test": "final-near-end-0",
+    "exit_code": 0
+  },
+  {
+    "test": "final-graphics-1",
+    "exit_code": 0
+  },
+  {
+    "test": "final-near-end-1",
+    "exit_code": 0
+  },
+  {
+    "test": "final-graphics-2",
+    "exit_code": 0
+  },
+  {
+    "test": "final-near-end-2",
+    "exit_code": 0
+  },
+  {
+    "test": "final-audio-19",
+    "exit_code": 0
+  },
+  {
+    "test": "final-audio-4",
+    "exit_code": 0
+  },
+  {
+    "test": "final-audio-22",
+    "exit_code": 0
+  }
+]

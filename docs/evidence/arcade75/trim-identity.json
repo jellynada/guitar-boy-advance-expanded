@@ -1,0 +1,24 @@
+{
+  "normalized_native_unchanged": true,
+  "source_samples": 1228800,
+  "playback_samples": 1261568,
+  "fade_samples": 1228,
+  "streams": {
+    "imported_audio.bin": {
+      "source_sample_zero_preserved": true,
+      "unchanged_prefix_samples": 1227572,
+      "identical_fade_indexes": true,
+      "final_sample_zero": true,
+      "guard_silent": true,
+      "sha256": "ee7c9d582c84934b8f39f3a293b04e94436624b7645e584f8f2c2612abf775a2"
+    },
+    "imported_backing.bin": {
+      "source_sample_zero_preserved": true,
+      "unchanged_prefix_samples": 1227572,
+      "identical_fade_indexes": true,
+      "final_sample_zero": true,
+      "guard_silent": true,
+      "sha256": "b5fde0c1a567dd53cd39b40f5cc44ee7033f2274f1e7e5ac8c01bb7e5684cb84"
+    }
+  }
+}

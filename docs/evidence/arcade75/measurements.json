@@ -1,0 +1,527 @@
+{
+  "public": {
+    "source_commit": "fa29d315326c5a06bd0b5dc2939ec6e8ef98a120",
+    "rom_bytes": 827960,
+    "rom_sha256": "07073e135014ebe7078c65d3ea3428f5a2ec9edde890938584545003159c138f"
+  },
+  "full": {
+    "source_commit": "fa29d315326c5a06bd0b5dc2939ec6e8ef98a120",
+    "rom_bytes": 9229228,
+    "rom_sha256": "b806e992e0c037a2def8f825df586026c10fd4940b66ebeb83ff98b793b38b35",
+    "memory_sections": {
+      ".crt0": 528,
+      ".init": 12,
+      ".plt": 0,
+      ".text": 40328,
+      ".fini": 12,
+      ".rodata": 9171036,
+      ".ctors": 0,
+      ".dtors": 0,
+      ".eh_frame": 4,
+      ".gcc_except_table": 0,
+      ".iwram": 6976,
+      ".bss": 20640,
+      ".data": 204,
+      ".init_array": 16,
+      ".fini_array": 8,
+      ".iwram0": 0,
+      ".iwram1": 0,
+      ".iwram2": 0,
+      ".iwram3": 0,
+      ".iwram4": 0,
+      ".iwram5": 0,
+      ".iwram6": 0,
+      ".iwram7": 0,
+      ".iwram8": 0,
+      ".iwram9": 0,
+      ".ewram": 10088,
+      ".sbss": 0,
+      ".pad": 8,
+      ".comment": 59,
+      ".debug_aranges": 888,
+      ".debug_info": 121643,
+      ".debug_abbrev": 18121,
+      ".debug_line": 65547,
+      ".debug_frame": 3772,
+      ".debug_str": 35761,
+      ".debug_loclists": 51863,
+      ".debug_rnglists": 9490,
+      ".debug_line_str": 320
+    },
+    "iwram_static_bytes": 27844,
+    "ewram_static_bytes": 10088
+  },
+  "arcade": {
+    "source_commit": "61e4de93e29f09fede3d3e994c76a7f030ca3c3b",
+    "rom_bytes": 2878020,
+    "rom_sha256": "8dbb34ec1bf4940039575812b8fb0a0b738c3cb1bfb3a64282694c640506f7f1",
+    "memory_sections": {
+      ".crt0": 528,
+      ".init": 12,
+      ".plt": 0,
+      ".text": 40808,
+      ".fini": 12,
+      ".rodata": 2819996,
+      ".ctors": 0,
+      ".dtors": 0,
+      ".eh_frame": 4,
+      ".gcc_except_table": 0,
+      ".iwram": 6976,
+      ".bss": 19904,
+      ".data": 204,
+      ".init_array": 16,
+      ".fini_array": 8,
+      ".iwram0": 0,
+      ".iwram1": 0,
+      ".iwram2": 0,
+      ".iwram3": 0,
+      ".iwram4": 0,
+      ".iwram5": 0,
+      ".iwram6": 0,
+      ".iwram7": 0,
+      ".iwram8": 0,
+      ".iwram9": 0,
+      ".ewram": 9440,
+      ".sbss": 0,
+      ".pad": 8,
+      ".comment": 59,
+      ".debug_aranges": 896,
+      ".debug_info": 122564,
+      ".debug_abbrev": 18141,
+      ".debug_line": 66458,
+      ".debug_frame": 3816,
+      ".debug_str": 35732,
+      ".debug_loclists": 52041,
+      ".debug_rnglists": 9462,
+      ".debug_line_str": 320
+    },
+    "iwram_static_bytes": 27108,
+    "ewram_static_bytes": 9440
+  },
+  "synth": {
+    "source_commit": "61e4de93e29f09fede3d3e994c76a7f030ca3c3b",
+    "rom_bytes": 2871116,
+    "rom_sha256": "d7a53dfc3ed41dac70df04acd9893a54ae8f9d2109623a19510a3efae063141c",
+    "memory_sections": {
+      ".crt0": 528,
+      ".init": 12,
+      ".plt": 0,
+      ".text": 40744,
+      ".fini": 12,
+      ".rodata": 2813300,
+      ".ctors": 0,
+      ".dtors": 0,
+      ".eh_frame": 4,
+      ".gcc_except_table": 0,
+      ".iwram": 6976,
+      ".bss": 19744,
+      ".data": 204,
+      ".init_array": 16,
+      ".fini_array": 8,
+      ".iwram0": 0,
+      ".iwram1": 0,
+      ".iwram2": 0,
+      ".iwram3": 0,
+      ".iwram4": 0,
+      ".iwram5": 0,
+      ".iwram6": 0,
+      ".iwram7": 0,
+      ".iwram8": 0,
+      ".iwram9": 0,
+      ".ewram": 9296,
+      ".sbss": 0,
+      ".pad": 8,
+      ".comment": 59,
+      ".debug_aranges": 896,
+      ".debug_info": 122432,
+      ".debug_abbrev": 18141,
+      ".debug_line": 66389,
+      ".debug_frame": 3820,
+      ".debug_str": 35591,
+      ".debug_loclists": 51992,
+      ".debug_rnglists": 9501,
+      ".debug_line_str": 320
+    },
+    "iwram_static_bytes": 26948,
+    "ewram_static_bytes": 9296
+  },
+  "cut_metrics": {
+    "0": {
+      "frames": 4900,
+      "frames_checked": 4570,
+      "defect_frames": 0,
+      "worst_displaced_pixels": 0,
+      "total_displaced_pixels": 0,
+      "floor_pixels": 51920997,
+      "peak_tails": 10,
+      "foreground_max": 133056,
+      "foreground_mean": 80371.851,
+      "refill_max": 1408,
+      "refill_mean": 1352.769,
+      "underruns": 0
+    },
+    "1": {
+      "frames": 4900,
+      "frames_checked": 4570,
+      "defect_frames": 0,
+      "worst_displaced_pixels": 0,
+      "total_displaced_pixels": 0,
+      "floor_pixels": 46043348,
+      "peak_tails": 20,
+      "foreground_max": 222400,
+      "foreground_mean": 100397.339,
+      "refill_max": 1408,
+      "refill_mean": 1351.597,
+      "underruns": 0
+    },
+    "2": {
+      "frames": 4900,
+      "frames_checked": 4570,
+      "defect_frames": 0,
+      "worst_displaced_pixels": 0,
+      "total_displaced_pixels": 0,
+      "floor_pixels": 45997304,
+      "peak_tails": 27,
+      "foreground_max": 248768,
+      "foreground_mean": 106445.346,
+      "refill_max": 1408,
+      "refill_mean": 1352.824,
+      "underruns": 0
+    }
+  },
+  "cream_changes": [
+    {
+      "difficulty": "Easy",
+      "original_heads": 395,
+      "original_sustains": 78,
+      "heads": 110,
+      "sustains": 20,
+      "score_reference": {
+        "heads": 3830,
+        "hold_bonus": 93,
+        "policy": "on-time Perfect heads in logical-lane event order; independent full holds; upper bound if rearticulations remain; actual frame/input phase may reduce hold bonus",
+        "total": 3923
+      },
+      "conflicts_before": [],
+      "changes": [],
+      "conflicts_after": [],
+      "trimmed_holds": [
+        {
+          "id": 109,
+          "source_tick": 68160,
+          "start_us": 74835000,
+          "old_end_us": 75226240,
+          "prepared_end_us": 74999938
+        }
+      ],
+      "excluded_heads": 285
+    },
+    {
+      "difficulty": "Medium",
+      "original_heads": 686,
+      "original_sustains": 172,
+      "heads": 186,
+      "sustains": 38,
+      "score_reference": {
+        "heads": 6870,
+        "hold_bonus": 190,
+        "policy": "on-time Perfect heads in logical-lane event order; independent full holds; upper bound if rearticulations remain; actual frame/input phase may reduce hold bonus",
+        "total": 7060
+      },
+      "conflicts_before": [
+        {
+          "ids": [
+            136,
+            137
+          ],
+          "kind": "opposing-directions",
+          "source_us": 57992000
+        },
+        {
+          "ids": [
+            146,
+            147
+          ],
+          "kind": "opposing-directions",
+          "source_us": 62152000
+        },
+        {
+          "ids": [
+            156,
+            157
+          ],
+          "kind": "opposing-directions",
+          "source_us": 66390000
+        }
+      ],
+      "changes": [
+        {
+          "action": "shift",
+          "from_lane": 1,
+          "id": 137,
+          "reason": {
+            "ids": [
+              136,
+              137
+            ],
+            "kind": "opposing-directions",
+            "source_us": 57992000
+          },
+          "to_lane": 2
+        },
+        {
+          "action": "shift",
+          "from_lane": 1,
+          "id": 147,
+          "reason": {
+            "ids": [
+              146,
+              147
+            ],
+            "kind": "opposing-directions",
+            "source_us": 62152000
+          },
+          "to_lane": 2
+        },
+        {
+          "action": "shift",
+          "from_lane": 1,
+          "id": 157,
+          "reason": {
+            "ids": [
+              156,
+              157
+            ],
+            "kind": "opposing-directions",
+            "source_us": 66390000
+          },
+          "to_lane": 2
+        }
+      ],
+      "conflicts_after": [],
+      "trimmed_holds": [
+        {
+          "id": 185,
+          "source_tick": 68160,
+          "start_us": 74835000,
+          "old_end_us": 75226240,
+          "prepared_end_us": 74999938
+        }
+      ],
+      "excluded_heads": 500
+    },
+    {
+      "difficulty": "Hard",
+      "original_heads": 878,
+      "original_sustains": 175,
+      "heads": 235,
+      "sustains": 39,
+      "score_reference": {
+        "heads": 8830,
+        "hold_bonus": 199,
+        "policy": "on-time Perfect heads in logical-lane event order; independent full holds; upper bound if rearticulations remain; actual frame/input phase may reduce hold bonus",
+        "total": 9029
+      },
+      "conflicts_before": [
+        {
+          "ids": [
+            169,
+            170
+          ],
+          "kind": "opposing-directions",
+          "source_us": 57992000
+        },
+        {
+          "ids": [
+            179,
+            180
+          ],
+          "kind": "opposing-directions",
+          "source_us": 62152000
+        },
+        {
+          "ids": [
+            187,
+            188
+          ],
+          "kind": "opposing-directions",
+          "source_us": 65328000
+        },
+        {
+          "ids": [
+            190,
+            191
+          ],
+          "kind": "opposing-directions",
+          "source_us": 66390000
+        }
+      ],
+      "changes": [
+        {
+          "action": "shift",
+          "from_lane": 0,
+          "id": 169,
+          "reason": {
+            "ids": [
+              169,
+              170
+            ],
+            "kind": "opposing-directions",
+            "source_us": 57992000
+          },
+          "to_lane": 1
+        },
+        {
+          "action": "shift",
+          "from_lane": 0,
+          "id": 179,
+          "reason": {
+            "ids": [
+              179,
+              180
+            ],
+            "kind": "opposing-directions",
+            "source_us": 62152000
+          },
+          "to_lane": 1
+        },
+        {
+          "action": "shift",
+          "from_lane": 0,
+          "id": 187,
+          "reason": {
+            "ids": [
+              187,
+              188
+            ],
+            "kind": "opposing-directions",
+            "source_us": 65328000
+          },
+          "to_lane": 1
+        },
+        {
+          "action": "shift",
+          "from_lane": 0,
+          "id": 190,
+          "reason": {
+            "ids": [
+              190,
+              191
+            ],
+            "kind": "opposing-directions",
+            "source_us": 66390000
+          },
+          "to_lane": 1
+        }
+      ],
+      "conflicts_after": [],
+      "trimmed_holds": [
+        {
+          "id": 234,
+          "source_tick": 68160,
+          "start_us": 74835000,
+          "old_end_us": 75226240,
+          "prepared_end_us": 74999938
+        }
+      ],
+      "excluded_heads": 643
+    }
+  ],
+  "same_asset_comparison": {
+    "0": {
+      "frozen": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 51920858,
+        "peak_tails": 10,
+        "foreground_max": 133056,
+        "foreground_mean": 80313.362,
+        "refill_max": 1408,
+        "refill_mean": 1384.573,
+        "underruns": 0
+      },
+      "candidate": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 51920997,
+        "peak_tails": 10,
+        "foreground_max": 133056,
+        "foreground_mean": 80371.851,
+        "refill_max": 1408,
+        "refill_mean": 1352.769,
+        "underruns": 0
+      }
+    },
+    "1": {
+      "frozen": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 46043277,
+        "peak_tails": 20,
+        "foreground_max": 222400,
+        "foreground_mean": 100368.964,
+        "refill_max": 1408,
+        "refill_mean": 1364.581,
+        "underruns": 0
+      },
+      "candidate": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 46043348,
+        "peak_tails": 20,
+        "foreground_max": 222400,
+        "foreground_mean": 100397.339,
+        "refill_max": 1408,
+        "refill_mean": 1351.597,
+        "underruns": 0
+      }
+    },
+    "2": {
+      "frozen": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 45997412,
+        "peak_tails": 27,
+        "foreground_max": 248640,
+        "foreground_mean": 106351.064,
+        "refill_max": 1408,
+        "refill_mean": 1333.207,
+        "underruns": 0
+      },
+      "candidate": {
+        "frames": 4900,
+        "frames_checked": 4570,
+        "defect_frames": 0,
+        "worst_displaced_pixels": 0,
+        "total_displaced_pixels": 0,
+        "floor_pixels": 45997304,
+        "peak_tails": 27,
+        "foreground_max": 248768,
+        "foreground_mean": 106445.346,
+        "refill_max": 1408,
+        "refill_mean": 1352.824,
+        "underruns": 0
+      }
+    }
+  },
+  "peak_smoke_cycles": {
+    "0": 133120,
+    "1": 223232,
+    "2": 248896
+  }
+}

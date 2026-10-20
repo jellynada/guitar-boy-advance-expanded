@@ -1,5 +1,26 @@
 # Stabilization gate: current status
 
+## Arcade75 candidate
+
+- Full-length ordinary mGBA output comparisons remain 10/15 passing; digital
+  PCM/FIFO checks are a separate result. Do not call this audio issue resolved.
+- Native full Cream Medium/Hard retain 11/14 opposing chords. Only explicitly
+  labelled derived charts repair them. Physical diagonals need handheld testing.
+- No private upload/attachment route is configured. AES ZIPs remain local until
+  authorized transfer exists. Never substitute a synthetic/old ROM.
+- v1 minimizes each conflict locally, not global fingering. It fails if repair
+  would require modifying protected playable chords. Native re-articulations
+  remain reported under the existing hold-replacement rules.
+- Source parsing still has established 8192-head/chart, 32-visible-head,
+  30-minute decode and full-decode PCM-budget bounds. A 75s request does not
+  silently bypass unsupported source content or these preparation limits.
+- Cut results close remaining late windows at real EOF; heads beyond that clock
+  receive misses, never automatic hits. Clipped holds respect the last-sample
+  clock (approximately 61us before the mathematical end boundary).
+- The Windows launcher is unchanged; no actual Windows GUI or real GBA run is
+  claimed by developer emulator checks.
+
+
 - Original ten Cream restart cases and initial glyph observer now pass unchanged.
 - Exact Z-only affine reuse brings measured native Hard under the deadline;
   worst measured mixed-input cost256448cycles,24448cycles headroom. New charts /
