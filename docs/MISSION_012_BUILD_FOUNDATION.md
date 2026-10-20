@@ -99,7 +99,7 @@ service here; the local Windows workflow replaces misleading cloud download path
 ## Actual tests and results
 
 The complete engine-regression revision is `5de174ac3bb14ec321a24d76aa7b30816cd0afa0`.
-Subsequent source changes are documentation/test logging only. Final deliverable
+Subsequent source changes are documentation/test logging and Windows path/checksum handoff only. No further engine changes. Final deliverable
 profiles are rebuilt from the same final committed revision; their manifests give
 the exact full source/hash, avoiding self-referential commit hashes in this file.
 Final delivery verification compares game bytes outside the embedded revision
