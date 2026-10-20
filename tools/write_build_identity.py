@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 
 LABELS = {'legacy': 'M014 REVIEW', 'public-synthetic': 'M014 / SYNTH',
-          'cream-private': 'M014 / CREAM / LOCAL'}
+          'cream-private': 'M014 / CREAM / LOCAL', 'song-private': 'M014 / SONG / LOCAL'}
 
 
 def identity(profile, revision):

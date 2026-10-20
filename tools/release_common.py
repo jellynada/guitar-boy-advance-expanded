@@ -12,7 +12,8 @@ PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
 PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml'}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
 PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
-            'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba')}
+            'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba'),
+            'song': ('song-private', 'Guitar-Boy-Advance-M014-Song-Private.gba')}
 
 
 def digest(data):
@@ -39,7 +40,7 @@ def safe_source_name(name):
         raise ValueError('Imported private/generated payload: ' + name)
     if p.suffix.lower() in {'.gba', '.elf', '.bin', '.zip', '.wav', '.opus', '.mp3', '.ogg', '.flac', '.pcm', '.raw', '.samples', '.fifo', '.map'}:
         raise ValueError('Generated or recording payload cannot enter public source: ' + name)
-    if p.name.lower() in {'audio.json', 'adapted.json', 'imported_chart.hpp', 'imported_audio.hpp'}:
+    if p.name.lower() in {'audio.json', 'adapted.json', 'imported_chart.hpp', 'imported_audio.hpp', 'song-manifest.json', 'normalized-song.json'}:
         raise ValueError('Prepared song data cannot enter public source: ' + name)
     return name
 
@@ -115,6 +116,22 @@ def validate_assets(work, profile):
     synthetic = re.search(rb'imported_is_synthetic = (true|false)', header)
     if not synthetic or (synthetic[1] == b'true') != (profile == 'public'):
         raise ValueError('Wrong public/private runtime chart identity')
+    if profile == 'song':
+        try:
+            from .song_pipeline import verify_prepared
+        except ImportError:
+            from song_pipeline import verify_prepared
+        prepared = work / 'imports/output/song'
+        m = verify_prepared(prepared)
+        for name in ['imported_chart.hpp', 'audio/imported_audio.bin', 'audio/imported_backing.bin']:
+            if file_hash(runtime / Path(name).name) != file_hash(prepared / name):
+                raise ValueError('Generic runtime differs from prepared song: ' + name)
+        audio = json.loads((prepared / 'audio/audio.json').read_text())
+        return {'note_heads': m['runtime']['note_heads'], 'genuine_sustains': m['runtime']['genuine_sustains'],
+                'chart_sha256': digest(header), 'guitar_sha256': file_hash(runtime / 'imported_audio.bin'),
+                'backing_sha256': file_hash(runtime / 'imported_backing.bin'),
+                'source_samples': audio['source_samples'], 'sample_rate': audio['sample_rate'],
+                'ffmpeg_version': audio['ffmpeg_version'], 'selected_package_files': audio['selected_package_files']}
     if profile == 'cream':
         prepared = work / 'imports/output/cream'
         adapted = json.loads((prepared / 'adapted.json').read_text())
@@ -189,6 +206,23 @@ def verify_result(folder, public_only=False):
     for stem, key in [('imported_chart.hpp', 'chart_sha256'), ('imported_audio.bin', 'guitar_sha256'), ('imported_backing.bin', 'backing_sha256')]:
         if file_hash(folder / 'runtime' / stem) != m['assets'][key]:
             raise ValueError('Manifest runtime asset mismatch')
+    if profile == 'song':
+        try:
+            from .song_pipeline import verify_prepared
+        except ImportError:
+            from song_pipeline import verify_prepared
+        prepared = folder / 'prepared'
+        song = verify_prepared(prepared)
+        if file_hash(prepared / 'song-manifest.json') != m.get('prepared_song_sha256'):
+            raise ValueError('Build prepared-song manifest mismatch')
+        if song['runtime']['note_heads'] != m['assets']['note_heads'] or song['runtime']['genuine_sustains'] != m['assets']['genuine_sustains']:
+            raise ValueError('Build prepared-song counts mismatch')
+        for name in ['imported_chart.hpp', 'audio/imported_audio.bin', 'audio/imported_backing.bin']:
+            if file_hash(folder / 'runtime' / Path(name).name) != file_hash(prepared / name):
+                raise ValueError('Build runtime differs from prepared song')
+        for name in ['imported_audio.bin', 'imported_backing.bin']:
+            if (folder / 'runtime' / name).read_bytes() not in data:
+                raise ValueError('Prepared audio stream missing from ROM')
     if public_only:
         if m['assets']['note_heads'] != 25 or m['assets']['genuine_sustains'] != 6 or m.get('input_zip_sha256') is not None:
             raise ValueError('Public manifest contains private configuration')

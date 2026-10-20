@@ -1,3 +1,10 @@
+# Mission 016 song pipeline
+
+Generic package preparation and private builds are documented in
+[Mission016](docs/MISSION_016_SONG_PIPELINE.md). It supports explicit audio
+selection and compatible Easy chart/MIDI data without game-source edits.
+The runtime and separate Cream/public regression profiles are preserved.
+
 # Mission 015 foundation work
 
 Repository audit and CI development-artifact workflow are prepared on
