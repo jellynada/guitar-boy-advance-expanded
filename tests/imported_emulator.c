@@ -57,7 +57,7 @@ int main(int argc,char** argv) {
         // Right is ignored in Easy; cannot create WrongInput or consume a note.
         if(f%30==0)keys|=16;
         frame(core,keys);
-        selectDefaultDifficulty(core,modeaddr);assert(core->busRead32(core,modeaddr)==2);
+        assert(core->busRead32(core,modeaddr)==2);
         unsigned first=core->busRead32(core,firstaddr),end=core->busRead32(core,endaddr);
         assert(first<=end&&end<=count&&end-first<=32);
         unsigned p=core->busRead32(core,statsaddr),g=core->busRead32(core,statsaddr+4),m=core->busRead32(core,statsaddr+8);

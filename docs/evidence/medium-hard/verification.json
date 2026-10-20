@@ -1,0 +1,122 @@
+{
+  "tested_runtime_commit": "c138f3c7531c8afad953b1476c0f791e3b6e50e3",
+  "rom_sha256": "e295278fa1fdc1fe56531b580fbadd772dc4427d975e4424a65c3057a244fa4b",
+  "rom_bytes": 464108,
+  "host_python_tests": 162,
+  "host_sanitizer_programs": 11,
+  "native_difficulties": [
+    {
+      "name": "Easy",
+      "note_heads": 6,
+      "physical_controls": [
+        "LEFT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Medium",
+      "note_heads": 10,
+      "physical_controls": [
+        "LEFT",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Hard",
+      "note_heads": 13,
+      "physical_controls": [
+        "LEFT",
+        "UP/DOWN",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    }
+  ],
+  "menu_navigation": "passed: held confirmation, Back, Original, Hard replay/pause/exit, switch to Easy",
+  "scenarios": [
+    {
+      "choice": 0,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "choice": 0,
+      "case": 12,
+      "exit_code": 0
+    },
+    {
+      "choice": 0,
+      "case": 17,
+      "exit_code": 0
+    },
+    {
+      "choice": 0,
+      "case": 19,
+      "exit_code": 0
+    },
+    {
+      "choice": 1,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "choice": 1,
+      "case": 12,
+      "exit_code": 0
+    },
+    {
+      "choice": 1,
+      "case": 17,
+      "exit_code": 0
+    },
+    {
+      "choice": 1,
+      "case": 19,
+      "exit_code": 0
+    },
+    {
+      "choice": 2,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "choice": 2,
+      "case": 12,
+      "exit_code": 0
+    },
+    {
+      "choice": 2,
+      "case": 17,
+      "exit_code": 0
+    },
+    {
+      "choice": 2,
+      "case": 19,
+      "exit_code": 0
+    }
+  ],
+  "foreground_peak_cycles": {
+    "Easy": 144064,
+    "Medium": 152512,
+    "Hard": 211520
+  },
+  "audio_underruns": 0,
+  "scanline_deadline_misses": 0,
+  "sustain_sprite_overflows": 0,
+  "additional_easy_regressions": [
+    "verified public package/extracted ROM",
+    "visible identity",
+    "four pause cases",
+    "receptor/labels",
+    "perfect audio/gameplay",
+    "input diagnostic"
+  ],
+  "physical_gba_verified": false,
+  "windows_verified": false,
+  "strict_audio_comparison_issue": "unchanged and open",
+  "measurements_scope": "Original synthetic example only; no general CPU/RAM capacity or analog audio certification"
+}

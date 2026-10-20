@@ -101,7 +101,7 @@ int main(int argc,char** argv){
         if(f==180){visible(c,pixels,fontaddr,4,16,"LEFT");visible(c,pixels,fontaddr,14,16,"B");visible(c,pixels,fontaddr,23,16,"A");}
         if(getenv("GBA_TEST_HIDE_TAILS")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~4096);
         if(getenv("GBA_TEST_HIDE_HUD")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~256);
-        if(f>4){selectDefaultDifficulty(c,modeaddr);assert(c->busRead32(c,modeaddr)==2);}
+        if(f>4)assert(c->busRead32(c,modeaddr)==2);
         short left[4096],right[4096];int n=blip_read_samples(c->getAudioChannel(c,0),left,4096,0),r=blip_read_samples(c->getAudioChannel(c,1),right,4096,0);assert(n==r);
         for(int i=0;i<n;++i){assert(left[i]==right[i]);nonzero+=left[i]!=0;}
         fwrite(left,2,n,audio);written+=n;

@@ -72,3 +72,27 @@ count. A new sanitizer test covers fifth-lane hits/holds, bounded chart counts,
 scoring totals and alias handoff. Four importer tests cover native counts,
 per-difficulty preparation, bundled hold validation and rejection of an invalid
 Medium lane or Expert relabelling.
+
+## Executed verification
+
+[Recorded results](evidence/medium-hard/verification.json) identify the exact
+compiled runtime commit `c138f3c` and ROM hash.162 Python tests and11 ASan/UBSan
+C++ programs pass. The original three-difficulty package compiled successfully;
+all12 menu-aware gameplay/pause scenarios passed (4per native chart), including
+UP/both/DOWN handoffs during Hard play with no extra hit or wrong-input events.
+The separate navigation driver passed held-confirm protection, Back, Original
+Demo, Hard replay/pause/exit, and then Easy completion with its own chart count.
+The existing25-note public fixture also compiled, packaged, extracted and passed
+visible identity,4pause cases, receptor/label checks, perfect audio/gameplay and
+input-diagnostic execution. Gameplay/audio thresholds were not relaxed.
+
+Observed foreground peaks for the small synthetic package were144064cycles
+(Easy),152512(Medium),211520(Hard) per281k-cycle frame. No audio underruns,
+scanline deadline misses or sustain-sprite overflows occurred in these runs.
+These are observations for the supplied charts, not a worst-case hardware proof.
+The final tooling/tests/evidence follow-up does not change GBA runtime code;
+verified ROMs retain their exact compiled-source identity without an unnecessary
+rebuild. Private recordings/ROMs/archives remain unchanged; no release or merge.
+
+![Difficulty selection](evidence/medium-hard/difficulty-menu.png)
+![Five-lane Hard gameplay](evidence/medium-hard/hard-gameplay.png)

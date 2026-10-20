@@ -32,14 +32,17 @@ def run(root, build, output, symbols):
     # The two supplied examples are sized for this; arbitrary songs may use a
     # targeted driver instead. This runner is not a universal playability gate.
     cases = [0, 12, 17, 19]
-    for case in cases:
-        prefix = output / f'pause-{case}'
-        with prefix.with_suffix('.log').open('w') as log:
-            subprocess.run([str(output / 'pause'), str(rom), str(symbols), str(m['assets']['note_heads']),
-                            str(frames), str(case), '1' if case == 0 else '30', str(prefix)],
-                           env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
+    choices=m.get('available_difficulties',[dict(name='Easy',note_heads=m['assets']['note_heads'])])
+    for choice,chart in enumerate(choices):
+        env['GBA_DIFFICULTY']=str(choice)
+        for case in cases:
+            prefix = output / f'difficulty-{choice}-pause-{case}'
+            with prefix.with_suffix('.log').open('w') as log:
+                subprocess.run([str(output / 'pause'), str(rom), str(symbols), str(chart['note_heads']),
+                                str(frames), str(case), '1' if case == 0 else '30', str(prefix)],
+                               env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
     result = dict(source_commit=m['source_commit'], rom_sha256=m['rom_sha256'], note_heads=m['assets']['note_heads'],
-                  frames=frames, cases=cases, result='passed', physical_hardware_verified=False)
+                  frames=frames, cases=cases, difficulties=choices, result='passed', physical_hardware_verified=False)
     (output / 'smoke.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result, indent=2))
 

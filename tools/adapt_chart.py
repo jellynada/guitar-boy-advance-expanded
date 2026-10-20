@@ -36,11 +36,11 @@ def adapt(song, *, difficulty, instrument, synthetic=False):
     if song.get('timing', {}).get('unit') != 'microseconds':
         raise ValueError('Normalized timestamps must be in microseconds.')
     if difficulty not in ('Easy','Medium','Hard') or instrument != 'five_fret_lead_guitar':
-        raise ValueError('This adapter explicitly supports Easy five_fret_lead_guitar only.')
+        raise ValueError('This adapter supports native Easy/Medium/Hard lead guitar only.')
     lanes={'Easy':3,'Medium':4,'Hard':5}[difficulty]
     selected = [t for t in song['tracks'] if t['difficulty'] == difficulty and t['instrument'] == instrument]
     if len(selected) != 1:
-        raise ValueError('Exactly one Easy lead-guitar track must be selected.')
+        raise ValueError('Exactly one native track for the selected difficulty must be present.')
     notes = selected[0]['notes']
     if not notes or len(notes) > MAX_NOTES:
         raise ValueError('Selected chart must contain 1..8192 notes.')

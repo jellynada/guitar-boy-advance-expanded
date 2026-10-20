@@ -215,6 +215,9 @@ def verify_result(folder, public_only=False):
         song = verify_prepared(prepared)
         if file_hash(prepared / 'song-manifest.json') != m.get('prepared_song_sha256'):
             raise ValueError('Build prepared-song manifest mismatch')
+        expected_choices=song['runtime'].get('difficulties',[dict(name=song['runtime']['difficulty'],note_heads=song['runtime']['note_heads'],physical_controls=song['runtime']['physical_controls'])])
+        if ('available_difficulties' in m or song['schema_version']=='gba-prepared-song-v2') and m.get('available_difficulties')!=expected_choices:
+            raise ValueError('Build difficulty inventory differs from preparation')
         if song['runtime']['note_heads'] != m['assets']['note_heads'] or song['runtime']['genuine_sustains'] != m['assets']['genuine_sustains']:
             raise ValueError('Build prepared-song counts mismatch')
         for name in ['imported_chart.hpp', 'audio/imported_audio.bin', 'audio/imported_backing.bin']:

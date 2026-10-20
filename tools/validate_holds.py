@@ -24,11 +24,13 @@ def validate(text,audio=None):
     lengths=dict(re.findall(r'inline constexpr uint64_t (\w+)\[\] = \{(.*?)\};',text,re.S))
     choices=re.findall(r'\{(\w+),(\w+),(\w+),([345]),"(Easy|Medium|Hard)"\}',text.split('imported_choices[]',1)[1])
     if not choices or len(choices)>3:raise ValueError('Invalid difficulty inventory')
+    capacity=int(re.search(r'imported_note_count = (\d+)',text)[1])
     total=holds=0
     for n,h,c,lanes,difficulty in choices:
         expected={'Easy':3,'Medium':4,'Hard':5}[difficulty]
         if int(lanes)!=expected:raise ValueError('Difficulty lane mismatch')
         count=int(c) if c.isdigit() else int(re.search(r'imported_note_count = (\d+)',text)[1])
+        if count>capacity:raise ValueError('Difficulty exceeds compiled runtime capacity')
         single=f'imported_note_count = {count};\n'+notes[n]+'\nimported_sustain_us[] = {'+lengths[h]+'}'
         size,held=_validate(single,audio,int(lanes));total+=size;holds+=held
     return total,holds
