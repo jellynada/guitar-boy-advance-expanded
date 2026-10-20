@@ -252,6 +252,7 @@ int main(){
     memcpy16(&se_mem[24], imageMap, imageMapLen/2);
 
 	memcpy16(&tile_mem[1], buttonsTiles, buttonsTilesLen/2);
+    ScoreDisplay::preparePauseFont();
 	drawButtons();
 
 	if(ENABLED){

@@ -7,6 +7,7 @@ void clear();
 void page();
 void line(unsigned x,unsigned y,const char* text);
 void value(unsigned x,unsigned y,uint32_t number);
+void preparePauseFont();
 void pauseShow();
 void pauseHide();
 void hud(const ScoreSnapshot&,const char* judgment,const char* guitar);
