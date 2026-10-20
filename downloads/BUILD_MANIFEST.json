@@ -1,0 +1,36 @@
+{
+  "schema": "gba-build-v1",
+  "status": "success",
+  "game_version": "M012",
+  "profile": "public",
+  "build_identity": "M012 / SYNTH",
+  "source_commit": "29f05ed20556985c0b96cc9eb3bca6f571a3bdcb",
+  "source_tree_sha256": "e075ff2d5c6cdf290c6c5f64dfaad46eb4faaf91e1496e391e44ea1f5dd461b1",
+  "created_utc": "2026-10-20T01:17:47.731123+00:00",
+  "input_zip_sha256": null,
+  "assets": {
+    "note_heads": 25,
+    "genuine_sustains": 6,
+    "chart_sha256": "f22234e064afc54bc54858bea9cab68399a44b0f5d5c823b436be6e6118053b4",
+    "guitar_sha256": "9bdf7bb29f01fcca718bac7b4b27e1ad8a1b5828182d543b24fdd5b1db6b3a01",
+    "backing_sha256": "bb1609766da3e8ba8da57f1b964bfccd4bfd6c46310b42da27114f8c0a04862e",
+    "source_samples": 202070,
+    "sample_rate": 16384,
+    "ffmpeg_version": "not used: integer synthetic generator",
+    "selected_package_files": []
+  },
+  "toolchain_image": "devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5",
+  "compiler": "arm-none-eabi-gcc (devkitARM) 16.1.0",
+  "rom": "Guitar-Boy-Advance-M012-Synthetic.gba",
+  "rom_bytes": 821636,
+  "rom_sha256": "b3c42e40adde05aee480d0e6916609f5e297b98800619515ee8ab7f38832ac17",
+  "fresh_outputs": true,
+  "artifact_sha256": {
+    "Guitar-Boy-Advance-M012-Synthetic.gba": "b3c42e40adde05aee480d0e6916609f5e297b98800619515ee8ab7f38832ac17",
+    "Guitar-Boy-Advance-M012-Synthetic.elf": "ff14ddd503108d98d63fffb7c88e24053161f0e75c57f0f34ba612a17a67ca15",
+    "runtime/imported_audio.bin": "9bdf7bb29f01fcca718bac7b4b27e1ad8a1b5828182d543b24fdd5b1db6b3a01",
+    "runtime/imported_chart.hpp": "f22234e064afc54bc54858bea9cab68399a44b0f5d5c823b436be6e6118053b4",
+    "runtime/imported_backing.bin": "bb1609766da3e8ba8da57f1b964bfccd4bfd6c46310b42da27114f8c0a04862e",
+    "runtime/imported_audio.hpp": "6be751f7e25ef010da7d315e181791c2350cd6e0155b1ed0230f1bb337175a39"
+  }
+}
