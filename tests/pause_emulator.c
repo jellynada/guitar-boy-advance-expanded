@@ -54,7 +54,7 @@ int main(int argc,char**argv){assert(argc==8);const char*sy=argv[2];unsigned cou
   uint64_t now=r64(c,importedNowCycles);unsigned keys=0;
   for(unsigned l=0;l<lanes;l++)if(until[l]>now)keys|=buttons[l];
   if(next<count){unsigned l=c->busRead32(c,imported_notes+next*16+8);uint64_t t=r64(c,imported_notes+next*16);if(t>now+280896&&t<=now+561792&&(keys&buttons[l])){keys&=~buttons[l];until[l]=0;}}
-  while(next<count){uint64_t t=r64(c,imported_notes+next*16);if(t>now+280896)break;unsigned l=c->busRead32(c,imported_notes+next*16+8);assert(l<3);if(test!=4){keys|=buttons[l];until[l]=t+(r64(c,imported_sustain_us+next*8)*16777216ULL+500000)/1000000;}next++;}
+  while(next<count){uint64_t t=r64(c,imported_notes+next*16);if(t>now+280896)break;unsigned l=c->busRead32(c,imported_notes+next*16+8);assert(l<lanes);if(test!=4){keys|=buttons[l];until[l]=t+(r64(c,imported_sustain_us+next*8)*16777216ULL+500000)/1000000;}next++;}
   int trigger=frame>=pauseAt&&pauses<cycles&&c->busRead32(c,importedTransport)==1;
   if(test==4)trigger=trigger&&!c->busRead32(c,guitarAudible)&&!c->busRead32(c,guitarGain);
   if(test==20){assert(getenv("GBA_PAUSE_PLAYBACK_SAMPLES"));trigger=trigger&&c->busRead32(c,audioSamplesConsumed)>=strtoul(getenv("GBA_PAUSE_PLAYBACK_SAMPLES"),0,10)-4096;}

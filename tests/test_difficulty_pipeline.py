@@ -6,6 +6,7 @@ from tools.generate_difficulty_example import generate_difficulties
 from tools.song_pipeline import prepare, verify_prepared
 from tools.adapt_chart import adapt
 from tools.difficulty_data import LAYOUTS
+from tools.validate_holds import validate
 
 class DifficultyPipelineTests(unittest.TestCase):
     def setUp(self):
@@ -21,6 +22,7 @@ class DifficultyPipelineTests(unittest.TestCase):
         text=(self.root/'prepared/imported_chart.hpp').read_text()
         self.assertIn('imported_note_count = 13;',text)
         self.assertIn('imported_choices[]',text)
+        self.assertEqual(validate(text)[0],29)
 
     def test_each_native_difficulty_can_be_prepared(self):
         for difficulty,count in [('Easy',6),('Medium',10),('Hard',13)]:
