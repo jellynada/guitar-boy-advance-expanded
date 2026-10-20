@@ -39,15 +39,19 @@ def recipe(source_samples, max_duration=75, handheld=True):
 def transform_chart(native, policy):
     charts = native.get('charts', [native]); output = []; reports = []
     boundary = Fraction(policy['cutoff_numerator'], policy['cutoff_denominator'])
-    final_cycle = (PRE_ROLL + policy['source_samples']) * 1024
+    # Existing clock intentionally represents the last consumed sample index,
+    # not the boundary after it. Preserve that transport contract exactly.
+    final_cycle = (PRE_ROLL + policy['source_samples'] - 1) * 1024
     for chart in charts:
         cut = copy.deepcopy(chart); kept = []; mapping = []
         for n in chart['notes']:
             item = copy.deepcopy(n); action = 'keep'
             if n['start_us'] >= boundary:
                 mapping.append(dict(id=n['source_note_index'], source_tick=n['source_tick'], action='trim-remove', original=copy.deepcopy(n), prepared=None)); continue
-            if n['genuine_sustain'] and n['start_us'] + n['sustain_us'] > boundary:
-                duration = int(boundary - n['start_us'])
+            if n['genuine_sustain'] and (n['start_us'] + n['sustain_us'] > boundary or
+                                       n['runtime_tick'] + cycles(n['sustain_us']) > final_cycle):
+                duration = max(0, min(int(boundary - n['start_us']),
+                                     (final_cycle - n['runtime_tick']) * 1000000 // 16777216))
                 while duration and n['runtime_tick'] + cycles(duration) > final_cycle: duration -= 1
                 item['sustain_us'] = duration; item['genuine_sustain'] = duration > 0
                 item['end_us'] = item['start_us'] + duration; action = 'trim-hold'
