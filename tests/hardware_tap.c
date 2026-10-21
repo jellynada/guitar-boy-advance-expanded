@@ -11,7 +11,7 @@ static FILE *fifoLog,*sampleLog,*pwmLog,*metaLog;
 static FILE *transportLog;
 static uint64_t pausedFifoRequests;
 static uint32_t sampleNumber;
-static int capturePcm=1;
+static int capturePcm=1,capturePwm=1;
 static unsigned modeAddress,stateAddress,fillAddress,countAddress,segment,graphicsMode=2,ioDepth;
 static uint64_t affineWrites,lateWrites,lineWrites[160],lateLines[160],lastWordWrites,lateLastWords,blendWrites,lateBlendWrites;
 static int32_t blankRemainingMin=0x7fffffff;
@@ -26,7 +26,7 @@ static void init(void){
     initialized=1;
     const char* prefix=getenv("GBA_HARDWARE_TAP");if(!prefix)return;
     if(getenv("GBA_TAP_GRAPHICS_MODE"))graphicsMode=strtoul(getenv("GBA_TAP_GRAPHICS_MODE"),0,10);
-    capturePcm=getenv("GBA_TAP_NO_PCM")==NULL;
+    capturePcm=getenv("GBA_TAP_NO_PCM")==NULL;capturePwm=getenv("GBA_TAP_NO_PWM")==NULL;
     modeAddress=strtoul(getenv("GBA_TAP_MODE_ADDR"),0,16);
     stateAddress=strtoul(getenv("GBA_TAP_STATE_ADDR"),0,16);
     fillAddress=strtoul(getenv("GBA_TAP_FILL_ADDR"),0,16);
@@ -83,7 +83,7 @@ void GBAAudioSample(struct GBAAudio* audio,int32_t timestamp){
     if(!real)real=dlsym(RTLD_NEXT,"GBAAudioSample");
     init();int begin=audio->sampleIndex;int32_t old=audio->lastSample;
     real(audio,timestamp);
-    if(capturePcm&&pwmLog&&ram(audio->p,modeAddress)==2&&ram(audio->p,stateAddress)==1){
+    if(capturePcm&&capturePwm&&pwmLog&&ram(audio->p,modeAddress)==2&&ram(audio->p,stateAddress)==1){
         int end=audio->lastSample!=old?2<<GBARegisterSOUNDBIASGetResolution(audio->soundbias):audio->sampleIndex;
         for(int i=begin;i<end;++i){
             uint64_t now=mTimingGlobalTime(&audio->p->timing);
