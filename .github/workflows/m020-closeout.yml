@@ -26,7 +26,10 @@ jobs:
       - name: Unmodified Debian stock 0.10.1
         run: |
           dpkg-query -W libmgba-dev
-          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-001
+          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-001 --tap
+          python3 tools/m020_pair_analysis.py --build builds/ci/result --captures builds/focused-001 --output builds/focused-001/pair.json
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-001/difficulty-0-case-22 --startup-advance 15 > builds/focused-001/mixed-digital.log
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-001/difficulty-0-case-23 --startup-advance 15 > builds/focused-001/backing-digital.log
       - name: Build unmodified stock 0.10.5
         run: |
           git clone https://github.com/mgba-emu/mgba.git builds/stock105
@@ -35,7 +38,10 @@ jobs:
           cmake --build builds/stock105/out -j2
       - name: Unmodified stock 0.10.5 replay
         run: |
-          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-105 --flag=-I$PWD/builds/stock105/include --flag=-I$PWD/builds/stock105/out/include --flag=-L$PWD/builds/stock105/out --flag=-Wl,-rpath,$PWD/builds/stock105/out
+          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-105 --tap --flag=-I$PWD/builds/stock105/include --flag=-I$PWD/builds/stock105/out/include --flag=-L$PWD/builds/stock105/out --flag=-Wl,-rpath,$PWD/builds/stock105/out
+          python3 tools/m020_pair_analysis.py --build builds/ci/result --captures builds/focused-105 --output builds/focused-105/pair.json
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-105/difficulty-0-case-22 --startup-advance 15 > builds/focused-105/mixed-digital.log
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-105/difficulty-0-case-23 --startup-advance 15 > builds/focused-105/backing-digital.log
       - if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

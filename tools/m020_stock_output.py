@@ -16,7 +16,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tests'))
 from build_demo_probes import generate
 
-def run(build,output,cc,flags):
+def run(build,output,cc,flags,tap=False):
     root=Path(__file__).resolve().parents[1]
     build,output=Path(build).resolve(),Path(output).resolve()
     output.mkdir(parents=True,exist_ok=False)
@@ -37,6 +37,9 @@ def run(build,output,cc,flags):
     common=[cc,'-O2','-Wall','-Wextra','-Werror','-I'+str(root/'tests'),*flags]
     subprocess.run([*common,str(output/'observer.c'),'-o',str(output/'observer'),'-lmgba'],check=True)
     subprocess.run([*common,str(root/'tests/m020_blip_reference.c'),'-o',str(output/'reference'),'-lmgba'],check=True)
+    if tap:
+        subprocess.run([*common,'-fPIC','-shared',str(root/'tests/m020_fifo_observer.c'),'-o',str(output/'tap.so'),'-lmgba','-ldl'],check=True)
+    symbols={v[2]:v[0]for line in(build/'symbols.txt').read_text().splitlines()if len(v:=line.split())==3}
     manifest=json.loads((build/'manifest.json').read_text())
     rom=build/manifest['rom']
     assert hashlib.sha256(rom.read_bytes()).hexdigest()==manifest['rom_sha256']
@@ -45,6 +48,10 @@ def run(build,output,cc,flags):
         prefix=output/f'difficulty-0-case-{case}'
         env={k:v for k,v in os.environ.items()if not k.startswith('GBA_')}
         env.update(GBA_DIFFICULTY='0',GBA_PAUSE_PLAYBACK_SAMPLES='1261568')
+        if tap:
+            env.update(LD_PRELOAD=str(output/'tap.so'),GBA_HARDWARE_TAP=str(prefix),
+                GBA_TAP_MODE_ADDR=symbols['gameMode'],GBA_TAP_STATE_ADDR=symbols['audioState'],
+                GBA_TAP_COUNT_ADDR=symbols['audioSamplesConsumed'],GBA_TAP_FILL_ADDR=symbols['_ZL12fillPosition'],GBA_TAP_NO_PWM='1')
         with Path(str(prefix)+'.log').open('w')as log:
             subprocess.run([str(output/'observer'),str(rom),str(build/'symbols.txt'),'86','4900',str(case),'30',str(prefix)],env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
         subprocess.run([str(output/'reference'),str(prefix)+'.pwm16',str(prefix)+'.replay16'],check=True)
@@ -70,4 +77,5 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build',required=True,type=Path);p.add_argument('--output',required=True,type=Path)
     p.add_argument('--cc',default='gcc');p.add_argument('--flag',action='append',default=[])
-    a=p.parse_args();run(a.build,a.output,a.cc,a.flag)
+    p.add_argument('--tap',action='store_true')
+    a=p.parse_args();run(a.build,a.output,a.cc,a.flag,a.tap)
