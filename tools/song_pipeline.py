@@ -127,7 +127,7 @@ def verify_prepared(folder):
         except ImportError:
             from arcade_cut import recipe, transform_chart
         policy = m['preparation_recipe']
-        if policy != recipe(policy['original_source_samples'], policy['max_duration_seconds'], policy['handheld']):
+        if policy != recipe(policy['original_source_samples'], policy['max_duration_seconds'], policy['handheld'], policy.get('display_title')):
             raise ValueError('Invalid reproducible preparation recipe')
         adapted, derivation = transform_chart(adapted, policy)
         if derivation != json.loads((folder / 'derivation-report.json').read_text()):
@@ -187,7 +187,7 @@ def verify_prepared(folder):
     return m
 
 
-def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None, difficulty="Easy", max_duration=None, handheld=False):
+def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, offset_policy=None, difficulty="Easy", max_duration=None, handheld=False, display_title=None):
     source, output = Path(source), Path(output)
     if output.exists():
         raise ValueError('Output must be a new directory; existing prepared songs are never overwritten')
@@ -236,7 +236,7 @@ def prepare(source, output, *, chart=None, mix=None, guitar=None, backing=None, 
                     from .arcade_cut import recipe, transform_chart, trim_audio
                 except ImportError:
                     from arcade_cut import recipe, transform_chart, trim_audio
-                policy = recipe(audio['source_samples'], max_duration, handheld)
+                policy = recipe(audio['source_samples'], max_duration, handheld, display_title)
                 adapted, derivation = transform_chart(adapted, policy)
                 audio = trim_audio(stage / 'audio', audio, policy)
                 save(stage / 'derivation-report.json', derivation)

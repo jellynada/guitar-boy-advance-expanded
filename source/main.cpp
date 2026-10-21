@@ -27,17 +27,28 @@
 
 #include "image.h"
 #include "palette.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "soundbank.h"
 #include "soundbank_bin.h"
+#endif
 
 #include "text_sprites.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "careless.h"
+#endif
 #include "buttons.h"
 
+#ifdef GBA_PUBLIC_DEMO
+#define mmStop() ((void)0)
+#define mmFrame() ((void)0)
+#define mmVBlank() ((void)0)
+#endif
 #define CONTROLS_ENABLED false
 
+#ifndef GBA_PUBLIC_DEMO
 static NoteManager<careless_expertsingle_count> originalNotes(careless_expertsingle_data, careless_BPM);
 NoteManager<careless_expertsingle_count>* nm = &originalNotes;
+#endif
 static ImportedRuntime<imported_note_count,5> importedNotes(imported_notes);
 volatile u32 gameMode = 0;
 u32 importedLaneCount=imported_choices[0].lanes,importedChartCount=imported_choices[0].count;
@@ -74,8 +85,13 @@ u32 importedEventCount = 0;
 u32 importedFrameWorkMaxCycles = 0;
 u64 importedFrameWorkTotalCycles = 0;
 u32 importedFrameWorkCount = 0;
+#ifdef GBA_PUBLIC_DEMO
+u32 activeNoteCount() { return importedChartCount; }
+bool activeWasHit(u32 index) { return importedNotes.wasHit(index); }
+#else
 u32 activeNoteCount() { return gameMode == 2 ? importedChartCount : careless_expertsingle_count; }
 bool activeWasHit(u32 index) { return gameMode == 2 ? importedNotes.wasHit(index) : nm->wasHit(index); }
+#endif
 noteSprite importedSprite(u32 index) {
     noteSprite sprite{};
     if (index >= importedChartCount) return sprite;
@@ -86,7 +102,11 @@ noteSprite importedSprite(u32 index) {
     return sprite;
 }
 
+#ifdef GBA_PUBLIC_DEMO
+FIXED VEL_H = 0x200;
+#else
 FIXED VEL_H = CONTROLS_ENABLED ? 0x200 : careless_BPM;
+#endif
 
 s64 curr_z = 0; // Avoid signed overflow when the music keeps looping.
 
@@ -226,7 +246,11 @@ void refreshFeedback() {
         feedbackDirty = true;
     }
     if (!feedbackDirty) return;
+#ifdef GBA_PUBLIC_DEMO
+    displayedStats = importedNotes.stats();
+#else
     displayedStats = gameMode == 2 ? importedNotes.stats() : nm->judgment().stats();
+#endif
     if(gameMode==2) {
         displayedScore=scoreSnapshot();
         ScoreDisplay::hud(displayedScore,feedbackUntilFrame?lastJudgment:"",
@@ -300,8 +324,10 @@ int main(){
 	init_sprites();
     // Initialize Interrupts
     irq_init(nullptr);
+#ifndef GBA_PUBLIC_DEMO
 	nm->reset();
 	nm->judgment().setEventSink(onGameplayEvent);
+#endif
 	refreshFeedback();
 
 	// Initialise audio before any VBlank handler can call mmVBlank().
@@ -325,7 +351,12 @@ int main(){
     textDisplay menuHelp(16, 128, 112, true, 16);
     textDisplay menuInfo(16, 146, 0);
     textDisplay modeLabel(4, 40, 96);
-    int selection = 1;
+    int selection =
+#ifdef GBA_PUBLIC_DEMO
+    2;
+#else
+    1;
+#endif
     bool menuDirty = true;
     bool selectorControlsArmed = true;
 
@@ -344,8 +375,22 @@ int main(){
                 menuOriginal.updateText(imported_choice_count>0?(difficultySelection==0?">":" "):"");
                 menuImported.updateText("");menuDiagnostic.updateText("");
                 textDisplay* rows[]={&menuOriginal,&menuImported,&menuDiagnostic};
-                for(unsigned i=0;i<imported_choice_count;++i){char label[16];unsigned j=0;label[j++]=i==difficultySelection?'>':' ';const char* name=imported_choices[i].difficulty;while(*name&&j<15)label[j++]=*name++;label[j]=0;rows[i]->updateText(label);}
-                menuHelp.updateText("A:Choose B:Back");menuDirty=false;
+                for(unsigned i=0;i<imported_choice_count;++i){char label[16];unsigned j=0;label[j++]=i==difficultySelection?'>':' ';const char* name=imported_choices[i].difficulty;while(*name&&j<15)label[j++]=*name++;label[j]=0;
+#ifdef GBA_PUBLIC_DEMO
+                    rows[i]->updateText(i==0?(difficultySelection==0?">Easy LEFT B A":" Easy LEFT B A"):i==1?(difficultySelection==1?">Medium L R B A":" Medium L R B A"):(difficultySelection==2?">Hard L U/D R B A":" Hard L U/D R B A"));
+#else
+                    rows[i]->updateText(label);
+#endif
+                }
+#ifdef GBA_PUBLIC_DEMO
+                menuHelp.updateText("A:Play B:Back");
+#else
+                menuHelp.updateText("A:Choose B:Back");
+#endif
+#ifdef GBA_PUBLIC_DEMO
+                if(difficultySelection==2)menuInfo.updateText("U/D=Up or Down");
+#endif
+                menuDirty=false;
             }
             if(!key_hit(KEY_A|KEY_START)){vid_vsync();continue;}
             const auto& chosen=imported_choices[difficultySelection];
@@ -401,17 +446,31 @@ int main(){
             if(gameMode==3){vid_vsync();InputDiagnostic::update(gameplayFrames,easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));continue;}
         }
         if (!gameMode) {
+#ifdef GBA_PUBLIC_DEMO
+            if(key_hit(KEY_DOWN|KEY_UP)){selection=selection==2?3:2;menuDirty=true;}
+#else
             if (key_hit(KEY_DOWN)) { selection=selection%3+1;menuDirty=true; }
             if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
+#endif
             if (menuDirty) {
                 oam_init(oam_mem,128);
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
                 menuTitle.updateText(GBA_BUILD_TITLE);
+#ifdef GBA_PUBLIC_DEMO
+                menuOriginal.updateText(selection==2?">Copper Circuit":" Copper Circuit");
+                menuImported.updateText(selection==3?">Controls / Help":" Controls / Help");
+                menuDiagnostic.updateText("EXPANDED RC1");
+#else
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Custom song" : " Custom song");
                 menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
+#endif
                 menuHelp.updateText("Up/Down A:Start");
+#ifdef GBA_PUBLIC_DEMO
+                menuInfo.updateText("Original / 75s");
+#else
                 menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
+#endif
                 pal_bg_mem[0] = 0;
                 menuDirty = false;
             }
@@ -448,7 +507,9 @@ int main(){
             importedFrameWorkMaxCycles = importedFrameWorkCount = 0;
             importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
+#ifndef GBA_PUBLIC_DEMO
             nm->reset(laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
+#endif
             importedNotes.reset(importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount));
             importedNotes.judgment().setEventSink(onGameplayEvent);
             lastJudgment = "READY";
@@ -472,8 +533,11 @@ int main(){
                 m7_level.camera->pos.z=ImportedTiming::floorZ(0);
                 m7_prep_horizon(&m7_level);m7_prep_affines(&m7_level);Scanline::start();
             }
+#ifndef GBA_PUBLIC_DEMO
             if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
-            else if(gameMode==2) { mmStop(); pcmStart(); }
+            else
+#endif
+            if(gameMode==2) { mmStop(); pcmStart(); }
             else {mmStop();pcmStop();irq_disable(II_HBLANK);InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
             const u16 startIrq = REG_IME; REG_IME=0;
             gameplayFrames=0; gameClockRunning=true;
@@ -545,7 +609,9 @@ int main(){
             }
             } // No end-of-song transition during a successful freeze.
         } else {
+#ifndef GBA_PUBLIC_DEMO
             recent_sprite = nm->update(currentGameFrame, laneMaskFromButtons(key_is_down(mask)));
+#endif
         }
         updateButtons(key_hit(mask), key_released(mask));
         refreshFeedback();

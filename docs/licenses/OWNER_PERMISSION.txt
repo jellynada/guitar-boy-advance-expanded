@@ -1,0 +1,20 @@
+MISSION 017 OWNER AUTHORIZATION
+
+The project owner confirmed in this Codex session on 2026-10-21:
+"yes i am the orignial creator"
+in response to the request for redistribution permission for modified original
+Guitar Boy Advance code and artwork. Together with the explicit Mission 017
+public-demo instructions, this authorizes this candidate's original game code
+and graphics. This records the owner's stated authority; it is not a blanket
+license for unrelated third-party works or a project-wide open-source license.
+
+The inherited commercial music and chart are excluded from the public ROM.
+Third-party library/example/runtime notices remain separately applicable.
+The new Copper Circuit composition and charts were generated for the owner
+inside this mission, using only the checked-in synthesis/arrangement program.
+No commercial recording or external instrument sample was used. Public demo
+distribution is requested by the owner; no exclusive copyright claim is made
+for automatically generated material.
+
+Original project attribution: startfliing / Guitar Boy Advance.
+A deliberate source-license selection remains a future owner decision.

@@ -26,14 +26,19 @@ def duration_samples(seconds):
     return int(count)
 
 
-def recipe(source_samples, max_duration=75, handheld=True):
+def recipe(source_samples, max_duration=75, handheld=True, display_title=None):
     maximum = duration_samples(max_duration) if max_duration is not None else source_samples
     if type(source_samples) is not int or source_samples <= 0: raise ValueError('Invalid original audio length')
-    return dict(version=VERSION, max_duration_seconds=str(max_duration) if max_duration is not None else None,
+    result = dict(version=VERSION, max_duration_seconds=str(max_duration) if max_duration is not None else None,
                 original_source_samples=source_samples, source_samples=min(source_samples, maximum),
                 cutoff_numerator=min(source_samples, maximum) * 1000000, cutoff_denominator=RATE,
                 handheld=bool(handheld), fade_samples=min(FADE_SAMPLES, source_samples, maximum),
                 pre_roll_samples=PRE_ROLL, tail_samples=0)
+    if display_title is not None:
+        if not isinstance(display_title,str) or not 1<=len(display_title)<=16 or any(not 32<=ord(c)<=126 for c in display_title):
+            raise ValueError('Display title must be 1..16 printable ASCII characters')
+        result['display_title']=display_title
+    return result
 
 
 def transform_chart(native, policy):
@@ -59,6 +64,7 @@ def transform_chart(native, policy):
             mapping.append(dict(id=n['source_note_index'], source_tick=n['source_tick'], action=action, original=copy.deepcopy(n), prepared=copy.deepcopy(item)))
         cut['notes'] = kept; recalculate(cut)
         cut['title'] = 'ARCADE75 / HANDHELD' if policy['handheld'] and policy['max_duration_seconds'] == '75' else 'ARCADE CUT / ' + ('HANDHELD' if policy['handheld'] else 'NATIVE')
+        if 'display_title' in policy: cut['title']=policy['display_title']
         trimmed_validation = validate(cut)
         if policy['handheld']: cut, adaptation = adapt_handheld(cut)
         else: adaptation = dict(changes=[], before=trimmed_validation, after=trimmed_validation)

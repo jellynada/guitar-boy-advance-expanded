@@ -34,7 +34,7 @@ def main():
         tail=0 if cut else TAIL
         if cut:
             from arcade_cut import recipe
-            if cut!=recipe(cut['original_source_samples'],cut['max_duration_seconds'],cut['handheld']) or cut['source_samples']!=manifest['source_samples']:raise ValueError('Invalid cut recipe')
+            if cut!=recipe(cut['original_source_samples'],cut['max_duration_seconds'],cut['handheld'],cut.get('display_title')) or cut['source_samples']!=manifest['source_samples']:raise ValueError('Invalid cut recipe')
         if manifest['pre_roll_samples']!=PRE_ROLL or manifest['tail_samples']!=tail or manifest['guard_samples']!=GUARD:raise ValueError('Prepared timing/padding mismatch.')
         if len(blob)>MAX_ROM_AUDIO or len(blob)!=manifest['byte_size'] or len(blob)%16 or hashlib.sha256(blob).hexdigest()!=manifest['pcm_sha256']:raise ValueError('Prepared PCM size/hash/alignment mismatch; prepare again.')
         if manifest['playback_samples']!=PRE_ROLL+manifest['source_samples']+tail or len(blob)<manifest['playback_samples']+GUARD:raise ValueError('Prepared audio sample counts disagree.')

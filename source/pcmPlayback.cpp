@@ -1,7 +1,9 @@
 #include "pcmPlayback.hpp"
 #include "guitarGate.hpp"
 #include "maxmod.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "soundbank_bin.h"
+#endif
 #include "imported_audio.hpp"
 #include "imported_audio_bin.h"
 #include "imported_backing_bin.h"
@@ -20,11 +22,13 @@ volatile u32 guitarEventSerial=0;
 static GuitarGate gate;
 static u32 fillPosition=0,previousBlock=0,countEpoch=0,previousRaw=0;
 // Retained original Maxmod storage; no allocations during mode changes.
+#ifndef GBA_PUBLIC_DEMO
 alignas(4) static u8 mixMemory[MM_MIXLEN_16KHZ];
 alignas(4) EWRAM_DATA static u8 waveMemory[MM_MIXLEN_16KHZ];
 alignas(4) EWRAM_DATA static u8 moduleChannels[16*MM_SIZEOF_MODCH];
 alignas(4) EWRAM_DATA static u8 activeChannels[16*MM_SIZEOF_ACTCH];
 alignas(4) EWRAM_DATA static u8 mixingChannels[16*MM_SIZEOF_MIXCH];
+#endif
 bool legacyAudioReady=false;
 static void hardwareStop() {
     REG_TM0CNT=0;REG_TM1CNT=0;REG_TM2CNT=0;
@@ -34,12 +38,14 @@ static void hardwareStop() {
 }
 void legacyAudioInit() {
     legacyAudioReady=false;hardwareStop();
+#ifndef GBA_PUBLIC_DEMO
     memset32(moduleChannels,0,sizeof(moduleChannels)/4);
     memset32(activeChannels,0,sizeof(activeChannels)/4);
     memset32(mixingChannels,0,sizeof(mixingChannels)/4);
     memset32(mixMemory,0,sizeof(mixMemory)/4);
     mm_gba_system setup={MM_MIX_16KHZ,16,16,moduleChannels,activeChannels,mixingChannels,mixMemory,waveMemory,(mm_addr)soundbank_bin};
     mmInit(&setup);legacyAudioReady=true;
+#endif
 }
 // Timer1 reloads after16 sample requests; Timer2 counts those blocks. Software
 // extends the20-bit count, serviced1024times/sec, including >64second tracks.

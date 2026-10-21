@@ -41,6 +41,10 @@ CSV_READER	:= csv_reader.exe
 
 CHARTS		:= charts
 CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
+ifeq ($(BUILD_PROFILE),public-demo)
+MUSIC :=
+CHART_FILES :=
+endif
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
 PYTHON ?= python3
@@ -63,6 +67,9 @@ CFLAGS	:=	-g -Wall -O2\
 		$(ARCH)
 
 CFLAGS	+=	$(INCLUDE)
+ifeq ($(BUILD_PROFILE),public-demo)
+CFLAGS += -DGBA_PUBLIC_DEMO
+endif
 
 CXXFLAGS	:=	$(CFLAGS) -std=gnu++17 -fno-rtti -fno-exceptions
 
@@ -201,6 +208,7 @@ $(BUILD)/%.s $(BUILD)/%.h : $(CSV_DIR)/%.csv
 $(CHART_SFILES) $(CHART_HFILES) $(BUILD)/note.h &: $(CHART_FILES) $(CHART_READER)
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@for chart in $(CHART_FILES); do $(CHART_READER) "$(CURDIR)/$$chart" "$(CURDIR)/$(BUILD)" || exit $$?; done
+	@if [ -z "$(CHART_FILES)" ]; then $(CHART_READER) --layout-only "$(CURDIR)/$(BUILD)"; fi
 
 
 #---------------------------------------------------------------------------------

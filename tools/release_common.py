@@ -9,7 +9,10 @@ import zipfile
 
 PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
                'music', 'scripts', 'source', 'tests', 'tools'}
-PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml'}
+PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml', '.github/workflows/public-demo.yml'}
+PUBLIC_DEMO_DELIVERY = {'public-demo-downloads/' + n for n in (
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip', 'DELIVERY.json', 'SHA256SUMS.txt')}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
 PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
             'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba'),
@@ -62,6 +65,12 @@ def source_snapshot(root):
         with zipfile.ZipFile(io.BytesIO(git('archive', '--format=zip', commit))) as z:
             for entry in z.infolist():
                 if entry.is_dir():
+                    continue
+                # Reviewed public demo delivery is a separate artifact commit,
+                # never a source/build input (nor recursively repackaged).
+                if entry.filename.startswith('public-demo-downloads/'):
+                    if entry.filename not in PUBLIC_DEMO_DELIVERY:
+                        raise ValueError('Unreviewed public demo delivery path: ' + entry.filename)
                     continue
                 safe_source_name(entry.filename)
                 if (entry.external_attr >> 16) & 0o170000 == 0o120000:

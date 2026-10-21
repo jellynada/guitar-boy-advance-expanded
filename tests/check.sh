@@ -85,3 +85,5 @@ python3 -m unittest discover -s tests -p test_chord_conflicts.py -v
 python3 -m unittest discover -s tests -p test_arcade75.py -v
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/arcade_eof.cpp -o "$tmp/arcade_eof"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/arcade_eof"
+
+python3 -m unittest discover -s tests -p test_public_demo.py -v
