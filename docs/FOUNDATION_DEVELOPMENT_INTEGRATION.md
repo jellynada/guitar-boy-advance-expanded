@@ -23,9 +23,12 @@ difficulties, stabilization, Arcade75 and Copper Circuit plus M018–M020 eviden
 Existing historical public-download commits are already part of that lineage;
 no download-only branch is separately merged and no history is dropped.
 
-This integration adds only PR verification/approval records, two host guards and
-nine negative gate tests. No runtime, song, chart, input, scoring, graphics, audio
-parameter, private pipeline or Windows launcher changes are introduced.
+This integration adds PR verification/approval records, two host guards and
+nine negative gate tests. The inherited generic build exposed a missing exact
+allowlist entry for the reviewed M020 workflow; the source exporter now permits
+only that additional filename, with unknown/nested workflow rejection retained.
+No runtime, song, chart, input, scoring, graphics, audio parameter, private song
+preparation behavior or Windows launcher changes are introduced.
 
 ## Verify the actual proposed merge
 

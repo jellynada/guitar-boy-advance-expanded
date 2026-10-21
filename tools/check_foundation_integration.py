@@ -23,7 +23,7 @@ BUILD_INPUTS=['source','include','graphics','charts','data','music','Makefile',
     'scripts/toolchain-image.txt']
 ALLOWED_ADDITIONS={'.github/workflows/m020-closeout.yml',
     'tools/check_foundation_integration.py','tools/foundation_development_gate.py',
-    'tests/test_foundation_integration.py'}
+    'tests/test_foundation_integration.py','tools/release_common.py','tests/test_build_release.py'}
 
 def git(*args):
     return subprocess.check_output(['git',*args],text=True).strip()

@@ -85,8 +85,10 @@ class ReleaseTests(unittest.TestCase):
 
     def test_only_reviewed_workflow_is_exportable(self):
         self.assertEqual(safe_source_name('.github/workflows/foundation.yml'), '.github/workflows/foundation.yml')
+        self.assertEqual(safe_source_name('.github/workflows/m020-closeout.yml'), '.github/workflows/m020-closeout.yml')
         for name in ['.github/workflows/unreviewed.yml', '.github/secrets.txt',
-                     '.github/workflows/Cream.zip', '.github/workflows/private/key.txt']:
+                     '.github/workflows/Cream.zip', '.github/workflows/private/key.txt',
+                     '.github/workflows/m020-closeout.yml/private/key.txt']:
             with self.subTest(name=name), self.assertRaises(ValueError):
                 safe_source_name(name)
 
