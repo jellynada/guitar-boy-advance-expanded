@@ -1,0 +1,25 @@
+{
+  "candidate": "v0.1.0-alpha-RC2",
+  "recommendation": "YELLOW",
+  "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "source_tree_sha256": "8558feeaf5d1869af65a623ba4a8954d4ab49d204a316ca2ae440dd983b3a277",
+  "rom": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "archive": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip",
+  "archive_sha256": "194c34e77deade95e2c60f4d57cc55c946dbd199cf56cf48cfb9fd1e2d08b77b",
+  "gates": {
+    "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+    "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+    "build_succeeded": true,
+    "gameplay_passed": true,
+    "digital_passed": true,
+    "audio_output_passed": false,
+    "owner_accepted": false,
+    "release_approved": false,
+    "promotion": "blocked; mandatory technical gates and separate owner approval required"
+  },
+  "public_content": "Unchanged original Copper Circuit; no commercial/private recordings",
+  "rc1_untouched": true,
+  "network_download_verified": false,
+  "formal_release": false
+}
