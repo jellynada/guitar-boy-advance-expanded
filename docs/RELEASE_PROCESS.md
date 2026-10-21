@@ -1,3 +1,21 @@
+# Mission 019 current release policy
+
+The exact engine remains RC2 source9ccc460; verification-only changes do not
+create RC3. The workflow checks out frozen source separately, rebuilds it and
+requires the immutable ROM hash. Digital observation uses the verified pinned
+Debian environment; ordinary Ubuntu output remains its independent failing gate.
+No continue-on-error or automatic release/merge is used. The promotion report
+may succeed in recording a blocked result; that is not approval.
+
+The actual run39653084111 passes build/gameplay/digital/soak and fails ordinary
+output9/15. Documentation-only follow-up does not rerun or cancel that code run;
+its exact source/tool commit is recorded separately. Remote artifacts are
+short-lived evidence; immutable RC1/RC2 public links remain the owner delivery.
+Never publish private music in a public encrypted archive.
+[M019 report](MISSION_019_FOUNDATION_CERTIFICATION.md), [proposed integration](M019_INTEGRATION_PLAN.md).
+
+Older policies below are historical.
+
 # Mission018 current promotion policy
 
 Build success, gameplay pass, exact digital pass, ordinary output pass, owner

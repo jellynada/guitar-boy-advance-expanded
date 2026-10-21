@@ -1,3 +1,17 @@
+# Mission 019 current verification
+
+Freeze game source9ccc460 and RC2 bytes; verify tools separately. Run the regular
+host suite,38 exact-ROM checks, full15-case FIFO transport, unchanged ordinary
+output matrix and independent stock0.10.1/0.10.5 input comparison. Execute
+`tests/foundation_soak.c` for3600 actual emulated seconds per public/private/legacy
+profile; record scene partitions, legal masks, no-miss/all-miss/mixed counts,
+pauses, replay, bounds and valid-frame graphics. Keep unsuccessful attempts.
+Stack sentinels are intrusive emulation diagnostics. Never infer hardware
+acceptance or output clearance from digital identity. Verify actual remote jobs
+and hosted/extracted ROM. Exact commands/results: [M019 verification](M019_VERIFICATION.json).
+
+Older plans below describe historical coverage.
+
 # Mission018 current verification
 
 Rebuild exact RC1 before fixes; preserve before/after identities and failures.

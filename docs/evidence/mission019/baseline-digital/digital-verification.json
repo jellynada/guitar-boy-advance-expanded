@@ -1,0 +1,99 @@
+{
+  "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "startup_advance_samples": 15,
+  "results": [
+    {
+      "difficulty": 0,
+      "case": 19,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 4,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 22,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 0,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 12,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 19,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 4,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 22,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 0,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 12,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 19,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 4,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 22,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 0,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 12,
+      "process_exit_code": 0,
+      "oracle_exit_code": 0
+    }
+  ],
+  "passed": true,
+  "emulator_lateness_correction": false
+}

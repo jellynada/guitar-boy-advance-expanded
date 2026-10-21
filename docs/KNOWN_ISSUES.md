@@ -1,3 +1,22 @@
+# Current unresolved gates — Mission 019
+
+- **Audio:** strict ordinary output9/15 on two stock versions despite identical
+  physical inputs and digital15/15; separate fixed-phase diagnostic14/15 does
+  not clear it. See [audio gate](M019_AUDIO_GATE.md).
+- **Hardware:** detailed RC2 all-difficulty acceptance, physical stack/IRQ/DMA
+  margins and calibrated output timing remain unmeasured. RC1 praise is retained.
+- **Intentional semantics:** Medium final same-lane note replaces the old hold,
+  by owner choice. A real new fret press after resume can produce WRONG.
+- **Trace dependence:**395Perfect/full holds is not a universal15815 score.
+  Fresh private pause cases2/3/12 and frozen host replay reproduce15815; a
+  different valid head-hit phase reaches15831. Rules were not changed.
+- **CI observer:** initial Ubuntu capture produced no sample files; pinned
+  baseline observation now passes15/15 remotely. Package/linker cause not proven.
+- **Delivery/licensing:** no private recording uploaded; access-controlled
+  private transfer and project-wide license remain separate unresolved matters.
+
+Older issue lists below are historical; see M019_VERIFICATION.json for fresh scope.
+
 # Current issues — Mission018
 
 - Reproduced/unresolved: strict ordinary public output9/15; stock FIFO/time

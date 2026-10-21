@@ -1,3 +1,18 @@
+# Current status — Mission 019
+
+Foundation recommendation **BLOCKED**, audio **AUDIO BLOCKED**. No runtime
+changes and no RC3: immutable Copper Circuit RC2 was independently rebuilt and
+downloaded/tested again.209 Python,13 regular sanitizers,38 ROM checks and15/15
+complete digital transports pass; ordinary output9/15 on stock0.10.1/0.10.5.
+Public both versions, private full Cream Easy and original699 each exceeded an
+emulated hour. Remote CI actually passes build/gameplay/digital/soak and fails
+ordinary output. Owner RC2 all-difficulty acceptance, precise hardware margins
+and source-license choice remain pending. No integration or graphics approval.
+
+See [M019 report](MISSION_019_FOUNDATION_CERTIFICATION.md),
+[verification](M019_VERIFICATION.json), [owner checklist](OWNER_M019_PLAYTEST.md).
+Older status below is historical and does not override this decision.
+
 # Current authoritative status — Mission018
 
 **YELLOW**, playable public Copper Circuit; audio-output release gate unresolved.

@@ -1,0 +1,22 @@
+[
+  {
+    "test": "difficulty-0",
+    "exit_code": 0
+  },
+  {
+    "test": "difficulty-1",
+    "exit_code": 0
+  },
+  {
+    "test": "difficulty-2",
+    "exit_code": 0
+  },
+  {
+    "test": "ui",
+    "exit_code": 0
+  },
+  {
+    "test": "readiness",
+    "exit_code": 0
+  }
+]

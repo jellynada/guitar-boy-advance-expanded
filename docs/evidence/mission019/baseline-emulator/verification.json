@@ -1,0 +1,271 @@
+{
+  "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "passed": [
+    {
+      "test": "difficulty-0-case-0",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-4",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-11",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-12",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-17",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-19",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-20",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-22",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-23",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-0-case-28",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-0-perfect",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-0-mixed",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-0",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-4",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-11",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-12",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-17",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-19",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-20",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-22",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-23",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-1-case-28",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-1-perfect",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-1-mixed",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-0",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-4",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-11",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-12",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-17",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-19",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-20",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-22",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-23",
+      "exit_code": 0
+    },
+    {
+      "test": "difficulty-2-case-28",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-2-perfect",
+      "exit_code": 0
+    },
+    {
+      "test": "graphics-2-mixed",
+      "exit_code": 0
+    },
+    {
+      "test": "ui",
+      "exit_code": 0
+    },
+    {
+      "test": "readiness",
+      "exit_code": 0
+    }
+  ],
+  "performance": [
+    {
+      "difficulty": 0,
+      "foreground_max_cycles": 119616,
+      "frame_cycles": 280896,
+      "headroom_cycles": 161280,
+      "graphics": [
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 52158797,
+          "peak_tails": 8,
+          "foreground_max": 119552,
+          "foreground_mean": 75367.021,
+          "refill_max": 1408,
+          "refill_mean": 1376.565,
+          "underruns": 0
+        },
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 52167037,
+          "peak_tails": 8,
+          "foreground_max": 117184,
+          "foreground_mean": 75832.861,
+          "refill_max": 1472,
+          "refill_mean": 1401.538,
+          "underruns": 0
+        }
+      ]
+    },
+    {
+      "difficulty": 1,
+      "foreground_max_cycles": 147008,
+      "frame_cycles": 280896,
+      "headroom_cycles": 133888,
+      "graphics": [
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 46257460,
+          "peak_tails": 12,
+          "foreground_max": 146624,
+          "foreground_mean": 89854.427,
+          "refill_max": 1408,
+          "refill_mean": 1374.037,
+          "underruns": 0
+        },
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 46272087,
+          "peak_tails": 11,
+          "foreground_max": 144128,
+          "foreground_mean": 89663.75,
+          "refill_max": 1472,
+          "refill_mean": 1395.732,
+          "underruns": 0
+        }
+      ]
+    },
+    {
+      "difficulty": 2,
+      "foreground_max_cycles": 155392,
+      "frame_cycles": 280896,
+      "headroom_cycles": 125504,
+      "graphics": [
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 45357354,
+          "peak_tails": 8,
+          "foreground_max": 155392,
+          "foreground_mean": 105314.456,
+          "refill_max": 1408,
+          "refill_mean": 1352.36,
+          "underruns": 0
+        },
+        {
+          "frames": 4900,
+          "frames_checked": 4570,
+          "defect_frames": 0,
+          "worst_displaced_pixels": 0,
+          "total_displaced_pixels": 0,
+          "floor_pixels": 45360428,
+          "peak_tails": 8,
+          "foreground_max": 152384,
+          "foreground_mean": 105689.23,
+          "refill_max": 1472,
+          "refill_mean": 1371.847,
+          "underruns": 0
+        }
+      ]
+    }
+  ],
+  "result": "passed",
+  "audio_output_release_gate": "separate; not cleared by gameplay tests",
+  "hardware_verified": false
+}

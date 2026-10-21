@@ -1,3 +1,19 @@
+# Current gates — Mission 019
+
+- [x] Source lineage, clean byte-identical RC2 rebuild, unchanged RC1/RC2.
+- [x]209 Python +13 regular sanitizer programs;38 compiled-ROM checks.
+- [x]15/15 full digital transports including every resume, local and remote.
+- [x]One measured emulated hour per public/private/legacy execution profile.
+- [x]Download-back,14-member ZIP extraction, exact downloaded-ROM regressions.
+- [x]Actual remote build, host, gameplay/graphics and soak outcomes verified.
+- [ ] Strict ordinary output: **9/15, AUDIO BLOCKED**; promotion remains blocked.
+- [ ] RC2 owner all-difficulty handheld acceptance and remaining resource evidence.
+- [ ] Explicit integration / graphics authorization; public-release approval and
+      project-wide source-license decision remain separate.
+
+Recommendation **BLOCKED**; no new candidate or formal release.
+[Current report](MISSION_019_FOUNDATION_CERTIFICATION.md). Older checklists follow.
+
 # Current RC2 gates — Mission018
 
 - RC1 reproduced independently; preserve its binary and download.

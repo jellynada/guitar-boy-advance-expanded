@@ -1,0 +1,44 @@
+[
+  {
+    "difficulty": 0,
+    "case": 4,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  },
+  {
+    "difficulty": 0,
+    "case": 22,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  },
+  {
+    "difficulty": 1,
+    "case": 4,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  },
+  {
+    "difficulty": 1,
+    "case": 22,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  },
+  {
+    "difficulty": 2,
+    "case": 4,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  },
+  {
+    "difficulty": 2,
+    "case": 22,
+    "exit_code": 1,
+    "reference_case": 23,
+    "reference_stock_version": "0.10.5"
+  }
+]

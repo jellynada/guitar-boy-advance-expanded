@@ -1,0 +1,77 @@
+[
+  {
+    "difficulty": 0,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 0,
+    "case": 4,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 0,
+    "case": 22,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 0,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 0,
+    "case": 12,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 1,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 1,
+    "case": 4,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 1,
+    "case": 22,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 1,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 1,
+    "case": 12,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 2,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 2,
+    "case": 4,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 2,
+    "case": 22,
+    "exit_code": 1
+  },
+  {
+    "difficulty": 2,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "difficulty": 2,
+    "case": 12,
+    "exit_code": 0
+  }
+]

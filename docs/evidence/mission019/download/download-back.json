@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "194c34e77deade95e2c60f4d57cc55c946dbd199cf56cf48cfb9fd1e2d08b77b",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "members": 14,
+  "extraction": "passed",
+  "direct_rom_equals_extracted": true,
+  "rom_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+  "zip_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip",
+  "receipt_source": "retained independent M018 packaging receipt; no hosted receipt at attempted URL (404)"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "difficulty": 0,
+    "case": 4,
+    "physical_inputs_identical": true,
+    "frames": [
+      4728,
+      4728
+    ],
+    "physical_trace_sha256": "d42f04373340582da1bd41194c617b175ccbc10099067d9326a684e313189457"
+  },
+  {
+    "difficulty": 0,
+    "case": 22,
+    "physical_inputs_identical": true,
+    "frames": [
+      4693,
+      4693
+    ],
+    "physical_trace_sha256": "5272dfefc06170fa417e7d316d29ac0d739409f51f9336fd1c4107aa4dc63629"
+  },
+  {
+    "difficulty": 1,
+    "case": 4,
+    "physical_inputs_identical": true,
+    "frames": [
+      4730,
+      4730
+    ],
+    "physical_trace_sha256": "da492e716293552bf8142fe3d4870aa949000b19ac33fcdb834ea4303885f871"
+  },
+  {
+    "difficulty": 1,
+    "case": 22,
+    "physical_inputs_identical": true,
+    "frames": [
+      4695,
+      4695
+    ],
+    "physical_trace_sha256": "8b9e4077d47514e02b65905845c4404accbff81e5919522980bd254c8fda6999"
+  },
+  {
+    "difficulty": 2,
+    "case": 4,
+    "physical_inputs_identical": true,
+    "frames": [
+      4732,
+      4732
+    ],
+    "physical_trace_sha256": "7ac87ce1c363dab5d3a5eb04b5b41c1aa20af9dab04091b8e20d68dc224265f6"
+  },
+  {
+    "difficulty": 2,
+    "case": 22,
+    "physical_inputs_identical": true,
+    "frames": [
+      4697,
+      4697
+    ],
+    "physical_trace_sha256": "78b9ad57cf6e9ac7ab02a8abdf2c9de588c307feab70c730bc69b76787d5d6c1"
+  }
+]

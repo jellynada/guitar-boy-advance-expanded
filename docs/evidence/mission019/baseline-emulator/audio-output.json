@@ -1,0 +1,85 @@
+{
+  "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "check": "ordinary unmodified mGBA output; existing thresholds unchanged",
+  "passed": 9,
+  "total": 15,
+  "results": [
+    {
+      "difficulty": 0,
+      "case": 19,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 4,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 0,
+      "case": 22,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 0,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 0,
+      "case": 12,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 19,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 4,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 1,
+      "case": 22,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 1,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 1,
+      "case": 12,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 19,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 4,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 2,
+      "case": 22,
+      "exit_code": 1
+    },
+    {
+      "difficulty": 2,
+      "case": 0,
+      "exit_code": 0
+    },
+    {
+      "difficulty": 2,
+      "case": 12,
+      "exit_code": 0
+    }
+  ],
+  "release_gate": "blocked"
+}

@@ -1,3 +1,14 @@
+# Current priority — Mission 019 certification gates
+
+**BLOCKED for graphics development.** First resolve the retained Easy mixed
+paired-backing residual without weakening strict criteria, obtain RC2 handheld
+feedback and review remaining hardware evidence. Then explicitly review the
+source/history integration proposal. No feature, new song, codec, scoring change
+or graphics mission begins automatically. Medium's pattern stays as chosen.
+
+[Audio next experiment](M019_AUDIO_GATE.md), [owner playtest](OWNER_M019_PLAYTEST.md),
+[integration plan](M019_INTEGRATION_PLAN.md). Older backlog is historical.
+
 # Current priority — Mission018 stabilization
 
 Keep Medium's current pattern by owner choice. Resolve measured audio-output

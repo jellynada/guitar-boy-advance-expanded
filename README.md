@@ -1,23 +1,30 @@
-# Current status — Mission 018
+# Current status — Mission 019
 
-Copper Circuit is playable on Easy/Medium/Hard. The owner reports RC1 works
-well on a real GBA. RC2 is a **YELLOW playtest candidate**, not a release-approved
-build: strict ordinary audio output remains unresolved.
+**Foundation certification: BLOCKED.** Copper Circuit RC2 remains playable; no
+gameplay or song change was needed. Fresh gameplay, graphics, complete digital
+audio and hour-long stress tests pass. Strict ordinary audio remains9/15 on two
+stock emulator versions, and RC2 handheld acceptance is pending.
 
-[Current source of truth](docs/MISSION_018_STABILIZATION_REPORT.md),
-[verification](docs/M018_VERIFICATION.json), [handheld checklist](docs/OWNER_M018_PLAYTEST.md).
-Current branch: `mission-018-release-stabilization`; no merge into main/develop.
 [Download RC2 ROM](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba) or
 [download RC2 player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip).
-Both were downloaded back, hashed, extracted and tested.
-Historical RC1 download below stays valid. No compilation is required to play.
+These unchanged hosted files were downloaded, hashed, extracted and tested again.
+Windows: right-click ZIP → Extract All; open the RC2.gba in mGBA or copy it to
+your flash cartridge normally. No compilation is needed.
 
-Build: `python3 tools/build_public_demo.py` for maintainers with the pinned
-toolchain. Private owner-song builds still use the preserved Windows launcher
-and separate `tools/build_profile.py` profiles; never publish their recordings.
+[Certification report](docs/MISSION_019_FOUNDATION_CERTIFICATION.md),
+[audio evidence](docs/M019_AUDIO_GATE.md), [handheld checklist](docs/OWNER_M019_PLAYTEST.md),
+[machine verification](docs/M019_VERIFICATION.json), [proposed integration](docs/M019_INTEGRATION_PLAN.md).
+Review branch: `mission-019-foundation-certification`; main/develop untouched.
+Actual remote CI passes build/host, gameplay/graphics, digital15/15 and the hour
+soak, and fails ordinary output9/15. No promotion, merge or graphics work approved.
 
-Everything below this current-status section is historical Mission017 or earlier
-context unless explicitly referenced by the Mission018 report.
+ROM source remains9ccc460693fa7254527177330f32e56153720237; no fictitious RC3.
+Maintainer canonical build is `python3 tools/build_public_demo.py` from that clean
+source with its pinned toolchain. Private owner-song profiles and the Windows
+launcher remain intact; private recordings are not public download payloads.
+
+Everything below is historical Mission017 or earlier context unless explicitly
+referenced by the current report. M018 evidence is preserved under docs.
 
 # Mission 017 playable public candidate
 

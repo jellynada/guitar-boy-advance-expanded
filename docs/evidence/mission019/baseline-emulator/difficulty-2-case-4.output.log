@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/mission-019-foundation-certification/tests/analyze_reactive.py", line 82, in <module>
+    r=match(round(seconds*32768)-256,8000,'sync-reference');assert r;checks.append(r)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/mission-019-foundation-certification/tests/analyze_reactive.py", line 50, in match
+    assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error)
+                                                                                                       ^^^^^^^^^^^^
+AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125)

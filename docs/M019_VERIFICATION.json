@@ -1,0 +1,1691 @@
+{
+  "schema": "gba-m019-foundation-certification-v1",
+  "observed_date_utc": "2026-10-21",
+  "recommendation": "BLOCKED",
+  "audio_decision": "AUDIO BLOCKED",
+  "branch": "mission-019-foundation-certification",
+  "parent": "7cb0a3fca5b102e0cceaf4c2aecc92ddaff84889",
+  "game_source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "historical_verification_commit": "4652d45294a7cb930d6928d7fc5eda755a3f8bb2",
+  "verification_code_commit": "e61614e64dba326876ff14634a6f1b705c9f7320",
+  "local_soak_code_introduced": "d9fa70679907ebaff10b9338921987275de79bc7",
+  "final_docs_commit": "Containing commit; documentation-only after verified code commit",
+  "new_ROM_candidate": false,
+  "runtime_changed": false,
+  "charts_audio_art_controls_scoring_unchanged": true,
+  "environment": {
+    "toolchain_image": "devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5",
+    "cross_compiler": "GCC16.1.0",
+    "local_stock_emulators": [
+      "Debian libmgba0.10.1+dfsg-1+deb12u1",
+      "stock mGBA0.10.5 from unmodified commit26b7884bc25a5933960f3cdcd98bac1ae14d42e2"
+    ],
+    "existing_container": "mission001-mgba",
+    "new_software_installed": false,
+    "network_proxy_preserved": true,
+    "network_policy_enforcement_not_claimed": true,
+    "build_scope": "Clean detached exact source and generated inputs; verified pinned existing image reused because cloud VFS disk low. Independent GitHub runner also reproduced exact ROM.",
+    "raw_evidence_root": "/workspace/mission019-evidence"
+  },
+  "historical_baseline": {
+    "python_tests": 209,
+    "regular_sanitizer_programs": 13,
+    "compiled_ROM_checks": 38,
+    "digital": [
+      15,
+      15
+    ],
+    "ordinary": [
+      9,
+      15
+    ],
+    "graphics_checked": 27420,
+    "foreground_peaks": [
+      119616,
+      147008,
+      155392
+    ],
+    "frame_budget": 280896,
+    "rom_bytes": 2643632
+  },
+  "fresh_baseline": {
+    "python_tests": 209,
+    "regular_sanitizer_programs": 13,
+    "host_pass": true,
+    "gameplay": {
+      "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+      "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+      "passed": [
+        {
+          "test": "difficulty-0-case-0",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-4",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-11",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-12",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-17",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-19",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-20",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-22",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-23",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-0-case-28",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-0-perfect",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-0-mixed",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-0",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-4",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-11",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-12",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-17",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-19",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-20",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-22",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-23",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-1-case-28",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-1-perfect",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-1-mixed",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-0",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-4",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-11",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-12",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-17",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-19",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-20",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-22",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-23",
+          "exit_code": 0
+        },
+        {
+          "test": "difficulty-2-case-28",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-2-perfect",
+          "exit_code": 0
+        },
+        {
+          "test": "graphics-2-mixed",
+          "exit_code": 0
+        },
+        {
+          "test": "ui",
+          "exit_code": 0
+        },
+        {
+          "test": "readiness",
+          "exit_code": 0
+        }
+      ],
+      "performance": [
+        {
+          "difficulty": 0,
+          "foreground_max_cycles": 119616,
+          "frame_cycles": 280896,
+          "headroom_cycles": 161280,
+          "graphics": [
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 52158797,
+              "peak_tails": 8,
+              "foreground_max": 119552,
+              "foreground_mean": 75367.021,
+              "refill_max": 1408,
+              "refill_mean": 1376.565,
+              "underruns": 0
+            },
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 52167037,
+              "peak_tails": 8,
+              "foreground_max": 117184,
+              "foreground_mean": 75832.861,
+              "refill_max": 1472,
+              "refill_mean": 1401.538,
+              "underruns": 0
+            }
+          ]
+        },
+        {
+          "difficulty": 1,
+          "foreground_max_cycles": 147008,
+          "frame_cycles": 280896,
+          "headroom_cycles": 133888,
+          "graphics": [
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 46257460,
+              "peak_tails": 12,
+              "foreground_max": 146624,
+              "foreground_mean": 89854.427,
+              "refill_max": 1408,
+              "refill_mean": 1374.037,
+              "underruns": 0
+            },
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 46272087,
+              "peak_tails": 11,
+              "foreground_max": 144128,
+              "foreground_mean": 89663.75,
+              "refill_max": 1472,
+              "refill_mean": 1395.732,
+              "underruns": 0
+            }
+          ]
+        },
+        {
+          "difficulty": 2,
+          "foreground_max_cycles": 155392,
+          "frame_cycles": 280896,
+          "headroom_cycles": 125504,
+          "graphics": [
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 45357354,
+              "peak_tails": 8,
+              "foreground_max": 155392,
+              "foreground_mean": 105314.456,
+              "refill_max": 1408,
+              "refill_mean": 1352.36,
+              "underruns": 0
+            },
+            {
+              "frames": 4900,
+              "frames_checked": 4570,
+              "defect_frames": 0,
+              "worst_displaced_pixels": 0,
+              "total_displaced_pixels": 0,
+              "floor_pixels": 45360428,
+              "peak_tails": 8,
+              "foreground_max": 152384,
+              "foreground_mean": 105689.23,
+              "refill_max": 1472,
+              "refill_mean": 1371.847,
+              "underruns": 0
+            }
+          ]
+        }
+      ],
+      "result": "passed",
+      "audio_output_release_gate": "separate; not cleared by gameplay tests",
+      "hardware_verified": false
+    },
+    "digital": {
+      "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+      "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+      "startup_advance_samples": 15,
+      "results": [
+        {
+          "difficulty": 0,
+          "case": 19,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 4,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 22,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 0,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 12,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 19,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 4,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 22,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 0,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 12,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 19,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 4,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 22,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 0,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 12,
+          "process_exit_code": 0,
+          "oracle_exit_code": 0
+        }
+      ],
+      "passed": true,
+      "emulator_lateness_correction": false
+    },
+    "ordinary": {
+      "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+      "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+      "check": "ordinary unmodified mGBA output; existing thresholds unchanged",
+      "passed": 9,
+      "total": 15,
+      "results": [
+        {
+          "difficulty": 0,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 4,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 0,
+          "case": 22,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 0,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 12,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 4,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 1,
+          "case": 22,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 1,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 12,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 4,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 2,
+          "case": 22,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 2,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 12,
+          "exit_code": 0
+        }
+      ],
+      "release_gate": "blocked"
+    },
+    "phase_diagnostic": {
+      "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+      "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+      "diagnostic_only": true,
+      "mandatory_gate_unchanged": true,
+      "phase_samples": 15,
+      "script_sha256": "a7fce8f1a9078371332df4004dfbb20490004a94fd6b8e03ea7826e864d1830b",
+      "passed": 14,
+      "total": 15,
+      "results": [
+        {
+          "difficulty": 0,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 4,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 22,
+          "exit_code": 1
+        },
+        {
+          "difficulty": 0,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 0,
+          "case": 12,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 4,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 22,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 1,
+          "case": 12,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 19,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 4,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 22,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 0,
+          "exit_code": 0
+        },
+        {
+          "difficulty": 2,
+          "case": 12,
+          "exit_code": 0
+        }
+      ]
+    },
+    "clean_build_manifest": {
+      "schema": "gba-public-demo-v1",
+      "status": "success",
+      "version": "v0.1.0-alpha-RC2",
+      "profile": "public-demo",
+      "test_suite_revision": "9ccc460693fa7254527177330f32e56153720237",
+      "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+      "source_tree_sha256": "8558feeaf5d1869af65a623ba4a8954d4ab49d204a316ca2ae440dd983b3a277",
+      "rom": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+      "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+      "rom_bytes": 2643632,
+      "prepared_manifest_sha256": "b051a7eb78c215cce4892fd762355844869ab36076cad3bfb17f2bd552e2856d",
+      "composition": {
+        "title": "Copper Circuit",
+        "tempo_bpm": 128,
+        "source_bars": 42,
+        "source_samples": 1290240,
+        "source_seconds": 78.75,
+        "playable_bars": 40,
+        "playable_seconds": 75,
+        "origin": "New score, melody, arrangement, charts and deterministic synthesizer written for Mission017; no external recordings or copied chart data.",
+        "rights_scope": "New composition/source generation only; no license is asserted for inherited game code or artwork.",
+        "sections": [
+          "opening/riff",
+          "A development",
+          "upper-register B",
+          "A return",
+          "closing/ring-out"
+        ],
+        "stems": {
+          "guitar.wav": "8be9dca6b6c4aa40e4eda0542b6c73f0b3001a76ba638c97e60dbd1ba9a78a4f",
+          "backing.wav": "2edf15e7885480bfffeab5ffd8958725d6e4b47e366fe7eda3a9e02aae78f377"
+        },
+        "source_chart_heads": {
+          "Easy": 86,
+          "Medium": 171,
+          "Hard": 335
+        },
+        "synthesis": "Plucked harmonic drive guitar; tonal bass; synthesized kick, noise snare and hats. Separate guitar/backing roles."
+      },
+      "charts": [
+        {
+          "name": "Easy",
+          "note_heads": 86,
+          "physical_controls": [
+            "LEFT",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "name": "Medium",
+          "note_heads": 171,
+          "physical_controls": [
+            "LEFT",
+            "RIGHT",
+            "B",
+            "A"
+          ]
+        },
+        {
+          "name": "Hard",
+          "note_heads": 335,
+          "physical_controls": [
+            "LEFT",
+            "UP/DOWN",
+            "RIGHT",
+            "B",
+            "A"
+          ]
+        }
+      ],
+      "toolchain": "devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5",
+      "legacy_commercial_assets_excluded": true,
+      "physical_hardware_verified": false,
+      "file_sha256": {
+        "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+        "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.elf": "1394d04cee9b125ba82dcea475fa1d88cdfb18b6acf56ddd031b93d399ca7ae4",
+        "symbols.txt": "c54d84ce10828815fd919617013fd8db4707ca1599f478a96f1bfc2df2020c75"
+      }
+    },
+    "source_manifest_sha256": "066220c4372c8d884c1c7246e81ae64117f8c866722d99d792b086593762c6fd",
+    "prepared_files_sha256": {
+      "adapted.json": "6debb672098642be35744c825124b8af451c232fb1c78c0b2aa3609e948f286e",
+      "imported_chart.hpp": "e60385f03f0baf77e16a3740794a91a983bac70dfa11ac1003ea158107e4eb6c",
+      "derivation-report.json": "c984e0a77de701ff85f8c5a13d698427500ddab067cbcab07d74d6b7d286c63f",
+      "validation-report.json": "32fcf59a319014d6c871cc99f0ef62753b34259ba00b1c5f565ca8a4e7c03e7e",
+      "song-manifest.json": "b051a7eb78c215cce4892fd762355844869ab36076cad3bfb17f2bd552e2856d",
+      "validation-report.txt": "147fc6d7088a2abbce616eafddf711ba901c04b9c406c10ed4b15d86738b816e",
+      "normalized-song.json": "f7c93d58e1b43a7c5abc7211748cc158d2f6a5e13ba817b57b8156b46122f44d",
+      "audio/audio.json": "a07bcd0246fdea7e84cd7c931df9643928888a3ac8aea0e9a41cf64a017a37b9",
+      "audio/imported_audio.bin": "39e3ab3800008b683c524a9fae82c1881c5cad854018303b6af62a31b9942a05",
+      "audio/audio_report.txt": "cc9f62e7465182d16aa43583bb47989e51c88a7a6056d5b94f6c87cb11b0470e",
+      "audio/imported_backing.bin": "0315fb60c82e60d739b816715114241a8fa8ab813139f49123095d3c3c4685e8"
+    }
+  },
+  "audio": {
+    "identical_failing_physical_inputs": [
+      {
+        "difficulty": 0,
+        "case": 4,
+        "physical_inputs_identical": true,
+        "frames": [
+          4728,
+          4728
+        ],
+        "physical_trace_sha256": "d42f04373340582da1bd41194c617b175ccbc10099067d9326a684e313189457"
+      },
+      {
+        "difficulty": 0,
+        "case": 22,
+        "physical_inputs_identical": true,
+        "frames": [
+          4693,
+          4693
+        ],
+        "physical_trace_sha256": "5272dfefc06170fa417e7d316d29ac0d739409f51f9336fd1c4107aa4dc63629"
+      },
+      {
+        "difficulty": 1,
+        "case": 4,
+        "physical_inputs_identical": true,
+        "frames": [
+          4730,
+          4730
+        ],
+        "physical_trace_sha256": "da492e716293552bf8142fe3d4870aa949000b19ac33fcdb834ea4303885f871"
+      },
+      {
+        "difficulty": 1,
+        "case": 22,
+        "physical_inputs_identical": true,
+        "frames": [
+          4695,
+          4695
+        ],
+        "physical_trace_sha256": "8b9e4077d47514e02b65905845c4404accbff81e5919522980bd254c8fda6999"
+      },
+      {
+        "difficulty": 2,
+        "case": 4,
+        "physical_inputs_identical": true,
+        "frames": [
+          4732,
+          4732
+        ],
+        "physical_trace_sha256": "7ac87ce1c363dab5d3a5eb04b5b41c1aa20af9dab04091b8e20d68dc224265f6"
+      },
+      {
+        "difficulty": 2,
+        "case": 22,
+        "physical_inputs_identical": true,
+        "frames": [
+          4697,
+          4697
+        ],
+        "physical_trace_sha256": "78b9ad57cf6e9ac7ab02a8abdf2c9de588c307feab70c730bc69b76787d5d6c1"
+      }
+    ],
+    "stock105_ordinary": [
+      {
+        "difficulty": 0,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 0,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 0,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 12,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 1,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 1,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 12,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 2,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 2,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 12,
+        "exit_code": 0
+      }
+    ],
+    "matching_105_backing_references": [
+      {
+        "difficulty": 0,
+        "case": 4,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      },
+      {
+        "difficulty": 0,
+        "case": 22,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      },
+      {
+        "difficulty": 1,
+        "case": 4,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      },
+      {
+        "difficulty": 1,
+        "case": 22,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      },
+      {
+        "difficulty": 2,
+        "case": 4,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      },
+      {
+        "difficulty": 2,
+        "case": 22,
+        "exit_code": 1,
+        "reference_case": 23,
+        "reference_stock_version": "0.10.5"
+      }
+    ],
+    "initial_105_pair_reference": "Initial15-case analysis used baseline001 reference; replaced by matching005 references for all6 failing cases; verdict unchanged",
+    "normal_capture_interposition": false,
+    "ordinary_thresholds_changed": false,
+    "lateness_correction_enabled": false,
+    "complete_consumed_samples_checked": 18923520,
+    "complete_mixer_words_checked": 4730820,
+    "maximum_complete_segment_drift_cycles": 0,
+    "fifo_mechanisms_reproduced_both_versions": true,
+    "residual": "Fixed-phase diagnostic Easy mixed paired-backing correlation about0.998555 below0.999; capture/filter/PWM contribution not fully isolated",
+    "hardware_audio_measurement": false,
+    "acceptance_method_changed": false
+  },
+  "input_pause": {
+    "stock105_focused_actual_ROM_cases": [
+      {
+        "case": 8,
+        "passed": true,
+        "wrong_events": 1,
+        "cause": "genuine new B press after resume; existing head already judged"
+      },
+      {
+        "case": 24,
+        "passed": true,
+        "wrong_events": 0,
+        "cause": "no manufactured press"
+      },
+      {
+        "case": 25,
+        "passed": true,
+        "wrong_events": 0,
+        "cause": "no manufactured press"
+      },
+      {
+        "case": 27,
+        "passed": true,
+        "wrong_events": 0,
+        "cause": "no manufactured press"
+      }
+    ],
+    "actual_physical_map": [
+      [
+        "LEFT",
+        "B",
+        "A"
+      ],
+      [
+        "LEFT",
+        "RIGHT",
+        "B",
+        "A"
+      ],
+      [
+        "LEFT",
+        "UP-or-DOWN",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    ],
+    "alias_edges_coalesced": true,
+    "medium_same_lane_final_hold_preserved": true,
+    "head_counts": [
+      86,
+      171,
+      335
+    ],
+    "hold_counts": [
+      11,
+      11,
+      10
+    ],
+    "perfect_no_pause_results": [
+      {
+        "difficulty": 0,
+        "score": 2901,
+        "perfect": 86,
+        "good": 0,
+        "miss": 0,
+        "wrong": 0
+      },
+      {
+        "difficulty": 1,
+        "score": 6338,
+        "perfect": 171,
+        "good": 0,
+        "miss": 0,
+        "wrong": 0
+      },
+      {
+        "difficulty": 2,
+        "score": 12866,
+        "perfect": 335,
+        "good": 0,
+        "miss": 0,
+        "wrong": 0
+      }
+    ]
+  },
+  "soaks": {
+    "public_0101": {
+      "profile": "public",
+      "requested_seconds": 3600,
+      "emulated_cycles": 61186785041,
+      "emulated_seconds": 3647.016587317,
+      "playing_cycles": 54318837018,
+      "paused_cycles": 4829725768,
+      "menu_cycles": 2014627040,
+      "result_cycles": 23595215,
+      "judgments_P_G_M_W": [
+        4204,
+        460,
+        3624,
+        1976
+      ],
+      "runFrame_calls": 217828,
+      "complete_songs": [
+        14,
+        14,
+        14
+      ],
+      "perfect_runs": 15,
+      "all_miss_runs": 15,
+      "mixed_runs": 12,
+      "pause_cycles": 126,
+      "replay_then_exit": 11,
+      "startup_frames_observed_not_reference_valid": 186,
+      "framebuffer_frames_checked": 3016,
+      "displaced_pixels": 0,
+      "visible_head_peak": 8,
+      "tail_peak": 12,
+      "foreground_peak": 155776,
+      "refill_peak": 1472,
+      "host_peak_rss_kib": 49484,
+      "nonzero_audio_samples": 103409565,
+      "reference_scores": [
+        2901,
+        6338,
+        12866
+      ],
+      "result": "passed",
+      "scene_seconds": {
+        "playing": 3237.6549850702286,
+        "paused": 287.8740887641907,
+        "menu": 120.08112907409668,
+        "result": 1.4063844084739685
+      },
+      "perfect_runs_field_means": "No-miss driver pattern; assertion permits Good. Actual all-Perfect baseline runs recorded separately."
+    },
+    "public_0105": {
+      "profile": "public",
+      "requested_seconds": 3600,
+      "emulated_cycles": 61186785041,
+      "emulated_seconds": 3647.016587317,
+      "playing_cycles": 54318837018,
+      "paused_cycles": 4829725768,
+      "menu_cycles": 2014627040,
+      "result_cycles": 23595215,
+      "judgments_P_G_M_W": [
+        4204,
+        460,
+        3624,
+        1976
+      ],
+      "runFrame_calls": 217828,
+      "complete_songs": [
+        14,
+        14,
+        14
+      ],
+      "perfect_runs": 15,
+      "all_miss_runs": 15,
+      "mixed_runs": 12,
+      "pause_cycles": 126,
+      "replay_then_exit": 11,
+      "startup_frames_observed_not_reference_valid": 186,
+      "framebuffer_frames_checked": 3016,
+      "displaced_pixels": 0,
+      "visible_head_peak": 8,
+      "tail_peak": 12,
+      "foreground_peak": 155776,
+      "refill_peak": 1472,
+      "host_peak_rss_kib": 9408,
+      "nonzero_audio_samples": 103409565,
+      "reference_scores": [
+        2901,
+        6338,
+        12866
+      ],
+      "result": "passed",
+      "scene_seconds": {
+        "playing": 3237.6549850702286,
+        "paused": 287.8740887641907,
+        "menu": 120.08112907409668,
+        "result": 1.4063844084739685
+      },
+      "perfect_runs_field_means": "No-miss driver pattern; assertion permits Good. Actual all-Perfect baseline runs recorded separately."
+    },
+    "private_Cream_Easy_0101": {
+      "profile": "private",
+      "requested_seconds": 3600,
+      "emulated_cycles": 61705881633,
+      "emulated_seconds": 3677.957155287,
+      "playing_cycles": 58859240582,
+      "paused_cycles": 1602511730,
+      "menu_cycles": 1236826021,
+      "result_cycles": 7303300,
+      "judgments_P_G_M_W": [
+        3009,
+        261,
+        1865,
+        1680
+      ],
+      "runFrame_calls": 219676,
+      "complete_songs": [
+        13,
+        0,
+        0
+      ],
+      "perfect_runs": 6,
+      "all_miss_runs": 4,
+      "mixed_runs": 3,
+      "pause_cycles": 39,
+      "replay_then_exit": 4,
+      "startup_frames_observed_not_reference_valid": 60,
+      "framebuffer_frames_checked": 3276,
+      "displaced_pixels": 0,
+      "visible_head_peak": 4,
+      "tail_peak": 11,
+      "foreground_peak": 137088,
+      "refill_peak": 1472,
+      "host_peak_rss_kib": 62608,
+      "nonzero_audio_samples": 110631668,
+      "reference_scores": [
+        15811,
+        0,
+        0
+      ],
+      "result": "passed",
+      "scene_seconds": {
+        "playing": 3508.284126639366,
+        "paused": 95.51714241504669,
+        "menu": 73.72057563066483,
+        "result": 0.43531060218811035
+      },
+      "perfect_runs_field_means": "No-miss driver pattern; assertion permits Good. Actual all-Perfect baseline runs recorded separately."
+    },
+    "original_699_0101": {
+      "profile": "legacy",
+      "requested_seconds": 3600,
+      "emulated_cycles": 60398018027,
+      "emulated_seconds": 3600.002409637,
+      "playing_cycles": 60372415492,
+      "paused_cycles": 0,
+      "menu_cycles": 25602535,
+      "result_cycles": 0,
+      "judgments_P_G_M_W": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "runFrame_calls": 215020,
+      "complete_songs": [
+        0,
+        0,
+        0
+      ],
+      "perfect_runs": 0,
+      "all_miss_runs": 0,
+      "mixed_runs": 0,
+      "pause_cycles": 0,
+      "replay_then_exit": 0,
+      "framebuffer_frames_checked": 0,
+      "displaced_pixels": 0,
+      "visible_head_peak": 0,
+      "tail_peak": 0,
+      "foreground_peak": 0,
+      "refill_peak": 0,
+      "host_peak_rss_kib": 62892,
+      "nonzero_audio_samples": 117119279,
+      "reference_scores": [
+        0,
+        0,
+        0
+      ],
+      "result": "passed",
+      "scene_seconds": {
+        "playing": 3598.47637963295,
+        "paused": 0.0,
+        "menu": 1.5260300040245056,
+        "result": 0.0
+      },
+      "perfect_runs_field_means": "No-miss driver pattern; assertion permits Good. Actual all-Perfect baseline runs recorded separately."
+    }
+  },
+  "graphics": {
+    "baseline_frame_calls": 29400,
+    "baseline_frames_checked": 27420,
+    "baseline_displaced_pixels": 0,
+    "extra_soak_checked": 9308,
+    "extra_soak_displaced_pixels": 0,
+    "hardware_observer_transports": 15,
+    "affine_writes": 11190415,
+    "late_affine_writes": 0,
+    "final_word_writes": 11190415,
+    "late_final_word_writes": 0,
+    "blend_writes": 11190415,
+    "late_blend_writes": 0,
+    "minimum_emulated_hblank_remaining_cycles": 39,
+    "paused_FIFO_requests": 0,
+    "observed_soak_foreground_peak": 155776,
+    "remaining_emulated_frame_cycles": 125120,
+    "observed_refill_peak": 1472,
+    "negative": {
+      "expected_failure": true,
+      "exit_code": 134,
+      "diagnostic_only": true,
+      "rom_modified": false,
+      "measurement": {
+        "frames": 1800,
+        "frames_checked": 1769,
+        "defect_frames": 1769,
+        "worst_displaced_pixels": 433,
+        "total_displaced_pixels": 500758,
+        "floor_pixels": 17810578,
+        "peak_tails": 8,
+        "foreground_max": 151360,
+        "foreground_mean": 103457.388,
+        "refill_max": 1408,
+        "refill_mean": 1352.341,
+        "underruns": 0
+      }
+    },
+    "hardware_measured": false
+  },
+  "memory": {
+    "public_static_iwram_bytes": 8308,
+    "public_static_ewram_bytes": 7016,
+    "private_static_iwram_bytes": 27276,
+    "private_static_ewram_bytes": 9600,
+    "public_stack": {
+      "user_untouched": 23288,
+      "user_touched_from_top": 916,
+      "user_monitored": 24204,
+      "IRQ_touched": 40,
+      "IRQ_monitored": 160,
+      "runs": 3
+    },
+    "private_stack": {
+      "user_untouched": 4256,
+      "user_touched_from_top": 980,
+      "user_monitored": 5236,
+      "IRQ_touched": 40,
+      "IRQ_monitored": 160,
+      "runs": 1
+    },
+    "intrusive_unused_emulated_RAM_sentinels": true,
+    "physical_stack_margin_measured": false,
+    "new_per_frame_allocations": false,
+    "head_object_limit": 32,
+    "tail_object_limit": 96,
+    "unmeasured": [
+      "Physical IRQ dispatch/return and worst-case contention",
+      "Full pause/resume path WCET",
+      "Physical stack high-water",
+      "Every possible input sequence"
+    ]
+  },
+  "delivery": {
+    "archive_sha256": "194c34e77deade95e2c60f4d57cc55c946dbd199cf56cf48cfb9fd1e2d08b77b",
+    "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+    "members": 14,
+    "extraction": "passed",
+    "direct_rom_equals_extracted": true,
+    "rom_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+    "zip_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip",
+    "receipt_source": "retained independent M018 packaging receipt; no hosted receipt at attempted URL (404)",
+    "artifact_commit": "437410b45881119084cf675735b30cf3c841dad5",
+    "build_source": "9ccc460693fa7254527177330f32e56153720237",
+    "ROM_bytes": 2643632,
+    "byte_identical_clean_rebuild": true,
+    "hosted_ROM_exercised": [
+      {
+        "test": "difficulty-0",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2",
+        "exit_code": 0
+      },
+      {
+        "test": "ui",
+        "exit_code": 0
+      },
+      {
+        "test": "readiness",
+        "exit_code": 0
+      }
+    ],
+    "new_upload": false
+  },
+  "private_profile": {
+    "rom_sha256": "527181f12353efb3e5b65562e85a23443c9f689d042a0baefe921e1e49e8333a",
+    "rom_bytes": 9191156,
+    "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+    "chart_heads": 395,
+    "sustains": 78,
+    "inputs": {
+      "source": "9ccc460693fa7254527177330f32e56153720237",
+      "owner_zip_sha256": "af5c179308cb042b2769c7b3796f66f19d11eb59b69d7284b7e3464be30621c4",
+      "cached_profile": "cream",
+      "cache_manifest_sha256": "dd345b8bcdea15d36a494a112b56f634b65c7012a16a3140f4a3ea67e1e1c462",
+      "cache_verified": true
+    },
+    "new_actual_ROM_tested": true,
+    "actual_ROM_modes": [
+      {
+        "mode": "sustain-perfect",
+        "passed": true
+      },
+      {
+        "mode": "sustain-release",
+        "passed": true
+      },
+      {
+        "mode": "reactive",
+        "passed": true
+      }
+    ],
+    "actual_ROM_pause_cases": [
+      {
+        "test": "original-navigation-2",
+        "exit_code": 0
+      },
+      {
+        "test": "original-navigation-3",
+        "exit_code": 0
+      },
+      {
+        "test": "original-navigation-12",
+        "exit_code": 0
+      },
+      {
+        "test": "original-navigation-18",
+        "exit_code": 0
+      }
+    ],
+    "actual_15815_cases": [
+      2,
+      3,
+      12
+    ],
+    "historical_trace": {
+      "path": "/workspace/stabilization-evidence/baseline-0.csv",
+      "sha256": "ffffa7084edd20000da18dcf3e87b1694344e712178265ec48f92eea6d58919b",
+      "clock_only": true,
+      "capture_has_no_judgment_statistics": true,
+      "asan_ubsan_pass": true,
+      "result": "Reconstructed score=15815 bonus=585\nPASS:16116frames, exact external trace score15815 hold_bonus585 completed78\n"
+    },
+    "payload_uploaded": false,
+    "private_delivery_available": false,
+    "windows_launcher_GUI_tested": false,
+    "ordinary_full_Cream_output": "historical10/15; not rerun or cleared",
+    "input_files_sha256": {
+      "imports/output/owner-private/audio.json": "d02d0f814c3bfd3323d729a45ebc72ddf6bca9415e49fc38c0b1da20f202ac45",
+      "imports/output/owner-private/imported_audio.bin": "f0dd9ae3ffc3c04efc292ef815652a792dde2914880480efd4c94581595908fc",
+      "imports/output/owner-private/adapted.json": "6c44e2c323ef77e7b3a55a835d6c412106d25ff7f27b3dc086f7a66fc2e954ca",
+      "imports/output/owner-private/imported_chart.hpp": "368883c55492c5139ae940c740ac5d4463de8bf30b3ddadf04a1c48b41d3e1e4",
+      "imports/output/owner-private/adaptation_report.txt": "918f29baa51d848dd313580792596169d8447ca32a3632496e971351b0f972b4",
+      "imports/output/owner-private/imported_backing.bin": "0efd813e88652191bfcd0574d59d6d96ec4d52e81484ca5b31a44956003db764",
+      "imports/output/owner-private/imported_audio.hpp": "4040ce8265470399d553d774d39e38c44b8de4b36ef21fc234976b4693d6c247"
+    },
+    "private_stack_passed": true,
+    "launcher_sha256": {
+      "Build-Cream-ROM.bat": "c1b41519679e76a8d41a6e6d6118f9aa8f718fd0865956ffd12565635ff056c5",
+      "scripts/Build-Cream-ROM.ps1": "0b44798704bc42e1752ee98d8b167700a83417b68ff3dad71e8d8d7e4ba09603"
+    }
+  },
+  "CI": {
+    "M018_actual_run": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39646729570",
+    "M018_build_gameplay_pass_digital_ordinary_fail": true,
+    "initial_M019_run": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39651971307",
+    "initial_digital_failure": "Observer produced no .samples despite process_exit_code0; oracle failed all15. Exact distro/linker mechanism not established.",
+    "final_run": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111",
+    "final_code_commit": "e61614e64dba326876ff14634a6f1b705c9f7320",
+    "actual_outcomes": [
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119406208120",
+        "status": [
+          "succeeded"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "Build and host regressions",
+          "Run mandatory digital observer in the verified baseline environment #6",
+          "Annotations"
+        ],
+        "annotations": " Annotations 1 warning Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Build and host regressions Build and host regressions succeeded Oct 21, 2026 in 1m 41s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "observed_utc": "2026-10-21"
+      },
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407124179",
+        "status": [
+          "succeeded"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "One emulated hour on the exact RC2",
+          "Run mandatory digital observer in the verified baseline environment #6",
+          "Annotations"
+        ],
+        "annotations": " Annotations 1 warning and 1 notice Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Run python3 tools/ci_gate_summary.py builds/soak builds/soak/verification.json: {\"profile\":\"public\",\"requested_seconds\":3600,\"emulated_cycles\":61186785041,\"emulated_seconds\":3647.016587317,\"playing_cycles\":54318837018,\"paused_cycles\":4829725768,\"menu_cycles\":2014627040,\"result_cycles\":23595215,\"judgments_P_G_M_W\":[4204,460,3624,1976],\"runFrame_calls\":217828,\"complete_songs\":[14,14,14],\"perfect_runs\":15,\"all_miss_runs\":15,\"mixed_runs\":12,\"pause_cycles\":126,\"replay_then_exit\":11,\"startup_frames_observed_not_reference_valid\":186,\"framebuffer_frames_checked\":3016,\"displaced_pixels\":0,\"visible_head_peak\":8,\"tail_peak\":12,\"foreground_peak\":155776,\"refill_peak\":1472,\"host_peak_rss_kib\":47532,\"nonzero_audio_samples\":103409565,\"reference_scores\":[2901,6338,12866],\"result\":\"passed\"} Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } One emulated hour on the exact RC2 One emulated hour on the exact RC2 succeeded Oct 21, 2026 in 3m 16s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "observed_utc": "2026-10-21"
+      },
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407124764",
+        "status": [
+          "succeeded"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "Exact-ROM gameplay and graphics",
+          "Run mandatory digital observer in the verified baseline environment #6",
+          "Annotations"
+        ],
+        "annotations": " Annotations 1 warning Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Exact-ROM gameplay and graphics Exact-ROM gameplay and graphics succeeded Oct 21, 2026 in 1m 11s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "observed_utc": "2026-10-21"
+      },
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407778992",
+        "status": [
+          "succeeded"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "Exact digital PCM and FIFO gate",
+          "Run mandatory digital observer in the verified baseline environment #6",
+          "Annotations"
+        ],
+        "annotations": " Annotations 1 warning and 2 notices Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Publish bounded public test diagnostics builds/digital/digital-verification.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"startup_advance_samples\":15,\"results\":[{\"difficulty\":0,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0}],\"passed\":true,\"emulator_lateness_correction\":false} Show more Show less Publish bounded public test diagnostics builds/pause-edges/verification.json: [{\"case\":8,\"passed\":true,\"wrong_events\":1,\"cause\":\"genuine new B press after resume; existing head already judged\"},{\"case\":24,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"},{\"case\":25,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"},{\"case\":27,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"}] Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Exact digital PCM and FIFO gate Exact digital PCM and FIFO gate succeeded Oct 21, 2026 in 1m 33s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "observed_utc": "2026-10-21"
+      },
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407779036",
+        "status": [
+          "failed"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "Strict ordinary audio-output release gate",
+          "Run mandatory digital observer in the verified baseline environment #6",
+          "Annotations"
+        ],
+        "annotations": " Annotations 1 error, 1 warning, and 8 notices Run python3 tools/check_demo_audio.py --build builds/ci/result --captures builds/emulator Process completed with exit code 1. Show more Show less Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Publish audio gate result builds/emulator/difficulty-2-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-2-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 39.21282958984375, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-1-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-1-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 53.78021240234375, 'error_ms', -1.068115234375) Show more Show less Publish audio gate result builds/emulator/difficulty-0-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.068115234375) Show more Show less Publish audio gate result builds/emulator/difficulty-0-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 23.64447021484375, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/audio-output.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"check\":\"ordinary unmodified mGBA output; existing thresholds unchanged\",\"passed\":9,\"total\":15,\"results\":[{\"difficulty\":0,\"case\":19,\"exit_code\":0},{\"difficulty\":0,\"case\":4,\"exit_code\":1},{\"difficulty\":0,\"case\":22,\"exit_code\":1},{\"difficulty\":0,\"case\":0,\"exit_code\":0},{\"difficulty\":0,\"case\":12,\"exit_code\":0},{\"difficulty\":1,\"case\":19,\"exit_code\":0},{\"difficulty\":1,\"case\":4,\"exit_code\":1},{\"difficulty\":1,\"case\":22,\"exit_code\":1},{\"difficulty\":1,\"case\":0,\"exit_code\":0},{\"difficulty\":1,\"case\":12,\"exit_code\":0},{\"difficulty\":2,\"case\":19,\"exit_code\":0},{\"difficulty\":2,\"case\":4,\"exit_code\":1},{\"difficulty\":2,\"case\":22,\"exit_code\":1},{\"difficulty\":2,\"case\":0,\"exit_code\":0},{\"difficulty\":2,\"case\":12,\"exit_code\":0}],\"release_gate\":\"blocked\"} Show more Show less Publish audio gate result builds/emulator/verification.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"passed\":[{\"test\":\"difficulty-0-case-0\",\"exit_code\":0},{\"test\":\"difficulty-0-case-4\",\"exit_code\":0},{\"test\":\"difficulty-0-case-11\",\"exit_code\":0},{\"test\":\"difficulty-0-case-12\",\"exit_code\":0},{\"test\":\"difficulty-0-case-17\",\"exit_code\":0},{\"test\":\"difficulty-0-case-19\",\"exit_code\":0},{\"test\":\"difficulty-0-case-20\",\"exit_code\":0},{\"test\":\"difficulty-0-case-22\",\"exit_code\":0},{\"test\":\"difficulty-0-case-23\",\"exit_code\":0},{\"test\":\"difficulty-0-case-28\",\"exit_code\":0},{\"test\":\"graphics-0-perfect\",\"exit_code\":0},{\"test\":\"graphics-0-mixed\",\"exit_code\":0},{\"test\":\"difficulty-1-case-0\",\"exit_code\":0},{\"test\":\"difficulty-1-case-4\",\"exit_code\":0},{\"test\":\"difficulty-1-case-11\",\"exit_code\":0},{\"test\":\"difficulty-1-case-12\",\"exit_code\":0},{\"test\":\"difficulty-1-case-17\",\"exit_code\":0},{\"test\":\"difficulty-1-case-19\",\"exit_code\":0},{\"test\":\"difficulty-1-case-20\",\"exit_code\":0},{\"test\":\"difficulty-1-case-22\",\"exit_code\":0},{\"test\":\"difficulty-1-case-23\",\"exit_code\":0},{\"test\":\"difficulty-1-case-28\",\"exit_code\":0},{\"test\":\"graphics-1-perfect\",\"exit_code\":0},{\"test\":\"graphics-1-mixed\",\"exit_code\":0},{\"test\":\"difficulty-2-case-0\",\"exit_code\":0},{\"test\":\"difficulty-2-case-4\",\"exit_code\":0},{\"test\":\"difficulty-2-case-11\",\"exit_code\":0},{\"test\":\"difficulty-2-case-12\",\"exit_code\":0},{\"test\":\"difficulty-2-case-17\",\"exit_code\":0},{\"test\":\"difficulty-2-case-19\",\"exit_code\":0},{\"test\":\"difficulty-2-case-20\",\"exit_code\":0},{\"test\":\"difficulty-2-case-22\",\"exit_code\":0},{\"test\":\"difficulty-2-case-23\",\"exit_code\":0},{\"test\":\"difficulty-2-case-28\",\"exit_code\":0},{\"te Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Strict ordinary audio-output release gate Strict ordinary audio-output release gate failed Oct 21, 2026 in 34s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. ",
+        "observed_utc": "2026-10-21"
+      },
+      {
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119408862413",
+        "status": [
+          "succeeded"
+        ],
+        "headings": [
+          "Navigation Menu",
+          "Repository navigation",
+          "Release promotion blocked until explicit acceptance",
+          "Run mandatory digital observer in the verified baseline environment #6"
+        ],
+        "annotations": "",
+        "observed_utc": "2026-10-21"
+      }
+    ],
+    "final_summary": {
+      "build_host": "passed",
+      "gameplay_graphics": "passed",
+      "digital": "passed15/15",
+      "soak": "passed3647.016587seconds",
+      "ordinary": "failed9/15",
+      "promotion_report": "succeeded reporting blocked; not promotion"
+    },
+    "all_checks_passed": false,
+    "mandatory_failure_nonzero": true,
+    "continue_on_error": false,
+    "formal_release": false,
+    "job_detail_logs_signed_out": "404; public annotations and actual job status inspected instead",
+    "documentation_only_pushes_ignored": true
+  },
+  "content": {
+    "public_title": "Copper Circuit",
+    "original_composition_and_charts": true,
+    "actual_original_stems_embedded_verified": true,
+    "legacy_commercial_symbols_and_private_markers_absent": true,
+    "private_payloads_added_to_git": false,
+    "third_party_notices_preserved": true,
+    "owner_creator_confirmation": "historical explicit reply",
+    "project_wide_license_choice": "pending separate owner review"
+  },
+  "integration": {
+    "develop": "56f6b7b243dfc710996336b99ac249806e666c85",
+    "main": "6c4e63460fab10733d8ff011045ee246e7201952",
+    "develop_is_ancestor": true,
+    "feature_commits_ahead_at_code_head": 35,
+    "source_artifact_commits_already_in_lineage": [
+      "e8ef0a59ddf1eecca84895c32c5e1e87722b51f5",
+      "437410b45881119084cf675735b30cf3c841dad5"
+    ],
+    "download_only_branches_not_merged": true,
+    "merge_conflicts": "None predicted from ancestor relationship; no merge executed; recheck on approval",
+    "recommended_future_source": "e61614e64dba326876ff14634a6f1b705c9f7320",
+    "accepted_baseline": false,
+    "rollback": "Revert future approved merge on a review branch, preserve history",
+    "protected_branches_unchanged": true
+  },
+  "owner": {
+    "historical_RC1_feedback": "works great on real GBA",
+    "RC2_all_difficulty_acceptance": false,
+    "graphics_authorized": false,
+    "release_approved": false,
+    "checklist": "docs/OWNER_M019_PLAYTEST.md"
+  },
+  "unsuccessful_attempts": [
+    {
+      "test": "initial soak replay",
+      "classification": "Driver held A; no new press. Fresh release/press required; corrected without engine change"
+    },
+    {
+      "test": "initial soak floor observer",
+      "classification": "Compared prior screen while importedReady0/DMAoff/tick0; observer now requires established readiness; thresholds unchanged"
+    },
+    {
+      "test": "pause105 first output path",
+      "classification": "Executable/directory collision; corrected path"
+    },
+    {
+      "test": "hosted receipt URL",
+      "classification": "404; ROM/ZIP downloaded200 and checked against independently retained package receipt"
+    },
+    {
+      "test": "private extra pause first attempts",
+      "classification": "Wrong public navigation then wrongly omitted private menu; retained failures; unmodified original navigation passes all4"
+    },
+    {
+      "test": "private historical host replay first attempts",
+      "classification": "Wrong trace then judgment assertion against capture containing no judgments; documented clock-only replay of frozen trace passes. Actual private ROM also reproduces15815"
+    },
+    {
+      "test": "optional negative scanline first attempt",
+      "classification": "Required tap symbol addresses omitted, host exit139 before observation; addressed diagnostic detects actual displacement with expected exit134"
+    }
+  ],
+  "evidence": {
+    "selected_directory": "docs/evidence/mission019",
+    "full_retained_inventory": "docs/evidence/mission019/EVIDENCE_INDEX.json",
+    "private_waveforms_not_committed": true,
+    "lossless_storage": "docs/evidence/mission019/baseline-digital/lossless-transport-storage.json"
+  },
+  "smallest_next_action": "Resolve retained Easy mixed paired-backing window23.644470s under deterministic PWM/filter/capture model without weakening gate, and collect owner RC2 handheld checklist; neither alone automatically clears all gates",
+  "original_699_regressions": [
+    {
+      "mode": "perfect",
+      "frames": 36000,
+      "exit_code": 0
+    },
+    {
+      "mode": "miss",
+      "frames": 36000,
+      "exit_code": 0
+    },
+    {
+      "mode": "mixed",
+      "frames": 36000,
+      "exit_code": 0
+    }
+  ],
+  "reproduction_commands": [
+    {
+      "cwd": "/workspace/mission019-evidence/rc2-source",
+      "argv": [
+        "python3",
+        "tools/build_public_demo.py",
+        "--build-container",
+        "mission001-mgba"
+      ]
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "bash",
+        "tests/check.sh"
+      ],
+      "log": "/workspace/mission019-evidence/baseline-host.log"
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "python3",
+        "tools/test_public_demo.py",
+        "--build",
+        "/workspace/mission019-evidence/rc2-source/builds/public-demo/9ccc460693fa-20261021T180615748570Z",
+        "--rom",
+        "/workspace/mission019-evidence/rc2-source/builds/public-demo/9ccc460693fa-20261021T180615748570Z/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+        "--output",
+        "/workspace/mission019-evidence/baseline-emulator",
+        "--docker-container",
+        "mission001-mgba"
+      ]
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "python3",
+        "tools/check_demo_fifo.py",
+        "--build",
+        "/workspace/mission019-evidence/rc2-source/builds/public-demo/9ccc460693fa-20261021T180615748570Z",
+        "--probes",
+        "/workspace/mission019-evidence/baseline-emulator",
+        "--output",
+        "/workspace/mission019-evidence/baseline-digital",
+        "--tap",
+        "/workspace/mission019-evidence/tap.so",
+        "--skip-pwm",
+        "--docker-container",
+        "mission001-mgba"
+      ]
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "python3",
+        "tools/check_demo_audio.py",
+        "--build",
+        "/workspace/mission019-evidence/rc2-source/builds/public-demo/9ccc460693fa-20261021T180615748570Z",
+        "--captures",
+        "/workspace/mission019-evidence/baseline-emulator"
+      ],
+      "expected_exit": 1
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "python3",
+        "tools/diagnose_demo_phase.py",
+        "--build",
+        "/workspace/mission019-evidence/rc2-source/builds/public-demo/9ccc460693fa-20261021T180615748570Z",
+        "--captures",
+        "/workspace/mission019-evidence/baseline-emulator",
+        "--digital",
+        "/workspace/mission019-evidence/baseline-digital",
+        "--output",
+        "/workspace/mission019-evidence/phase-diagnostic"
+      ],
+      "diagnostic_only": true
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "compile": [
+        "gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "tests/foundation_soak.c",
+        "-o",
+        "SOAK",
+        "-lmgba"
+      ],
+      "run": [
+        "SOAK",
+        "EXACT_ROM",
+        "MATCHING_SYMBOLS",
+        "3600",
+        "public|private|legacy",
+        "NEW_OUTPUT.json"
+      ],
+      "note": "Run in stock emulator host, one core for whole target; different paths per profile; stock005 needs matching include/library/rpath"
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "compile": [
+        "gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DGBA_STACK_INSTRUMENT",
+        "-Itests",
+        "PAUSE_PROBE.c",
+        "-o",
+        "STACK",
+        "-lmgba"
+      ],
+      "note": "Public generated navigation probe vs original private navigation; run all-song case12/8pauses, matching ROM/symbols; writes unused RAM sentinels"
+    },
+    {
+      "cwd": "/workspace/mission-019-foundation-certification",
+      "argv": [
+        "PRIVATE_SANITIZER_REFERENCE",
+        "/workspace/stabilization-evidence/baseline-0.csv",
+        "15815",
+        "--clock-only"
+      ],
+      "note": "Compile tests/replay_sustain_trace.cpp with current core, actual private generated header/note.h, tests/host Tonc shim, ASan/UBSan; private data never committed"
+    }
+  ],
+  "reproduction_note": "Recorded invocations or explicit compile/run templates; choose NEW output paths on rerun to preserve evidence. Historical runtime source is frozen; tools at verification_code_commit."
+}
