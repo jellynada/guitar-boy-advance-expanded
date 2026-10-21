@@ -1,4 +1,20 @@
-# Current status — Mission 019
+# Current status — Mission 020
+
+Development recommendation **APPROVED WITH DOCUMENTED LIMITATIONS**, audio
+**AUDIO BOUNDED LIMITATION**, formal release **BLOCKED**. Engine changes NONE;
+RC2 checksum and original Copper Circuit are preserved. Actual new CI passes
+host/sanitizers,38 gameplay/graphics checks,15 digital transports and public soak;
+strict ordinary output9/15 remains failed. The paired reference discrepancy is
+localized to stock emulator PWM-slot updates; see M020_AUDIO_CONCLUSION.md.
+
+New owner evidence: positive RC2 physical-GBA playability and subjective audio,
+without inferred exhaustive difficulty/timing/stack/recording-fidelity coverage.
+Private full Cream resource/testing numbers remain retained M019 evidence.
+No graphics, merge, formal release or private upload. Baseline and resource
+contract await owner/reviewer approval. Current report:
+[M020](MISSION_020_FOUNDATION_CLOSEOUT.md). All following status is historical.
+
+# Historical status — Mission 019
 
 Foundation recommendation **BLOCKED**, audio **AUDIO BLOCKED**. No runtime
 changes and no RC3: immutable Copper Circuit RC2 was independently rebuilt and

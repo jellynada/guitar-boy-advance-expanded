@@ -1,4 +1,30 @@
-# Mission 019 current release policy
+# Mission 020 current policy
+
+Development approval and release certification are independent. The proposed
+source baseline is33b4d227e7e8142639486d1effeb67a81c15903e; unchanged runtime
+is9ccc460693fa7254527177330f32e56153720237. Exact RC2 SHA256 is required.
+M020's actual CI passes build/host, gameplay/graphics, digital and soak; strict
+ordinary output9/15 remains a nonzero failure. Its promotion reporter records
+“blocked”; it never releases, merges or overrides mandatory failures.
+
+The stock PWM-slot limitation is documented for development, not waived for
+release. A corrected future output specification needs independent calibration,
+old-versus-proposed results and explicit review; no threshold change is implied.
+Content isolation, licensing and formal owner approval remain mandatory.
+
+Frozen-RC2 CI certifies this baseline. Before later graphics changes are accepted,
+extend branch triggers and build/test the exact changed candidate too. Keep
+separate source/build identities and regression/resource comparisons. Do not
+substitute an unchanged-baseline green check for candidate execution.
+
+Docs-only closeout commits do not rerun/cancel the recorded code run. Preserve
+immutable public RC2 links and private source/launcher behavior; never upload
+private music, its ROM or encrypted packages. No protected merge or formal release
+is authorized. See M020_DEVELOPMENT_BASELINE_PLAN.md and M020_VERIFICATION.json.
+
+All policies below are retained historical context.
+
+# Mission 019 historical release policy
 
 The exact engine remains RC2 source9ccc460; verification-only changes do not
 create RC3. The workflow checks out frozen source separately, rebuilds it and

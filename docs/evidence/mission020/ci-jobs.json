@@ -1,0 +1,56 @@
+{
+  "run": 39660269121,
+  "head_sha": "33b4d227e7e8142639486d1effeb67a81c15903e",
+  "jobs": [
+    {
+      "name": "Build and host regressions",
+      "id": 119431126626,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431126626"
+    },
+    {
+      "name": "Independent stock PWM output replay",
+      "id": 119431733085,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733085"
+    },
+    {
+      "name": "One emulated hour on the exact RC2",
+      "id": 119431733184,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733184"
+    },
+    {
+      "name": "Exact-ROM gameplay and graphics",
+      "id": 119431733323,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733323"
+    },
+    {
+      "name": "Strict ordinary audio-output release gate",
+      "id": 119432636733,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119432636733"
+    },
+    {
+      "name": "Exact digital PCM and FIFO gate",
+      "id": 119432637068,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119432637068"
+    },
+    {
+      "name": "Release promotion blocked until explicit acceptance",
+      "id": 119433606711,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119433606711"
+    }
+  ],
+  "all_checks_passed": false
+}

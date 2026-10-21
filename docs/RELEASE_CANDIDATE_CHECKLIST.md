@@ -1,4 +1,27 @@
-# Current gates — Mission 019
+# Current gates — Mission 020
+
+- [x] Complete ancestry and exact M019 starting tip verified.
+- [x] Unchanged RC2 independently rebuilt to its required hash in actual new CI.
+- [x]209 Python tests,13 sanitizer programs,38 exact-ROM gameplay/graphics checks.
+- [x]15/15 complete digital transports; public measured hour soak.
+- [x] Focused unmodified stock0.10.1/0.10.5 FIFO/PWM causal evidence, with
+      identical inputs and unchanged output under observation.
+- [x] Published ROM/ZIP downloaded, hashed, safely extracted; same ROM bytes
+      executed from the freshly packaged CI artifact.
+- [x] Positive RC2 physical-GBA playability/subjective audio feedback recorded.
+- [x] Proposed graphics resource contract includes tighter private memory.
+- [ ] Strict ordinary output gate: **9/15; RELEASE BLOCKED**.
+- [ ] Calibrated release-output methodology and independent reference residual.
+- [ ] Remaining hardware/resource, all-difficulty and real-recording listening
+      acceptance, scoped to the intended release profile.
+- [ ] Project-wide licensing decision and formal owner release approval.
+- [ ] Owner/reviewer approval of development baseline and any future graphics.
+
+**Development recommendation: APPROVED WITH DOCUMENTED LIMITATIONS**, not formal
+release or automatic graphics authorization. M020 reports are authoritative;
+following lists are historical.
+
+# Historical gates — Mission 019
 
 - [x] Source lineage, clean byte-identical RC2 rebuild, unchanged RC1/RC2.
 - [x]209 Python +13 regular sanitizer programs;38 compiled-ROM checks.

@@ -1,4 +1,33 @@
-# Current status — Mission 019
+# Current status — Mission 020
+
+**Development recommendation: APPROVED WITH DOCUMENTED LIMITATIONS. Public
+release: BLOCKED.** RC2 is unchanged and retains Copper Circuit and all three
+difficulties. Fresh CI passes209 Python tests,13 sanitizer programs,38 ROM checks,
+15/15 digital transports and the public hour soak. Strict ordinary output remains
+**9/15**, visibly failing; it is not overridden by this development recommendation.
+
+The focused stock0.10.1/0.10.5 experiment identifies expired emulator PWM-slot
+updates in the backing reference while every FIFO byte and song clock remains
+correct. See [closeout](docs/MISSION_020_FOUNDATION_CLOSEOUT.md),
+[audio conclusion](docs/M020_AUDIO_CONCLUSION.md),
+[resource contract](docs/M020_GRAPHICS_RESOURCE_CONTRACT.md),
+[baseline proposal](docs/M020_DEVELOPMENT_BASELINE_PLAN.md) and
+[verification](docs/M020_VERIFICATION.json).
+
+Owner feedback is now **positive RC2 real-GBA playability and subjective audio**;
+it does not establish every-difficulty coverage, professional recording fidelity,
+calibrated timing or physical stack/IRQ margins. No graphics work, protected merge
+or formal release is authorized or performed. Cream remains private.
+
+[Play unchanged RC2](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba)
+or [download player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip).
+No compilation required. Runtime source9ccc460693fa7254527177330f32e56153720237;
+proposed development code baseline33b4d227e7e8142639486d1effeb67a81c15903e.
+Next: owner/reviewer decision on that baseline and its safeguards.
+
+Everything below is retained historical status and does not override M020.
+
+# Historical status — Mission 019
 
 **Foundation certification: BLOCKED.** Copper Circuit RC2 remains playable; no
 gameplay or song change was needed. Fresh gameplay, graphics, complete digital

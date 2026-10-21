@@ -1,0 +1,271 @@
+{
+  "schema": "gba-m020-foundation-closeout-v1",
+  "observed_date": "2026-10-21",
+  "branch": "mission-020-foundation-closeout",
+  "starting_commit": "d0dda65a5ca71702cb6650ba06d0931bc10350d5",
+  "verification_code_commit": "33b4d227e7e8142639486d1effeb67a81c15903e",
+  "recommended_development_baseline": "33b4d227e7e8142639486d1effeb67a81c15903e",
+  "runtime_source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "rom": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "rom_bytes": 2643632,
+  "foundation_verdict": "APPROVED WITH DOCUMENTED LIMITATIONS",
+  "public_release_verdict": "RELEASE BLOCKED",
+  "audio_decision": "AUDIO BOUNDED LIMITATION",
+  "owner_approved_foundation": false,
+  "graphics_authorized": false,
+  "graphics_started": false,
+  "engine_changes": "NONE",
+  "runtime_charts_audio_controls_scoring_unchanged": true,
+  "new_rom_candidate": false,
+  "ci": {
+    "initial_run": 39658801775,
+    "final_run": 39660269121,
+    "head_sha": "33b4d227e7e8142639486d1effeb67a81c15903e",
+    "jobs": [
+      {
+        "name": "Build and host regressions",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431126626"
+      },
+      {
+        "name": "Independent stock PWM output replay",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733085"
+      },
+      {
+        "name": "One emulated hour on the exact RC2",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733184"
+      },
+      {
+        "name": "Exact-ROM gameplay and graphics",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119431733323"
+      },
+      {
+        "name": "Strict ordinary audio-output release gate",
+        "result": "failure",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119432636733"
+      },
+      {
+        "name": "Exact digital PCM and FIFO gate",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119432637068"
+      },
+      {
+        "name": "Release promotion blocked until explicit acceptance",
+        "result": "success",
+        "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39660269121/job/119433606711"
+      }
+    ],
+    "all_checks_passed": false,
+    "ordinary_failure_is_nonzero": true,
+    "continue_on_error": false,
+    "release_promotion": "blocked; reporting success is not promotion",
+    "documentation_only_followup": true
+  },
+  "fresh_gates": {
+    "build": {
+      "passed": true,
+      "exact_frozen_source": true,
+      "byte_identical_rc2": true,
+      "toolchain_image": "devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5"
+    },
+    "host_tests": {
+      "passed": true,
+      "count": 209
+    },
+    "sanitizers": {
+      "passed": true,
+      "programs": 13
+    },
+    "gameplay": {
+      "passed": true,
+      "checks": 38
+    },
+    "graphics": {
+      "passed": true,
+      "reference_valid_frames": 27420,
+      "displaced_pixels": 0,
+      "foreground_peaks": [
+        119616,
+        147008,
+        155392
+      ]
+    },
+    "digital": {
+      "passed": true,
+      "cases": 15,
+      "total": 15,
+      "all_resumed_segments_checked": true
+    },
+    "ordinary": {
+      "passed": 9,
+      "total": 15,
+      "result": "failed; original criteria unchanged"
+    },
+    "stress": {
+      "passed": true,
+      "profile": "public",
+      "emulated_seconds": 3647.016587317,
+      "complete_songs": [
+        14,
+        14,
+        14
+      ],
+      "foreground_peak": 155776,
+      "underruns": 0
+    },
+    "reproducibility": {
+      "passed": true,
+      "independent_ci_rebuilds": 2,
+      "rom_unchanged": true
+    },
+    "content_isolation": {
+      "passed": true,
+      "title": "Copper Circuit",
+      "all_three_difficulties": true,
+      "private_payload_uploaded": false
+    },
+    "artifact_verification": {
+      "published_download_hashes_verified": true,
+      "zip_members": 14,
+      "crc_passed": true,
+      "safe_extraction_passed": true,
+      "downloaded_rom_matches_zip": true,
+      "downloaded_rom_matches_executed_ci_rom": true,
+      "windows_gui_execution": false
+    }
+  },
+  "focused_audio": {
+    "stock_versions": [
+      "Debian stock mGBA 0.10.1",
+      "unmodified mGBA 0.10.5 at 26b7884bc25a5933960f3cdcd98bac1ae14d42e2"
+    ],
+    "cases": [
+      22,
+      23
+    ],
+    "all_raw_input_event_and_clock_traces_cross_version_identical": true,
+    "observer_preserves_untapped_raw_bytes": true,
+    "complete_samples_per_case": 1261568,
+    "mixer_words_per_case": 315388,
+    "digital_mismatches": 0,
+    "mixer_mismatches": 0,
+    "complete_clock_drift_cycles": 0,
+    "original_first_failure_runtime_seconds": 23.64447021484375,
+    "remaining_fixed_phase_pair_failure_runtime_seconds": 36.20111083984375,
+    "remaining_fixed_phase_pair_failure_music_seconds": 34.20111083984375,
+    "pair_correlation": 0.9985551608734642,
+    "pair_required_correlation": ">0.999; unchanged",
+    "startup_advance_source_samples": 15,
+    "fixed_phase_diagnostic_only": true,
+    "observed_fifo_indices": [
+      590000,
+      599999
+    ],
+    "window_fifo_period_cycles": [
+      1024,
+      1024
+    ],
+    "event_lateness_cycles": [
+      0,
+      48
+    ],
+    "scheduled_deadline_distance_cycles": {
+      "mixed": 59,
+      "backing": 5
+    },
+    "expired_deadlines": {
+      "mixed": 0,
+      "backing": 3403
+    },
+    "changed_updates_skipped": 579,
+    "next_pwm_retains_previous": 579,
+    "next_pwm_emits_incoming": 0,
+    "maximum_observed_consecutive_expired_ticks": 8,
+    "observed_sequence_ms": 0.48828125,
+    "universal_or_physical_bound": false,
+    "independent_blip_exact": false,
+    "independent_blip_maximum_signed16_error": {
+      "mixed": 2,
+      "backing": 1
+    },
+    "new_acceptance_threshold_or_method_adopted": false,
+    "emulator_patched": false,
+    "game_audio_parameters_changed": false,
+    "reason_for_development_classification": "Complete game/FIFO data and clocks remain independently correct. The causal mismatch is observed after this boundary in stock host PWM-slot placement, including 579/579 retained-old-value witnesses. It cannot reasonably conceal game-side sample corruption or accumulating transport drift under the exercised matrix; absolute hardware output certification remains separate."
+  },
+  "private_profile": {
+    "fresh_m020_execution": false,
+    "retained_source": "docs/M019_VERIFICATION.json",
+    "authorized_zip_present_locally": true,
+    "uploaded": false,
+    "prior_full_easy_heads": 395,
+    "prior_full_easy_holds": 78,
+    "static_iwram": 27276,
+    "static_ewram": 9600,
+    "prior_stack_user_untouched": 4256,
+    "prior_stack_user_touched": 980,
+    "prior_irq_touched_of_160": 40,
+    "prior_full_length_ordinary_passed": 10,
+    "prior_full_length_ordinary_total": 15,
+    "private_medium_hard_all_paths_certified": false,
+    "professional_recording_fidelity_accepted": false,
+    "pipeline_preserved": true
+  },
+  "owner_hardware_feedback": {
+    "classification": "Positive RC2 physical-GBA playability and subjective audio feedback",
+    "quote": "I tested it and it's working great. The audio sounds fine to me. We don't have a real song in the game so I can't really judge quality or clarity. Besides that, I love this and where it's at. I'm glad that with all the tests it still hasn't crashed.",
+    "all_difficulties_exhaustively_tested": false,
+    "calibrated_output_timing_measured": false,
+    "physical_stack_irq_margins_measured": false,
+    "commercial_recording_clarity_proven": false
+  },
+  "environment": {
+    "local": "Windows 11; bundled Python/NumPy analysis",
+    "fresh_compilation_and_rom_execution": "GitHub Linux runners; not local Windows GUI",
+    "software_installed_on_owner_pc": false,
+    "owner_approved_tools_if_needed": true,
+    "system_settings_changed": false
+  },
+  "integration": {
+    "main_changed": false,
+    "develop_changed": false,
+    "protected_merge_performed": false,
+    "force_push": false,
+    "history_rewritten": false,
+    "formal_release": false,
+    "source_license_decision_pending": true,
+    "future_candidate_ci_required": true
+  },
+  "delivery": {
+    "artifact_commit": "437410b45881119084cf675735b30cf3c841dad5",
+    "zip_sha256": "194c34e77deade95e2c60f4d57cc55c946dbd199cf56cf48cfb9fd1e2d08b77b",
+    "rom_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+    "zip_url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip",
+    "local_copy": "Workspace parent / Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba"
+  },
+  "unsuccessful_attempts": [
+    {
+      "test": "First local ordinary-verifier invocation",
+      "result": "Sandbox temporary-file denial; rerun approved and original 9/15 failure reproduced; not an engine failure"
+    },
+    {
+      "test": "Hosted ZIP with fresh CI receipt",
+      "result": "Rejected correctly: only BUILD_MANIFEST.json differs from hosted historical archive. Hosted archive matches its independent published historical hash, all 14 names/CRC verified, ROM identical. No receipt check weakened."
+    },
+    {
+      "test": "Independent PWM/blip replay",
+      "result": "Not byte-exact; 1..2 signed16 unit residual retained. No acceptance substitution."
+    },
+    {
+      "test": "One/two-neighbor ideal PWM model",
+      "result": "Backing leaves 201/42 slot-end or 75/19 slot-start observations outside one/two source samples. Repeated expired stock deadlines explain why this naive model is insufficient; not marked passing."
+    }
+  ],
+  "evidence_directory": "docs/evidence/mission020",
+  "smallest_remaining_release_experiment": "Independently calibrated deterministic PWM/quantization output reference covering the eight-expired-tick case and 1..2-unit blip residual, then unchanged ordinary matrix or explicitly reviewed revised specification; no audio-engine rewrite.",
+  "next_action": "Owner/reviewer decides whether to accept exact development baseline 33b4d227e7e8142639486d1effeb67a81c15903e and the documented resource/regression contract; no graphics starts automatically."
+}

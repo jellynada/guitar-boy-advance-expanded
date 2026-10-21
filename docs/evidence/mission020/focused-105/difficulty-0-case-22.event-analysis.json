@@ -1,0 +1,40 @@
+{
+  "diagnostic_only": true,
+  "acceptance_thresholds_unchanged": true,
+  "fifo_events": 10000,
+  "timer_period_min": 1024,
+  "timer_period_max": 1024,
+  "late_cycles_min": 0,
+  "late_cycles_max": 48,
+  "first_fifo_source_index": 590000,
+  "last_fifo_source_index": 599999,
+  "output_slot_cycles": 512,
+  "source_sample_cycles": 1024,
+  "scheduled_fifo_to_pwm_deadline_cycles": [
+    59
+  ],
+  "expired_pwm_deadlines": 0,
+  "maximum_consecutive_expired_deadlines": 0,
+  "changed_fifo_values_skipped_by_stock_slot_rule": 0,
+  "next_pwm_retains_previous": 0,
+  "next_pwm_emits_incoming": 0,
+  "first_skipped_examples": [],
+  "models": [
+    {
+      "boundary": "slot-end",
+      "pwm_samples": 19992,
+      "exact_sample_matches": 18284,
+      "matches_within_one_source_sample": 19992,
+      "unexplained_outside_one": 0,
+      "unexplained_outside_two": 0
+    },
+    {
+      "boundary": "slot-start",
+      "pwm_samples": 19992,
+      "exact_sample_matches": 16515,
+      "matches_within_one_source_sample": 19992,
+      "unexplained_outside_one": 0,
+      "unexplained_outside_two": 0
+    }
+  ]
+}

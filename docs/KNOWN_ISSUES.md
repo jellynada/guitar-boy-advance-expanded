@@ -1,4 +1,25 @@
-# Current unresolved gates — Mission 019
+# Current limitations — Mission 020
+
+- Strict ordinary output remains9/15 and blocks release. Stock0.10.1/0.10.5
+  skip PWM-slot updates when the backing reference's5-cycle deadline expires;
+ 579 changed-byte events all retain the prior output in the focused trace.
+  Full consumed PCM and clocks pass. This supports development, not a passing
+  replacement acceptance gate. See M020_AUDIO_CONCLUSION.md.
+- Independent blip replay is not bit-exact (maximum1..2signed16 units); observed
+  eight-expired-tick sequences are not universal hardware/emulator bounds.
+- Private full Cream has much tighter IWRAM/stack margins than public RC2;
+  full private Medium/Hard and physical worst-case timing remain unqualified.
+  Existing private full-length ordinary10/15 remains historical and unresolved.
+- Owner RC2 playability/listening feedback is positive; no calibrated timing,
+  professional-recording clarity or exhaustive all-difficulty proof is inferred.
+- Licensing, formal publication and protected integration remain separate owner
+  decisions. Graphics are not started. Future visual CI must test its exact
+  changed candidate as well as frozen RC2; baseline-only success is insufficient.
+
+Existing intentional score/hold/input semantics are preserved. Older findings
+below are historical; M020_VERIFICATION.json governs the current recommendation.
+
+# Historical unresolved gates — Mission 019
 
 - **Audio:** strict ordinary output9/15 on two stock versions despite identical
   physical inputs and digital15/15; separate fixed-phase diagnostic14/15 does
