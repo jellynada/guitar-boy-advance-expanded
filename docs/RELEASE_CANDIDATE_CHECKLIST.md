@@ -1,3 +1,16 @@
+# Current RC2 gates — Mission018
+
+- RC1 reproduced independently; preserve its binary and download.
+- No gameplay/chart/mapping/timer changes; pause event cause traced.
+- Verify current exact ROM/source, header, all3 difficulties and digital samples.
+- Ordinary output gate remains unresolved; do not silently calibrate it away.
+- Owner RC1 positive feedback is recorded; RC2 acceptance remains pending.
+- New download-back evidence must pass before owner delivery is claimed.
+- No merge, formal release, tag or next mission without approval.
+
+See M018_VERIFICATION.json for actual machine-readable results. Older checklists
+below are historical.
+
 # v0.1.0-alpha-RC1 gates
 
 - [x] Exact Arcade75 baseline and full ancestry; isolated Mission017 branch.

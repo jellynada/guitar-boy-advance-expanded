@@ -1,3 +1,22 @@
+# Current status — Mission 018
+
+Copper Circuit is playable on Easy/Medium/Hard. The owner reports RC1 works
+well on a real GBA. RC2 is a **YELLOW playtest candidate**, not a release-approved
+build: strict ordinary audio output remains unresolved.
+
+[Current source of truth](docs/MISSION_018_STABILIZATION_REPORT.md),
+[verification](docs/M018_VERIFICATION.json), [handheld checklist](docs/OWNER_M018_PLAYTEST.md).
+Current branch: `mission-018-release-stabilization`; no merge into main/develop.
+RC2 download links will be recorded in `public-demo-downloads/RC2-DELIVERY.json`.
+Historical RC1 download below stays valid. No compilation is required to play.
+
+Build: `python3 tools/build_public_demo.py` for maintainers with the pinned
+toolchain. Private owner-song builds still use the preserved Windows launcher
+and separate `tools/build_profile.py` profiles; never publish their recordings.
+
+Everything below this current-status section is historical Mission017 or earlier
+context unless explicitly referenced by the Mission018 report.
+
 # Mission 017 playable public candidate
 
 **Copper Circuit** is the new original75-second demo for Easy/Medium/Hard.

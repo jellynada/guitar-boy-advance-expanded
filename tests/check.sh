@@ -87,3 +87,5 @@ g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sani
 ASAN_OPTIONS=detect_leaks=1 "$tmp/arcade_eof"
 
 python3 -m unittest discover -s tests -p test_public_demo.py -v
+
+python3 -m unittest discover -s tests -p test_release_gates.py -v

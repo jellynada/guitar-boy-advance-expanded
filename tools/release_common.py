@@ -12,7 +12,9 @@ PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
 PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml', '.github/workflows/public-demo.yml'}
 PUBLIC_DEMO_DELIVERY = {'public-demo-downloads/' + n for n in (
     'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba',
-    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip', 'DELIVERY.json', 'SHA256SUMS.txt')}
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip', 'DELIVERY.json', 'SHA256SUMS.txt',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip', 'RC2-DELIVERY.json', 'RC2-SHA256SUMS.txt')}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
 PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
             'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba'),

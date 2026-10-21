@@ -1,3 +1,12 @@
+# Current priority — Mission018 stabilization
+
+Keep Medium's current pattern by owner choice. Resolve measured audio-output
+compatibility through a targeted hardware/stock-emulator comparison, gather RC2
+handheld feedback, then review history-preserving develop integration. Features
+remain deferred; no next mission is automatically begun.
+
+Older backlog entries below are historical, subject to the current gate report.
+
 # Mission 017 priority gates
 
 Before any new feature: classify/fix strict public-demo output failure, investigate

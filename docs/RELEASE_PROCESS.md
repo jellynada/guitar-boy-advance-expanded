@@ -1,3 +1,17 @@
+# Mission018 current promotion policy
+
+Build success, gameplay pass, exact digital pass, ordinary output pass, owner
+acceptance and release approval are independent statuses. A failed mandatory
+output gate stays red/nonzero even while an original public playtest is hosted.
+No automatic merge/release job exists. Candidate manifests bind source/tree,
+toolchain, profile, tests and ROM/chart/audio hashes. Packaging regenerates the
+original composition, checks positive allowlist, extraction and downloaded ROM.
+RC1's4 delivery files stay untouched; RC2 uses its own4 allowlisted paths.
+The later artifact/evidence commit is distinct from the ROM source commit.
+
+Old release notes below are historical. Owner approval precedes any protected
+merge, release/tag or broader licensing choice.
+
 # Mission 017 public playtest delivery
 
 Build from clean committed source only. Independently regenerate original

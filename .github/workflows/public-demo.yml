@@ -2,7 +2,7 @@ name: Public demo candidate gates
 on:
   workflow_dispatch:
   push:
-    branches: [mission-017-public-demo]
+    branches: [mission-018-release-stabilization]
     paths-ignore: ['public-demo-downloads/**']
 permissions:
   contents: read
@@ -10,42 +10,116 @@ concurrency:
   group: public-demo-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  candidate:
+  build:
+    name: Build and host regressions
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - name: Install verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y g++ ffmpeg python3-numpy libmgba-dev
-      - name: Host regressions
-        run: bash tests/check.sh
-      - name: Build original public composition
-        run: python3 tools/build_public_demo.py
-      - name: Package, extract, exercise exact ROM
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y g++ ffmpeg python3-numpy
+      - run: bash tests/check.sh
+      - run: python3 tools/build_public_demo.py
+      - name: Package original composition and verify extraction
         run: |
           set -euo pipefail
           build="builds/public-demo/$(cat builds/public-demo/LATEST.txt)"
-          zip="builds/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip"
-          python3 tools/package_public_demo.py --build "$build" --output "$zip"
-          python3 tools/verify_demo_zip.py "$zip" --receipt "${zip%.zip}.verification.json" --extract-to builds/player
-          python3 tools/test_public_demo.py --build "$build" --rom builds/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba --output builds/emulator
-      - name: Strict ordinary audio-output release gate
-        run: |
-          build="builds/public-demo/$(cat builds/public-demo/LATEST.txt)"
-          python3 tools/check_demo_audio.py --build "$build" --captures builds/emulator
-      - name: Retain candidate evidence even when release gate fails
-        if: always()
+          mkdir -p builds/ci
+          python3 tools/package_public_demo.py --build "$build" --output builds/ci/player.zip
+          python3 tools/verify_demo_zip.py builds/ci/player.zip --receipt builds/ci/player.verification.json --extract-to builds/ci/player
+          cp -r "$build" builds/ci/result
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m018-build, path: builds/ci, if-no-files-found: error, retention-days: 14}
+  gameplay:
+    name: Exact-ROM gameplay and graphics
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y gcc ffmpeg python3-numpy libmgba-dev
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m018-build, path: builds/ci}
+      - run: |
+          dpkg-query -W libmgba-dev > builds/ci/emulator-version.txt
+          python3 tools/test_public_demo.py --build builds/ci/result --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --output builds/emulator
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m018-gameplay, path: builds/emulator, if-no-files-found: warn, retention-days: 14}
+  digital:
+    name: Exact digital PCM and FIFO gate
+    needs: [build, gameplay]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y gcc ffmpeg python3-numpy libmgba-dev
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m018-build, path: builds/ci}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m018-gameplay, path: builds/emulator}
+      - run: |
+          set -euo pipefail
+          gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/pause.c -o builds/emulator/pause -lmgba
+          gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/stress.c -o builds/emulator/stress -lmgba
+          gcc -O2 -Wall -Wextra -Werror tests/pause_trace_emulator.c -o builds/pause-trace -lmgba
+          python3 tools/check_pause_trace.py --probe builds/pause-trace --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --symbols builds/ci/result/symbols.txt --output builds/pause-edges
+          gcc -O2 -Wall -Wextra -Werror -fPIC -shared tests/hardware_tap.c -o builds/tap.so -lmgba -ldl
+          python3 tools/check_demo_fifo.py --build builds/ci/result --probes builds/emulator --output builds/digital --tap builds/tap.so
+      - if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: m017-candidate-${{ github.sha }}
+          name: m018-digital-evidence
           path: |
-            builds/*.zip
-            builds/*.verification.json
-            builds/emulator/*.log
-            builds/emulator/*.json
+            builds/digital/*.json
+            builds/digital/*.log
+            builds/pause-edges/*.json
+            builds/pause-edges/*.csv
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 14
+  audio-output:
+    name: Strict ordinary audio-output release gate
+    needs: [build, gameplay]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg python3-numpy
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m018-build, path: builds/ci}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m018-gameplay, path: builds/emulator}
+      - run: python3 tools/check_demo_audio.py --build builds/ci/result --captures builds/emulator
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m018-ordinary-output
+          path: |
+            builds/emulator/*.output.log
+            builds/emulator/audio-output.json
+          retention-days: 14
+  promotion:
+    name: Release promotion blocked until explicit acceptance
+    if: always()
+    needs: [build, gameplay, digital, audio-output]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Record independent statuses; never publish or merge
+        env:
+          BUILD: ${{ needs.build.result }}
+          GAMEPLAY: ${{ needs.gameplay.result }}
+          DIGITAL: ${{ needs.digital.result }}
+          AUDIO: ${{ needs.audio-output.result }}
+        run: |
+          python3 - <<'PY'
+          import os,json
+          r={k:os.environ[k] for k in ['BUILD','GAMEPLAY','DIGITAL','AUDIO']}
+          r.update(owner_accepted=False,release_approved=False,promotion='blocked; no automatic release or merge')
+          open('release-status.json','w').write(json.dumps(r,indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'w') as f:f.write('```json\n'+json.dumps(r,indent=2)+'\n```\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m018-release-status, path: release-status.json, retention-days: 14}

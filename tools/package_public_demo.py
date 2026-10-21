@@ -19,7 +19,7 @@ ZIP = ROM.replace('.gba','.zip')
 
 
 def package(root, result, destination):
-    root,result,destination=map(Path,(root,result,destination));m=verify(result);files,source=source_snapshot(root)
+    root,result,destination=map(Path,(root,result,destination));m=verify(result);ROM=m['rom'];files,source=source_snapshot(root)
     if m['source_commit']!=source['source_commit'] or m['source_tree_sha256']!=source['source_tree_sha256']:raise ValueError('Build/source mismatch')
     # Ignore all owner folders, historical exports and existing downloaded ZIPs.
     with tempfile.TemporaryDirectory()as t:
@@ -28,10 +28,10 @@ def package(root, result, destination):
         if composition!=m['composition'] or expected!=json.loads((result/'prepared/song-manifest.json').read_text()):raise ValueError('Not the exact original public composition')
     payload={ROM:(result/ROM).read_bytes(),'BUILD_MANIFEST.json':(result/'manifest.json').read_bytes(),
              'SHA256SUMS.txt':(m['rom_sha256']+'  '+ROM+'\n').encode(),
-             'README.txt':('GUITAR BOY ADVANCE EXPANDED - v0.1.0-alpha-RC1\n\nOpen '+ROM+' in mGBA, or copy it to a compatible GBA flash cartridge.\nNo compilation is needed.\n\nChoose Copper Circuit, then Easy/Medium/Hard.\nEasy: LEFT / B / A\nMedium: LEFT / RIGHT / B / A\nHard: LEFT / UP-or-DOWN / RIGHT / B / A\nEvery note needs a fresh press. Keep sustains held for bonuses.\nMisses mute guitar; a valid hit brings it back.\nSTART: pause/resume. SELECT while paused: return.\nResults: A/START replay; B/SELECT song selection.\n\nOriginal 75-second composition, plus a 2-second count-in.\nSource: '+m['source_commit']+'\nROM SHA256: '+m['rom_sha256']+'\n\nReal-GBA owner acceptance pending. Public-demo strict emulator output\ncomparisons currently fail the unchanged 1ms limit: release gate blocked.\nHistorical full-length Cream emulator\noutput findings remain unresolved; this ROM contains no Cream recording.\nInput diagnostics use the historical Easy test; Hard alias is described above.\nRead LICENSES/OWNER_PERMISSION.txt and included third-party notices.\n').encode()}
+             'README.txt':('GUITAR BOY ADVANCE EXPANDED - '+m['version']+' playtest candidate\n\nOpen '+ROM+' in mGBA, or copy it to a compatible GBA flash cartridge.\nNo compilation is needed.\n\nChoose Copper Circuit, then Easy/Medium/Hard.\nEasy: LEFT / B / A\nMedium: LEFT / RIGHT / B / A\nHard: LEFT / UP-or-DOWN / RIGHT / B / A\nEvery note needs a fresh press. Keep sustains held for bonuses.\nMisses mute guitar; a valid hit brings it back.\nSTART: pause/resume. SELECT while paused: return.\nResults: A/START replay; B/SELECT song selection.\n\nOriginal 75-second composition, plus a 2-second count-in.\nSource: '+m['source_commit']+'\nROM SHA256: '+m['rom_sha256']+'\n\nReal-GBA owner acceptance pending. Public-demo strict emulator output\ncomparisons currently fail the unchanged 1ms limit: release gate blocked.\nHistorical full-length Cream emulator\noutput findings remain unresolved; this ROM contains no Cream recording.\nInput diagnostics use the historical Easy test; Hard alias is described above.\nRead LICENSES/OWNER_PERMISSION.txt and included third-party notices.\n').encode()}
     for name in sorted(files):
         if name.startswith('docs/licenses/') or name=='docs/DEMO_CONTENT_PROVENANCE.md':payload['LICENSES/'+Path(name).name]=files[name]
-        if name in {'docs/KNOWN_ISSUES.md','docs/OWNER_M017_PLAYTEST.md'}:payload[Path(name).name]=files[name]
+        if name in {'docs/KNOWN_ISSUES.md','docs/OWNER_M018_PLAYTEST.md'}:payload[Path(name).name]=files[name]
     if 'LICENSES/OWNER_PERMISSION.txt' not in payload or 'LICENSES/TONC-MIT.txt' not in payload:raise ValueError('Missing publication authority/notices')
     destination.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(destination,'x',zipfile.ZIP_DEFLATED,compresslevel=9)as z:
@@ -41,7 +41,7 @@ def package(root, result, destination):
         if z.testzip() is not None or set(z.namelist())!=set(payload):raise ValueError('ZIP CRC/inventory failed')
         for name,data in payload.items():
             if z.read(name)!=data:raise ValueError('ZIP content mismatch')
-    receipt=dict(source_commit=m['source_commit'],archive_sha256=file_hash(destination),rom_sha256=m['rom_sha256'],
+    receipt=dict(rom=ROM,source_commit=m['source_commit'],archive_sha256=file_hash(destination),rom_sha256=m['rom_sha256'],
                  original_content_regenerated=True,legacy_commercial_payloads_excluded=True,crc='passed',payload_sha256={n:__import__('hashlib').sha256(b).hexdigest()for n,b in payload.items()},network_download_verified=False)
     destination.with_suffix('.verification.json').write_text(json.dumps(receipt,indent=2)+'\n');return receipt
 

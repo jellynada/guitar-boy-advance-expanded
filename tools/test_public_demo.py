@@ -35,9 +35,9 @@ def run(root, build, rom, output, container=None):
     jobs=[]
     for i,count in enumerate([86,171,335]):
         env={'GBA_DIFFICULTY':str(i),'GBA_PAUSE_PLAYBACK_SAMPLES':'1261568'}
-        for case in [0,4,11,12,17,19,20,22,23]:
+        for case in [0,4,11,12,17,19,20,22,23,28]:
             prefix=output/f'difficulty-{i}-case-{case}'
-            jobs.append((prefix,[output/('stress'if case in [22,23]else'pause'),rom,build/'symbols.txt',str(count),'4900',str(case),'120'if case==20 else'1'if case==0 else'30',prefix],env))
+            jobs.append((prefix,[output/('stress'if case in [22,23,28]else'pause'),rom,build/'symbols.txt',str(count),'4900',str(case),'120'if case==20 else'1'if case==0 else'30',prefix],env))
         for mode in ['perfect','mixed']:
             prefix=output/f'graphics-{i}-{mode}'
             jobs.append((prefix,[output/'timing',rom,build/'symbols.txt',str(count),'4900',mode,prefix,'1'],dict(env,GBA_REQUIRE_CLEAN_HIGHWAY='1')))
@@ -56,7 +56,8 @@ def run(root, build, rom, output, container=None):
     maxima=[]
     for i in range(3):
         timings=[json.loads((output/f'graphics-{i}-{mode}.timing.json').read_text())for mode in ['perfect','mixed']]
-        peaks=[int(v)for p in output.glob(f'difficulty-{i}-*.log')for v in re.findall('foreground_peak_cycles=(\\d+)',p.read_text())]
+        peaks=[int(v)for p in output.glob(f'difficulty-{i}-*.log')for v in re.findall(r'foreground_peak_cycles=(\d+)',p.read_text())]
+        if len(peaks)!=10:raise ValueError('Missing foreground measurements; cannot claim frame budget')
         maximum=max(peaks+[t['foreground_max']for t in timings]);assert maximum<280896,('frame deadline',i,maximum)
         assert all(t['defect_frames']==0 and t['underruns']==0 for t in timings)
         maxima.append(dict(difficulty=i,foreground_max_cycles=maximum,frame_cycles=280896,headroom_cycles=280896-maximum,graphics=timings))

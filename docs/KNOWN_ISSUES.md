@@ -1,3 +1,18 @@
+# Current issues — Mission018
+
+- Reproduced/unresolved: strict ordinary public output9/15; stock FIFO/time
+  mechanisms confirmed, fixed-phase diagnostic14/15 leaves one waveform issue.
+- Reproduced/understood: pause case8 contains a genuine B press after resume
+  outside a new note opportunity. No engine behavior was changed to hide it.
+- Accepted for now: Medium same-lane hold replacement, explicit owner choice.
+- Fixed: CI/status separation, stale audio-evidence rejection, missed peak-log
+  aggregation and explicit RC2 artifact/boot-header validation.
+- Environment-limited: physical stack/IRQ/audio timing; broad RC2 owner acceptance.
+- Historical/open: full Cream10/15 and exact15815 trace not automatically certified
+  by public demo checks. No invented project-wide license or private redistribution.
+
+See M018_AUDIO_INVESTIGATION.md and M018_PAUSE_INPUT.md. All below is historical.
+
 # Mission 017 current public candidate
 
 - Strict mixed-play output residual -1.007080ms at23.644470s exceeds unchanged

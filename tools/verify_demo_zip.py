@@ -15,6 +15,9 @@ except ImportError:
 def verify(archive, receipt, destination):
     archive,receipt,destination=map(Path,(archive,receipt,destination));r=json.loads(receipt.read_text())
     if file_hash(archive)!=r['archive_sha256']:raise ValueError('Archive checksum mismatch')
+    roms=[n for n in r['payload_sha256'] if n in {'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba','Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba'}]
+    if len(roms)!=1:raise ValueError('Unknown or ambiguous candidate ROM')
+    ROM=roms[0]
     with zipfile.ZipFile(archive)as z:
         names=z.namelist()
         if len(names)!=len(set(names))or set(names)!=set(r['payload_sha256']):raise ValueError('ZIP inventory mismatch')

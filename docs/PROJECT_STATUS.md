@@ -1,3 +1,17 @@
+# Current authoritative status — Mission018
+
+**YELLOW**, playable public Copper Circuit; audio-output release gate unresolved.
+Easy/Medium/Hard and song selection are implemented. RC1 received positive real
+GBA playability feedback. RC2 requires separate owner testing. Extra pause-case8
+WrongInput is explained as a real new B press, not a manufactured edge.
+Medium pattern remains unchanged by owner choice.
+
+Use MISSION_018_STABILIZATION_REPORT.md and M018_VERIFICATION.json for current
+source, features, measurements, gates and next milestone. The current private
+Windows launcher/build profiles are preserved; no private delivery is attempted.
+
+The older mission notes below are historical evidence, not current feature status.
+
 # Mission 017 current candidate
 
 Original Copper Circuit public profile implemented on isolated mission branch.

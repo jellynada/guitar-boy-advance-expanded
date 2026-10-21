@@ -1,3 +1,14 @@
+# Mission018 current verification
+
+Rebuild exact RC1 before fixes; preserve before/after identities and failures.
+Run tests/check.sh, exact-source builder, package/extraction checks, complete
+difficulty/graphics suite, check_pause_trace.py, digital FIFO oracle and unchanged
+ordinary output gate. Compare stock0.10.1/0.10.5, record diagnostic stack writes
+separately, and run negative scanline/header/stale-evidence tests. Download back,
+hash, extract and emulate actual hosted RC2. See M018_VERIFICATION.json.
+
+Older plans below are historical; never infer release approval from build success.
+
 # Mission 017 exact-candidate validation
 
 Run tests/check.sh, build_public_demo.py, package_public_demo.py, verify_demo_zip.py,

@@ -459,7 +459,7 @@ int main(){
 #ifdef GBA_PUBLIC_DEMO
                 menuOriginal.updateText(selection==2?">Copper Circuit":" Copper Circuit");
                 menuImported.updateText(selection==3?">Controls / Help":" Controls / Help");
-                menuDiagnostic.updateText("EXPANDED RC1");
+                menuDiagnostic.updateText("EXPANDED RC2");
 #else
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
                 menuImported.updateText(selection == 2 ? ">Custom song" : " Custom song");
