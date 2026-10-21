@@ -47,7 +47,7 @@ def verify(result):
     return m
 
 
-def build(root):
+def build(root, container=None):
     root=Path(root).resolve();files,source=source_snapshot(root)
     output=root/'builds/public-demo';output.mkdir(parents=True,exist_ok=True)
     stamp=source['source_commit'][:12]+'-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
@@ -57,13 +57,20 @@ def build(root):
         composition=generate(job/'composition')
         prepare(job/'composition',job/'prepared',difficulty='All',guitar='guitar.wav',backing=['backing.wav'],max_duration=75,handheld=True,display_title=TITLE)
         shutil.copytree(job/'prepared',work/'imports/output/public-demo')
+        image=(work/'scripts/toolchain-image.txt').read_text().strip()
+        flags=['BUILD_PROFILE=public-demo','SOURCE_REVISION='+source['source_commit'],
+               'IMPORTED_HEADER=imports/output/public-demo/imported_chart.hpp','AUDIO_DIR=imports/output/public-demo/audio']
+        if container:
+            actual=subprocess.check_output(['docker','inspect','--format','{{.Config.Image}}',container],text=True).strip()
+            if actual!=image:raise ValueError('Existing build container is not the exact pinned toolchain image')
+            command=['docker','exec','-w',str(work),container,'make','-j2',*flags]
+        else:command=['bash','scripts/build-docker.sh',*flags]
         with(job/'build.log').open('w')as log:
-            subprocess.run(['bash','scripts/build-docker.sh','BUILD_PROFILE=public-demo','SOURCE_REVISION='+source['source_commit'],
-                            'IMPORTED_HEADER=imports/output/public-demo/imported_chart.hpp','AUDIO_DIR=imports/output/public-demo/audio'],cwd=work,stdout=log,stderr=subprocess.STDOUT,check=True)
+            subprocess.run(command,cwd=work,stdout=log,stderr=subprocess.STDOUT,check=True)
         for extension in ['.gba','.elf']:shutil.copyfile(work/('guitar-boy-advance-expanded'+extension),job/ROM.replace('.gba',extension))
         image=(work/'scripts/toolchain-image.txt').read_text().strip()
         with(job/'symbols.txt').open('w')as f:
-            subprocess.run(['docker','run','--rm','-v',str(job)+':/public-demo:ro',image,'/opt/devkitpro/devkitARM/bin/arm-none-eabi-nm','/public-demo/'+ROM.replace('.gba','.elf')],stdout=f,check=True)
+            subprocess.run((['docker','exec',container,'/opt/devkitpro/devkitARM/bin/arm-none-eabi-nm',str(job/ROM.replace('.gba','.elf'))]if container else['docker','run','--rm','-v',str(job)+':/public-demo:ro',image,'/opt/devkitpro/devkitARM/bin/arm-none-eabi-nm','/public-demo/'+ROM.replace('.gba','.elf')]),stdout=f,check=True)
         m=dict(schema='gba-public-demo-v1',status='success',version=VERSION,profile='public-demo',test_suite_revision=source['source_commit'],source_commit=source['source_commit'],source_tree_sha256=source['source_tree_sha256'],
                rom=ROM,rom_sha256=file_hash(job/ROM),rom_bytes=(job/ROM).stat().st_size,prepared_manifest_sha256=file_hash(job/'prepared/song-manifest.json'),
                composition=composition,charts=verify_prepared(job/'prepared')['runtime']['difficulties'],toolchain=image,
@@ -82,4 +89,4 @@ def build(root):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--repo',type=Path,default=Path(__file__).resolve().parents[1]);a=p.parse_args();build(a.repo)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--repo',type=Path,default=Path(__file__).resolve().parents[1]);p.add_argument('--build-container',help='Reuse an existing exact pinned-image container with the workspace mounted');a=p.parse_args();build(a.repo,a.build_container)
