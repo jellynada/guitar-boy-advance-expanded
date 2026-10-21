@@ -8,6 +8,19 @@ thresholds are unchanged. Fresh digital15/15 passes with zero sample/word
 corruption or complete-song clock drift, with the existing explicit startup
 advance15. Passing digital identity alone is not output timing clearance.
 
+## Digital verifier coverage correction
+
+The old digital analyzer selected only segment1. Consequently its paused-case
+success did not prove post-resume sample identity. The new analyzer validates
+all segments in source order, all mixer words and each running segment's clock
+without treating intentional paused wall time as drift. A new negative test
+corrupts only a post-resume byte; the old analyzer missed it, the new one rejects
+it. Separate tests cover a correct pause and a post-resume clock discontinuity.
+Fresh retained RC1 and RC2 captures both pass all15 full-transport comparisons,
+including all9 running segments in the eight-pause case. Historical first-segment
+reports remain retained. ROM source9ccc460 is unchanged; the verification-suite
+commit is recorded separately in the final delivery/evidence record.
+
 ## Confirmed stock-emulator mechanisms
 
 `tests/mgba_fifo_capacity.c` independently calls the unmodified stock library:

@@ -35,6 +35,9 @@ measurements are machine-readable in `M018_VERIFICATION.json`.
   remains nonzero; no continue-on-error or promotion/upload-to-release job exists.
 - Add read-only pause input traces and stock-library FIFO/time diagnostics,
   legal adversarial gameplay traces and lossless evidence storage.
+- Correct digital observation coverage across every pause/resume segment;
+  add post-resume corruption and clock-fault negative tests. No ROM rebuild is
+  needed for this verifier-only correction; final suite revision is separate.
 - Fix a measurement-aggregation regex that searched for literal `\\d` and silently
   missed foreground peaks in gameplay logs. Require all expected measurements.
   This changes reporting correctness, not game speed or a performance threshold.
