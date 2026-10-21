@@ -1,0 +1,27 @@
+[
+  {
+    "test": "header",
+    "detected": true,
+    "reason": "Invalid GBA cartridge header/budget"
+  },
+  {
+    "test": "chart",
+    "detected": true,
+    "reason": "Prepared song changed or is damaged: imported_chart.hpp"
+  },
+  {
+    "test": "audio",
+    "detected": true,
+    "reason": "Actual original stem missing from ROM"
+  },
+  {
+    "test": "private-marker",
+    "detected": true,
+    "reason": "Private payload marker in public ROM"
+  },
+  {
+    "test": "stale RC1 evidence offered for RC2",
+    "detected": true,
+    "reason": "Stale or foreign audio captures"
+  }
+]

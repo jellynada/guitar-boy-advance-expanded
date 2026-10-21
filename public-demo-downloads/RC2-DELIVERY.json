@@ -20,6 +20,15 @@
   },
   "public_content": "Unchanged original Copper Circuit; no commercial/private recordings",
   "rc1_untouched": true,
-  "network_download_verified": false,
-  "formal_release": false
+  "network_download_verified": true,
+  "formal_release": false,
+  "verification_suite_revision": "4652d45294a7cb930d6928d7fc5eda755a3f8bb2",
+  "artifact_commit": "437410b45881119084cf675735b30cf3c841dad5",
+  "download_urls": {
+    "rom": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba",
+    "zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip"
+  },
+  "downloaded_rom_emulator": "all3 complete runs and UI/results/replay/20ready epochs passed",
+  "full_transport_digital": "15/15; all1261568 samples and every resumed segment checked",
+  "owner_RC1_feedback": "positive real-GBA playtest; does not imply RC2 acceptance"
 }

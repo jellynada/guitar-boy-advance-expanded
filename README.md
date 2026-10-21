@@ -7,7 +7,9 @@ build: strict ordinary audio output remains unresolved.
 [Current source of truth](docs/MISSION_018_STABILIZATION_REPORT.md),
 [verification](docs/M018_VERIFICATION.json), [handheld checklist](docs/OWNER_M018_PLAYTEST.md).
 Current branch: `mission-018-release-stabilization`; no merge into main/develop.
-RC2 download links will be recorded in `public-demo-downloads/RC2-DELIVERY.json`.
+[Download RC2 ROM](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba) or
+[download RC2 player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip).
+Both were downloaded back, hashed, extracted and tested.
 Historical RC1 download below stays valid. No compilation is required to play.
 
 Build: `python3 tools/build_public_demo.py` for maintainers with the pinned

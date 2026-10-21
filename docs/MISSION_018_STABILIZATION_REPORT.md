@@ -24,6 +24,54 @@ frames and15 digital comparisons pass; ordinary output remains9/15. The source
 manifest, toolchain digest, environment, audio/chart identities and before/after
 measurements are machine-readable in `M018_VERIFICATION.json`.
 
+## Exact delivered result
+
+ROM build source: `9ccc460693fa7254527177330f32e56153720237`.
+Final verification tools: `4652d45294a7cb930d6928d7fc5eda755a3f8bb2` (stronger
+post-resume digital checks, without changing/rebuilding the existing binary).
+Artifact-only commit: `437410b45881119084cf675735b30cf3c841dad5`.
+The later evidence/documentation commit is distinct from all three.
+
+209 Python tests/13 regular sanitizer programs pass; separate private-data
+sanitizer replay reproduces exactly15815/585/78 over the documented16116 frames.
+All38 actual-ROM gameplay/graphics checks and4 focused pause cases pass. Digital
+15/15 now covers every transport segment and every1261568 consumed samples per
+run for both candidates. Mandatory ordinary output remains9/15; six actual
+physical-input traces were observed separately and produced byte-identical
+output captures to the failing runs. No threshold or output timestamp is weakened.
+
+27420 composed graphics frames show zero displacement; no exercised scanline
+miss or audio underrun. Foreground peaks119616/147008/155392 cycles versus280896.
+ROM2643632 bytes, static IWRAM8308/EWRAM7016. Emulated stack probe found23288 user
+bytes untouched,916 touched from top, IRQ40 touched of160 allocated. These are
+sampled/intrusive emulator observations, not real-GBA safety certification.
+Observed refill routine maximum1472 cycles; full IRQ dispatch/return cost and
+pause transition overhead are not fully measured. DMA0 affine/DMA3 blend remain
+isolated from software PCM FIFO; note/tail limits32/96, tail peak12.
+
+RC1/RC2 ROM bytes are identical after normalizing only the build identity and
+on-screen RC label. Prepared music/chart manifest hashes are identical. Medium
+pattern remains unchanged by owner instruction. Original699-note mode passes
+three36000-frame Perfect/Miss/mixed runs; private Windows GUI/ROM was not rebuilt
+or tested, and the historical full Cream ordinary matrix is not claimed fixed.
+
+Hosted ROM and ZIP both returned HTTP200 with exact hashes; all14 ZIP entries
+extract correctly. The downloaded extracted ROM passes3 full difficulties,
+UI/results/replay and20 readiness epochs. RC1's old immutable URL still returns
+its original verified checksum. See `../public-demo-downloads/RC2-DELIVERY.json`.
+
+Two infrastructure attempts failed before success: new Docker VFS clone hit
+ENOSPC, then reuse compiled but cleanup failed because files were root-owned.
+Both logs/failed jobs are preserved; neither was delivered. Reuse now verifies
+the exact pinned image and uses the workspace uid/gid. Only newly generated
+Mission018 PWM traces were losslessly compressed and verified; no completed
+project or older artifact was deleted. CI's default fresh-image path remains.
+
+Remote CI was observed in progress, not declared passing. Configuration now
+separates build/gameplay/digital/output/promotion, while verified local outcomes
+are explicit above. Audio failure still blocks technical release promotion;
+owner RC2 acceptance and formal release approval remain false.
+
 ## Supported changes
 
 - Preserve RC1; add explicit RC2/M018 filename/identity and separate artifact

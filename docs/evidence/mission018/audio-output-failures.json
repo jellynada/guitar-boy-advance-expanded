@@ -1,0 +1,44 @@
+[
+  {
+    "difficulty": 0,
+    "case": 4,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.068115234375)",
+    "log_sha256": "c1cafd2a6f30367851053d2760ad25ad8a9e182e5ac137cfb87297b3ca54fd38"
+  },
+  {
+    "difficulty": 0,
+    "case": 22,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 23.64447021484375, 'error_ms', -1.007080078125)",
+    "log_sha256": "29f65d277feccaa9127744b57cf484cddbc42db6a88ac950416ef1bf0f357e95"
+  },
+  {
+    "difficulty": 1,
+    "case": 4,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125)",
+    "log_sha256": "04230a5822d208925c4fa4f9e28e314f9b3570e1b4a421f1b7b925f1bb6a1bd6"
+  },
+  {
+    "difficulty": 1,
+    "case": 22,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 53.78021240234375, 'error_ms', -1.068115234375)",
+    "log_sha256": "e0eb033aecea7bf9821ec457d25811ec6f939203e17086916a98a7d28e993346"
+  },
+  {
+    "difficulty": 2,
+    "case": 4,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125)",
+    "log_sha256": "04230a5822d208925c4fa4f9e28e314f9b3570e1b4a421f1b7b925f1bb6a1bd6"
+  },
+  {
+    "difficulty": 2,
+    "case": 22,
+    "exit_code": 1,
+    "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 39.21282958984375, 'error_ms', -1.007080078125)",
+    "log_sha256": "ae11f273086cd3d734d8e69759c86e2c3c8bfedb19d385eddab1f9976be41f01"
+  }
+]
