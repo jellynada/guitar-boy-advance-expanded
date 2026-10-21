@@ -81,7 +81,7 @@ int main(int argc,char** argv){
             if(next<count){unsigned l=c->busRead32(c,chart+next*16+8);uint64_t target=read64(c,chart+next*16);if(target>now+280896&&target<=now+2*280896&&(keys&buttons[l])){keys&=~buttons[l];heldUntil[l]=0;}}
             while(next<count){uint64_t target=read64(c,chart+next*16);if(target>now+280896)break;unsigned l=c->busRead32(c,chart+next*16+8);assert(l<lanes);if(!mixed||next%3!=1){keys|=buttons[l];heldUntil[l]=target+(read64(c,lengths+next*8)*16777216ULL+500000)/1000000;}++next;}
         }
-        if(mixed&&f>10&&f%30==0){keys=0;for(unsigned l=0;l<lanes;++l)keys|=buttons[l];}
+        if(mixed&&f>10&&f%30==0&&c->busRead32(c,address(syms,"importedSessionState"))==0){keys=0;for(unsigned l=0;l<lanes;++l)keys|=buttons[l];}
         if(lanes==5&&(keys&192)){unsigned aliases[]={64,192,128};keys=(keys&~192)|aliases[f%3];}
         frame(c,keys);if(f==2){selectDefaultDifficulty(c,mode);chart=c->busRead32(c,address(syms,"activeImportedNotes"));lengths=c->busRead32(c,address(syms,"activeImportedSustains"));lanes=c->busRead32(c,address(syms,"importedLaneCount"));if(lanes==4){unsigned b[]={32,16,2,1};memcpy(buttons,b,sizeof b);}if(lanes==5){unsigned b[]={32,64,16,2,1};memcpy(buttons,b,sizeof b);}}drain(c);if(f>4)assert(c->busRead32(c,mode)==(original?1:2));
         if(!original&&activeTable&&f>30&&(c->busRead16(c,0x04000000)&1024)&&!getenv("GBA_TEST_DISABLE_SCANLINE_DMA")){

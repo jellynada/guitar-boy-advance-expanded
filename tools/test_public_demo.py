@@ -44,9 +44,15 @@ def run(root, build, rom, output, container=None):
     for name in ['ui','readiness']:jobs.append((output/name,[output/name,rom,build/'symbols.txt'],{}))
     def job(item):
         prefix,args,env=item
-        with Path(str(prefix)+'.log').open('w')as log:command(args,env,log)
-        return prefix.name
+        try:
+            with Path(str(prefix)+'.log').open('w')as log:command(args,env,log)
+            return dict(test=prefix.name,exit_code=0)
+        except subprocess.CalledProcessError as error:
+            return dict(test=prefix.name,exit_code=error.returncode)
     with ThreadPoolExecutor(max_workers=3)as pool:passed=list(pool.map(job,jobs))
+    failures=[r for r in passed if r['exit_code']]
+    if failures:
+        (output/'FAILED.json').write_text(json.dumps(failures,indent=2)+'\n');raise RuntimeError('Emulator checks failed; inspect FAILED.json and individual logs')
     maxima=[]
     for i in range(3):
         timings=[json.loads((output/f'graphics-{i}-{mode}.timing.json').read_text())for mode in ['perfect','mixed']]
