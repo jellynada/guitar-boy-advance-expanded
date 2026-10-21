@@ -1,3 +1,15 @@
+# Foundation accepted — development integration under review
+
+The owner accepts M020's development recommendation with documented limitations.
+A normal merge PR into `develop` is being prepared and verified; completing the
+merge still requires separate owner approval. RC2, Copper Circuit and gameplay
+remain unchanged. The strict9/15 audio-output failure continues blocking release.
+No graphics work or formal publication is authorized. See the
+[integration scope, checks and rollback plan](docs/FOUNDATION_DEVELOPMENT_INTEGRATION.md).
+
+The certification below records the evidence at its original closeout date;
+its “await owner acceptance” wording is superseded only by the acceptance above.
+
 # Current status — Mission 020
 
 **Development recommendation: APPROVED WITH DOCUMENTED LIMITATIONS. Public
