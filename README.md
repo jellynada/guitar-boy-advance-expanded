@@ -1,9 +1,9 @@
 # Mission 017 playable public candidate
 
 **Copper Circuit** is the new original75-second demo for Easy/Medium/Hard.
-Player ROM/ZIP links are on the `mission-017-public-demo` branch under
-`public-demo-downloads/DELIVERY.json`; the owner delivery response supplies
-direct immutable links. No compiler is needed. Open the `.gba` in mGBA or put
+[Download the ROM](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba) or
+[download the player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip).
+Both were downloaded back, hash-verified, extracted and emulated. No compiler is needed. Open the `.gba` in mGBA or put
 it on a compatible GBA flash cartridge.
 
 Easy: LEFT/B/A. Medium: LEFT/RIGHT/B/A. Hard: LEFT/UP-or-DOWN/RIGHT/B/A.

@@ -4,6 +4,40 @@ Status: playable development candidate; **release approval blocked by strict
 ordinary emulator audio comparison**. Owner handheld acceptance is pending.
 No formal release/tag or merge is authorized or performed.
 
+## Exact delivered candidate
+
+Build source: `113fc49fbcec851631ee4a932320de7fa803e551`.
+Artifact-only commit: `e8ef0a59ddf1eecca84895c32c5e1e87722b51f5`.
+ROM SHA256: `243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6`.
+ZIP SHA256: `5a2e0e420a59c02bb578c72e10f202461b1e0da91799d871896307953d29388d`.
+
+201 Python tests and13 ASan/UBSan programs passed. All35 exact extracted-ROM
+checks passed, including27420 framebuffer observations with zero displaced
+pixels, missed scanline deadlines or underruns in exercised cases. Foreground
+peaks Easy119616 / Medium147008 / Hard155392 cycles, versus280896 cycles/frame.
+Static IWRAM8308 bytes, EWRAM7016 bytes; stack/hardware margins remain unmeasured.
+ROM2643632 bytes, within32MiB budget. These samples do not certify every input.
+
+Digital15/15 passed:1261568 consumed samples and315388 mixer words per run,
+zero mismatches/drift; startup advance15 explicitly accounted, no emulator
+lateness correction. Ordinary output9/15 passed: all-miss and mixed comparisons
+fail across all3 difficulties (residuals up to1.068115ms versus abs<1ms limit).
+Perfect and tested single/eight-pause output comparisons pass. Stock0.10.5
+reproduces the Easy mixed failure on this exact final ROM; it is not a remedy.
+
+Specific uninterrupted scripted scores: Easy2901 / Medium6338 / Hard12866,
+all heads Perfect. These are trace-dependent references, not universal scores.
+Medium's final same-lane re-articulation ends one preceding hold under the
+existing replacement rule (10 completed,1 ended early);11 genuine hold heads
+are present. The public demo does not alter that inherited rule.
+
+Both immutable raw GitHub links returned HTTP200; downloaded hashes match.
+Downloaded ZIP extracted all14 expected entries; its identical ROM passed
+three complete difficulty runs, UI/results/replay and20 readiness epochs.
+See `../public-demo-downloads/DELIVERY.json` for the verified direct links.
+The latest documentation/delivery-verification commit does not rebuild or
+change the ROM; its exact build source remains the SHA above.
+
 ## Source and scope
 
 Baseline: `arcade75-handheld-chart-adaptation` at

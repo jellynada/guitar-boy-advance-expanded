@@ -11,6 +11,13 @@
   "digital_checks_passed": 15,
   "ordinary_audio_output": "9/15; unchanged thresholds",
   "owner_hardware_acceptance": false,
-  "network_download_verified": false,
-  "formal_release": false
+  "network_download_verified": true,
+  "formal_release": false,
+  "artifact_commit": "e8ef0a59ddf1eecca84895c32c5e1e87722b51f5",
+  "download_urls": {
+    "rom": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba",
+    "zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip"
+  },
+  "downloaded_extraction": "passed;14 exact entries",
+  "downloaded_rom_emulator": "all3 complete hit runs, UI/results/replay,20 readiness epochs passed"
 }

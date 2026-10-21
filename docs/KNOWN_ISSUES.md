@@ -5,6 +5,8 @@
 - Exploratory legacy pause case8 applied to the new Easy chart produces one
   WrongInput after release/repress; reproduced identically in the preserved
   non-public profile. Not counted as a passed acceptance case.
+- Medium has one final same-lane re-articulation that replaces a preceding
+  hold under existing rules; reference scores depend on the exact hit trace.
 - Real-GBA audio, diagonal comfort, musical enjoyment and owner acceptance pending.
 - Controls/Help remains the historical Easy input diagnostic, not a full tutorial.
 - No project-wide source license has been selected; owner authorized this public

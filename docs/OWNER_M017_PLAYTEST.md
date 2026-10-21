@@ -11,8 +11,9 @@ audio comparison still fails; please pay special attention to music timing.
    Easy is LEFT/B/A; Medium LEFT/RIGHT/B/A; Hard LEFT/UP-or-DOWN/RIGHT/B/A.
    On an emulator, map those GBA buttons in its controller settings first.
 3. Press each note as it reaches the line. Each new note needs a new press.
-   Keep long notes held. Try chords and overlapping holds. In Hard, move from
-   Up to both Up+Down to Down: the shared lane should stay held.
+   Keep long notes held. Try chords and overlapping holds. In Hard, test either
+   Up or Down for the shared lane. In mGBA, overlapping Up+Down keys should
+   also keep that lane held. On a real D-pad, test comfortable valid diagonals.
 4. Intentionally miss several notes: guitar should disappear while drums/bass
    continue. Hit a later note: guitar should return. Listen through the ending.
 5. Press START during a hold. Wait10seconds: score, notes and music must freeze.
