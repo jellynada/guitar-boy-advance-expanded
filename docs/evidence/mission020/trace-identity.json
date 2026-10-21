@@ -1,0 +1,74 @@
+[
+  {
+    "case": 22,
+    "suffix": ".raw",
+    "sha256": "171bc855a985cbcd6199f347c188806d9e13312edf16c087d0c73bbbcd7e74e1",
+    "versions_identical": true
+  },
+  {
+    "case": 22,
+    "suffix": ".events.csv",
+    "sha256": "9f7ddcdd85be51ede1f4a89821ad3937ddb7ab8b4fabac5bf648dedb5200d231",
+    "versions_identical": true
+  },
+  {
+    "case": 22,
+    "suffix": ".csv",
+    "sha256": "8c763923c65b765edf2eef85b834276e5381d5e636159358c3653f24516198ad",
+    "versions_identical": true
+  },
+  {
+    "case": 22,
+    "suffix": ".pwm16",
+    "sha256": "d27c346a8f6c4641ea0d16fcb932365d7f99c3f03f5de87020e796c828abc9fa",
+    "versions_identical": true
+  },
+  {
+    "case": 22,
+    "suffix": ".m020-events.csv",
+    "sha256": "5503337afda81b313fa551dca96acf67d2fe29b82b85425c549df1409cab2df4",
+    "versions_identical": true
+  },
+  {
+    "case": 22,
+    "suffix": ".pwm-events.csv",
+    "sha256": "cb90a23ae284235bb621560485dafc7442285380e937d4760560cfcc47f7015e",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".raw",
+    "sha256": "f02d7491f04da4b477ac303eb5f8c0aea4321627852dc37a2f53b667a69219cf",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".events.csv",
+    "sha256": "0058f321a8dc211952c68d990c548c4abebe4b43ad478f349e3fcb2445426a96",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".csv",
+    "sha256": "f564ba131fbe61beedcaa4789123adcefb6ef1cdcd207423e9946bfcf9fac93c",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".pwm16",
+    "sha256": "71f6bbfaa39ef0484303453641c50dea6cd1e297c02a8ba23082aaea131c3a1c",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".m020-events.csv",
+    "sha256": "3ee5ed4f843a233fe740f3c134c6f98b9cb773baf5a0a9647ea5868efe408e7d",
+    "versions_identical": true
+  },
+  {
+    "case": 23,
+    "suffix": ".pwm-events.csv",
+    "sha256": "5bc31393ae8f4215bca90df0a92fe84fc83a38426756f6cd4c8e23f95a26bd9b",
+    "versions_identical": true
+  }
+]

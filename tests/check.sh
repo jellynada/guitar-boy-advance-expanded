@@ -63,3 +63,29 @@ ASAN_OPTIONS=detect_leaks=1 "$tmp/input_diagnostic"
 python3 -m unittest discover -s tests -p test_fifo_oracle.py -v
 
 python3 -m unittest discover -s tests -p test_build_release.py -v
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude tests/physical_input.cpp -o "$tmp/physical_input"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/physical_input"
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/pause_policy.cpp -o "$tmp/pause_policy"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/pause_policy"
+
+python3 -m unittest discover -s tests -p test_public_package.py -v
+
+python3 -m unittest discover -s tests -p test_song_pipeline.py -v
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/difficulty_core.cpp -o "$tmp/difficulty_core"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/difficulty_core"
+python3 -m unittest discover -s tests -p test_difficulty_pipeline.py -v
+
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Iinclude tests/affine_translation.cpp -o "$tmp/affine_translation"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/affine_translation"
+python3 -m unittest discover -s tests -p test_chord_conflicts.py -v
+
+python3 -m unittest discover -s tests -p test_arcade75.py -v
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Itests/host -Iinclude -I"$tmp/generated" tests/arcade_eof.cpp -o "$tmp/arcade_eof"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/arcade_eof"
+
+python3 -m unittest discover -s tests -p test_public_demo.py -v
+
+python3 -m unittest discover -s tests -p test_release_gates.py -v

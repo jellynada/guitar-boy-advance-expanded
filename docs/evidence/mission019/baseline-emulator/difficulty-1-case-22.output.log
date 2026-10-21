@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/mission-019-foundation-certification/tests/analyze_reactive.py", line 89, in <module>
+    r=match((start+128)*2,min(4096,(end-start-256)*2),kind)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/mission-019-foundation-certification/tests/analyze_reactive.py", line 50, in match
+    assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error)
+                                                                                                       ^^^^^^^^^^^^
+AssertionError: ('backing-only', 'runtime_seconds', 53.78021240234375, 'error_ms', -1.068115234375)

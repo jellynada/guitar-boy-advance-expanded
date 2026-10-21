@@ -4,8 +4,9 @@ import argparse
 from pathlib import Path
 import re
 
-LABELS = {'legacy': 'M012 REVIEW', 'public-synthetic': 'M012 / SYNTH',
-          'cream-private': 'M012 / CREAM / LOCAL'}
+LABELS = {'legacy': 'M014 REVIEW', 'public-synthetic': 'M014 / SYNTH',
+          'cream-private': 'M014 / CREAM / LOCAL', 'song-private': 'M014 / SONG / LOCAL',
+          'public-demo':'GUITAR BOY ADVANCE'}
 
 
 def identity(profile, revision):
@@ -13,7 +14,7 @@ def identity(profile, revision):
         raise ValueError('Invalid build profile/source revision')
     return ('// Generated build identity, not a gameplay configuration.\n#pragma once\n'
             f'#define GBA_BUILD_TITLE "{LABELS[profile]}"\n'
-            f'#define GBA_BUILD_MARKER "GBA_BUILD:M012:{profile}:{revision}"\n')
+            f'#define GBA_BUILD_MARKER "GBA_BUILD:{"M018" if profile=="public-demo" else "M014"}:{profile}:{revision}"\n')
 
 
 if __name__ == '__main__':

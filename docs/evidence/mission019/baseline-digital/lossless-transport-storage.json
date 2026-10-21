@@ -1,0 +1,182 @@
+[
+  {
+    "original": "difficulty-0-case-0.samples",
+    "sha256": "5fadcd11b177731a8f57a9d9bd98c53c5ae35c812e8c3c31ae52879609e3c969",
+    "bytes": 16400384,
+    "compressed": "difficulty-0-case-0.samples.gz"
+  },
+  {
+    "original": "difficulty-0-case-12.samples",
+    "sha256": "fbdba70254857c1b7862a99ee6a14a1c2be5663420c98dd7fe52bd450573c68a",
+    "bytes": 16400384,
+    "compressed": "difficulty-0-case-12.samples.gz"
+  },
+  {
+    "original": "difficulty-0-case-19.samples",
+    "sha256": "df030bec4b15a62e4ff67143f74fa10169eac0bd3be35ff3469b28f344222217",
+    "bytes": 16400384,
+    "compressed": "difficulty-0-case-19.samples.gz"
+  },
+  {
+    "original": "difficulty-0-case-22.samples",
+    "sha256": "dd1d1798b7d0372408f2d4b82e944b12845e85709f0c620d85aafc615cb1b839",
+    "bytes": 16400384,
+    "compressed": "difficulty-0-case-22.samples.gz"
+  },
+  {
+    "original": "difficulty-0-case-4.samples",
+    "sha256": "d86bbdd7d2605680a0997a551975cd38a42f743a0cfa5714aff7f120571cb161",
+    "bytes": 16400384,
+    "compressed": "difficulty-0-case-4.samples.gz"
+  },
+  {
+    "original": "difficulty-1-case-0.samples",
+    "sha256": "ee73a96a699e570a8a45b3f4ef2f27c79edef1a3582c33ec6042ae3b7da891ea",
+    "bytes": 16400384,
+    "compressed": "difficulty-1-case-0.samples.gz"
+  },
+  {
+    "original": "difficulty-1-case-12.samples",
+    "sha256": "1413c058e729a65aedc5d3f1700b0c35f350848e68b964ce3e69c24c89b4a8d7",
+    "bytes": 16400384,
+    "compressed": "difficulty-1-case-12.samples.gz"
+  },
+  {
+    "original": "difficulty-1-case-19.samples",
+    "sha256": "eaaee4c247dd5eb821a8ad6159a7992958dd90e6e0060c685eab38dc52f34259",
+    "bytes": 16400384,
+    "compressed": "difficulty-1-case-19.samples.gz"
+  },
+  {
+    "original": "difficulty-1-case-22.samples",
+    "sha256": "c02f3837ee1e764a7359ec6b6b68541c88cd2052e42b4ee25f914ad956a593db",
+    "bytes": 16400384,
+    "compressed": "difficulty-1-case-22.samples.gz"
+  },
+  {
+    "original": "difficulty-1-case-4.samples",
+    "sha256": "cf43eee493526f8c6f16a59da054f2c3e4480c9567027e2a9d80cdbf63b16be3",
+    "bytes": 16400384,
+    "compressed": "difficulty-1-case-4.samples.gz"
+  },
+  {
+    "original": "difficulty-2-case-0.samples",
+    "sha256": "6ef136dba3d8fa801ae1377b9aa7e7650dd4ca840c98d6a09fc02091ac802b6f",
+    "bytes": 16400384,
+    "compressed": "difficulty-2-case-0.samples.gz"
+  },
+  {
+    "original": "difficulty-2-case-12.samples",
+    "sha256": "e9e9c5bec0842b81036730b6137d2509afb4b3e7158aa1cbc5c03dcaf97a876b",
+    "bytes": 16400384,
+    "compressed": "difficulty-2-case-12.samples.gz"
+  },
+  {
+    "original": "difficulty-2-case-19.samples",
+    "sha256": "473521a4c6fa619d948f24ec6eb8e785c475d6beb232942a63d6e16d654ec331",
+    "bytes": 16400384,
+    "compressed": "difficulty-2-case-19.samples.gz"
+  },
+  {
+    "original": "difficulty-2-case-22.samples",
+    "sha256": "6ec62b164784fd24d259625f858b193f47caf930f9fa0ddc2145dc879b977053",
+    "bytes": 16400384,
+    "compressed": "difficulty-2-case-22.samples.gz"
+  },
+  {
+    "original": "difficulty-2-case-4.samples",
+    "sha256": "4075bf00560267f45be7e7fedbe8357e9ddb0388438039d646566b095cf64a08",
+    "bytes": 16400384,
+    "compressed": "difficulty-2-case-4.samples.gz"
+  },
+  {
+    "original": "difficulty-0-case-0.fifo",
+    "sha256": "4078a05157c15b51bcf6947516ad4e2fe6e29abc44adeb5d70b7946199fb1d73",
+    "bytes": 6307760,
+    "compressed": "difficulty-0-case-0.fifo.gz"
+  },
+  {
+    "original": "difficulty-0-case-12.fifo",
+    "sha256": "bc39d890d8cb365170319c9f0b1cfae0263566a1394f43a5bb1153d11d01afc1",
+    "bytes": 6307760,
+    "compressed": "difficulty-0-case-12.fifo.gz"
+  },
+  {
+    "original": "difficulty-0-case-19.fifo",
+    "sha256": "100fe9b34d130ece261a885898c419feeae2c8f0264cead5e3181a293a2debdc",
+    "bytes": 6307760,
+    "compressed": "difficulty-0-case-19.fifo.gz"
+  },
+  {
+    "original": "difficulty-0-case-22.fifo",
+    "sha256": "090c4d13088eb53f9028084705543905611d62ee98ee53be2e616196f3cc6a18",
+    "bytes": 6307760,
+    "compressed": "difficulty-0-case-22.fifo.gz"
+  },
+  {
+    "original": "difficulty-0-case-4.fifo",
+    "sha256": "f7fd67feee75fb590bdf006bc2cedc62e75847c7a12773ac1e5ca868c84dc4ca",
+    "bytes": 6307760,
+    "compressed": "difficulty-0-case-4.fifo.gz"
+  },
+  {
+    "original": "difficulty-1-case-0.fifo",
+    "sha256": "40232047a310a86cc79e567d9d479fa74d7d5fbcce5b8b6e87375617a6f3f75b",
+    "bytes": 6307760,
+    "compressed": "difficulty-1-case-0.fifo.gz"
+  },
+  {
+    "original": "difficulty-1-case-12.fifo",
+    "sha256": "937288b4a7cba248b8aeb26563854612d7d7e32303c719965dd71734298a1c23",
+    "bytes": 6307760,
+    "compressed": "difficulty-1-case-12.fifo.gz"
+  },
+  {
+    "original": "difficulty-1-case-19.fifo",
+    "sha256": "c85b1d7a87c98f4f040c0181473788a8e25749d854c57c524439863175fe908b",
+    "bytes": 6307760,
+    "compressed": "difficulty-1-case-19.fifo.gz"
+  },
+  {
+    "original": "difficulty-1-case-22.fifo",
+    "sha256": "cc429a107c49e4cba46d2fa8481a0c6e50b4a7ec88b594a7ca4ed738adb7f486",
+    "bytes": 6307760,
+    "compressed": "difficulty-1-case-22.fifo.gz"
+  },
+  {
+    "original": "difficulty-1-case-4.fifo",
+    "sha256": "95649448a660c76bab36f9146c59277107381e492242a5614c859d3f3e3b876b",
+    "bytes": 6307760,
+    "compressed": "difficulty-1-case-4.fifo.gz"
+  },
+  {
+    "original": "difficulty-2-case-0.fifo",
+    "sha256": "55b691bd8950dd47d62762d3b19588d2ca546eb340d73534e5417e99aa56157f",
+    "bytes": 6307760,
+    "compressed": "difficulty-2-case-0.fifo.gz"
+  },
+  {
+    "original": "difficulty-2-case-12.fifo",
+    "sha256": "872bce9b19cb59e0fd46c3eacfbdcb1c1b7a15580d695676bc5f4bfe4321b9c1",
+    "bytes": 6307760,
+    "compressed": "difficulty-2-case-12.fifo.gz"
+  },
+  {
+    "original": "difficulty-2-case-19.fifo",
+    "sha256": "c42226769c9a50e127d8a267b55fc1a1a4280bfe20c0fa2f24f219b13aa8a1ae",
+    "bytes": 6307760,
+    "compressed": "difficulty-2-case-19.fifo.gz"
+  },
+  {
+    "original": "difficulty-2-case-22.fifo",
+    "sha256": "6f66e8d9cab72e7fd214011a6dcf922de54e90fc29c4f164edc065f5a5778836",
+    "bytes": 6307760,
+    "compressed": "difficulty-2-case-22.fifo.gz"
+  },
+  {
+    "original": "difficulty-2-case-4.fifo",
+    "sha256": "38c5f81f9177d54cee5e4f6ff4059f00dc32c9c1be535dfb3758395fa70afeb2",
+    "bytes": 6307760,
+    "compressed": "difficulty-2-case-4.fifo.gz"
+  }
+]

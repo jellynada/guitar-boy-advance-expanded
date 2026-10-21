@@ -1,0 +1,26 @@
+[
+  {
+    "scenario": "cream-full-graphics",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-perfect",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-miss",
+    "exit_code": 0
+  },
+  {
+    "scenario": "original-mixed",
+    "exit_code": 0
+  },
+  {
+    "scenario": "public-physical",
+    "exit_code": 0
+  },
+  {
+    "scenario": "cream-physical",
+    "exit_code": 0
+  }
+]

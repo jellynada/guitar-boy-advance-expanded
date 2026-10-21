@@ -1,0 +1,428 @@
+{
+  "format": "16384Hz signed8 mono, two aligned ROM streams",
+  "capture_epoch_samples": 2614,
+  "epoch_variation_samples": 6,
+  "events": 958,
+  "mute_transitions": 383,
+  "recoveries": 382,
+  "exact_backing_only_source_samples": 2712567,
+  "fade_samples": 64,
+  "fade_ms": 3.90625,
+  "independent_model_peak": 57,
+  "captured_peak": 10656,
+  "clipped_samples": 0,
+  "underruns": 0,
+  "last_second_nonzero_samples": 0,
+  "checks": [
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 6.314178466796875,
+      "correlation": 0.996947726579531,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 135.0802001953125,
+      "correlation": 0.9594785810557087,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 264.8721923828125,
+      "correlation": 0.9913146055649987,
+      "error_ms": -0.579833984375,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2612
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 6.34661865234375,
+      "correlation": 0.9971138128546282,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.9154822830107,
+      "guitar_to_backing_scale": 0.9932643322263857
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 26.83978271484375,
+      "correlation": 0.9953457562048177,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.64698435138942,
+      "guitar_to_backing_scale": 0.9963910006702629
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 45.52435302734375,
+      "correlation": 0.9933433671204046,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.24889781753066,
+      "guitar_to_backing_scale": 0.9877160642221493
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 69.46673583984375,
+      "correlation": 0.9936626102299779,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 191.2754140676501,
+      "guitar_to_backing_scale": 0.9623725283816518
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 85.28900146484375,
+      "correlation": 0.9954504278526118,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 190.36950845834673,
+      "guitar_to_backing_scale": 0.9720801124875702
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 106.31732177734375,
+      "correlation": 0.9953524784026488,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 190.75476376147986,
+      "guitar_to_backing_scale": 0.9744980293739287
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 127.88177490234375,
+      "correlation": 0.9936231134636907,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.345574297817,
+      "guitar_to_backing_scale": 0.9854258773952832
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 154.06732177734375,
+      "correlation": 0.9906966376753588,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.31762658264998,
+      "guitar_to_backing_scale": 0.9469107468013965
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 174.20892333984375,
+      "correlation": 0.9899504242488018,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.83696601391108,
+      "guitar_to_backing_scale": 0.9145761519051385
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 196.57708740234375,
+      "correlation": 0.9943527835205672,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 188.8748287967202,
+      "guitar_to_backing_scale": 1.002424274435494
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 212.61712646484375,
+      "correlation": 0.9928219384784989,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 191.0567705281228,
+      "guitar_to_backing_scale": 0.9769675128844825
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 244.19329833984375,
+      "correlation": 0.9931996389183471,
+      "error_ms": -0.579833984375,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2612,
+      "backing_scale": 193.55608757692684,
+      "guitar_to_backing_scale": 0.9393606724190386
+    },
+    {
+      "label": "guitar-on",
+      "runtime_seconds": 260.31634521484375,
+      "correlation": 0.9942009222820382,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.3212553322397,
+      "guitar_to_backing_scale": 0.9912239876631141
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 24.59661865234375,
+      "correlation": 0.994688578991162,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.52523555097198,
+      "guitar_to_backing_scale": -0.0025134988846035287
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 42.67864990234375,
+      "correlation": 0.9935621517538602,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.82726781172224,
+      "guitar_to_backing_scale": 0.006785821309416439
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 65.28118896484375,
+      "correlation": 0.9931506789565703,
+      "error_ms": -0.732421875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2618,
+      "backing_scale": 190.17302391017637,
+      "guitar_to_backing_scale": 0.009309836883613533
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 85.37200927734375,
+      "correlation": 0.9955520869638437,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 190.5326736112328,
+      "guitar_to_backing_scale": -0.0011036113806249586
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 103.45404052734375,
+      "correlation": 0.9933889985691666,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.47175274962922,
+      "guitar_to_backing_scale": -0.00011742384045931677
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 127.06146240234375,
+      "correlation": 0.9941647471502766,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 191.65977149172576,
+      "guitar_to_backing_scale": -0.025718728296770618
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 153.68255615234375,
+      "correlation": 0.9929143041759793,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 190.2315796450766,
+      "guitar_to_backing_scale": -0.00516098148631241
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 174.27630615234375,
+      "correlation": 0.9921554548491692,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 189.95172923906915,
+      "guitar_to_backing_scale": 0.0005210263161872679
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 195.87396240234375,
+      "correlation": 0.9884658864190145,
+      "error_ms": -0.579833984375,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2612,
+      "backing_scale": 189.30209838237312,
+      "guitar_to_backing_scale": 0.0038895682596431593
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 213.45404052734375,
+      "correlation": 0.992219468875685,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616,
+      "backing_scale": 190.04192557655188,
+      "guitar_to_backing_scale": -0.019365146284306342
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 244.59564208984375,
+      "correlation": 0.9925189074564914,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 190.32744913532872,
+      "guitar_to_backing_scale": -0.0278953126677851
+    },
+    {
+      "label": "backing-only",
+      "runtime_seconds": 260.66888427734375,
+      "correlation": 0.990775907405117,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614,
+      "backing_scale": 189.35316094634655,
+      "guitar_to_backing_scale": 0.0035873986812874135
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 34.1201171875,
+      "correlation": 0.9931574212569987,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 65.763671875,
+      "correlation": 0.9945207375358702,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 95.900390625,
+      "correlation": 0.9940638473655907,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 128.548828125,
+      "correlation": 0.9900866212778263,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 167.7265625,
+      "correlation": 0.994008544698117,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 196.859375,
+      "correlation": 0.9951046407446341,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 227.498046875,
+      "correlation": 0.9881623538633547,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-down",
+      "runtime_seconds": 259.64453125,
+      "correlation": 0.9950018080743794,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 6.3271484375,
+      "correlation": 0.9964586954976424,
+      "error_ms": -0.6103515625,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 34.689453125,
+      "correlation": 0.9961682255167219,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 67.337890625,
+      "correlation": 0.9914744129165258,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 96.0341796875,
+      "correlation": 0.992318265664322,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 131.060546875,
+      "correlation": 0.9927898984816348,
+      "error_ms": -0.67138671875,
+      "global_epoch_error_ms": -0.6103515625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 167.84375,
+      "correlation": 0.9925204965883531,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 197.09375,
+      "correlation": 0.9935996583891874,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2616
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 228.40234375,
+      "correlation": 0.9936649883162798,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614
+    },
+    {
+      "label": "fade-up",
+      "runtime_seconds": 259.7783203125,
+      "correlation": 0.9931530327445635,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": 2614
+    }
+  ]
+}

@@ -1,3 +1,7 @@
+# Mission014 note
+
+The existing launcher is preserved and now names the private output **Guitar-Boy-Advance-M014-Cream-Private.gba**. The cloud exercises its underlying clean build chain; Windows11 double-click execution is untested here. A user who only wants to play should receive the already-built ROM privately, without needing these developer installation steps. That private transfer is currently unavailable; the owner requested local retention. Public synthetic review ZIPs do not contain Cream.
+
 # Build your Cream ROM on Windows 11
 
 Keep the song ZIP on your computer. The launcher never downloads music or uploads
@@ -13,9 +17,9 @@ its result. Both profiles use the same engine revision.
    **Ubuntu**, Apply, and keep Docker Desktop running.
 4. In Ubuntu, enter `sudo apt update`, then
    `sudo apt install -y python3 ffmpeg git`. This is one-time setup.
-5. Extract the **complete** Mission012 review ZIP with Windows **Extract All**.
+5. Extract the **complete** Mission013 review ZIP with Windows **Extract All**.
    Keep the `guitar-boy-advance-expanded` source folder together. A short local
-   path such as `C:\gba\mission012` is recommended; spaces are supported.
+   path such as `C:\gba\mission013` is recommended; spaces are supported.
 
 ## Every time you want a current private ROM
 
@@ -25,19 +29,19 @@ its result. Both profiles use the same engine revision.
    song ZIP inside and name it **Cream.zip**. In Explorer enable View → Show →
    File name extensions; it must not be named Cream.zip.zip. Do not unpack it.
 3. Double-click **Build-Cream-ROM.bat**. The first build downloads the pinned GBA
-   compiler image. Wait for **BUILD SUCCESS: M012 / CREAM / LOCAL**.
+   compiler image. Wait for **BUILD SUCCESS: M013 / CREAM / LOCAL**.
 4. The window prints the exact ROM location, complete source commit and SHA-256
    checksum. Find it under `builds\private\<source-version-and-time>\` with name
-   **Guitar-Boy-Advance-M012-Cream-Private.gba**. The adjacent manifest identifies
+   **Guitar-Boy-Advance-M013-Cream-Private.gba**. The adjacent manifest identifies
    the source, song hashes, toolchain and ROM. `LATEST.txt` selects only a
    successful current attempt.
 5. In mGBA: File → Load ROM → select that newly printed file. Confirm the selector
-   says **M012 / CREAM / LOCAL**, then choose Imported Easy Test. Alternatively,
+   says **M013 / CREAM / LOCAL**, then choose Imported Easy Test. Alternatively,
    copy that `.gba` file to your compatible flash cartridge using its normal
    instructions. Never copy the ELF, source or ZIP to the cartridge as the game.
 
-Easy currently uses GBA **Left / A / B**. The planned physical-order correction
-is future work. A/Start replays results; B/Select returns; Start+Select exits play.
+Easy now uses GBA **Left / B / A** from left to right. Original Demo keeps
+Left / Right / A / B. A/Start replays results; B/Select returns; Start+Select exits play.
 
 ## If it stops
 

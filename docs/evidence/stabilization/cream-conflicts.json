@@ -1,0 +1,620 @@
+{
+  "policy": "report-only; native chart unchanged; runtime includes existing2s pre-roll",
+  "charts": [
+    {
+      "difficulty": "Medium",
+      "note_heads": 686,
+      "maximum_chord_heads": 2,
+      "simultaneous_opposing_chords": [
+        {
+          "source_us": 57992000,
+          "runtime_us": 59992000,
+          "heads": [
+            {
+              "index": 136,
+              "source_tick": 52800,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 58518688,
+              "genuine_sustain": true
+            },
+            {
+              "index": 137,
+              "source_tick": 52800,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 58518688,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 62152000,
+          "runtime_us": 64152000,
+          "heads": [
+            {
+              "index": 146,
+              "source_tick": 56640,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 62662538,
+              "genuine_sustain": true
+            },
+            {
+              "index": 147,
+              "source_tick": 56640,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 62662538,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 66390000,
+          "runtime_us": 68390000,
+          "heads": [
+            {
+              "index": 156,
+              "source_tick": 60480,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 66917681,
+              "genuine_sustain": true
+            },
+            {
+              "index": 157,
+              "source_tick": 60480,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 66917681,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 112690000,
+          "runtime_us": 114690000,
+          "heads": [
+            {
+              "index": 283,
+              "source_tick": 102720,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 113202513,
+              "genuine_sustain": true
+            },
+            {
+              "index": 284,
+              "source_tick": 102720,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 113202513,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 116888000,
+          "runtime_us": 118888000,
+          "heads": [
+            {
+              "index": 293,
+              "source_tick": 106560,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 117396563,
+              "genuine_sustain": true
+            },
+            {
+              "index": 294,
+              "source_tick": 106560,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 117396563,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 121108000,
+          "runtime_us": 123108000,
+          "heads": [
+            {
+              "index": 303,
+              "source_tick": 110400,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 121623573,
+              "genuine_sustain": true
+            },
+            {
+              "index": 304,
+              "source_tick": 110400,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 121623573,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 222159000,
+          "runtime_us": 224159000,
+          "heads": [
+            {
+              "index": 536,
+              "source_tick": 202560,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 222668550,
+              "genuine_sustain": true
+            },
+            {
+              "index": 537,
+              "source_tick": 202560,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 222668550,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 226403000,
+          "runtime_us": 228403000,
+          "heads": [
+            {
+              "index": 546,
+              "source_tick": 206400,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 226915513,
+              "genuine_sustain": true
+            },
+            {
+              "index": 547,
+              "source_tick": 206400,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 226915513,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 230573000,
+          "runtime_us": 232573000,
+          "heads": [
+            {
+              "index": 556,
+              "source_tick": 210240,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 231101675,
+              "genuine_sustain": true
+            },
+            {
+              "index": 557,
+              "source_tick": 210240,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 231101675,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 234785000,
+          "runtime_us": 236785000,
+          "heads": [
+            {
+              "index": 566,
+              "source_tick": 214080,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 235303542,
+              "genuine_sustain": true
+            },
+            {
+              "index": 567,
+              "source_tick": 214080,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 235303542,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 238991000,
+          "runtime_us": 240991000,
+          "heads": [
+            {
+              "index": 576,
+              "source_tick": 217920,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 239531000,
+              "genuine_sustain": true
+            },
+            {
+              "index": 577,
+              "source_tick": 217920,
+              "lane": 1,
+              "button": "RIGHT",
+              "end_us": 239531000,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        }
+      ],
+      "opposing_hold_interactions": []
+    },
+    {
+      "difficulty": "Hard",
+      "note_heads": 878,
+      "maximum_chord_heads": 3,
+      "simultaneous_opposing_chords": [
+        {
+          "source_us": 57992000,
+          "runtime_us": 59992000,
+          "heads": [
+            {
+              "index": 169,
+              "source_tick": 52800,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 58518688,
+              "genuine_sustain": true
+            },
+            {
+              "index": 170,
+              "source_tick": 52800,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 58518688,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 62152000,
+          "runtime_us": 64152000,
+          "heads": [
+            {
+              "index": 179,
+              "source_tick": 56640,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 62662538,
+              "genuine_sustain": true
+            },
+            {
+              "index": 180,
+              "source_tick": 56640,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 62662538,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 65328000,
+          "runtime_us": 67328000,
+          "heads": [
+            {
+              "index": 187,
+              "source_tick": 59520,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 65855681,
+              "genuine_sustain": true
+            },
+            {
+              "index": 188,
+              "source_tick": 59520,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 65855681,
+              "genuine_sustain": true
+            },
+            {
+              "index": 189,
+              "source_tick": 59520,
+              "lane": 3,
+              "button": "B",
+              "end_us": 65855681,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 66390000,
+          "runtime_us": 68390000,
+          "heads": [
+            {
+              "index": 190,
+              "source_tick": 60480,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 66917681,
+              "genuine_sustain": true
+            },
+            {
+              "index": 191,
+              "source_tick": 60480,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 66917681,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 112690000,
+          "runtime_us": 114690000,
+          "heads": [
+            {
+              "index": 359,
+              "source_tick": 102720,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 113202513,
+              "genuine_sustain": true
+            },
+            {
+              "index": 360,
+              "source_tick": 102720,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 113202513,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 116888000,
+          "runtime_us": 118888000,
+          "heads": [
+            {
+              "index": 369,
+              "source_tick": 106560,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 117396563,
+              "genuine_sustain": true
+            },
+            {
+              "index": 370,
+              "source_tick": 106560,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 117396563,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 120065000,
+          "runtime_us": 122065000,
+          "heads": [
+            {
+              "index": 377,
+              "source_tick": 109440,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 120580573,
+              "genuine_sustain": true
+            },
+            {
+              "index": 378,
+              "source_tick": 109440,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 120580573,
+              "genuine_sustain": true
+            },
+            {
+              "index": 379,
+              "source_tick": 109440,
+              "lane": 3,
+              "button": "B",
+              "end_us": 120580573,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 121108000,
+          "runtime_us": 123108000,
+          "heads": [
+            {
+              "index": 380,
+              "source_tick": 110400,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 121623573,
+              "genuine_sustain": true
+            },
+            {
+              "index": 381,
+              "source_tick": 110400,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 121623573,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 222159000,
+          "runtime_us": 224159000,
+          "heads": [
+            {
+              "index": 687,
+              "source_tick": 202560,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 222668550,
+              "genuine_sustain": true
+            },
+            {
+              "index": 688,
+              "source_tick": 202560,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 222668550,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 226403000,
+          "runtime_us": 228403000,
+          "heads": [
+            {
+              "index": 697,
+              "source_tick": 206400,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 226915513,
+              "genuine_sustain": true
+            },
+            {
+              "index": 698,
+              "source_tick": 206400,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 226915513,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 229509000,
+          "runtime_us": 231509000,
+          "heads": [
+            {
+              "index": 705,
+              "source_tick": 209280,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 230037675,
+              "genuine_sustain": true
+            },
+            {
+              "index": 706,
+              "source_tick": 209280,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 230037675,
+              "genuine_sustain": true
+            },
+            {
+              "index": 707,
+              "source_tick": 209280,
+              "lane": 3,
+              "button": "B",
+              "end_us": 230037675,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 230573000,
+          "runtime_us": 232573000,
+          "heads": [
+            {
+              "index": 708,
+              "source_tick": 210240,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 231101675,
+              "genuine_sustain": true
+            },
+            {
+              "index": 709,
+              "source_tick": 210240,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 231101675,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 234785000,
+          "runtime_us": 236785000,
+          "heads": [
+            {
+              "index": 718,
+              "source_tick": 214080,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 235303542,
+              "genuine_sustain": true
+            },
+            {
+              "index": 719,
+              "source_tick": 214080,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 235303542,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        },
+        {
+          "source_us": 238991000,
+          "runtime_us": 240991000,
+          "heads": [
+            {
+              "index": 728,
+              "source_tick": 217920,
+              "lane": 0,
+              "button": "LEFT",
+              "end_us": 239531000,
+              "genuine_sustain": true
+            },
+            {
+              "index": 729,
+              "source_tick": 217920,
+              "lane": 2,
+              "button": "RIGHT",
+              "end_us": 239531000,
+              "genuine_sustain": true
+            }
+          ],
+          "held": []
+        }
+      ],
+      "opposing_hold_interactions": []
+    }
+  ]
+}

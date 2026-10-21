@@ -1,0 +1,241 @@
+{
+  "baseline": "7cb0a3fca5b102e0cceaf4c2aecc92ddaff84889",
+  "shallow": "false",
+  "refs": [
+    {
+      "ref": "origin",
+      "sha": "6c4e63460fab10733d8ff011045ee246e7201952",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/arcade75-handheld-chart-adaptation",
+      "sha": "1e8fec75eca86dd99798ec31e52c53dca34974f1",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/develop",
+      "sha": "56f6b7b243dfc710996336b99ac249806e666c85",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/foundation-audit-2026-10-20",
+      "sha": "7fee39d93693d4437da188a0b5d9e89e8e9081d2",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/main",
+      "sha": "6c4e63460fab10733d8ff011045ee246e7201952",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/medium-hard-controls",
+      "sha": "3ed8be72f9652ada15c32ef4f77bbafddc2615bf",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-001-download",
+      "sha": "43710f8a9762e48d79db946015d17ccfa232cc83",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-001-reproducible-build",
+      "sha": "47d340e105ff3afb899b063683b2ee0dbc5b7943",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-002-download",
+      "sha": "58e65134f2d32e1fc151392c1750b4c05a2f7ca8",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-002-note-judgment",
+      "sha": "533862124079a9dca1f84a6d88f54e40cde189cb",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-003-chart-importer",
+      "sha": "135a55c2a0de50a4c68610f1aeb288924508bb54",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-003-download",
+      "sha": "60d824cfd6241533bbf29caa54f8b64a47ad0c63",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-004-download",
+      "sha": "145496e5179c3dbccbf464bd531ba267a495914a",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-004-universal-import",
+      "sha": "1487532557a1e98b1c99c6628e5d65c291268cd2",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-005-download",
+      "sha": "0640643a844a9fbb0c2fcc4612b090c12512a64b",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-005-first-playable-import",
+      "sha": "f23cb6b4039fec93811b80f557a85518b2f626d1",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-006-audio-sync",
+      "sha": "4fa9e6f8b2558a129075c9815c8bb2ac68e6421b",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-006-download",
+      "sha": "d6e96a2d639479f5dd34a57a3d35c49c396c70d0",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-006-playtest-download",
+      "sha": "90ee15fe548110d23df04836befa0fabfcf7285c",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-007-download",
+      "sha": "0e6a37b941703184f3d76880ac7b8669261a9799",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-007-playtest-download",
+      "sha": "e8b5e6f1362438474e5102835ac3d094708b9d87",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-007-reactive-guitar-audio",
+      "sha": "90aaed9f2d7624258ff3485d6a0dc7858c126929",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-008-download",
+      "sha": "9c35c2fffd0e88bde4c3db4fee2239f6597f381d",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-008-hotfix-download",
+      "sha": "32e80153729d807aab9455f69221bd387a484e3b",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-008-hotfix-hud-completion",
+      "sha": "71f0152c29d7008acd310808861643d5018e65a7",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-008-playtest-download",
+      "sha": "3a1e6a948fd34a5e3de7a78deb6b33fe3ecafc0b",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-008-scoring-results",
+      "sha": "a6b36a22733992b274f352a190c9ec1d39547d1d",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-009-download",
+      "sha": "be1624dc33c9056d07ed5278ed405b43f3363912",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-009-playtest-download",
+      "sha": "9984c0953cc70b41c43390c04aa642a74e7994de",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-009-sustain-gameplay",
+      "sha": "f589e62a225651c7bd8a39ad27f517e3890cd1fb",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-010-download",
+      "sha": "b7266b38290969a039e9381eac111579c55e16a4",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-010-stabilization",
+      "sha": "233112a072e5a0e90e5a766207761474130f75a6",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-011-audio-graphics-stability",
+      "sha": "a6c0328b319ce1bf48e08371c2db770ac5a5008a",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-011-cream-download",
+      "sha": "85c765f04d883f6f6c0216dadf876b08cded2d43",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-011-download",
+      "sha": "144ff62d5c175547f1d6df9621d2e4e7e4c36429",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-012-build-release-foundation",
+      "sha": "56f6b7b243dfc710996336b99ac249806e666c85",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-012-download",
+      "sha": "60cd344aaeec4bbae3c724026ae329f11382da7c",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-012-encrypted-download",
+      "sha": "93b13cd9fe061a21bd702646428e8711696887e4",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-013-download",
+      "sha": "826adc1f77b2820186a77be41e673f33c6cec654",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-013-encrypted-download",
+      "sha": "1be1fa4ade23e0f0e78dbba7fed2e65b34e133ad",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-013-physical-controls",
+      "sha": "664c83ea624c4cec1c81d4c83f066e8abf0d2d87",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-014-download",
+      "sha": "b2f0402460baa05809fd69aa30f8f7e1d8030c6f",
+      "in_baseline": false
+    },
+    {
+      "ref": "origin/mission-014-pause-resume",
+      "sha": "2ae6544f96ad8662fadabd6d5cf373fd6931227d",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-016-song-pipeline",
+      "sha": "0d79c9526da1896d22517b4e4defbae51b2ed4b8",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-017-public-demo",
+      "sha": "8f1c4839475ad0167782c9c4d140bd2eb751c378",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/mission-018-release-stabilization",
+      "sha": "7cb0a3fca5b102e0cceaf4c2aecc92ddaff84889",
+      "in_baseline": true
+    },
+    {
+      "ref": "origin/stabilization-post-medium-hard",
+      "sha": "6c627e36dc30286575183c10076258d0bc9a7a0a",
+      "in_baseline": true
+    }
+  ]
+}

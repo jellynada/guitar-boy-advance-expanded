@@ -1,0 +1,33 @@
+{
+  "diagnostic_only": true,
+  "mandatory_gate_unchanged": true,
+  "source_time_seconds": 36.20111083984375,
+  "window_samples": 4096,
+  "startup_advance_samples": 15,
+  "target_index": 1185480,
+  "reference_index": 1185481,
+  "inherited_source_correlation": 0.9850415598975324,
+  "inherited_paired_correlation": 0.9985551608734791,
+  "fixed_phase_residual_ms": 0.244140625,
+  "layers": [
+    {
+      "layer": "ordinary",
+      "correlation": 0.9985551608733672,
+      "scale": 0.9996424076656554,
+      "rms_residual": 70.10846247968342
+    },
+    {
+      "layer": "independent-blip",
+      "correlation": 0.9985551320646017,
+      "scale": 0.99964792674337,
+      "rms_residual": 70.10909309068202
+    },
+    {
+      "layer": "pre-filter-PWM",
+      "correlation": 0.9975784335944782,
+      "scale": 0.998462958931493,
+      "rms_residual": 92.30082328790539
+    }
+  ],
+  "source_audio_sha256": "0315fb60c82e60d739b816715114241a8fa8ab813139f49123095d3c3c4685e8"
+}

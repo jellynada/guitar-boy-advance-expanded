@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "label": "before-pause-0",
+      "source_sample": 64531,
+      "correlation": 0.9984787711646442,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "after-resume-0",
+      "source_sample": 65683,
+      "correlation": 0.9981293399143699,
+      "error_ms": -0.701904296875
+    },
+    {
+      "label": "before-pause-1",
+      "source_sample": 67534,
+      "correlation": 0.998139700877833,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "after-resume-1",
+      "source_sample": 68686,
+      "correlation": 0.9977297401295884,
+      "error_ms": -0.67138671875
+    },
+    {
+      "label": "before-pause-2",
+      "source_sample": 70537,
+      "correlation": 0.9981453152626595,
+      "error_ms": -0.67138671875
+    },
+    {
+      "label": "after-resume-2",
+      "source_sample": 71689,
+      "correlation": 0.9981503844837809,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "before-pause-3",
+      "source_sample": 73540,
+      "correlation": 0.9980799460405649,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "after-resume-3",
+      "source_sample": 74692,
+      "correlation": 0.9981728501594536,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "before-pause-4",
+      "source_sample": 76543,
+      "correlation": 0.9981191134287717,
+      "error_ms": -0.640869140625
+    },
+    {
+      "label": "after-resume-4",
+      "source_sample": 77695,
+      "correlation": 0.9981114376708075,
+      "error_ms": -0.6103515625
+    },
+    {
+      "label": "before-pause-5",
+      "source_sample": 79546,
+      "correlation": 0.9981273923421252,
+      "error_ms": -0.6103515625
+    },
+    {
+      "label": "after-resume-5",
+      "source_sample": 80698,
+      "correlation": 0.9979649482725594,
+      "error_ms": -0.579833984375
+    },
+    {
+      "label": "before-pause-6",
+      "source_sample": 82549,
+      "correlation": 0.998130831016969,
+      "error_ms": -0.579833984375
+    },
+    {
+      "label": "after-resume-6",
+      "source_sample": 83701,
+      "correlation": 0.9977589625180091,
+      "error_ms": -0.701904296875
+    },
+    {
+      "label": "before-pause-7",
+      "source_sample": 85549,
+      "correlation": 0.9981115626011968,
+      "error_ms": -0.701904296875
+    },
+    {
+      "label": "after-resume-7",
+      "source_sample": 86701,
+      "correlation": 0.9981429085234144,
+      "error_ms": -0.67138671875
+    },
+    {
+      "label": "two-seconds-later",
+      "source_sample": 119405,
+      "correlation": 0.9981605466702972,
+      "error_ms": -0.6103515625
+    },
+    {
+      "label": "near-audible-end",
+      "source_sample": 232789,
+      "correlation": 0.998603533610664,
+      "error_ms": -0.701904296875
+    }
+  ],
+  "excluded_boundary_filter_settling_samples": 64,
+  "threshold_correlation": 0.94,
+  "threshold_error_ms": 1
+}

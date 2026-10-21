@@ -17,7 +17,7 @@ struct ScoreSnapshot {
 };
 template<uint32_t N> class NoteScore {
 public:
-    void reset() {state_={};state_.total=N;seen_.fill(0);}
+    void reset(uint32_t count=N) {state_={};state_.total=count<=N?count:N;seen_.fill(0);}
     NoteScore() {reset();}
     bool consume(const GameplayEvent& event) {
         if(state_.finalized)return false;
@@ -25,7 +25,7 @@ public:
             state_.wrong=ScoreRules::add(state_.wrong,1);breakCombo();return true;
         }
         const uint32_t i=event.noteIndex;
-        if(i>=N||(seen_[i/8]&(1u<<(i%8))))return false;
+        if(i>=state_.total||(seen_[i/8]&(1u<<(i%8))))return false;
         seen_[i/8]|=1u<<(i%8);
         if(event.kind==GameplayEventKind::Miss) {++state_.missed;breakCombo();return true;}
         if(event.kind==GameplayEventKind::PerfectHit)++state_.perfect;else ++state_.good;
@@ -34,18 +34,18 @@ public:
         if(state_.combo>state_.maxCombo)state_.maxCombo=state_.combo;
         if(state_.multiplier>state_.highestMultiplier)state_.highestMultiplier=state_.multiplier;
         state_.score=ScoreRules::add(state_.score,(event.kind==GameplayEventKind::PerfectHit?10:5)*state_.multiplier);
-        state_.accuracy=ScoreRules::accuracy(state_.perfect+state_.good,N);
+        state_.accuracy=ScoreRules::accuracy(state_.perfect+state_.good,state_.total);
         return true;
     }
     void addSustainBonus(uint32_t bonus) {if(!state_.finalized){state_.score=ScoreRules::add(state_.score,bonus);state_.sustainBonus=ScoreRules::add(state_.sustainBonus,bonus);}}
     bool coherent(const JudgmentStats& j) const {
         return state_.perfect==j.perfect&&state_.good==j.good&&state_.missed==j.missed&&state_.wrong==j.wrongInputs;
     }
-    bool resolved() const {return uint64_t(state_.perfect)+state_.good+state_.missed==N;}
+    bool resolved() const {return uint64_t(state_.perfect)+state_.good+state_.missed==state_.total;}
     bool finalize() {
         if(!resolved())return false;
-        state_.finalized=1;state_.fullCombo=N&&state_.missed==0&&state_.wrong==0;
-        state_.allPerfect=state_.fullCombo&&state_.perfect==N;return true;
+        state_.finalized=1;state_.fullCombo=state_.total&&state_.missed==0&&state_.wrong==0;
+        state_.allPerfect=state_.fullCombo&&state_.perfect==state_.total;return true;
     }
     const ScoreSnapshot& snapshot() const {return state_;}
 private:

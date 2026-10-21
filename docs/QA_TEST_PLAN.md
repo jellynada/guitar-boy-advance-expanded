@@ -1,3 +1,102 @@
+# Mission 019 current verification
+
+Freeze game source9ccc460 and RC2 bytes; verify tools separately. Run the regular
+host suite,38 exact-ROM checks, full15-case FIFO transport, unchanged ordinary
+output matrix and independent stock0.10.1/0.10.5 input comparison. Execute
+`tests/foundation_soak.c` for3600 actual emulated seconds per public/private/legacy
+profile; record scene partitions, legal masks, no-miss/all-miss/mixed counts,
+pauses, replay, bounds and valid-frame graphics. Keep unsuccessful attempts.
+Stack sentinels are intrusive emulation diagnostics. Never infer hardware
+acceptance or output clearance from digital identity. Verify actual remote jobs
+and hosted/extracted ROM. Exact commands/results: [M019 verification](M019_VERIFICATION.json).
+
+Older plans below describe historical coverage.
+
+# Mission018 current verification
+
+Rebuild exact RC1 before fixes; preserve before/after identities and failures.
+Run tests/check.sh, exact-source builder, package/extraction checks, complete
+difficulty/graphics suite, check_pause_trace.py, digital FIFO oracle and unchanged
+ordinary output gate. Compare stock0.10.1/0.10.5, record diagnostic stack writes
+separately, and run negative scanline/header/stale-evidence tests. Download back,
+hash, extract and emulate actual hosted RC2. See M018_VERIFICATION.json.
+
+Older plans below are historical; never infer release approval from build success.
+
+# Mission 017 exact-candidate validation
+
+Run tests/check.sh, build_public_demo.py, package_public_demo.py, verify_demo_zip.py,
+test_public_demo.py and check_demo_audio.py. Retain all failures; digital accuracy
+is not ordinary-output or hardware clearance. Test both hit and mixed graphics
+loads, all3 difficulties, aliases, sustains, restart,10s pause/results/replay.
+Hash/extract/download back and emulate the exact delivered ROM. See
+M017_VERIFICATION.json and OWNER_M017_PLAYTEST.md. Existing host tests and
+legacy699-note regressions remain separate; no assertion thresholds relaxed.
+
+# Mission014 additions
+
+## Arcade75 additional gates
+
+Run `bash tests/check.sh`: interval conflicts, protected doubles/triples,
+minimal shifts/deletions/failure, occupied/future holds, re-articulation, rapid
+transition guards, cutoff boundaries, fade/sample identity, provenance and
+repeatable recipes; finite-EOF ASan/UBSan coverage. Keep old full-length tests.
+Build real native-All regression and real derived Arcade75-All separately.
+Exercise every difficulty, alias handoff, 8 pauses, paused exit, near-EOF pause,
+full completion/replay, mixed/miss inputs and Original Demo. Verify graphics,
+DMA/IRQ deadlines, stack margin and zero underruns/overflow. Digital mixer
+checks and ordinary mGBA output checks are separate; thresholds stay unchanged.
+Independent public synthetic packaging must reject any non-generator input,
+verify exact extraction and emulate that extracted ROM. AES private packaging
+uses independent 7-Zip extraction and matching ROM hashes. A local test is not
+a network download or real-GBA acceptance. See ARCADE75_VERIFICATION.md.
+
+
+Run `bash tests/check.sh`; compile `tests/pause_emulator.c` against libmgba and run `tests/run_pause_matrix.py` with matching profile manifests/symbols. Exercise every case on both actual profiles, including ten minutes, repeated START and both sequential exit orders. Read-only snapshots must freeze sample count, mixer, score, judgments, effects and composed screen. Test current-held resume, independent holds and missing-fret50ms grace. Keep existing uninterrupted regressions/thresholds intact.
+
+Use `tests/hardware_tap.c` with explicit ELF addresses (including GBA_TAP_COUNT_ADDR) and GBA_TAP_SINGLE_PLAYBACK=1 for first-playback pause captures. Run `tests/analyze_pause_audio.py` against matching runtime PCM; no experimental lateness correction. The latter checks declared Timer0 gaps separately, not by relaxing `analyze_fifo.py`. Compare untouched audio/graphics tests, original demo, diagnostic, replay and resources. Owner handheld acceptance remains required; use OWNER_M014_PLAYTEST.md.
+
+# Mission013 physical controls QA
+
+Owner acceptance is **pending** for this mission. Prior Mission011 acceptance
+must not be attributed to the new LEFT/B/A mapping. Current automated coverage:
+127 Python tests,9 sanitized C++ programs;17 synthetic,10 full real,5 diagnostics
+on each profile,3 Original36000frame runs; full real frame oracle and direct
+physical/receptor composition tests. See MISSION_013_PHYSICAL_CONTROLS.md for
+actual outcomes and the owner checklist.
+
+```bash
+bash tests/check.sh
+python3 tools/build_profile.py public
+python3 tools/build_profile.py cream
+# Use each verified profile's matching ROM and ELF-derived symbols:
+gcc -O2 -Wall -Wextra -Werror tests/physical_emulator.c -o /tmp/physical -lmgba
+/tmp/physical PATH_TO_ROM PATH_TO_NM_SYMBOLS
+```
+
+C harnesses use independent physical key bits LEFT32/B2/A1. The old LEFT/A/B
+script must fail the new ROM. Check visible LEFT/B/A labels,8 receptor masks,
+release-B/keep-A, exact scene tile restoration and Original LEFT/RIGHT/A/B.
+Diagnostic live and results labels are verified in actual framebuffer pixels.
+Held inputs must not emit repeated NEW PRESS; partial/wrong/early/stuck scripts
+remain expected outcome tests. Host tests exhaust1024 hardware masks and8192
+logical edge cases plus test-only alias handoffs with no duplicate press/release.
+Medium/Hard must remain unavailable as gameplay selections.
+
+Waveform analyzers and thresholds are unchanged. M013 currently passes all eight
+primary real models, four synthetic models and three additional >0.999 backing
+comparisons. Keep prior M011/M012 failures as compatibility history; do not count
+an experimental emulator correction as normal acceptance. No music/timing patch
+is used to obtain these passes. All chart/audio hashes match Mission012 exactly.
+
+Delivery verification must download the actual synthetic ZIP and encrypted real
+ZIP, reject private payloads in the public source package, require the private
+password, verify extracted ROM SHA against the matching build manifest, and run
+the extracted real ROM in mGBA. Never put the password in public evidence/commits.
+Preserve Mission012 stale/output and packaging negative tests.
+
+## Historical retained Mission012/011 test plans
+
 # Mission012 build foundation QA
 
 Owner-reported Mission011 Windows/mGBA and physical-GBA acceptance: flicker fixed,

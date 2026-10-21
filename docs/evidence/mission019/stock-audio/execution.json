@@ -1,0 +1,128 @@
+[
+  {
+    "version": "001",
+    "difficulty": 0,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "001",
+    "difficulty": 0,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "001",
+    "difficulty": 1,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "001",
+    "difficulty": 1,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "001",
+    "difficulty": 2,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "001",
+    "difficulty": 2,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 0,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 0,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 0,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 0,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 0,
+    "case": 12,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 1,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 1,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 1,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 1,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 1,
+    "case": 12,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 2,
+    "case": 19,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 2,
+    "case": 4,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 2,
+    "case": 22,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 2,
+    "case": 0,
+    "exit_code": 0
+  },
+  {
+    "version": "105",
+    "difficulty": 2,
+    "case": 12,
+    "exit_code": 0
+  }
+]

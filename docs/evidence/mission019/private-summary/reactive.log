@@ -1,0 +1,10 @@
+PASS: reactive frames16200 notes395 Perfect263 Good0 Miss132 Wrong0 nonzero_samples8509881 audio_state2; foreground max131904 avg79104.1 CPUcycles/frame
+PASS: 241 composite framebuffer HUD checks
+SCORE: score2630 combo0 maximum2 highest1 accuracy6658 FC0 AP0 session1
+TAILS: peak10 composite_checks19 overflow0
+HOLDS: total78 completed0 released49 missed29 bonus0
+IRQ: refills276246 max1472 mean1362.4 cycles, underruns0 gate0 gain0
+PASS: composed results heading, score, statistics labels and navigation instructions
+PASS: replay produces 58570 new nonzero audio samples after fresh pre-roll
+PASS: results A replay action resets score, combo, multiplier, audio and guitar
+PASS:4rapid original/imported replay cycles, original sound, reset counters/position, no crash

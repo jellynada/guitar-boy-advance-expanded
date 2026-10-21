@@ -1,0 +1,27 @@
+{
+  "source_commit": "9ccc460693fa7254527177330f32e56153720237",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "diagnostic_only": true,
+  "release_gate_unchanged": true,
+  "records": [
+    {
+      "case": 22,
+      "offset": 51104,
+      "samples": 2523124,
+      "mismatches": 56931,
+      "maximum_error": 2,
+      "raw_sha256": "171bc855a985cbcd6199f347c188806d9e13312edf16c087d0c73bbbcd7e74e1",
+      "predicted_sha256": "ab596470c006eeda060da29c2568199aede58401484e909183d1ae39b528e8ee"
+    },
+    {
+      "case": 23,
+      "offset": 51104,
+      "samples": 2523124,
+      "mismatches": 44906,
+      "maximum_error": 1,
+      "raw_sha256": "f02d7491f04da4b477ac303eb5f8c0aea4321627852dc37a2f53b667a69219cf",
+      "predicted_sha256": "c7b34c2916714848b15133e595bcb683e0bc47fef115b9a3b6a88e731f69bf2a"
+    }
+  ],
+  "independent_output_replay_exact": false
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/guitar-boy-advance-expanded/tests/analyze_reactive.py", line 89, in <module>
+    r=match((start+128)*2,min(4096,(end-start-256)*2),kind)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/guitar-boy-advance-expanded/tests/analyze_reactive.py", line 77, in match
+    assert sc[j]>.999 and .98<scale<1.02,(label,'backing capture differs',result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('backing-only', 'backing capture differs', {'label': 'backing-only', 'runtime_seconds': 204.26849365234375, 'correlation': 0.9672875063002229, 'error_ms': -0.6103515625, 'global_epoch_error_ms': -0.67138671875, 'capture_epoch_at_reference': 1850, 'backing_scale': 190.46537177794727, 'guitar_to_backing_scale': -0.005107721745097994, 'backing_capture_correlation': 0.9795933005699026, 'backing_capture_scale': 0.9814724806906339, 'residual_guitar_after_common_filter': -0.0058353465242112846})

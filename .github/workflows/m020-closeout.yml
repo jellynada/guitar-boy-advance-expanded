@@ -1,0 +1,281 @@
+name: Reviewed foundation development integration
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [develop]
+    paths-ignore: ['public-demo-downloads/**', 'docs/**', 'README.md']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: public-demo-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  focused-audio:
+    name: Independent stock PWM output replay
+    needs: build
+    runs-on: ubuntu-24.04
+    container: debian:bookworm-slim
+    timeout-minutes: 25
+    steps:
+      - run: apt-get update && apt-get install -y git gcc g++ cmake make libmgba-dev python3-numpy zlib1g-dev libpng-dev ca-certificates
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false, fetch-depth: 0}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - name: Unmodified Debian stock 0.10.1
+        run: |
+          dpkg-query -W libmgba-dev
+          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-001 --tap
+          python3 tools/m020_pair_analysis.py --build builds/ci/result --captures builds/focused-001 --output builds/focused-001/pair.json
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-001/difficulty-0-case-22 --startup-advance 15 > builds/focused-001/mixed-digital.log
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-001/difficulty-0-case-23 --startup-advance 15 > builds/focused-001/backing-digital.log
+      - name: Build unmodified stock 0.10.5
+        run: |
+          git clone https://github.com/mgba-emu/mgba.git builds/stock105
+          git -C builds/stock105 checkout --detach 26b7884bc25a5933960f3cdcd98bac1ae14d42e2
+          cmake -S builds/stock105 -B builds/stock105/out -DBUILD_QT=OFF -DBUILD_SDL=OFF -DBUILD_GL=OFF -DBUILD_GLES2=OFF -DBUILD_GLES3=OFF -DBUILD_LIBRETRO=OFF -DBUILD_TEST=OFF -DUSE_FFMPEG=OFF -DUSE_LIBZIP=OFF -DUSE_LZMA=OFF -DUSE_SQLITE3=OFF -DUSE_ELF=OFF
+          cmake --build builds/stock105/out -j2
+      - name: Unmodified stock 0.10.5 replay
+        run: |
+          python3 tools/m020_stock_output.py --build builds/ci/result --output builds/focused-105 --tap --flag=-I$PWD/builds/stock105/include --flag=-I$PWD/builds/stock105/out/include --flag=-L$PWD/builds/stock105/out --flag=-Wl,-rpath,$PWD/builds/stock105/out
+          python3 tools/m020_pair_analysis.py --build builds/ci/result --captures builds/focused-105 --output builds/focused-105/pair.json
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-105/difficulty-0-case-22 --startup-advance 15 > builds/focused-105/mixed-digital.log
+          python3 tests/analyze_fifo.py --audio-dir builds/ci/result/prepared/audio --prefix builds/focused-105/difficulty-0-case-23 --startup-advance 15 > builds/focused-105/backing-digital.log
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m020-focused-stock-output
+          path: |
+            builds/focused-001/*
+            builds/focused-105/*
+          if-no-files-found: error
+          retention-days: 14
+  build:
+    name: Build and host regressions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false, fetch-depth: 0}
+      - run: sudo apt-get update && sudo apt-get install -y g++ ffmpeg python3-numpy
+      - run: bash tests/check.sh
+      - run: python3 -m unittest discover -s tests -p test_foundation_integration.py -v
+      - name: Verify accepted ancestry and actual PR merge-tree runtime inputs
+        run: python3 tools/check_foundation_integration.py --output builds/ci/candidate-source.json
+      - name: Check out immutable RC2 build source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 9ccc460693fa7254527177330f32e56153720237
+          path: builds/frozen-rc2
+          persist-credentials: false
+      - name: Independently rebuild exact RC2
+        run: python3 builds/frozen-rc2/tools/build_public_demo.py --repo builds/frozen-rc2
+      - name: Package original composition and verify extraction
+        run: |
+          set -euo pipefail
+          build="builds/frozen-rc2/builds/public-demo/$(cat builds/frozen-rc2/builds/public-demo/LATEST.txt)"
+          mkdir -p builds/ci
+          python3 tools/package_public_demo.py --repo builds/frozen-rc2 --build "$build" --output builds/ci/player.zip
+          python3 tools/verify_demo_zip.py builds/ci/player.zip --receipt builds/ci/player.verification.json --extract-to builds/ci/player
+          cp -r "$build" builds/ci/result
+          echo "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde  builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba" | sha256sum --check
+      - name: Compile the actual proposed merge tree and require byte-identical RC2
+        run: |
+          set -euo pipefail
+          # Identity retained only after the previous complete build-input equality guard.
+          bash scripts/build-docker.sh BUILD_PROFILE=public-demo SOURCE_REVISION=9ccc460693fa7254527177330f32e56153720237 IMPORTED_HEADER=builds/ci/result/prepared/imported_chart.hpp AUDIO_DIR=builds/ci/result/prepared/audio
+          candidate="$(basename "$PWD").gba"
+          cmp "$candidate" builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba
+          cp "$candidate" builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba
+          python3 -c "from tools.build_public_demo import verify; verify('builds/ci/result')"
+      - name: Download published RC2 and verify archive and executed candidate identity
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,urllib.request,zipfile
+          from pathlib import Path,PurePosixPath
+          d=Path('builds/ci/hosted');d.mkdir()
+          delivery=json.loads(Path('public-demo-downloads/RC2-DELIVERY.json').read_text())
+          base='https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/'
+          for name,key in [(delivery['rom'],'rom_sha256'),(delivery['archive'],'archive_sha256')]:
+              urllib.request.urlretrieve(base+name,d/name)
+              assert hashlib.sha256((d/name).read_bytes()).hexdigest()==delivery[key]
+          z=zipfile.ZipFile(d/delivery['archive']);names=z.namelist()
+          receipt=json.loads(Path('builds/ci/player.verification.json').read_text())
+          assert len(names)==len(set(names))==14 and set(names)==set(receipt['payload_sha256']) and z.testzip()is None
+          for name in names:
+              p=PurePosixPath(name);assert not p.is_absolute()and '..'not in p.parts and '\\'not in name
+              dest=d/'extracted'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(z.read(name))
+          assert (d/delivery['rom']).read_bytes()==(d/'extracted'/delivery['rom']).read_bytes()==Path('builds/ci/player',delivery['rom']).read_bytes()
+          # Downstream jobs execute the actual downloaded-and-extracted published file.
+          Path('builds/ci/player',delivery['rom']).write_bytes((d/'extracted'/delivery['rom']).read_bytes())
+          r=dict(published_rom_sha256=delivery['rom_sha256'],published_archive_sha256=delivery['archive_sha256'],members=14,crc='passed',safe_extraction=True,actual_merge_tree_rom_identical=True,downloaded_extracted_rom_selected_for_execution=True)
+          (d/'verification.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m019-build, path: builds/ci, if-no-files-found: error, retention-days: 14}
+  gameplay:
+    name: Exact-ROM gameplay and graphics
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y gcc ffmpeg python3-numpy libmgba-dev
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - run: |
+          dpkg-query -W libmgba-dev > builds/ci/emulator-version.txt
+          python3 tools/test_public_demo.py --build builds/ci/result --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --output builds/emulator
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m019-gameplay, path: builds/emulator, if-no-files-found: warn, retention-days: 14}
+  digital:
+    name: Exact digital PCM and FIFO gate
+    needs: [build, gameplay]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y python3-numpy
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-gameplay, path: builds/emulator}
+      - name: Use the baseline stock Debian observer environment
+        run: |
+          set -euo pipefail
+          docker run -d --name m019-digital -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5 sleep infinity
+          docker exec m019-digital bash -c 'apt-get update && apt-get install -y gcc libmgba-dev'
+          docker exec m019-digital dpkg-query -W libmgba-dev > builds/ci/digital-emulator-version.txt
+      - run: |
+          set -euo pipefail
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/pause.c -o builds/emulator/pause -lmgba
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/stress.c -o builds/emulator/stress -lmgba
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror tests/pause_trace_emulator.c -o builds/pause-trace -lmgba
+      - name: Pause input-edge gate
+        run: python3 tools/check_pause_trace.py --probe builds/pause-trace --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --symbols builds/ci/result/symbols.txt --output builds/pause-edges --docker-container m019-digital
+      - name: Compile matching stock-library FIFO observer
+        run: docker exec m019-digital gcc -O2 -Wall -Wextra -Werror -fPIC -shared tests/hardware_tap.c -o builds/tap.so -lmgba -ldl
+      - name: Digital transport gate including every resume
+        run: python3 tools/check_demo_fifo.py --build builds/ci/result --probes builds/emulator --output builds/digital --tap builds/tap.so --skip-pwm --docker-container m019-digital
+      - name: Publish bounded public test diagnostics
+        if: always()
+        run: python3 tools/ci_gate_summary.py builds/pause-edges builds/digital
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m019-digital-evidence
+          path: |
+            builds/digital/*.json
+            builds/digital/*.log
+            builds/pause-edges/*.json
+            builds/pause-edges/*.csv
+            builds/ci/digital-emulator-version.txt
+          if-no-files-found: warn
+          retention-days: 14
+  audio-output:
+    name: Strict ordinary audio-output release gate
+    needs: [build, gameplay]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg python3-numpy
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-gameplay, path: builds/emulator}
+      - run: python3 tools/check_demo_audio.py --build builds/ci/result --captures builds/emulator
+      - name: Publish audio gate result
+        if: always()
+        run: python3 tools/ci_gate_summary.py builds/emulator
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m019-ordinary-output
+          path: |
+            builds/emulator/*.output.log
+            builds/emulator/audio-output.json
+          retention-days: 14
+  soak:
+    name: One emulated hour on the exact RC2
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y gcc libmgba-dev
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - name: Soak all difficulties, pause, failure inputs, replay and return
+        run: |
+          set -euo pipefail
+          mkdir -p builds/soak
+          dpkg-query -W libmgba-dev > builds/soak/environment.txt
+          gcc -O2 -Wall -Wextra -Werror tests/foundation_soak.c -o builds/soak/probe -lmgba
+          builds/soak/probe builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba builds/ci/result/symbols.txt 3600 public builds/soak/verification.json > builds/soak/soak.log 2>&1
+      - if: always()
+        run: python3 tools/ci_gate_summary.py builds/soak
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m019-soak
+          path: |
+            builds/soak/*.json
+            builds/soak/*.log
+            builds/soak/environment.txt
+          if-no-files-found: warn
+          retention-days: 14
+  development-integration:
+    name: Development integration readiness (owner review still required)
+    if: always()
+    needs: [build, gameplay, digital, audio-output, soak, focused-audio]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {persist-credentials: false}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-build, path: builds/ci}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m019-ordinary-output, path: builds/ordinary}
+      - name: Preserve release failure while requiring every development check
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          Path('builds/development-statuses.json').write_text(json.dumps({k:v['result']for k,v in json.loads(os.environ['NEEDS_JSON']).items()}))
+          PY
+          python3 tools/foundation_development_gate.py --ordinary builds/ordinary/audio-output.json --statuses builds/development-statuses.json --source builds/ci/candidate-source.json --output builds/development-integration.json
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: foundation-development-integration, path: 'builds/development-*.json', if-no-files-found: error, retention-days: 14}
+  promotion:
+    name: Release promotion blocked until explicit acceptance
+    if: always()
+    needs: [build, gameplay, digital, audio-output, soak]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Record independent statuses; never publish or merge
+        env:
+          BUILD: ${{ needs.build.result }}
+          GAMEPLAY: ${{ needs.gameplay.result }}
+          DIGITAL: ${{ needs.digital.result }}
+          AUDIO: ${{ needs.audio-output.result }}
+          SOAK: ${{ needs.soak.result }}
+        run: |
+          python3 - <<'PY'
+          import os,json
+          r={k:os.environ[k] for k in ['BUILD','GAMEPLAY','DIGITAL','AUDIO','SOAK']}
+          r.update(owner_accepted=False,release_approved=False,promotion='blocked; no automatic release or merge')
+          open('release-status.json','w').write(json.dumps(r,indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'w') as f:f.write('```json\n'+json.dumps(r,indent=2)+'\n```\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m019-release-status, path: release-status.json, retention-days: 14}

@@ -1,0 +1,26 @@
+[
+  {
+    "case": 8,
+    "passed": true,
+    "wrong_events": 1,
+    "cause": "genuine new B press after resume; existing head already judged"
+  },
+  {
+    "case": 24,
+    "passed": true,
+    "wrong_events": 0,
+    "cause": "no manufactured press"
+  },
+  {
+    "case": 25,
+    "passed": true,
+    "wrong_events": 0,
+    "cause": "no manufactured press"
+  },
+  {
+    "case": 27,
+    "passed": true,
+    "wrong_events": 0,
+    "cause": "no manufactured press"
+  }
+]

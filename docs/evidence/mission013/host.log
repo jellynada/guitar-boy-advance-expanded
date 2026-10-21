@@ -1,0 +1,209 @@
+PASS: timing boundaries, misses, wrong/extra input, chords, holds, repeat prevention, reset, final/empty charts, controls
+PASS: ASan/UBSan judgment checks; 699 chart records and unchanged timing; invalid resolution rejected
+PASS: unchanged 699-note chart, all-miss and all-perfect runs, exactly one event per note, consistent stats
+test_bad_bpm_resolution_and_offset (test_chart_importer.ImporterTests.test_bad_bpm_resolution_and_offset) ... ok
+test_batch_workflow_continues_past_invalid_charts (test_chart_importer.ImporterTests.test_batch_workflow_continues_past_invalid_charts) ... ok
+test_cli_determinism_sidecar_and_failed_reimport (test_chart_importer.ImporterTests.test_cli_determinism_sidecar_and_failed_reimport) ... ok
+test_difficulties_independent_and_expert_not_relabeled (test_chart_importer.ImporterTests.test_difficulties_independent_and_expert_not_relabeled) ... ok
+test_dot_only_filenames_cannot_escape_output_root (test_chart_importer.ImporterTests.test_dot_only_filenames_cannot_escape_output_root) ... ok
+test_dpad_opposition_and_diagonal_reports (test_chart_importer.ImporterTests.test_dpad_opposition_and_diagonal_reports) ... ok
+test_duplicate_and_unsorted_events_rejected (test_chart_importer.ImporterTests.test_duplicate_and_unsorted_events_rejected) ... ok
+test_duplicate_global_events_rejected (test_chart_importer.ImporterTests.test_duplicate_global_events_rejected) ... ok
+test_editor_anchors_do_not_override_tempo_timing (test_chart_importer.ImporterTests.test_editor_anchors_do_not_override_tempo_timing) ... ok
+test_empty_difficulty_is_reported_not_prepared (test_chart_importer.ImporterTests.test_empty_difficulty_is_reported_not_prepared) ... ok
+test_exact_rational_no_per_segment_rounding_drift (test_chart_importer.ImporterTests.test_exact_rational_no_per_segment_rounding_drift) ... ok
+test_exact_tempo_boundary_uses_new_segment_after_boundary (test_chart_importer.ImporterTests.test_exact_tempo_boundary_uses_new_segment_after_boundary) ... ok
+test_fractional_negative_offsets_and_rounding_endpoints (test_chart_importer.ImporterTests.test_fractional_negative_offsets_and_rounding_endpoints) ... ok
+test_generated_headers_compile_with_gba_compiler (test_chart_importer.ImporterTests.test_generated_headers_compile_with_gba_compiler) ... ok
+test_generated_headers_compile_with_host_compiler (test_chart_importer.ImporterTests.test_generated_headers_compile_with_host_compiler) ... ok
+test_hand_calculated_fixture_outputs (test_chart_importer.ImporterTests.test_hand_calculated_fixture_outputs) ... ok
+test_lanes_are_not_collapsed_to_fit_future_layout (test_chart_importer.ImporterTests.test_lanes_are_not_collapsed_to_fit_future_layout) ... ok
+test_large_timestamps_and_overflow (test_chart_importer.ImporterTests.test_large_timestamps_and_overflow) ... ok
+test_missing_sections_and_initial_tempo (test_chart_importer.ImporterTests.test_missing_sections_and_initial_tempo) ... ok
+test_modifiers_open_notes_and_special_phrases_preserved (test_chart_importer.ImporterTests.test_modifiers_open_notes_and_special_phrases_preserved) ... ok
+test_multiple_tempo_boundaries_and_sustain (test_chart_importer.ImporterTests.test_multiple_tempo_boundaries_and_sustain) ... ok
+test_negative_times_report_preroll (test_chart_importer.ImporterTests.test_negative_times_report_preroll) ... ok
+test_non_chart_inputs_and_invalid_utf8_report_errors (test_chart_importer.ImporterTests.test_non_chart_inputs_and_invalid_utf8_report_errors) ... ok
+test_offsets_are_explicit_and_applied_once (test_chart_importer.ImporterTests.test_offsets_are_explicit_and_applied_once) ... ok
+test_original_demo_is_valid_without_legacy_timing_changes (test_chart_importer.ImporterTests.test_original_demo_is_valid_without_legacy_timing_changes) ... ok
+test_parser_comments_bom_quotes_and_malformed_braces (test_chart_importer.ImporterTests.test_parser_comments_bom_quotes_and_malformed_braces) ... ok
+test_range_modifiers_are_retained_and_warned (test_chart_importer.ImporterTests.test_range_modifiers_are_retained_and_warned) ... ok
+test_resolution_changes_do_not_change_musical_time (test_chart_importer.ImporterTests.test_resolution_changes_do_not_change_musical_time) ... ok
+test_simultaneous_notes_stay_in_source_order (test_chart_importer.ImporterTests.test_simultaneous_notes_stay_in_source_order) ... ok
+test_time_signatures_do_not_change_timing (test_chart_importer.ImporterTests.test_time_signatures_do_not_change_timing) ... ok
+test_unknown_note_ids_and_events_rejected (test_chart_importer.ImporterTests.test_unknown_note_ids_and_events_rejected) ... ok
+test_unknown_tracks_retained_not_treated_as_guitar (test_chart_importer.ImporterTests.test_unknown_tracks_retained_not_treated_as_guitar) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.929s
+
+OK
+test_bad_structures (test_song_package.MidiTests.test_bad_structures) ... ok
+test_channels_paired_separately (test_song_package.MidiTests.test_channels_paired_separately) ... ok
+test_checked_in_fixture_matches_generator (test_song_package.MidiTests.test_checked_in_fixture_matches_generator) ... ok
+test_duplicate_instrument_and_ambiguous_channels (test_song_package.MidiTests.test_duplicate_instrument_and_ambiguous_channels) ... ok
+test_enhanced_opens_required (test_song_package.MidiTests.test_enhanced_opens_required) ... ok
+test_equivalent_chart_and_midi_independent_values (test_song_package.MidiTests.test_equivalent_chart_and_midi_independent_values) ... ok
+test_event_limit_and_invalid_data_bytes (test_song_package.MidiTests.test_event_limit_and_invalid_data_bytes) ... ok
+test_exact_nonintegral_bpm (test_song_package.MidiTests.test_exact_nonintegral_bpm) ... ok
+test_extended_header_and_single_byte_channel_events (test_song_package.MidiTests.test_extended_header_and_single_byte_channel_events) ... ok
+test_four_difficulties_exact_tempo_and_sustain (test_song_package.MidiTests.test_four_difficulties_exact_tempo_and_sustain) ... ok
+test_malformed_pairing (test_song_package.MidiTests.test_malformed_pairing) ... ok
+test_markers_instruments_and_unknowns (test_song_package.MidiTests.test_markers_instruments_and_unknowns) ... ok
+test_missing_tempo_and_bad_names (test_song_package.MidiTests.test_missing_tempo_and_bad_names) ... ok
+test_running_status_reset_and_vlq (test_song_package.MidiTests.test_running_status_reset_and_vlq) ... ok
+test_sysex_preserved_not_fake_notes (test_song_package.MidiTests.test_sysex_preserved_not_fake_notes) ... ok
+test_truncated_every_prefix (test_song_package.MidiTests.test_truncated_every_prefix) ... ok
+test_type_zero_running_status_zero_velocity (test_song_package.MidiTests.test_type_zero_running_status_zero_velocity) ... ok
+test_audio_ambiguity_and_selection (test_song_package.PackageTests.test_audio_ambiguity_and_selection) ... ok
+test_chart_offsets_require_choice (test_song_package.PackageTests.test_chart_offsets_require_choice) ... ok
+test_cli_single_mid (test_song_package.PackageTests.test_cli_single_mid) ... ok
+test_deterministic_outputs_and_invalid_removes_stale (test_song_package.PackageTests.test_deterministic_outputs_and_invalid_removes_stale) ... ok
+test_explicit_chart_selection (test_song_package.PackageTests.test_explicit_chart_selection) ... ok
+test_ini_encoding_and_no_audio_read (test_song_package.PackageTests.test_ini_encoding_and_no_audio_read) ... ok
+test_ini_errors (test_song_package.PackageTests.test_ini_errors) ... ok
+test_metadata_stems_offsets_counts_and_compatibility (test_song_package.PackageTests.test_metadata_stems_offsets_counts_and_compatibility) ... ok
+test_negative_half_microsecond_offset (test_song_package.PackageTests.test_negative_half_microsecond_offset) ... ok
+test_other_audio_formats_and_unknown_name (test_song_package.PackageTests.test_other_audio_formats_and_unknown_name) ... ok
+test_preview_only_not_gameplay (test_song_package.PackageTests.test_preview_only_not_gameplay) ... ok
+test_shared_markers_not_shifted_four_times (test_song_package.PackageTests.test_shared_markers_not_shifted_four_times) ... ok
+test_sustain_dpad_overlap_and_release_boundary (test_song_package.PackageTests.test_sustain_dpad_overlap_and_release_boundary) ... ok
+test_zip_and_folder_equivalence (test_song_package.PackageTests.test_zip_and_folder_equivalence) ... ok
+test_zip_nested_folder_and_size_limits (test_song_package.PackageTests.test_zip_nested_folder_and_size_limits) ... ok
+test_zip_ratio_duplicates_collisions_truncated (test_song_package.PackageTests.test_zip_ratio_duplicates_collisions_truncated) ... ok
+test_zip_unsafe_paths_and_symlinks (test_song_package.PackageTests.test_zip_unsafe_paths_and_symlinks) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.123s
+
+OK
+test_density_is_rejected_not_truncated (test_adapt_chart.AdaptTests.test_density_is_rejected_not_truncated) ... ok
+test_independent_boundaries_first_last (test_adapt_chart.AdaptTests.test_independent_boundaries_first_last) ... ok
+test_invalid_lanes_offsets_order_and_duplicates (test_adapt_chart.AdaptTests.test_invalid_lanes_offsets_order_and_duplicates) ... ok
+test_long_and_overflow (test_adapt_chart.AdaptTests.test_long_and_overflow) ... ok
+test_no_notes_or_source_mutated (test_adapt_chart.AdaptTests.test_no_notes_or_source_mutated) ... ok
+test_one_command_prepare_success_and_cleanup (test_adapt_chart.AdaptTests.test_one_command_prepare_success_and_cleanup) ... ok
+test_result_title_escaped_bounded_and_notes_preserved (test_adapt_chart.AdaptTests.test_result_title_escaped_bounded_and_notes_preserved) ... ok
+test_rounding_deterministic_cli_invalid_cleanup (test_adapt_chart.AdaptTests.test_rounding_deterministic_cli_invalid_cleanup) ... ok
+test_sustain_threshold_and_overlaps (test_adapt_chart.AdaptTests.test_sustain_threshold_and_overlaps) ... ok
+test_wrong_selection_and_sysex (test_adapt_chart.AdaptTests.test_wrong_selection_and_sysex) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.261s
+
+OK
+PASS: imported clock/controls/judgment/reset/long-song bounds; reference frame error max 11.405945 ms (<16.743ms)
+test_build_validation_missing_corrupt_and_silent (test_audio_prepare.AudioTests.test_build_validation_missing_corrupt_and_silent) ... ok
+test_cli_failure_clears_stale_assets (test_audio_prepare.AudioTests.test_cli_failure_clears_stale_assets) ... ok
+test_complete_package_rejects_audio_ending_before_chart (test_audio_prepare.AudioTests.test_complete_package_rejects_audio_ending_before_chart) ... ok
+test_complete_package_selection_and_wrong_preview (test_audio_prepare.AudioTests.test_complete_package_selection_and_wrong_preview) ... ok
+test_explicit_package_file_resolves_ambiguous_formats (test_audio_prepare.AudioTests.test_explicit_package_file_resolves_ambiguous_formats) ... ok
+test_explicit_selection_and_missing_dependency (test_audio_prepare.AudioTests.test_explicit_selection_and_missing_dependency) ... ok
+test_invalid_and_empty_audio (test_audio_prepare.AudioTests.test_invalid_and_empty_audio) ... ok
+test_lengths_determinism_and_zero_padding (test_audio_prepare.AudioTests.test_lengths_determinism_and_zero_padding) ... ok
+test_opus_decoder_preskip_duration (test_audio_prepare.AudioTests.test_opus_decoder_preskip_duration) ... ok
+test_package_command_requires_selection (test_audio_prepare.AudioTests.test_package_command_requires_selection) ... ok
+test_synthetic_matching_notes_and_duration (test_audio_prepare.AudioTests.test_synthetic_matching_notes_and_duration) ... ok
+test_wav_conversion_count_origin_headroom (test_audio_prepare.AudioTests.test_wav_conversion_count_origin_headroom) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 3.469s
+
+OK
+PASS: sample clock zero/pre-roll/hour-long exact timing, overflow bounds, shared judgment, frozen/backward snapshots
+test_build_rejects_corrupt_backing_and_unsafe_mix (test_reactive_prepare.ReactiveTests.test_build_rejects_corrupt_backing_and_unsafe_mix) ... ok
+test_duration_origin_headroom_determinism (test_reactive_prepare.ReactiveTests.test_duration_origin_headroom_determinism) ... ok
+test_fixture_distinct_tracks (test_reactive_prepare.ReactiveTests.test_fixture_distinct_tracks) ... ok
+test_package_reactive_and_cleanup (test_reactive_prepare.ReactiveTests.test_package_reactive_and_cleanup) ... ok
+test_role_selection_invalid (test_reactive_prepare.ReactiveTests.test_role_selection_invalid) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.809s
+
+OK
+PASS: gate Perfect/Good/Miss/WrongInput, true silence/no timeout,64sample fade/reversal, reset, same-update hit/miss/wrong event order, fixed-point bounds
+PASS: scoring10/20/30 thresholds, Good/Perfect, identity dedup, real held/chord/miss/hit/wrong order with audio gate,395Perfect=15230,8192notes, saturation, accuracy, empty charts, finalization, replay reset, audio end/fault/silent consistency
+PASS: exact quarter-second bonuses, captured multipliers, duplicate prevention, gaps, grace, permanent release, three simultaneous holds, missed onset, same-lane replacement, combo/FC/audio independence, reset
+test_bad_easy_lane_rejected (test_hold_data.HoldDataTests.test_bad_easy_lane_rejected) ... ok
+test_duration_bound_rejected (test_hold_data.HoldDataTests.test_duration_bound_rejected) ... ok
+test_fixture_contains_only_six_genuine_holds (test_hold_data.HoldDataTests.test_fixture_contains_only_six_genuine_holds) ... ok
+test_mismatched_parallel_arrays_rejected (test_hold_data.HoldDataTests.test_mismatched_parallel_arrays_rejected) ... ok
+test_too_short_audio_rejected (test_hold_data.HoldDataTests.test_too_short_audio_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+OK
+PASS: diagnostic chords, missing/extra inputs, no held-key retriggers, independent holds, deliberate release and reset
+test_backing_disappears (test_fifo_oracle.FifoOracleTests.test_backing_disappears) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp64grj_1c/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_clock_discontinuity (test_fifo_oracle.FifoOracleTests.test_clock_discontinuity) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp6lujibfa/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_correct_original_signal (test_fifo_oracle.FifoOracleTests.test_correct_original_signal) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpwl6qlftu/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_full_mix_instead_of_muting (test_fifo_oracle.FifoOracleTests.test_full_mix_instead_of_muting) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp9ihe8nke/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_missing_observation (test_fifo_oracle.FifoOracleTests.test_missing_observation) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpkcrzuqhf/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_one_consumed_byte (test_fifo_oracle.FifoOracleTests.test_one_consumed_byte) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpfsj2d47k/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_one_written_byte (test_fifo_oracle.FifoOracleTests.test_one_written_byte) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmppjrs00c9/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_repeated_sample (test_fifo_oracle.FifoOracleTests.test_repeated_sample) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp1y6som59/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_source_corruption (test_fifo_oracle.FifoOracleTests.test_source_corruption) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpesydv3dq/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_wrong_fixed_startup_offset (test_fifo_oracle.FifoOracleTests.test_wrong_fixed_startup_offset) ... /workspace/guitar-boy-advance-expanded/tests/analyze_fifo.py:32: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpkm28lc8f/capture.events.csv' mode='r' encoding='UTF-8'>
+  events=list(csv.DictReader(open(str(prefix)+'.events.csv')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.044s
+
+OK
+test_actual_failed_command_never_selects_old_rom (test_build_release.ReleaseTests.test_actual_failed_command_never_selects_old_rom) ... Building M013 / public-synthetic from 12d428f67cc85d9bc110a88ed6a350105ffc76b5
+deliberate Docker failure
+ok
+test_archive_missing_source_rejected (test_build_release.ReleaseTests.test_archive_missing_source_rejected) ... ok
+test_archive_round_trip_without_git (test_build_release.ReleaseTests.test_archive_round_trip_without_git) ... ok
+test_changed_archive_source_rejected (test_build_release.ReleaseTests.test_changed_archive_source_rejected) ... ok
+test_dirty_source_rejected (test_build_release.ReleaseTests.test_dirty_source_rejected) ... ok
+test_forbidden_paths_and_payloads (test_build_release.ReleaseTests.test_forbidden_paths_and_payloads) ... ok
+test_identity_rejects_shell_or_macro_injection (test_build_release.ReleaseTests.test_identity_rejects_shell_or_macro_injection) ... ok
+test_ignored_private_canary_excluded_and_not_staged (test_build_release.ReleaseTests.test_ignored_private_canary_excluded_and_not_staged) ... ok
+test_intact_artifact_inventory_accepted (test_build_release.ReleaseTests.test_intact_artifact_inventory_accepted) ... ok
+test_missing_elf_inventory_rejected (test_build_release.ReleaseTests.test_missing_elf_inventory_rejected) ... ok
+test_missing_private_input_invalidates_old_success (test_build_release.ReleaseTests.test_missing_private_input_invalidates_old_success) ... ok
+test_missing_revision_rejected (test_build_release.ReleaseTests.test_missing_revision_rejected) ... ok
+test_private_result_cannot_be_public (test_build_release.ReleaseTests.test_private_result_cannot_be_public) ... ok
+test_public_profile_rejects_private_argument (test_build_release.ReleaseTests.test_public_profile_rejects_private_argument) ... ok
+test_source_symlink_rejected (test_build_release.ReleaseTests.test_source_symlink_rejected) ... ok
+test_stale_rom_rejected (test_build_release.ReleaseTests.test_stale_rom_rejected) ... ok
+test_stale_runtime_rejected (test_build_release.ReleaseTests.test_stale_runtime_rejected) ... ok
+test_tracked_private_not_protected_by_ignore (test_build_release.ReleaseTests.test_tracked_private_not_protected_by_ignore) ... ok
+test_wrong_revision_marker_rejected_even_with_updated_hash (test_build_release.ReleaseTests.test_wrong_revision_marker_rejected_even_with_updated_hash) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.245s
+
+OK
+PASS:1024 raw masks,8192 logical edge cases; LEFT/B/A chords/overlaps/rapid taps/reset; Original unchanged; future aliases coalesce

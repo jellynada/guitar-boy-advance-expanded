@@ -1,0 +1,35 @@
+e61614e64dba326876ff14634a6f1b705c9f7320 Run mandatory digital observer in the verified baseline environment
+d9fa70679907ebaff10b9338921987275de79bc7 Certify immutable RC2 with measured scene soak and visible mandatory CI stages
+7cb0a3fca5b102e0cceaf4c2aecc92ddaff84889 Record full-transport RC2 verification, actual download checks and YELLOW readiness
+4652d45294a7cb930d6928d7fc5eda755a3f8bb2 Verify every resumed PCM segment and reject corruption after pause
+437410b45881119084cf675735b30cf3c841dad5 Provide original Copper Circuit RC2 playtest without replacing RC1 or clearing release gates
+9ccc460693fa7254527177330f32e56153720237 Keep pinned-container build outputs owned by the workspace user
+9a5018ceb33d58c9840cbac7ef38bb84d68347dd Allow verified pinned-container reuse when fresh Docker clones exceed cloud disk
+328a3187d794699e1efac7f959099879f6ff62dc Stabilize RC2 provenance and independent gates; characterize stock audio and pause edges
+8f1c4839475ad0167782c9c4d140bd2eb751c378 Record exact public download-back verification and unresolved acceptance gates
+e8ef0a59ddf1eecca84895c32c5e1e87722b51f5 Provide original public demo playtest files with explicit blocked release gate
+113fc49fbcec851631ee4a932320de7fa803e551 Stop stress keys at results and retain every emulator check outcome
+725bc0930f5ffbe7f4441bf0677c15b77a979346 Document public candidate gates and automate exact-ROM regression and audio checks
+19fd4f6dc9354ee3001fccb48e952b7b6bbad399 Add isolated original Copper Circuit public demo and verification tools
+1e8fec75eca86dd99798ec31e52c53dca34974f1 Document Arcade75 provenance, performance, regressions and private delivery gates
+61e4de93e29f09fede3d3e994c76a7f030ca3c3b Settle holds activated on the final arcade poll without advancing time
+54bd19d76cbb504dee211b7a28ac22e6f18780c4 Clip cut holds to the existing final consumed-sample clock
+fa29d315326c5a06bd0b5dc2939ec6e8ef98a120 Use generated note layout in finite-EOF sanitizer check
+ddddf12fa5ccbacd29a5ff47988920d0d0513c82 Prepare reproducible handheld charts and synchronized Arcade75 cuts offline
+6c627e36dc30286575183c10076258d0bc9a7a0a Record stabilization regressions, performance and unresolved acceptance gates
+e4cc5771aaacf18301b2dae6110538e78b38a834 Stabilize scene startup and reuse exact imported affine translations
+3ed8be72f9652ada15c32ef4f77bbafddc2615bf Verify all difficulty choices and preserve Easy menu regressions
+c138f3c7531c8afad953b1476c0f791e3b6e50e3 Polish difficulty screen and update menu-aware regression entry points
+301abd745b51996276e9884a38f066a29c72f86e Validate every bundled difficulty hold array before linking
+46edb87cbd8e036aff80d1c7490b8efd775ed886 Add custom-song difficulty menu and native Medium/Hard controls
+0d79c9526da1896d22517b4e4defbae51b2ed4b8 Record two generic song builds and metadata-driven emulator results
+01a78f831ee094c514b20101341ef0ac5f4d7880 Add versioned generic song preparation and isolated private ROM builds
+4119317d4f2d5bb34402619908525ddc2075bbf7 Scope Mission 016 generic song contract and two-package validation
+7fee39d93693d4437da188a0b5d9e89e8e9081d2 Add verified synthetic CI artifacts and extracted-ROM smoke checks
+f41365fce6f02c55b073f73642838e561bdc5c01 Audit Mission 014 foundation and scope Mission 015 build delivery slice
+2ae6544f96ad8662fadabd6d5cf373fd6931227d Document provisional Mission 014 QA, private delivery restriction and owner checks
+ce70e4ac1e45cd1bc4dd1d636e483b009472c914 Prepare pause glyphs at boot to preserve rapid scene input polling
+be1a99ede4616d7a728f7632bbc86ce4a0307482 Guard selector after exit and add pause matrix and sample continuity checks
+61b4d3ff7ced77f70bd4c492662aadec93cf9c01 Add provisional imported-song pause transport and input reseeding
+664c83ea624c4cec1c81d4c83f066e8abf0d2d87 Document LEFT/B/A verification, unchanged song assets and pending owner playtest
+61c49d66f2f09a96161ad0eb3bee2a2f8da50cbe Map imported Easy to LEFT/B/A through allocation-free logical input abstraction

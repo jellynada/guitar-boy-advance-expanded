@@ -1,0 +1,65 @@
+{
+  "diagnostic_only": true,
+  "acceptance_thresholds_unchanged": true,
+  "fifo_events": 10000,
+  "timer_period_min": 1024,
+  "timer_period_max": 1024,
+  "late_cycles_min": 0,
+  "late_cycles_max": 48,
+  "first_fifo_source_index": 590000,
+  "last_fifo_source_index": 599999,
+  "output_slot_cycles": 512,
+  "source_sample_cycles": 1024,
+  "scheduled_fifo_to_pwm_deadline_cycles": [
+    5
+  ],
+  "expired_pwm_deadlines": 3403,
+  "maximum_consecutive_expired_deadlines": 8,
+  "changed_fifo_values_skipped_by_stock_slot_rule": 579,
+  "next_pwm_retains_previous": 579,
+  "next_pwm_emits_incoming": 0,
+  "first_skipped_examples": [
+    {
+      "index": 590049,
+      "incoming": -1,
+      "previous": -2,
+      "next_pwm_value": -384,
+      "retains_previous": true,
+      "emits_incoming": false
+    },
+    {
+      "index": 590067,
+      "incoming": 4,
+      "previous": 3,
+      "next_pwm_value": 576,
+      "retains_previous": true,
+      "emits_incoming": false
+    },
+    {
+      "index": 590075,
+      "incoming": 6,
+      "previous": 5,
+      "next_pwm_value": 960,
+      "retains_previous": true,
+      "emits_incoming": false
+    }
+  ],
+  "models": [
+    {
+      "boundary": "slot-end",
+      "pwm_samples": 19992,
+      "exact_sample_matches": 18376,
+      "matches_within_one_source_sample": 19791,
+      "unexplained_outside_one": 201,
+      "unexplained_outside_two": 42
+    },
+    {
+      "boundary": "slot-start",
+      "pwm_samples": 19992,
+      "exact_sample_matches": 17900,
+      "matches_within_one_source_sample": 19917,
+      "unexplained_outside_one": 75,
+      "unexplained_outside_two": 19
+    }
+  ]
+}

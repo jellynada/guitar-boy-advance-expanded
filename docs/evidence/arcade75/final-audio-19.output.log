@@ -1,0 +1,42 @@
+{
+  "format": "16384Hz signed8 mono, two aligned ROM streams",
+  "capture_epoch_samples": -734,
+  "epoch_variation_samples": 4,
+  "events": 110,
+  "mute_transitions": 0,
+  "recoveries": 0,
+  "exact_backing_only_source_samples": 0,
+  "fade_samples": 64,
+  "fade_ms": 3.90625,
+  "independent_model_peak": 55,
+  "captured_peak": 10282,
+  "clipped_samples": 0,
+  "underruns": 0,
+  "last_second_nonzero_samples": 32028,
+  "checks": [
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 6.314178466796875,
+      "correlation": 0.9970594291059093,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": -732
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 37.4921875,
+      "correlation": 0.9947797748644034,
+      "error_ms": -0.701904296875,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": -732
+    },
+    {
+      "label": "sync-reference",
+      "runtime_seconds": 76.69219970703125,
+      "correlation": 0.9941908373212359,
+      "error_ms": -0.640869140625,
+      "global_epoch_error_ms": -0.640869140625,
+      "capture_epoch_at_reference": -734
+    }
+  ]
+}

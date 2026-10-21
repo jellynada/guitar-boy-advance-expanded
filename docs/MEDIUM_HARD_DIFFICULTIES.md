@@ -1,0 +1,98 @@
+# Custom-song difficulty selection
+
+Custom-song selection now opens a separate difficulty menu. UP/DOWN chooses an
+available native chart; A/START starts; B/SELECT returns to song selection.
+Unavailable difficulties are omitted. Original Demo keeps its existing flow.
+Results replay the selected chart; exiting returns to song selection. Imported
+START pause/resume and paused SELECT exit are unchanged.
+
+| Difficulty | Native lanes left to right |
+| --- | --- |
+| Easy | LEFT, B, A |
+| Medium | LEFT, RIGHT, B, A |
+| Hard | LEFT, UP **or** DOWN, RIGHT, B, A |
+
+UP and DOWN are OR aliases of Hard lane2. Edges are computed after logical
+coalescing: adding the other alias or releasing one while the other remains
+held does not create a hit/release. No configuration change is needed. New
+frets held across pause/resume remain seeded without phantom hits. The input
+chord diagnostic remains the existing Easy diagnostic, not a new five-lane UI.
+
+## Build a custom ROM
+
+The generic pipeline now defaults to `--difficulty All`: it prepares the native
+Easy/Medium/Hard lead-guitar charts present in the package, sharing the same
+converted audio. `--difficulty Easy`, `Medium` or `Hard` builds a single available
+choice instead. No chart is relabelled, dropped or converted from Expert.
+
+```sh
+python3 tools/song_pipeline.py YOUR_PACKAGE.zip --guitar guitar.opus --backing song.opus --output imports/output/custom-menu --difficulty All
+python3 tools/build_profile.py song --input imports/output/custom-menu
+```
+
+Use the actual audio filenames in your package. Fixed mix is also supported
+with repeated `--mix FILE`; it has no reactive guitar muting. The original
+public and Cream regression profiles retain their original Easy fixture/header
+bytes, but now show a one-choice difficulty screen. Existing private ROMs and
+archives are never rewritten.
+
+Menu preparations use `gba-prepared-song-v2`; single-chart preparations retain
+v1. v2 records available difficulties, per-chart controls/counts and maximum
+runtime capacity. Notes/holds remain in ROM for each chart; bounded judgment,
+score and sustain state are reused for the selected chart. There is no heap
+allocation, duplicate audio, runtime ZIP reader or SD song loader. The original
+max-capacity ROM/ELF guard is preserved; source/chart/audio hashes bind the bundle.
+
+Generate a new original test package with all three charts:
+
+```sh
+python3 tools/generate_difficulty_example.py builds/difficulty-examples
+python3 tools/song_pipeline.py builds/difficulty-examples/pulse --mix melody.wav --output imports/output/difficulty-test --difficulty All
+python3 tools/build_profile.py song --input imports/output/difficulty-test
+```
+
+## Limits and acceptance
+
+Native lanes must fit the selected difficulty (3/4/5); incompatible shapes fail
+rather than losing notes. The existing32-visible-head and8192-per-chart parser
+bounds, PCM/ROM limits and clock/judgment/scoring rules remain. More lanes do
+not establish that every high-density chart fits GBA CPU/RAM/OAM budgets.
+Native LEFT+RIGHT chords may be physically impractical on the conventional D-pad;
+notes are not silently remapped to avoid them. Owner hardware playtesting remains
+necessary for chord ergonomics, five-lane spacing, sound and cartridge behavior.
+The known strict emulator audio comparison issue remains open; no threshold is
+relaxed by this change. No public release or integration into main/develop is
+part of this implementation.
+
+The existing Easy emulator entry points now acknowledge the extra menu screen;
+this changes navigation setup only, not their gameplay or audio thresholds.
+The headless menu test checks held-confirm protection, Back, Original Demo,
+Hard replay/pause/exit and switching back to Easy with an independently reset
+count. A new sanitizer test covers fifth-lane hits/holds, bounded chart counts,
+scoring totals and alias handoff. Four importer tests cover native counts,
+per-difficulty preparation, bundled hold validation and rejection of an invalid
+Medium lane or Expert relabelling.
+
+## Executed verification
+
+[Recorded results](evidence/medium-hard/verification.json) identify the exact
+compiled runtime commit `c138f3c` and ROM hash.162 Python tests and11 ASan/UBSan
+C++ programs pass. The original three-difficulty package compiled successfully;
+all12 menu-aware gameplay/pause scenarios passed (4per native chart), including
+UP/both/DOWN handoffs during Hard play with no extra hit or wrong-input events.
+The separate navigation driver passed held-confirm protection, Back, Original
+Demo, Hard replay/pause/exit, and then Easy completion with its own chart count.
+The existing25-note public fixture also compiled, packaged, extracted and passed
+visible identity,4pause cases, receptor/label checks, perfect audio/gameplay and
+input-diagnostic execution. Gameplay/audio thresholds were not relaxed.
+
+Observed foreground peaks for the small synthetic package were144064cycles
+(Easy),152512(Medium),211520(Hard) per281k-cycle frame. No audio underruns,
+scanline deadline misses or sustain-sprite overflows occurred in these runs.
+These are observations for the supplied charts, not a worst-case hardware proof.
+The final tooling/tests/evidence follow-up does not change GBA runtime code;
+verified ROMs retain their exact compiled-source identity without an unnecessary
+rebuild. Private recordings/ROMs/archives remain unchanged; no release or merge.
+
+![Difficulty selection](evidence/medium-hard/difficulty-menu.png)
+![Five-lane Hard gameplay](evidence/medium-hard/hard-gameplay.png)

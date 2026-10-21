@@ -44,13 +44,16 @@ void update_sprites()
         // Adaptation rejects charts exceeding this complete visible-window budget.
         for (u32 index=importedFirstVisible; index<importedEndVisible && index-importedFirstVisible<SPR_COUNT; ++index)
             init_sprite(index-importedFirstVisible, importedSprite(index), index);
-    } else if(first_sprite != recent+SPR_COUNT-2){
+    }
+#ifndef GBA_PUBLIC_DEMO
+    else if(first_sprite != recent+SPR_COUNT-2){
 		noteSprite* positions = nm->getNoteSprites();
 		for(ii=first_sprite; ii<recent+SPR_COUNT-2 && ii<count; ii++){
 			init_sprite(ii%SPR_COUNT, positions[ii], ii);
 		}
 		first_sprite = recent;
 	}
+#endif
 
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
@@ -81,12 +84,17 @@ void update_sprites()
 void init_sprites()
 {
 	int ii;
+#ifndef GBA_PUBLIC_DEMO
 	noteSprite* pos = nm->getNoteSprites();
+#endif
 	// Notes
 	for(ii=0; ii<SPR_COUNT; ii++)
 	{
+#ifndef GBA_PUBLIC_DEMO
 		if(gameMode != 2 && ii < (int)nm->getNoteCount()) init_sprite(ii, pos[ii], ii);
-        else {
+        else
+#endif
+        {
             loaded_notes[ii] = UINT32_MAX;
             obj_hide(&m7_level.sprites[ii].obj);
         }

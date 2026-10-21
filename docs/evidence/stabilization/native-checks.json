@@ -1,0 +1,22 @@
+[
+  {
+    "test": "native-budget-0",
+    "exit_code": 0
+  },
+  {
+    "test": "native-budget-1",
+    "exit_code": 0
+  },
+  {
+    "test": "native-graphics-1",
+    "exit_code": 0
+  },
+  {
+    "test": "native-budget-2",
+    "exit_code": 0
+  },
+  {
+    "test": "native-graphics-2",
+    "exit_code": 0
+  }
+]

@@ -5,6 +5,7 @@
 #include "terminal.hpp"
 #include "mode7.hpp"
 #include "scanline.hpp"
+#include "playTransport.hpp"
 #include "build_identity.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
@@ -12,6 +13,7 @@
 #include "gameSession.hpp"
 #include "importedRuntime.hpp"
 #include "imported_chart.hpp"
+#include "importedSelection.hpp"
 #include "imported_audio.hpp"
 #include "pcmPlayback.hpp"
 #include "scoring.hpp"
@@ -25,22 +27,46 @@
 
 #include "image.h"
 #include "palette.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "soundbank.h"
 #include "soundbank_bin.h"
+#endif
 
 #include "text_sprites.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "careless.h"
+#endif
 #include "buttons.h"
 
+#ifdef GBA_PUBLIC_DEMO
+#define mmStop() ((void)0)
+#define mmFrame() ((void)0)
+#define mmVBlank() ((void)0)
+#endif
 #define CONTROLS_ENABLED false
 
+#ifndef GBA_PUBLIC_DEMO
 static NoteManager<careless_expertsingle_count> originalNotes(careless_expertsingle_data, careless_BPM);
 NoteManager<careless_expertsingle_count>* nm = &originalNotes;
-static ImportedRuntime<imported_note_count> importedNotes(imported_notes);
+#endif
+static ImportedRuntime<imported_note_count,5> importedNotes(imported_notes);
 volatile u32 gameMode = 0;
+u32 importedLaneCount=imported_choices[0].lanes,importedChartCount=imported_choices[0].count;
+const Note* activeImportedNotes=imported_choices[0].notes;
+const uint64_t* activeImportedSustains=imported_choices[0].sustains;
+static unsigned difficultySelection=0;
+static bool difficultyReady=false;
 static NoteScore<imported_note_count> importedScoring;
-EWRAM_DATA static Sustain::Holds<imported_note_count> importedHolds(imported_notes,imported_sustain_us);
+EWRAM_DATA static Sustain::Holds<imported_note_count,5> importedHolds(imported_notes,imported_sustain_us);
 static u64 importedLastEnd=0;
+static u64 importedLastEnds[imported_choice_count]{};
+extern "C" {volatile u32 importedReady=0;}
+static void prepareImportedBounds(){
+    for(unsigned c=0;c<imported_choice_count;++c){const auto& chart=imported_choices[c];u64 last=0;
+        for(u32 i=0;i<chart.count;++i){const u64 end=chart.notes[i].tick+Sustain::duration(chart.sustains[i]);if(end>last)last=end;}
+        importedLastEnds[c]=last;
+    }
+}
 ScoreSnapshot scoreSnapshot() {
     auto s=importedScoring.snapshot();const auto& h=importedHolds.stats();
     s.holdsCompleted=h.completed;s.holdsReleased=h.released;s.holdsMissed=h.missed;s.holdsTotal=h.total;return s;
@@ -59,19 +85,28 @@ u32 importedEventCount = 0;
 u32 importedFrameWorkMaxCycles = 0;
 u64 importedFrameWorkTotalCycles = 0;
 u32 importedFrameWorkCount = 0;
-u32 activeNoteCount() { return gameMode == 2 ? imported_note_count : careless_expertsingle_count; }
+#ifdef GBA_PUBLIC_DEMO
+u32 activeNoteCount() { return importedChartCount; }
+bool activeWasHit(u32 index) { return importedNotes.wasHit(index); }
+#else
+u32 activeNoteCount() { return gameMode == 2 ? importedChartCount : careless_expertsingle_count; }
 bool activeWasHit(u32 index) { return gameMode == 2 ? importedNotes.wasHit(index) : nm->wasHit(index); }
+#endif
 noteSprite importedSprite(u32 index) {
     noteSprite sprite{};
-    if (index >= imported_note_count) return sprite;
-    const Note& note = imported_notes[index];
+    if (index >= importedChartCount) return sprite;
+    const Note& note = activeImportedNotes[index];
     sprite.pal = note.lane + 1;
-    sprite.pos.x = ImportedTiming::laneX(note.lane);
+    sprite.pos.x = ImportedTiming::laneX(note.lane,importedLaneCount);
     sprite.pos.z = m7_level.camera->pos.z + ImportedTiming::relativeZ(int64_t(note.tick) - int64_t(importedNowCycles));
     return sprite;
 }
 
+#ifdef GBA_PUBLIC_DEMO
+FIXED VEL_H = 0x200;
+#else
 FIXED VEL_H = CONTROLS_ENABLED ? 0x200 : careless_BPM;
+#endif
 
 s64 curr_z = 0; // Avoid signed overflow when the music keeps looping.
 
@@ -105,14 +140,14 @@ void input_game()
 //blue button 	(21, 16)
 void drawButton(int b, bool active){
 	int palette = b+1;
-	int start_x = gameMode == 2 ? (b*9)+3 : (b*6)+3;
+	int start_x = gameMode == 2 ? receptorX(b,importedLaneCount) : (b*6)+3;
 	int start_ind = 32*13 + start_x;
 	//y
 	for(int i = 0; i < 3; i++){
 		int row_start = start_ind + (i*32);
 		//x
-		for(int j = 0; j < 6; j++){
-			u16 map_start = active ? buttonsMap[(i*6)+j] + 18 : buttonsMap[(i*6)+j];
+		for(int j = 0; j < int(gameMode==2?receptorWidth(importedLaneCount):6); j++){
+			u16 map_start = active ? buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?(j*5+2)/4:j)] + 18 : buttonsMap[(i*6)+(gameMode==2&&importedLaneCount==5?(j*5+2)/4:j)];
 			se_mem[30][row_start+j] = map_start | SE_PALBANK(palette);
 		}
 
@@ -132,7 +167,7 @@ void configureFloor() {
         u16* tile = reinterpret_cast<u16*>(tile_mem[2]) + (6+column)*32;
         for (int y=0; y<8; ++y) for (int pair=0; pair<4; ++pair) {
             int x=column*8+pair*2;
-            auto color = [edge, fill](int p) { return p == 0 || p == 21 || p == 42 || p == 63 ? edge : fill; };
+            auto color = [edge, fill](int p) { return p == 0 || p == 63 || (importedLaneCount==3?(p==21||p==42):((p*importedLaneCount)%64<importedLaneCount)) ? edge : fill; };
             tile[y*4+pair] = color(x) | (u16(color(x+1)) << 8);
         }
     }
@@ -144,14 +179,16 @@ void configureFloor() {
 
 void drawButtons(){
 	//iterate through buttons
-	for(int b = 0; b < (gameMode == 2 ? 3 : 4); b++){
+	for(int b = 0; b < (gameMode == 2 ? importedLaneCount : 4); b++){
 		drawButton(b, false);
 	}
 }
 
 void updateButtons(u16 hit, u16 released){
-	const u16* buttons = gameMode == 2 ? EASY_BUTTONS : LANE_BUTTONS;
-	for(int i = 0; i < (gameMode == 2 ? 3 : 4); i ++){
+    if(gameMode==2){const u8 held=importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount);
+        for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,held&(1u<<lane));return;}
+	const u16* buttons = gameMode == 2 ? importedButtons(importedLaneCount) : LANE_BUTTONS;
+	for(int i = 0; i < (gameMode == 2 ? importedLaneCount : 4); i ++){
 		if( buttons[i] & hit ){
 			drawButton(i, true);
 		}
@@ -209,7 +246,11 @@ void refreshFeedback() {
         feedbackDirty = true;
     }
     if (!feedbackDirty) return;
+#ifdef GBA_PUBLIC_DEMO
+    displayedStats = importedNotes.stats();
+#else
     displayedStats = gameMode == 2 ? importedNotes.stats() : nm->judgment().stats();
+#endif
     if(gameMode==2) {
         displayedScore=scoreSnapshot();
         ScoreDisplay::hud(displayedScore,feedbackUntilFrame?lastJudgment:"",
@@ -229,6 +270,11 @@ void update(){
     if (gameMode && gameClockRunning) ++gameplayFrames;
 }
 
+extern "C" {
+PlayTransport::Controller importedTransport;
+volatile u32 importedPauseCount=0,importedResumeCount=0;
+}
+
 int main(){
 
     const M7_CAM initialCamera = m7_cam_default;
@@ -246,6 +292,8 @@ int main(){
     memcpy16(&se_mem[24], imageMap, imageMapLen/2);
 
 	memcpy16(&tile_mem[1], buttonsTiles, buttonsTilesLen/2);
+    ScoreDisplay::preparePauseFont();
+    prepareImportedBounds();
 	drawButtons();
 
 	if(ENABLED){
@@ -264,6 +312,11 @@ int main(){
     REG_DISPCNT = DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
 
 	memcpy16(pal_obj_mem, palettePal, palettePalLen/2);
+    for(unsigned i=0;i<16;++i){
+        const unsigned c=palettePal[4*16+i],r=c&31,g=(c>>5)&31,b=(c>>10)&31;
+        const unsigned level=r>g?(r>b?r:b):(g>b?g:b);
+        pal_bg_mem[5*16+i]=pal_obj_mem[5*16+i]=i?RGB15(level,level/2,0):c;
+    }
 	memcpy16(tile_mem_obj, notesTiles, notesTilesLen/2);
 	memcpy16(&tile_mem_obj[1], text_spritesTiles, text_spritesTilesLen/2);
 
@@ -271,8 +324,10 @@ int main(){
 	init_sprites();
     // Initialize Interrupts
     irq_init(nullptr);
+#ifndef GBA_PUBLIC_DEMO
 	nm->reset();
 	nm->judgment().setEventSink(onGameplayEvent);
+#endif
 	refreshFeedback();
 
 	// Initialise audio before any VBlank handler can call mmVBlank().
@@ -296,13 +351,60 @@ int main(){
     textDisplay menuHelp(16, 128, 112, true, 16);
     textDisplay menuInfo(16, 146, 0);
     textDisplay modeLabel(4, 40, 96);
-    int selection = 1;
+    int selection =
+#ifdef GBA_PUBLIC_DEMO
+    2;
+#else
+    1;
+#endif
     bool menuDirty = true;
+    bool selectorControlsArmed = true;
 
     while(1){
         // Poll first: judge the newly observed input, not last frame's keys.
         key_poll();
-        if (gameMode && key_is_down(KEY_START | KEY_SELECT) == (KEY_START | KEY_SELECT)) {
+        if(gameMode!=2)importedReady=0;
+        if(gameMode==4){
+            if(!selectorControlsArmed){if(key_is_down(KEY_A|KEY_START|KEY_SELECT|KEY_B)){vid_vsync();continue;}selectorControlsArmed=true;}
+            if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;difficultyReady=false;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
+            if(key_hit(KEY_DOWN)){difficultySelection=(difficultySelection+1)%imported_choice_count;menuDirty=true;}
+            if(key_hit(KEY_UP)){difficultySelection=(difficultySelection+imported_choice_count-1)%imported_choice_count;menuDirty=true;}
+            if(menuDirty){
+                oam_init(oam_mem,128);
+                menuTitle.updateText("DIFFICULTY");menuInfo.updateText(imported_title);
+                menuOriginal.updateText(imported_choice_count>0?(difficultySelection==0?">":" "):"");
+                menuImported.updateText("");menuDiagnostic.updateText("");
+                textDisplay* rows[]={&menuOriginal,&menuImported,&menuDiagnostic};
+                for(unsigned i=0;i<imported_choice_count;++i){char label[16];unsigned j=0;label[j++]=i==difficultySelection?'>':' ';const char* name=imported_choices[i].difficulty;while(*name&&j<15)label[j++]=*name++;label[j]=0;
+#ifdef GBA_PUBLIC_DEMO
+                    rows[i]->updateText(i==0?(difficultySelection==0?">Easy LEFT B A":" Easy LEFT B A"):i==1?(difficultySelection==1?">Medium L R B A":" Medium L R B A"):(difficultySelection==2?">Hard L U/D R B A":" Hard L U/D R B A"));
+#else
+                    rows[i]->updateText(label);
+#endif
+                }
+#ifdef GBA_PUBLIC_DEMO
+                menuHelp.updateText("A:Play B:Back");
+#else
+                menuHelp.updateText("A:Choose B:Back");
+#endif
+#ifdef GBA_PUBLIC_DEMO
+                if(difficultySelection==2)menuInfo.updateText("U/D=Up or Down");
+#endif
+                menuDirty=false;
+            }
+            if(!key_hit(KEY_A|KEY_START)){vid_vsync();continue;}
+            const auto& chosen=imported_choices[difficultySelection];
+            importedLaneCount=chosen.lanes;importedChartCount=chosen.count;activeImportedNotes=chosen.notes;activeImportedSustains=chosen.sustains;
+            difficultyReady=true;gameMode=0;selection=2;
+        }
+        const auto systemCommand=gameMode==2&&importedSessionState==ImportedCompletion::Playing
+            ?importedTransport.poll(key_is_down(KEY_START|KEY_SELECT)):PlayTransport::Command::None;
+        const bool oldExitChord=gameMode&&(gameMode!=2||importedSessionState!=ImportedCompletion::Playing)&&
+            key_is_down(KEY_START|KEY_SELECT)==(KEY_START|KEY_SELECT);
+        if (oldExitChord||systemCommand==PlayTransport::Command::Exit) {
+            importedTransport.apply(PlayTransport::Command::Exit);
+            importedTransport.reset();
+            selectorControlsArmed=false; // Require release after exit before another start.
             Scanline::stop();
             mmStop();
             pcmStop();
@@ -310,14 +412,26 @@ int main(){
             irq_enable(II_HBLANK);
             ScoreDisplay::clear();
             gameClockRunning = false;
-            gameMode = 0;
+            importedReady=0;gameMode = 0;difficultyReady=false;
             menuDirty = true;
             oam_init(oam_mem, 128);
             vid_vsync(); continue; // Return chord must not also confirm the selector.
         }
+        if(gameMode==2&&importedTransport.phase==PlayTransport::Phase::Paused) {
+            if(systemCommand!=PlayTransport::Command::Resume){vid_vsync();Scanline::vblank();continue;}
+            // UI changes are made in VBlank while audio/time are still frozen.
+            vid_vsync();Scanline::vblank();ScoreDisplay::pauseHide();
+            const u8 held=importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount);
+            importedNotes.judgment().seedInput(held);
+            importedHolds.resumeInput(importedNowCycles,held);
+            for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,held&(1u<<lane));
+            const bool resumed=!imported_audio_enabled||pcmResume();
+            importedTransport.apply(PlayTransport::Command::Resume);
+            ++importedResumeCount;gameClockRunning=resumed;feedbackDirty=true;
+        }
         if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
             if(key_hit(KEY_B|KEY_SELECT)) {
-                Scanline::stop();pcmStop();gameMode=0;gameClockRunning=false;menuDirty=true;
+                Scanline::stop();pcmStop();importedTransport.reset();gameMode=0;difficultyReady=false;gameClockRunning=false;menuDirty=true;
                 importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
                 oam_init(oam_mem,128);ScoreDisplay::clear();
             } else if(key_hit(KEY_A|KEY_START)) {
@@ -332,27 +446,50 @@ int main(){
             if(gameMode==3){vid_vsync();InputDiagnostic::update(gameplayFrames,easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));continue;}
         }
         if (!gameMode) {
+#ifdef GBA_PUBLIC_DEMO
+            if(key_hit(KEY_DOWN|KEY_UP)){selection=selection==2?3:2;menuDirty=true;}
+#else
             if (key_hit(KEY_DOWN)) { selection=selection%3+1;menuDirty=true; }
             if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
+#endif
             if (menuDirty) {
+                oam_init(oam_mem,128);
                 REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
                 menuTitle.updateText(GBA_BUILD_TITLE);
+#ifdef GBA_PUBLIC_DEMO
+                menuOriginal.updateText(selection==2?">Copper Circuit":" Copper Circuit");
+                menuImported.updateText(selection==3?">Controls / Help":" Controls / Help");
+                menuDiagnostic.updateText("EXPANDED RC2");
+#else
                 menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
-                menuImported.updateText(selection == 2 ? ">Imported Easy Test" : " Imported Easy Test");
+                menuImported.updateText(selection == 2 ? ">Custom song" : " Custom song");
                 menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
+#endif
                 menuHelp.updateText("Up/Down A:Start");
+#ifdef GBA_PUBLIC_DEMO
+                menuInfo.updateText("Original / 75s");
+#else
                 menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
+#endif
                 pal_bg_mem[0] = 0;
                 menuDirty = false;
             }
+            if(!selectorControlsArmed){
+                if(key_is_down(KEY_START|KEY_SELECT|KEY_A)){vid_vsync();continue;}
+                selectorControlsArmed=true;
+            }
             if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
+            if(selection==2&&!difficultyReady){gameMode=4;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
             Scanline::stop();
+            importedReady=0;
             // Fresh mode epoch: counters, camera, visuals and held-key history.
             const u16 interrupts = REG_IME;
             REG_IME = 0;
             gameClockRunning = false;
             gameplayFrames = 0;
             gameMode = selection;
+            if(gameMode==2)importedTransport.begin(key_is_down(KEY_START|KEY_SELECT));else importedTransport.reset();
+            importedPauseCount=importedResumeCount=0;
             REG_IME = interrupts;
             currentGameFrame = 0;
             curr_z = 0;
@@ -360,16 +497,20 @@ int main(){
             m7_rotate(&m7_cam_default, initialCamera.phi, initialCamera.theta);
             importedNowCycles = importedMaxErrorCycles = 0;
             importedEventCount = 0;
-            importedScoring.reset();importedHolds.reset();
-            importedLastEnd=0;for(u32 i=0;i<imported_note_count;++i)if(importedHolds.end(i)>importedLastEnd)importedLastEnd=importedHolds.end(i);
+            importedScoring.reset(importedChartCount);
+            importedHolds.configure(activeImportedNotes,activeImportedSustains,importedChartCount);
+            importedNotes.configure(activeImportedNotes,importedChartCount);
+            importedLastEnd=importedLastEnds[difficultySelection];
             displayedScore=scoreSnapshot();
             importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
             importedCompletionDiagnostic=completionWaitFrames=0;
             importedFrameWorkMaxCycles = importedFrameWorkCount = 0;
             importedFrameWorkTotalCycles = 0;
             importedFirstVisible = importedEndVisible = 0;
+#ifndef GBA_PUBLIC_DEMO
             nm->reset(laneMaskFromButtons(key_is_down(GAME_BUTTONS)));
-            importedNotes.reset(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));
+#endif
+            importedNotes.reset(importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount));
             importedNotes.judgment().setEventSink(onGameplayEvent);
             lastJudgment = "READY";
             displayedStats = {};
@@ -392,8 +533,11 @@ int main(){
                 m7_level.camera->pos.z=ImportedTiming::floorZ(0);
                 m7_prep_horizon(&m7_level);m7_prep_affines(&m7_level);Scanline::start();
             }
+#ifndef GBA_PUBLIC_DEMO
             if (gameMode == 1) { legacyAudioInit(); mmStart(MOD_CARELESS_WHISPER, MM_PLAY_LOOP); }
-            else if(gameMode==2) { mmStop(); pcmStart(); }
+            else
+#endif
+            if(gameMode==2) { mmStop(); pcmStart(); }
             else {mmStop();pcmStop();irq_disable(II_HBLANK);InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
             const u16 startIrq = REG_IME; REG_IME=0;
             gameplayFrames=0; gameClockRunning=true;
@@ -402,28 +546,46 @@ int main(){
             modeLabel.updateText("");
             if(gameMode==3){vid_vsync();continue;}
         }
+        bool pauseNow=false;
+        if(gameMode==2&&systemCommand==PlayTransport::Command::Pause){
+            const bool beforeSilentEnd=ImportedTiming::frameTick(gameplayFrames)<ImportedCompletion::silentEnd(importedLastEnd,importedChartCount!=0);
+            if(imported_audio_enabled?pcmPause():beforeSilentEnd){gameClockRunning=false;pauseNow=true;}
+        }
         currentGameFrame = gameplayFrames; // Aligned 32-bit read is atomic on GBA.
         const u16 workStart = REG_TM3D;
-        const u16 mask = gameMode == 2 ? EASY_GAME_BUTTONS : GAME_BUTTONS;
+        const u16 mask = gameMode == 2 ? importedGameButtons(importedLaneCount) : GAME_BUTTONS;
         if (gameMode == 2) {
             if (imported_audio_enabled) {
                 const u64 sampleTick=pcmSnapshotTick();
                 if (audioState!=PcmClock::Fault) {
-                    const u32 bonus=importedHolds.update(sampleTick,easyLaneMaskFromButtons(key_is_down(mask)));
+                    const u32 bonus=importedHolds.update(sampleTick,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));
                     importedScoring.addSustainBonus(bonus);if(bonus)feedbackDirty=true;
-                    importedNotes.updateTick(sampleTick, easyLaneMaskFromButtons(key_is_down(mask)));
+                    importedNotes.updateTick(sampleTick, importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));
                 }
             }
             else {
-                importedScoring.addSustainBonus(importedHolds.update(ImportedTiming::frameTick(currentGameFrame),easyLaneMaskFromButtons(key_is_down(mask))));
-                importedNotes.update(currentGameFrame,easyLaneMaskFromButtons(key_is_down(mask)));feedbackDirty=true;
+                importedScoring.addSustainBonus(importedHolds.update(ImportedTiming::frameTick(currentGameFrame),importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount)));
+                importedNotes.update(currentGameFrame,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));feedbackDirty=true;
             }
 
+#ifdef GBA_IMPORTED_CUT
+            // Only finite cut profiles close pending late windows at real EOF.
+            // The normal update above first settles clipped holds at that clock.
+            if(imported_audio_enabled && audioState==PcmClock::Ended &&
+               importedNotes.now()>=PcmClock::tick(audioSamplesConsumed)) {
+                importedNotes.judgment().finishAtEof(importedNotes.now());
+                // A head hit on this final update may have just activated a
+                // clipped hold. Settle it at the SAME tick, never beyond EOF.
+                importedScoring.addSustainBonus(importedHolds.update(importedNotes.now(),
+                    importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount)));
+            }
+#endif
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
             importedEndVisible = importedNotes.endVisible();
             recent_sprite = importedEndVisible;
-            const u64 silentDeadline=ImportedCompletion::silentEnd(importedLastEnd,imported_note_count!=0);
+            if(!pauseNow){
+            const u64 silentDeadline=ImportedCompletion::silentEnd(importedLastEnd,importedChartCount!=0);
             const u32 completionAudioState=audioState;
             const u64 finalAudioTick=PcmClock::tick(audioSamplesConsumed);
             importedSessionState=ImportedCompletion::boundedPoll(imported_audio_enabled,completionAudioState,importedNowCycles,silentDeadline,
@@ -439,13 +601,17 @@ int main(){
                 if(importedSessionState==ImportedCompletion::Complete)importedScoring.finalize();
                 else if(importedSessionState==ImportedCompletion::Inconsistent)pcmStop();
                 displayedStats=importedNotes.stats();displayedScore=scoreSnapshot();
+                importedReady=0;importedTransport.finish();
                 gameClockRunning=false;Scanline::stop();irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
                 ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
                 vid_vsync();continue;
             }
+            } // No end-of-song transition during a successful freeze.
         } else {
+#ifndef GBA_PUBLIC_DEMO
             recent_sprite = nm->update(currentGameFrame, laneMaskFromButtons(key_is_down(mask)));
+#endif
         }
         updateButtons(key_hit(mask), key_released(mask));
         refreshFeedback();
@@ -461,7 +627,7 @@ int main(){
 
 		update_sprites();
         if(gameMode==2)SustainDisplay::draw(importedNowCycles);
-		m7_prep_affines(&m7_level);
+        if(gameMode==2)Scanline::prepareAffines();else m7_prep_affines(&m7_level);
         if(gameMode==2)Scanline::prepare();
 
 		//if(key_hit(KEY_START)) Terminal::log("Tick = %%", m7_level.camera->pos.z);
@@ -481,5 +647,10 @@ int main(){
         // interrupt simultaneous with the audio IRQ in Tonc's master handler.
         vid_vsync();
         Scanline::vblank();
+        if(gameMode==2)importedReady=1; // First completed table committed; initialization is over.
+        if(pauseNow){
+            ScoreDisplay::pauseShow();
+            importedTransport.apply(PlayTransport::Command::Pause);++importedPauseCount;
+        }
     }
 }

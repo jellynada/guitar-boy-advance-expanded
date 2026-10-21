@@ -1,0 +1,4 @@
+result score=15827 P=395 G=0 M=0 W=0 holds=78 released=0 bonus=597
+foreground_peak_cycles=137088
+AUDIT_METRICS lane_count=3 chart_count=395 foreground_peak=137088 underruns=0 deadline_misses=0 tail_overflows=0 score=15827 holds_done=78 holds_released=0
+PASS case=19 pauses=0 resumes=0 frozen_checks=0 score=15827 heads=395

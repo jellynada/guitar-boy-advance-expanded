@@ -1,26 +1,158 @@
-# Known issues — Mission012 development baseline
+# Current limitations — Mission 020
+
+- Strict ordinary output remains9/15 and blocks release. Stock0.10.1/0.10.5
+  skip PWM-slot updates when the backing reference's5-cycle deadline expires;
+ 579 changed-byte events all retain the prior output in the focused trace.
+  Full consumed PCM and clocks pass. This supports development, not a passing
+  replacement acceptance gate. See M020_AUDIO_CONCLUSION.md.
+- Independent blip replay is not bit-exact (maximum1..2signed16 units); observed
+  eight-expired-tick sequences are not universal hardware/emulator bounds.
+- Private full Cream has much tighter IWRAM/stack margins than public RC2;
+  full private Medium/Hard and physical worst-case timing remain unqualified.
+  Existing private full-length ordinary10/15 remains historical and unresolved.
+- Owner RC2 playability/listening feedback is positive; no calibrated timing,
+  professional-recording clarity or exhaustive all-difficulty proof is inferred.
+- Licensing, formal publication and protected integration remain separate owner
+  decisions. Graphics are not started. Future visual CI must test its exact
+  changed candidate as well as frozen RC2; baseline-only success is insufficient.
+
+Existing intentional score/hold/input semantics are preserved. Older findings
+below are historical; M020_VERIFICATION.json governs the current recommendation.
+
+# Historical unresolved gates — Mission 019
+
+- **Audio:** strict ordinary output9/15 on two stock versions despite identical
+  physical inputs and digital15/15; separate fixed-phase diagnostic14/15 does
+  not clear it. See [audio gate](M019_AUDIO_GATE.md).
+- **Hardware:** detailed RC2 all-difficulty acceptance, physical stack/IRQ/DMA
+  margins and calibrated output timing remain unmeasured. RC1 praise is retained.
+- **Intentional semantics:** Medium final same-lane note replaces the old hold,
+  by owner choice. A real new fret press after resume can produce WRONG.
+- **Trace dependence:**395Perfect/full holds is not a universal15815 score.
+  Fresh private pause cases2/3/12 and frozen host replay reproduce15815; a
+  different valid head-hit phase reaches15831. Rules were not changed.
+- **CI observer:** initial Ubuntu capture produced no sample files; pinned
+  baseline observation now passes15/15 remotely. Package/linker cause not proven.
+- **Delivery/licensing:** no private recording uploaded; access-controlled
+  private transfer and project-wide license remain separate unresolved matters.
+
+Older issue lists below are historical; see M019_VERIFICATION.json for fresh scope.
+
+# Current issues — Mission018
+
+- Reproduced/unresolved: strict ordinary public output9/15; stock FIFO/time
+  mechanisms confirmed, fixed-phase diagnostic14/15 leaves one waveform issue.
+- Reproduced/understood: pause case8 contains a genuine B press after resume
+  outside a new note opportunity. No engine behavior was changed to hide it.
+- Accepted for now: Medium same-lane hold replacement, explicit owner choice.
+- Fixed: CI/status separation, stale audio-evidence rejection, missed peak-log
+  aggregation and explicit RC2 artifact/boot-header validation.
+- Environment-limited: physical stack/IRQ/audio timing; broad RC2 owner acceptance.
+- Historical/open: full Cream10/15 and exact15815 trace not automatically certified
+  by public demo checks. No invented project-wide license or private redistribution.
+
+See M018_AUDIO_INVESTIGATION.md and M018_PAUSE_INPUT.md. All below is historical.
+
+# Mission 017 current public candidate
+
+- Strict mixed-play output residual -1.007080ms at23.644470s exceeds unchanged
+  absolute<1ms limit on stock mGBA0.10.1 and0.10.5. Digital checks separately pass.
+- Exploratory legacy pause case8 applied to the new Easy chart produces one
+  WrongInput after release/repress; reproduced identically in the preserved
+  non-public profile. Not counted as a passed acceptance case.
+- Medium has one final same-lane re-articulation that replaces a preceding
+  hold under existing rules; reference scores depend on the exact hit trace.
+- Real-GBA audio, diagonal comfort, musical enjoyment and owner acceptance pending.
+- Controls/Help remains the historical Easy input diagnostic, not a full tutorial.
+- No project-wide source license has been selected; owner authorized this public
+  candidate's code/art, and third-party notices are retained separately.
+- Inherited full Cream output10/15 issue remains separate and unresolved.
+
+# Stabilization gate: current status
+
+## Arcade75 candidate
+
+- Full-length ordinary mGBA output comparisons remain 10/15 passing; digital
+  PCM/FIFO checks are a separate result. Do not call this audio issue resolved.
+- Native full Cream Medium/Hard retain 11/14 opposing chords. Only explicitly
+  labelled derived charts repair them. Physical diagonals need handheld testing.
+- No private upload/attachment route is configured. AES ZIPs remain local until
+  authorized transfer exists. Never substitute a synthetic/old ROM.
+- v1 minimizes each conflict locally, not global fingering. It fails if repair
+  would require modifying protected playable chords. Native re-articulations
+  remain reported under the existing hold-replacement rules.
+- Source parsing still has established 8192-head/chart, 32-visible-head,
+  30-minute decode and full-decode PCM-budget bounds. A 75s request does not
+  silently bypass unsupported source content or these preparation limits.
+- Cut results close remaining late windows at real EOF; heads beyond that clock
+  receive misses, never automatic hits. Clipped holds respect the last-sample
+  clock (approximately 61us before the mathematical end boundary).
+- The Windows launcher is unchanged; no actual Windows GUI or real GBA run is
+  claimed by developer emulator checks.
+
+
+- Original ten Cream restart cases and initial glyph observer now pass unchanged.
+- Exact Z-only affine reuse brings measured native Hard under the deadline;
+  worst measured mixed-input cost256448cycles,24448cycles headroom. New charts /
+  every possible key trace and physical timing are not certified by that sample.
+- Ordinary emulator output:10/15PASS,5FAIL. Exact scoring/wrong/reactive FIFO
+  models pass with zero corruption. Emulator-only lateness diagnostics pass;
+  correction is not shipped. See the stabilization report for exact windows.
+- Native Medium/Hard still have11/14LEFT+RIGHT chords. No adaptation approved.
+- Hold bonus still depends on actual head-hit time inside the Perfect window;
+ 15815is a reproducible reference trace, not a universal all-Perfect score.
+- Private Cream transfer, Windows UI and owner physical GBA acceptance are pending.
+
+# Mission014 provisional issues / gates
+
+- Private Cream delivery unavailable; ROM remains local by owner instruction.
+- Mission013 controls and Mission014 pause need separate owner handheld acceptance.
+- Timer0 resumes with a full sample interval; boundary phase <61.04microseconds is explicit. Abrupt silence/unmute can cause a small transient; physical output is not certified click-free.
+- Inherited hold bonus depends on actual head-hit timing, even within Perfect; the established scripted reference15815 is not a universal score for every different input trace.
+- Windows GUI, physical stack/IRQ margins and real handheld audio remain unmeasured.
+- No Mission015/front-end/difficulty/scoring work is authorized by this change.
+
+# Known issues — Mission013 review candidate
 
 Owner reports successful Mission011 Windows/mGBA and physical-GBA playtests:
 flicker gone, good music, working scoring/sustains/results/replay. These scoped
 acceptance results do not certify every platform, timing margin or later build.
 Source can be saved and integrated for development independently of stable-release
-approval. Mission012 changes building/identity only, not gameplay.
+approval. Mission013 remaps imported Easy to LEFT/B/A. Its handheld acceptance is still pending;
+older hardware feedback does not approve this build.
 
 | ID | Priority | Status and evidence | Next action |
 | --- | --- | --- | --- |
 | GFX-010-001 | Resolved in exercised cases | Imported scanline repair d0b20dc; full M011 real0/16086 defective frames. Owner now confirms flicker gone in mGBA and on handheld. | Preserve frame/DMA regressions; do not redesign projection. |
-| QA-010-004 | P1 stable compatibility gate | M011 had two additional strict >0.999 common-backing comparisons failing in unmodified mGBA0.10.1. Exact digital samples were correct; experimental emulator late-event correction explained failures. | Keep original thresholds and fresh M012 observations in MISSION_012_BUILD_FOUNDATION; no emulator correction used for normal acceptance. Owner says audio sounds good; that does not close the numerical gate. |
+| QA-010-004 | P1 stable compatibility gate | M011 had two additional strict >0.999 common-backing comparisons failing in unmodified mGBA0.10.1. Exact digital samples were correct; experimental emulator late-event correction explained failures. | M013 all primary models and three strict comparisons now pass unchanged limits (scoring min0.9999964, wrong0.9999529). No emulator correction used. This build-dependent pass is not a general emulator fix; retain cross-build/version validation and historical failures. |
 | HW-010-008 | P1 validation risk | Owner reports game runs very well on actual GBA. M011 emulator minimum final DMA-write margin13cycles; actual hardware margin and stack high-water remain unmeasured. | Targeted hardware measurements/long sessions; no comprehensive certification claimed. |
 | BUILD-012-001 | P1 platform validation | WSL/Python/Docker build chain is exercised on Linux; actual Windows double-click GUI execution is not available in this cloud machine. | Owner follows WINDOWS_PRIVATE_BUILD and reports visible errors; no claim of a performed Windows launcher test. |
-| CTRL-012-001 | P2 confirmed physical usability | Current Easy Left/A/B places A before physically nearer B. | Future explicitly scoped Left/B/A remap; no mapping changes in M012. See DESIGN_BACKLOG. |
+| CTRL-012-001 | P2 confirmed physical usability | M013 now maps LEFT/B/A with matching receptors/diagnostics; Original stays LEFT/RIGHT/A/B. | Automated checks pass; owner must personally test this new mapping on handheld before acceptance. |
 | QA-010-005 | P2 platform dependent | Some keyboards cannot send all chord keys; injected emulator keys cannot establish real keyboard rollover. | Use INPUT / CHORD TEST, alternate mappings or controller; physical GBA feedback is scoped. |
-| GFX-010-002 | P2 inherited cosmetic | Distance fog retains abrupt bands from original coefficients. | Later visual review; not a timing fix or M012 feature. |
+| GFX-010-002 | P2 inherited cosmetic | Distance fog retains abrupt bands from original coefficients. | Later visual review; not a timing fix or M013 feature. |
 | GFX-010-003 | P2 observation risk | Earlier popping/obscuration report was not fully reproduced independently; owner now reports good overall operation and flicker fixed. | If it recurs, capture mode/time/version; do not invent a speculative patch. |
 | REL-010-006 | Review gate | Main remains immutable historical6c4e634; source integration proposal and develop are separate from stable release. | Explicit owner approval required before main merge; never merge download branches. |
-| REL-010-007 | P1 provenance gate | Inherited music/art/chart/code and historical public Cream downloads (including M011) require separate redistribution review. No repo-wide LICENSE found. | Preserve history and attribution. M012 public packages exclude new Cream data; private launcher never uploads. |
+| REL-010-007 | P1 provenance gate | Inherited music/art/chart/code and historical public Cream downloads (including M011) require separate redistribution review. No repo-wide LICENSE found. | Preserve history and attribution. M013 public review ZIP excludes Cream. The separately authorized AES download contains ciphertext only, with its key outside GitHub. Private launcher never uploads. |
 | CAP-012-001 | Design constraint | Roughly9MB per four-minute dual-PCM song cannot scale to ten songs in32MiB. | Future codec/storage feasibility study, no mixer/codec changes now. |
 
 No new reproduced crash is asserted here. Passing exercised cases does not prove
 all undefined behavior, hardware limits or historical licensing questions solved.
 Future physical-order controls, sustain feedback and audio budget work are recorded
 in DESIGN_BACKLOG.md and are deliberately unimplemented.
+
+## Mission013 boundaries
+
+No active failing ordinary waveform check was observed in the current M013
+matrix. Prior M011/M012 failures remain recorded; do not claim the underlying
+emulator late-event issue repaired. Actual Windows launcher and physical
+stack/DMA margins remain unmeasured by the agent. Future Hard Up/Down alias
+fixtures are tests, not a playable difficulty. Historical adapted JSON includes
+obsolete button annotations; runtime logical IDs, gameControls.hpp, build manifest
+and visible labels define current physical mapping (see PHYSICAL_INPUT.md).
+Owner M013 acceptance: **pending**, including LEFT/B/A comfort, chords and holds.
+
+Mission014 ordinary strict backing QA: reactive at204.268494s fails0.999
+correlation (observed0.979593). Exact unmodified FIFO source/mixer check passes;
+host-only mGBA0.10.1 lateness correction makes the comparison pass diagnostically.
+The delivered ROM does not include this correction. This remains an open audio
+compatibility issue; do not describe all audio regressions as clean.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Official fresh, pinned public-synthetic / private-Cream builds. Never uploads."""
+"""Official fresh, pinned public/Cream/generic-song builds. Never uploads."""
 import argparse
 from datetime import datetime, timezone
 import json
@@ -36,6 +36,8 @@ def checked(command, *, cwd, log, env):
 def build(root, profile, input_zip=None):
     root = Path(root).resolve()
     output = root / 'builds' / ('public' if profile == 'public' else 'private')
+    if profile == 'song':
+        output = output / 'songs'  # Never invalidate the existing Cream selection.
     output.mkdir(parents=True, exist_ok=True)
     latest = output / 'LATEST.txt'
     # Invalidate success selection before even checking input, while preserving dated builds.
@@ -46,7 +48,17 @@ def build(root, profile, input_zip=None):
     job = Path(tempfile.mkdtemp(prefix='.work-', dir=output))
     log_path = job / 'build.log'
     try:
-        if profile == 'cream':
+        if profile == 'song':
+            if input_zip is None:
+                raise ValueError('Song profile requires --input PREPARED_DIRECTORY from tools/song_pipeline.py')
+            try:
+                from .song_pipeline import verify_prepared
+            except ImportError:
+                from song_pipeline import verify_prepared
+            input_zip = Path(input_zip).absolute()
+            verify_prepared(input_zip)
+            input_hash = file_hash(input_zip / 'song-manifest.json')
+        elif profile == 'cream':
             input_zip = Path(input_zip or root / 'private/Cream.zip').resolve()
             if not input_zip.is_file():
                 raise ValueError('Missing private/Cream.zip. Put your existing Cream song ZIP there; '
@@ -73,9 +85,16 @@ def build(root, profile, input_zip=None):
             env.pop(key, None)
         label, rom_name = PROFILES[profile]
         with log_path.open('w') as log:
-            print(f'Building M012 / {label} from {source["source_commit"]}', flush=True)
+            print(f'Building M014 / {label} from {source["source_commit"]}', flush=True)
             checked(['docker', 'info'], cwd=work, log=log, env=env)
-            if profile == 'cream':
+            if profile == 'song':
+                # Copy only a verified prepared package into the clean committed build.
+                verify_prepared(input_zip)
+                shutil.copytree(input_zip, work / 'imports/output/song')
+                verify_prepared(work / 'imports/output/song')
+                header = 'imports/output/song/imported_chart.hpp'
+                audio = 'imports/output/song/audio'
+            elif profile == 'cream':
                 shutil.copyfile(input_zip, work / 'Cream.zip')
                 checked([sys.executable, 'tools/prepare_song.py', 'Cream.zip', '--reactive',
                          '--guitar-stem', 'guitar', '--backing-stem', 'rhythm', '--backing-stem',
@@ -101,8 +120,12 @@ def build(root, profile, input_zip=None):
             raise ValueError('ROM is older than a build input. Check your system clock; no stale success was selected.')
         # Recheck caller inputs after compiling, not just the isolated snapshot.
         _, current = source_snapshot(root)
-        if current != source or (input_zip and file_hash(input_zip) != input_hash):
-            raise ValueError('Source or Cream.zip changed during the build; retry with unchanged inputs.')
+        if profile == 'song':
+            verify_prepared(input_zip)
+        current_input_hash = (file_hash(input_zip / 'song-manifest.json') if profile == 'song'
+                              else file_hash(input_zip) if input_zip else None)
+        if current != source or current_input_hash != input_hash:
+            raise ValueError('Source or song input changed during the build; retry with unchanged inputs.')
         shutil.copy2(rom, job / rom_name)
         elf_name = rom_name.replace('.gba', '.elf')
         shutil.copy2(elf, job / elf_name)
@@ -110,18 +133,25 @@ def build(root, profile, input_zip=None):
         runtime.mkdir()
         for name in ['imported_chart.hpp', 'imported_audio.hpp', 'imported_audio.bin', 'imported_backing.bin']:
             shutil.copy2(work / 'build' / name, runtime / name)
+        if profile == 'song':
+            shutil.copytree(work / 'imports/output/song', job / 'prepared')
         if profile == 'cream':
             for name in ['adapted.json', 'adaptation_report.txt']:
                 shutil.copy2(work / 'imports/output/cream' / name, runtime / name)
             shutil.copy2(work / 'imports/output/cream/audio/audio.json', runtime / 'audio.json')
         artifact_names = [rom_name, elf_name] + ['runtime/' + p.name for p in runtime.iterdir() if p.suffix not in {'.json', '.txt'}]
-        manifest = {'schema': 'gba-build-v1', 'status': 'success', 'game_version': 'M012',
-                    'profile': profile, 'build_identity': 'M012 / SYNTH' if profile == 'public' else 'M012 / CREAM / LOCAL',
+        manifest = {'schema': 'gba-build-v1', 'status': 'success', 'game_version': 'M014',
+                    'profile': profile, 'build_identity': {'public': 'M014 / SYNTH', 'cream': 'M014 / CREAM / LOCAL', 'song': 'M014 / SONG / LOCAL'}[profile],
                     'source_commit': source['source_commit'], 'source_tree_sha256': source['source_tree_sha256'],
-                    'created_utc': utc(), 'input_zip_sha256': input_hash, 'assets': assets,
+                    'created_utc': utc(), 'input_zip_sha256': input_hash if profile == 'cream' else None, 'assets': assets,
                     'toolchain_image': image, 'compiler': compiler, 'rom': rom_name,
                     'rom_bytes': rom.stat().st_size, 'rom_sha256': file_hash(rom),
-                    'fresh_outputs': True, 'artifact_sha256': {n: file_hash(job / n) for n in artifact_names}}
+                    'physical_controls': ['LEFT', 'B', 'A'], 'fresh_outputs': True, 'artifact_sha256': {n: file_hash(job / n) for n in artifact_names}}
+        if profile == 'song':
+            manifest['prepared_song_sha256'] = input_hash
+            song_metadata=verify_prepared(job / 'prepared')['runtime']
+            manifest['physical_controls']=song_metadata['physical_controls']
+            manifest['available_difficulties']=song_metadata.get('difficulties',[dict(name=song_metadata['difficulty'],note_heads=song_metadata['note_heads'],physical_controls=song_metadata['physical_controls'])])
         (job / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         (job / 'SOURCE_MANIFEST.json').write_text(json.dumps(source, indent=2) + '\n')
         verify_result(job, public_only=profile == 'public')
@@ -135,7 +165,7 @@ def build(root, profile, input_zip=None):
         print(f'BUILD SUCCESS: {manifest["build_identity"]}\nSource: {source["source_commit"]}\n'
               f'ROM: {result / rom_name}\nSHA-256: {manifest["rom_sha256"]}\n'
               f'Manifest: {result / "manifest.json"}', flush=True)
-        if profile == 'cream':
+        if profile != 'public':
             print('Private local build only. No upload performed. Open the new ROM in mGBA or copy it to your flash cartridge.', flush=True)
         return result
     except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
@@ -154,7 +184,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('profile', choices=PROFILES)
     p.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[1])
-    p.add_argument('--input', type=Path, help='Existing owner ZIP; cream profile only')
+    p.add_argument('--input', type=Path, help='Existing Cream ZIP or prepared-song directory; private profiles only')
     a = p.parse_args()
     try:
         build(a.repo, a.profile, a.input)

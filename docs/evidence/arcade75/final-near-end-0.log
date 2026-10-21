@@ -1,0 +1,5 @@
+before timers 0 84 84 consumed 1257545 frozen 1257545 fill 1257568
+resume phase=1 audio=1 mode=2 fault=0
+result score=3919 P=110 G=0 M=0 W=0 holds=20 released=0 bonus=89
+foreground_peak_cycles=133120
+PASS case=20 pauses=1 resumes=1 frozen_checks=120 score=3919 heads=110

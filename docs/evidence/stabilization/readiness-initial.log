@@ -1,0 +1,1 @@
+PASS:20deterministic ready/start/label/pause/resume/short-exit epochs; no startup observation before readiness

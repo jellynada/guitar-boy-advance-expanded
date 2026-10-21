@@ -39,6 +39,21 @@ class FifoOracleTests(unittest.TestCase):
     def test_correct_original_signal(self):
         self.assertEqual(analyze(self.root,self.prefix,3)['digital_mismatches'],0)
 
+    def paused_fixture(self):
+        self.samples['segment'][1024:]=2;self.samples['cycle'][1024:]+=100000
+        self.words['segment'][250:]=2;self.write()
+
+    def test_every_resume_segment_checked(self):
+        self.paused_fixture();r=analyze(self.root,self.prefix,3)
+        self.assertEqual(r['consumed_samples_checked'],2048);self.assertEqual(r['transport_segments_checked'],2)
+        self.assertEqual(r['segment_clock_drift_cycles'],[0,0])
+
+    def test_corruption_only_after_resume_rejected(self):
+        self.paused_fixture();self.samples['value'][1500]^=1;self.rejected()
+
+    def test_post_resume_clock_fault_rejected(self):
+        self.paused_fixture();self.samples['cycle'][1500:]+=1024;self.rejected()
+
     def test_one_consumed_byte(self):
         self.samples['value'][500]^=1;self.rejected()
 

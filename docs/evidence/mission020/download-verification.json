@@ -1,0 +1,26 @@
+{
+  "archive_sha256": "194c34e77deade95e2c60f4d57cc55c946dbd199cf56cf48cfb9fd1e2d08b77b",
+  "rom_sha256": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+  "members": 14,
+  "crc": "passed",
+  "safe_extraction": "passed",
+  "ci_archive_metadata_differences": [
+    "BUILD_MANIFEST.json"
+  ],
+  "payload_sha256": {
+    "BUILD_MANIFEST.json": "9b8038c5e02721157dfca2b9dc4f5f1c908695fbd59028b0fe4f2ba5ff6dcae1",
+    "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba": "9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde",
+    "KNOWN_ISSUES.md": "03a602f9dc64869561776cd1629ef9ba01bba03d313b95ea663976ed7770f8c9",
+    "LICENSES/DEMO_CONTENT_PROVENANCE.md": "cc718475e2738e027995005d4f01e6d82d81f0fc9fd306cac35ee7e0c17320e4",
+    "LICENSES/GCC-RUNTIME-EXCEPTION.txt": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74",
+    "LICENSES/GPL-3.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "LICENSES/MAXMOD-ISC.txt": "b3c68af737a0bfc1cafd13b617323c0212e8def5b86ff2c02d07c07f4cbfc2a4",
+    "LICENSES/NEWLIB.txt": "fcfb5ec69b6ab52676dcc4dab7cf4338c8000ef97812dadd35b8592a640a8419",
+    "LICENSES/OWNER_PERMISSION.txt": "2b2dc49f30f82fca9540beed2ef7e0fce500d624e77163c8eb1a9e3b6884c2a7",
+    "LICENSES/TONC-EXAMPLES-CC0.txt": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+    "LICENSES/TONC-MIT.txt": "225e35cf24750edda27c5dcbb06db4d8aa119c99e1972e5c3a51b128c3515fcf",
+    "OWNER_M018_PLAYTEST.md": "aa58026ed3352dc33468b253aa7d5685e837ea6a76cdf6e40cf61cf913d6fee5",
+    "README.txt": "913c521a577a4bf97253f6cf494dff612c18a156e1478b89a0c1784f26e003eb",
+    "SHA256SUMS.txt": "b8653f22a39354eda830c744340a4fadba887728d31bfe6c827721079c9888dc"
+  }
+}

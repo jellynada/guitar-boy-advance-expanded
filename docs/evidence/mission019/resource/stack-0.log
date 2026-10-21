@@ -1,0 +1,19 @@
+before timers 0 84 84 consumed 65946 frozen 65946 fill 65968
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 68948 frozen 68948 fill 68976
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 71948 frozen 71948 fill 71968
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 74948 frozen 74948 fill 74976
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 77948 frozen 77948 fill 77968
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 80948 frozen 80948 fill 80976
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 83948 frozen 83948 fill 83968
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 86948 frozen 86948 fill 86976
+resume phase=1 audio=1 mode=2 fault=0
+result score=2901 P=86 G=0 M=0 W=0 holds=11 released=0 bonus=31
+foreground_peak_cycles=118912
+STACK_OBSERVATION user_free=23288 user_touched_from_top=916 irq_touched=40 allocated_user=24204 allocated_irq=160\nPASS case=12 pauses=8 resumes=8 frozen_checks=240 score=2901 heads=86

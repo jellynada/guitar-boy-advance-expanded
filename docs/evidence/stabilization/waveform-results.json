@@ -1,0 +1,62 @@
+[
+  {
+    "test": "public-perfect",
+    "exit_code": 0
+  },
+  {
+    "test": "public-miss",
+    "exit_code": 0
+  },
+  {
+    "test": "public-wrong",
+    "exit_code": 0
+  },
+  {
+    "test": "public-reactive",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-sustain-perfect",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-sustain-release",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-perfect",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-good",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-miss",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-scoring",
+    "exit_code": 1
+  },
+  {
+    "test": "cream-wrong",
+    "exit_code": 0
+  },
+  {
+    "test": "cream-reactive",
+    "exit_code": 1
+  },
+  {
+    "test": "cream-scoring-backing",
+    "exit_code": 1
+  },
+  {
+    "test": "cream-wrong-backing",
+    "exit_code": 1
+  },
+  {
+    "test": "cream-reactive-backing",
+    "exit_code": 1
+  }
+]

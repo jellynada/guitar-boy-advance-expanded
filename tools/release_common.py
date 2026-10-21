@@ -9,9 +9,17 @@ import zipfile
 
 PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
                'music', 'scripts', 'source', 'tests', 'tools'}
+PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml', '.github/workflows/public-demo.yml',
+                    '.github/workflows/m020-closeout.yml'}
+PUBLIC_DEMO_DELIVERY = {'public-demo-downloads/' + n for n in (
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip', 'DELIVERY.json', 'SHA256SUMS.txt',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba',
+    'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip', 'RC2-DELIVERY.json', 'RC2-SHA256SUMS.txt')}
 PUBLIC_ROOT = {'.gitignore', 'Makefile', 'README.md', 'Build-Cream-ROM.bat'}
-PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M012-Synthetic.gba'),
-            'cream': ('cream-private', 'Guitar-Boy-Advance-M012-Cream-Private.gba')}
+PROFILES = {'public': ('public-synthetic', 'Guitar-Boy-Advance-M014-Synthetic.gba'),
+            'cream': ('cream-private', 'Guitar-Boy-Advance-M014-Cream-Private.gba'),
+            'song': ('song-private', 'Guitar-Boy-Advance-M014-Song-Private.gba')}
 
 
 def digest(data):
@@ -32,13 +40,13 @@ def safe_source_name(name):
         raise ValueError('Private/generated path cannot enter public source: ' + name)
     if len(parts) == 1 and name not in PUBLIC_ROOT:
         raise ValueError('Unreviewed public root file: ' + name)
-    if len(parts) > 1 and parts[0] not in PUBLIC_DIRS:
+    if len(parts) > 1 and parts[0] not in PUBLIC_DIRS and name not in PUBLIC_WORKFLOWS:
         raise ValueError('Unreviewed source directory: ' + name)
     if parts[0] == 'imports' and name not in {'imports/incoming/README.md', 'imports/output/README.md'}:
         raise ValueError('Imported private/generated payload: ' + name)
     if p.suffix.lower() in {'.gba', '.elf', '.bin', '.zip', '.wav', '.opus', '.mp3', '.ogg', '.flac', '.pcm', '.raw', '.samples', '.fifo', '.map'}:
         raise ValueError('Generated or recording payload cannot enter public source: ' + name)
-    if p.name.lower() in {'audio.json', 'adapted.json', 'imported_chart.hpp', 'imported_audio.hpp'}:
+    if p.name.lower() in {'audio.json', 'adapted.json', 'imported_chart.hpp', 'imported_audio.hpp', 'song-manifest.json', 'normalized-song.json'}:
         raise ValueError('Prepared song data cannot enter public source: ' + name)
     return name
 
@@ -60,6 +68,12 @@ def source_snapshot(root):
         with zipfile.ZipFile(io.BytesIO(git('archive', '--format=zip', commit))) as z:
             for entry in z.infolist():
                 if entry.is_dir():
+                    continue
+                # Reviewed public demo delivery is a separate artifact commit,
+                # never a source/build input (nor recursively repackaged).
+                if entry.filename.startswith('public-demo-downloads/'):
+                    if entry.filename not in PUBLIC_DEMO_DELIVERY:
+                        raise ValueError('Unreviewed public demo delivery path: ' + entry.filename)
                     continue
                 safe_source_name(entry.filename)
                 if (entry.external_attr >> 16) & 0o170000 == 0o120000:
@@ -114,6 +128,22 @@ def validate_assets(work, profile):
     synthetic = re.search(rb'imported_is_synthetic = (true|false)', header)
     if not synthetic or (synthetic[1] == b'true') != (profile == 'public'):
         raise ValueError('Wrong public/private runtime chart identity')
+    if profile == 'song':
+        try:
+            from .song_pipeline import verify_prepared
+        except ImportError:
+            from song_pipeline import verify_prepared
+        prepared = work / 'imports/output/song'
+        m = verify_prepared(prepared)
+        for name in ['imported_chart.hpp', 'audio/imported_audio.bin', 'audio/imported_backing.bin']:
+            if file_hash(runtime / Path(name).name) != file_hash(prepared / name):
+                raise ValueError('Generic runtime differs from prepared song: ' + name)
+        audio = json.loads((prepared / 'audio/audio.json').read_text())
+        return {'note_heads': m['runtime']['note_heads'], 'genuine_sustains': m['runtime']['genuine_sustains'],
+                'chart_sha256': digest(header), 'guitar_sha256': file_hash(runtime / 'imported_audio.bin'),
+                'backing_sha256': file_hash(runtime / 'imported_backing.bin'),
+                'source_samples': audio['source_samples'], 'sample_rate': audio['sample_rate'],
+                'ffmpeg_version': audio['ffmpeg_version'], 'selected_package_files': audio['selected_package_files']}
     if profile == 'cream':
         prepared = work / 'imports/output/cream'
         adapted = json.loads((prepared / 'adapted.json').read_text())
@@ -182,12 +212,32 @@ def verify_result(folder, public_only=False):
         if file_hash(folder / name) != expected:
             raise ValueError('Stale or damaged build output: ' + name)
     data = (folder / filename).read_bytes()
-    marker = f'GBA_BUILD:M012:{label}:{m["source_commit"]}'.encode() + b'\0'
+    marker = f'GBA_BUILD:M014:{label}:{m["source_commit"]}'.encode() + b'\0'
     if data.count(marker) != 1 or len(data) != m['rom_bytes'] or file_hash(folder / filename) != m['rom_sha256']:
         raise ValueError('ROM identity/hash/size does not match manifest')
     for stem, key in [('imported_chart.hpp', 'chart_sha256'), ('imported_audio.bin', 'guitar_sha256'), ('imported_backing.bin', 'backing_sha256')]:
         if file_hash(folder / 'runtime' / stem) != m['assets'][key]:
             raise ValueError('Manifest runtime asset mismatch')
+    if profile == 'song':
+        try:
+            from .song_pipeline import verify_prepared
+        except ImportError:
+            from song_pipeline import verify_prepared
+        prepared = folder / 'prepared'
+        song = verify_prepared(prepared)
+        if file_hash(prepared / 'song-manifest.json') != m.get('prepared_song_sha256'):
+            raise ValueError('Build prepared-song manifest mismatch')
+        expected_choices=song['runtime'].get('difficulties',[dict(name=song['runtime']['difficulty'],note_heads=song['runtime']['note_heads'],physical_controls=song['runtime']['physical_controls'])])
+        if ('available_difficulties' in m or song['schema_version']=='gba-prepared-song-v2') and m.get('available_difficulties')!=expected_choices:
+            raise ValueError('Build difficulty inventory differs from preparation')
+        if song['runtime']['note_heads'] != m['assets']['note_heads'] or song['runtime']['genuine_sustains'] != m['assets']['genuine_sustains']:
+            raise ValueError('Build prepared-song counts mismatch')
+        for name in ['imported_chart.hpp', 'audio/imported_audio.bin', 'audio/imported_backing.bin']:
+            if file_hash(folder / 'runtime' / Path(name).name) != file_hash(prepared / name):
+                raise ValueError('Build runtime differs from prepared song')
+        for name in ['imported_audio.bin', 'imported_backing.bin']:
+            if (folder / 'runtime' / name).read_bytes() not in data:
+                raise ValueError('Prepared audio stream missing from ROM')
     if public_only:
         if m['assets']['note_heads'] != 25 or m['assets']['genuine_sustains'] != 6 or m.get('input_zip_sha256') is not None:
             raise ValueError('Public manifest contains private configuration')

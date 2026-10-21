@@ -1,0 +1,11 @@
+{
+  "consumed_samples_checked": 243040,
+  "mixer_words_checked": 60756,
+  "digital_mismatches": 0,
+  "mixer_mismatches": 0,
+  "pause_gaps": 8,
+  "paused_fifo_requests": 0,
+  "startup_advance": 15,
+  "max_boundary_fraction_cycles": 1024,
+  "meaning": "Every consumed/written sample checked against independent two-stem mixer; explicit transport gaps only. Not an analog click-free claim."
+}

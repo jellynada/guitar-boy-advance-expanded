@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "default_difficulty.h"
+
 static int crashed;
 static void crash(void* context){(void)context;crashed=1;}
 static void log_message(struct mLogger* logger,int category,enum mLogLevel level,const char* format,va_list args){
@@ -71,7 +73,7 @@ int main(int argc,char** argv){
     unsigned firstaddr=address(syms,"importedFirstVisible"),endaddr=address(syms,"importedEndVisible");
     unsigned previousReleased=0,previousCompleted=0;int eofSaved=0;
     unsigned simultaneousFrames=0;int lineSeen[5]={0};unsigned refIds[5]={0,1,2,count/2,count-1};
-    uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,1,2};
+    uint64_t written=0,previous=0;unsigned next=0,nonzero=0,lastJudged=0;uint64_t frozen=0;unsigned frozenJudged=0;unsigned buttons[]={32,2,1};
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;
         uint64_t now=read64(c,clockaddr);
@@ -95,7 +97,8 @@ int main(int argc,char** argv){
         if(isFault&&f>405&&f%2)keys=32|1|2; // inputs cannot judge after an audio fault
         if(!strcmp(mode,"fault_underrun")&&f==401)c->busWrite16(c,0x04000208,1);
         if(c->busRead32(c,sessionaddr)!=0)keys=0;
-        frame(c,keys);
+        frame(c,keys);if(f==2)selectDefaultDifficulty(c,modeaddr);
+        if(f==180){visible(c,pixels,fontaddr,4,16,"LEFT");visible(c,pixels,fontaddr,14,16,"B");visible(c,pixels,fontaddr,23,16,"A");}
         if(getenv("GBA_TEST_HIDE_TAILS")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~4096);
         if(getenv("GBA_TEST_HIDE_HUD")&&f>30)c->busWrite16(c,0x04000000,c->busRead16(c,0x04000000)&~256);
         if(f>4)assert(c->busRead32(c,modeaddr)==2);
@@ -247,7 +250,7 @@ int main(int argc,char** argv){
         frame(c,0);
         if(!strcmp(mode,"returnmenu")||!strcmp(mode,"returnselect")){
             frame(c,!strcmp(mode,"returnmenu")?2:4);frame(c,0);assert(c->busRead32(c,modeaddr)==0);screenshot(argv[6],"return-menu",pixels);
-            frame(c,8);frame(c,0);assert(c->busRead32(c,modeaddr)==2);
+            frame(c,8);frame(c,0);selectDefaultDifficulty(c,modeaddr);assert(c->busRead32(c,modeaddr)==2);
         }else {frame(c,!strcmp(mode,"replaystart")?8:1);frame(c,0);}assert(c->busRead32(c,sessionaddr)==0&&c->busRead32(c,scoreaddr)==0&&c->busRead32(c,scoreaddr+4)==0&&c->busRead32(c,scoreaddr+16)==1);assert(c->busRead32(c,gateaddr)==1&&c->busRead32(c,gainaddr)==256);assert(c->busRead32(c,scoreaddr+56)==0&&c->busRead32(c,scoreaddr+60)==0&&c->busRead32(c,scoreaddr+64)==0&&c->busRead32(c,scoreaddr+68)==0);for(unsigned i=0;i<120;++i){frame(c,0);drain(c);}if(state==2)assert(c->busRead32(c,consaddr)>16000&&c->busRead32(c,stateaddr)==1);else assert(c->busRead32(c,stateaddr)==0);visible(c,pixels,fontaddr,0,0,"SCORE:0");screenshot(argv[6],"replay",pixels);
         unsigned replaySound=0;
         for(unsigned i=0;i<360;++i){frame(c,0);short data[4096];int n=blip_read_samples(c->getAudioChannel(c,0),data,4096,0);for(int j=0;j<n;++j)replaySound+=data[j]!=0;blip_clear(c->getAudioChannel(c,1));}
@@ -262,7 +265,7 @@ int main(int argc,char** argv){
         unsigned sounding=0;for(unsigned i=0;i<90;++i){frame(c,0);short samples[4096];int n=blip_read_samples(c->getAudioChannel(c,0),samples,4096,0);for(int j=0;j<n;++j)sounding+=samples[j]!=0;blip_clear(c->getAudioChannel(c,1));}assert(sounding>100);
         for(unsigned i=0;i<2;++i){frame(c,12);}frame(c,0);
         for(unsigned i=0;i<2;++i){frame(c,128);}frame(c,0);
-        for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);assert(c->busRead32(c,modeaddr)==2);
+        for(unsigned i=0;i<2;++i){frame(c,8);}frame(c,0);selectDefaultDifficulty(c,modeaddr);assert(c->busRead32(c,modeaddr)==2);
         assert(c->busRead32(c,statsaddr)==0&&c->busRead32(c,statsaddr+8)==0);
         assert(c->busRead32(c,scoreaddr)==0&&c->busRead32(c,sessionaddr)==0);assert(c->busRead32(c,consaddr)<1500);assert(c->busRead32(c,gateaddr)==1&&c->busRead32(c,gainaddr)==256);drain(c);
     }

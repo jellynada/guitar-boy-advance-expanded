@@ -83,6 +83,15 @@ class ReleaseTests(unittest.TestCase):
                      '../README.md', '/README.md', 'source\\bad', 'unknown/x.txt']:
             with self.subTest(name=name), self.assertRaises(ValueError):safe_source_name(name)
 
+    def test_only_reviewed_workflow_is_exportable(self):
+        self.assertEqual(safe_source_name('.github/workflows/foundation.yml'), '.github/workflows/foundation.yml')
+        self.assertEqual(safe_source_name('.github/workflows/m020-closeout.yml'), '.github/workflows/m020-closeout.yml')
+        for name in ['.github/workflows/unreviewed.yml', '.github/secrets.txt',
+                     '.github/workflows/Cream.zip', '.github/workflows/private/key.txt',
+                     '.github/workflows/m020-closeout.yml/private/key.txt']:
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                safe_source_name(name)
+
     def test_source_symlink_rejected(self):
         (self.root / 'docs').mkdir();(self.root / 'docs/link').symlink_to('../README.md')
         subprocess.run(['git', '-C', str(self.root), 'add', 'docs'], check=True)
@@ -116,13 +125,13 @@ class ReleaseTests(unittest.TestCase):
 
     def artifact(self, profile='public'):
         folder = Path(self.temp.name) / 'artifact';folder.mkdir()
-        filename = 'Guitar-Boy-Advance-M012-Synthetic.gba' if profile == 'public' else 'Guitar-Boy-Advance-M012-Cream-Private.gba'
+        filename = 'Guitar-Boy-Advance-M014-Synthetic.gba' if profile == 'public' else 'Guitar-Boy-Advance-M014-Cream-Private.gba'
         label = 'public-synthetic' if profile == 'public' else 'cream-private'
         (folder / 'runtime').mkdir()
         for name, data in [('imported_chart.hpp', b'fixture chart'), ('imported_audio.hpp', b'fixture metadata'),
                            ('imported_audio.bin', b'fixture guitar'), ('imported_backing.bin', b'fixture backing')]:
             (folder / 'runtime' / name).write_bytes(data)
-        rom = f'GBA_BUILD:M012:{label}:'.encode() + b'a' * 40 + b'\0fixture guitarfixture backing'
+        rom = f'GBA_BUILD:M014:{label}:'.encode() + b'a' * 40 + b'\0fixture guitarfixture backing'
         (folder / filename).write_bytes(rom);(folder / filename.replace('.gba', '.elf')).write_bytes(b'unit fixture elf')
         names = [filename, filename.replace('.gba', '.elf')] + ['runtime/' + p.name for p in (folder / 'runtime').iterdir()]
         m = {'schema': 'gba-build-v1', 'status': 'success', 'profile': profile, 'source_commit': 'a' * 40,

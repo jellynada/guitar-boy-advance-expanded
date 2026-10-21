@@ -1,0 +1,50 @@
+[
+  {
+    "path": "docs/evidence/mission020/focused-001/difficulty-0-case-22.m020-events.csv.gz",
+    "uncompressed_sha256": "5503337afda81b313fa551dca96acf67d2fe29b82b85425c549df1409cab2df4",
+    "sha256": "b53f2050bcbe263d1e0d0ec48d34a75549caa02d8d634632e53fff4e832c447e",
+    "compressed_bytes": 79902
+  },
+  {
+    "path": "docs/evidence/mission020/focused-001/difficulty-0-case-22.pwm-events.csv.gz",
+    "uncompressed_sha256": "428f0e21d3d2146e845d171d1116917b0b594a609de9bd6bab41e8e43f5435fa",
+    "sha256": "d24bd59c4f2a3e7f8a0bb40da160fac585413f72d53d79ce42c8a6c29d2b8226",
+    "compressed_bytes": 123948
+  },
+  {
+    "path": "docs/evidence/mission020/focused-001/difficulty-0-case-23.m020-events.csv.gz",
+    "uncompressed_sha256": "3ee5ed4f843a233fe740f3c134c6f98b9cb773baf5a0a9647ea5868efe408e7d",
+    "sha256": "e28cab49a71e94bfa81a7c576b3260a45ebca83eb232e72a4243c9ca32d327be",
+    "compressed_bytes": 78370
+  },
+  {
+    "path": "docs/evidence/mission020/focused-001/difficulty-0-case-23.pwm-events.csv.gz",
+    "uncompressed_sha256": "2a9ac79b62f5766f83ed66a4210c1515ceafaa1df0c2e9a30d4add37883b91ad",
+    "sha256": "020f1a7ef1c2bdfc448d3add78e7635634f0715c1700f16825ba57333af61a92",
+    "compressed_bytes": 123150
+  },
+  {
+    "path": "docs/evidence/mission020/focused-105/difficulty-0-case-22.m020-events.csv.gz",
+    "uncompressed_sha256": "5503337afda81b313fa551dca96acf67d2fe29b82b85425c549df1409cab2df4",
+    "sha256": "b53f2050bcbe263d1e0d0ec48d34a75549caa02d8d634632e53fff4e832c447e",
+    "compressed_bytes": 79902
+  },
+  {
+    "path": "docs/evidence/mission020/focused-105/difficulty-0-case-22.pwm-events.csv.gz",
+    "uncompressed_sha256": "428f0e21d3d2146e845d171d1116917b0b594a609de9bd6bab41e8e43f5435fa",
+    "sha256": "d24bd59c4f2a3e7f8a0bb40da160fac585413f72d53d79ce42c8a6c29d2b8226",
+    "compressed_bytes": 123948
+  },
+  {
+    "path": "docs/evidence/mission020/focused-105/difficulty-0-case-23.m020-events.csv.gz",
+    "uncompressed_sha256": "3ee5ed4f843a233fe740f3c134c6f98b9cb773baf5a0a9647ea5868efe408e7d",
+    "sha256": "e28cab49a71e94bfa81a7c576b3260a45ebca83eb232e72a4243c9ca32d327be",
+    "compressed_bytes": 78370
+  },
+  {
+    "path": "docs/evidence/mission020/focused-105/difficulty-0-case-23.pwm-events.csv.gz",
+    "uncompressed_sha256": "2a9ac79b62f5766f83ed66a4210c1515ceafaa1df0c2e9a30d4add37883b91ad",
+    "sha256": "020f1a7ef1c2bdfc448d3add78e7635634f0715c1700f16825ba57333af61a92",
+    "compressed_bytes": 123150
+  }
+]

@@ -86,6 +86,9 @@ int main(int argc, char* argv[]) {
         noteHeaderOut.close();
     }
 
+    // Public-only profiles need the exact shared ABI without a legacy chart.
+    if (chartFile == "--layout-only") return 0;
+
     // Read chart file
     std::ifstream infile(chartFile);
     if (!infile.is_open()) {

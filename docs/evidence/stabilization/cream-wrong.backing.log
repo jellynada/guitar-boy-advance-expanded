@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/stabilization-post-medium-hard/tests/analyze_reactive.py", line 89, in <module>
+    r=match((start+128)*2,min(4096,(end-start-256)*2),kind)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/stabilization-post-medium-hard/tests/analyze_reactive.py", line 77, in match
+    assert sc[j]>.999 and .98<scale<1.02,(label,'backing capture differs',result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('backing-only', 'backing capture differs', {'label': 'backing-only', 'runtime_seconds': 65.28118896484375, 'correlation': 0.9931506789565703, 'error_ms': -0.732421875, 'global_epoch_error_ms': -0.6103515625, 'capture_epoch_at_reference': 2618, 'backing_scale': 190.17302391017637, 'guitar_to_backing_scale': 0.009309836883613533, 'backing_capture_correlation': 0.9944033873405012, 'backing_capture_scale': 0.9940408775345331, 'residual_guitar_after_common_filter': 0.0007571011048529864})

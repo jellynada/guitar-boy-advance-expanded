@@ -1,0 +1,254 @@
+[
+  {
+    "profile": "public",
+    "case": 0,
+    "evidence": "public-pause-0.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 1,
+    "evidence": "public-pause-1.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 2,
+    "evidence": "public-pause-2.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 3,
+    "evidence": "public-pause-3.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 4,
+    "evidence": "public-pause-4.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 5,
+    "evidence": "public-pause-5.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 6,
+    "evidence": "public-pause-6.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 7,
+    "evidence": "public-pause-7.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 8,
+    "evidence": "public-pause-8.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 9,
+    "evidence": "public-pause-9.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 10,
+    "evidence": "public-pause-10.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 11,
+    "evidence": "public-pause-11.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 12,
+    "evidence": "public-pause-12.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 13,
+    "evidence": "public-pause-13.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 14,
+    "evidence": "public-pause-14.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 15,
+    "evidence": "public-pause-15.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 16,
+    "evidence": "public-pause-16.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 17,
+    "evidence": "public-pause-17.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 18,
+    "evidence": "public-pause-18.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 19,
+    "evidence": "public-pause-19.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "public",
+    "case": 20,
+    "evidence": "public-pause-20.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 0,
+    "evidence": "cream-pause-0.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 1,
+    "evidence": "cream-pause-1.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 2,
+    "evidence": "cream-pause-2.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 3,
+    "evidence": "cream-pause-3.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 4,
+    "evidence": "cream-pause-4.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 5,
+    "evidence": "cream-pause-5.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 6,
+    "evidence": "cream-pause-6.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 7,
+    "evidence": "cream-pause-7.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 8,
+    "evidence": "cream-pause-8.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 9,
+    "evidence": "cream-pause-9.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 10,
+    "evidence": "cream-pause-10.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 11,
+    "evidence": "cream-pause-11.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 12,
+    "evidence": "cream-pause-12.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 13,
+    "evidence": "cream-pause-13.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 14,
+    "evidence": "cream-pause-14.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 15,
+    "evidence": "cream-pause-15.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 16,
+    "evidence": "cream-pause-16.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 17,
+    "evidence": "cream-pause-17.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 18,
+    "evidence": "cream-pause-18.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 19,
+    "evidence": "cream-pause-19.log",
+    "exit_code": 0
+  },
+  {
+    "profile": "cream",
+    "case": 20,
+    "evidence": "cream-pause-20.log",
+    "exit_code": 0
+  }
+]

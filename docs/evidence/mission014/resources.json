@@ -1,0 +1,66 @@
+{
+  "public": {
+    "M013": {
+      "rom_bytes": 821836,
+      "ewram_bytes": 8896,
+      "iwram_payload_bytes": 26708,
+      "stack_emulator_observation": {
+        "user_free": 4856,
+        "user_touched_from_top": 948,
+        "irq_touched": 40,
+        "allocated_user": 5804,
+        "allocated_irq": 160
+      },
+      "additional_OAM": 0,
+      "additional_DMA": 0,
+      "additional_IRQ": 0
+    },
+    "M014": {
+      "rom_bytes": 824220,
+      "ewram_bytes": 9096,
+      "iwram_payload_bytes": 26748,
+      "stack_emulator_observation": {
+        "user_free": 4792,
+        "user_touched_from_top": 972,
+        "irq_touched": 40,
+        "allocated_user": 5764,
+        "allocated_irq": 160
+      },
+      "additional_OAM": 0,
+      "additional_DMA": 0,
+      "additional_IRQ": 0
+    }
+  },
+  "cream": {
+    "M013": {
+      "rom_bytes": 9185256,
+      "ewram_bytes": 9264,
+      "iwram_payload_bytes": 27124,
+      "stack_emulator_observation": {
+        "user_free": 4472,
+        "user_touched_from_top": 916,
+        "irq_touched": 40,
+        "allocated_user": 5388,
+        "allocated_irq": 160
+      },
+      "additional_OAM": 0,
+      "additional_DMA": 0,
+      "additional_IRQ": 0
+    },
+    "M014": {
+      "rom_bytes": 9187576,
+      "ewram_bytes": 9464,
+      "iwram_payload_bytes": 27164,
+      "stack_emulator_observation": {
+        "user_free": 4416,
+        "user_touched_from_top": 932,
+        "irq_touched": 40,
+        "allocated_user": 5348,
+        "allocated_irq": 160
+      },
+      "additional_OAM": 0,
+      "additional_DMA": 0,
+      "additional_IRQ": 0
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "expected_failure": true,
+  "exit_code": 134,
+  "measurement": {
+    "frames": 1800,
+    "frames_checked": 1769,
+    "defect_frames": 1769,
+    "worst_displaced_pixels": 398,
+    "total_displaced_pixels": 433490,
+    "floor_pixels": 20423803,
+    "peak_tails": 8,
+    "foreground_max": 116352,
+    "foreground_mean": 74742.532,
+    "refill_max": 1408,
+    "refill_mean": 1376.67,
+    "underruns": 0
+  }
+}

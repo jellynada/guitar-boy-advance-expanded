@@ -1,0 +1,70 @@
+[
+  {
+    "check": "sustain-perfect-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "sustain-release-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "perfect-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "good-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "miss-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "scoring-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "wrong-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "reactive-primary",
+    "exit_code": 0
+  },
+  {
+    "check": "scoring-backing",
+    "exit_code": 0
+  },
+  {
+    "check": "wrong-backing",
+    "exit_code": 0
+  },
+  {
+    "check": "reactive-backing",
+    "exit_code": 0
+  },
+  {
+    "check": "sustain-perfect-holds",
+    "exit_code": 0
+  },
+  {
+    "check": "sustain-release-holds",
+    "exit_code": 0
+  },
+  {
+    "check": "public-perfect",
+    "exit_code": 0
+  },
+  {
+    "check": "public-miss",
+    "exit_code": 0
+  },
+  {
+    "check": "public-reactive",
+    "exit_code": 0
+  },
+  {
+    "check": "public-wrong",
+    "exit_code": 0
+  }
+]

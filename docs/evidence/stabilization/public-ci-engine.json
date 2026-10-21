@@ -1,0 +1,15 @@
+{
+  "schema": "gba-ci-smoke-v1",
+  "source_commit": "e4cc5771aaacf18301b2dae6110538e78b38a834",
+  "rom_sha256": "3bf6bbde91cfb02adc0f941060b209ca93aa24346e34d4a7d81264467697a4b1",
+  "visible_identity": "M014 / SYNTH",
+  "pause_cases": [
+    0,
+    12,
+    17,
+    19
+  ],
+  "readiness_epochs": 20,
+  "result": "passed",
+  "physical_hardware_verified": false
+}

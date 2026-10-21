@@ -1,0 +1,11 @@
+{
+  "consumed_samples_checked": 4419952,
+  "mixer_words_checked": 1104984,
+  "digital_mismatches": 0,
+  "mixer_mismatches": 0,
+  "startup_advance_samples": 15,
+  "startup_advance_ms": 0.91552734375,
+  "request_period_min": 1022,
+  "request_period_max": 1026,
+  "complete_clock_drift_cycles": 0
+}

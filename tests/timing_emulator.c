@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "default_difficulty.h"
+
 static int crashed;
 static void crash(void* context){(void)context;crashed=1;}
 static void log_message(struct mLogger* logger,int category,enum mLogLevel level,const char* format,va_list args){
@@ -65,7 +67,7 @@ int main(int argc,char** argv){
     struct mCoreCallbacks cb={.coreCrashed=crash};c->addCoreCallbacks(c,&cb);assert(mCoreLoadFile(c,argv[1]));c->reset(c);
     for(unsigned f=0;f<90;++f){frame(c,0);drain(c);}
     if(!original){frame(c,128);frame(c,128);frame(c,0);}
-    unsigned next=0,buttons[]={32,1,2};uint64_t heldUntil[3]={0};unsigned checked=0,badFrames=0,worst=0,peakTails=0,totalFloor=0;uint64_t totalBad=0;
+    unsigned next=0,buttons[]={32,2,1};uint64_t heldUntil[3]={0};unsigned checked=0,badFrames=0,worst=0,peakTails=0,totalFloor=0;uint64_t totalBad=0;
     char name[1024];snprintf(name,sizeof(name),"%s.frames.csv",argv[6]);FILE* csv=fopen(name,"w");assert(csv);fprintf(csv,"frame,tick,tails,displaced_floor_pixels\n");
     for(unsigned f=0;f<frames;++f){
         unsigned keys=f<2?8:0;uint64_t now=read64(c,clock);
@@ -74,7 +76,7 @@ int main(int argc,char** argv){
             if(next<count){unsigned l=c->busRead32(c,chart+next*16+8);uint64_t target=read64(c,chart+next*16);if(target>now+280896&&target<=now+2*280896&&(keys&buttons[l])){keys&=~buttons[l];heldUntil[l]=0;}}
             while(next<count){uint64_t target=read64(c,chart+next*16);if(target>now+280896)break;unsigned l=c->busRead32(c,chart+next*16+8);assert(l<3);keys|=buttons[l];heldUntil[l]=target+(read64(c,lengths+next*8)*16777216ULL+500000)/1000000;++next;}
         }
-        frame(c,keys);drain(c);if(f>4)assert(c->busRead32(c,mode)==(original?1:2));
+        frame(c,keys);if(f==2)selectDefaultDifficulty(c,mode);drain(c);if(f>4)assert(c->busRead32(c,mode)==(original?1:2));
         if(!original&&activeTable&&f>30&&(c->busRead16(c,0x04000000)&1024)&&!getenv("GBA_TEST_DISABLE_SCANLINE_DMA")){
             assert(c->busRead32(c,0x040000b8)&0x80000000u);assert(c->busRead32(c,0x040000dc)&0x80000000u);
         }

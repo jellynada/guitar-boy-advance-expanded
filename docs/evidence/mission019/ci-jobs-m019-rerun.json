@@ -1,0 +1,85 @@
+[
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119406208120",
+    "status": [
+      "succeeded"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "Build and host regressions",
+      "Run mandatory digital observer in the verified baseline environment #6",
+      "Annotations"
+    ],
+    "annotations": " Annotations 1 warning Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Build and host regressions Build and host regressions succeeded Oct 21, 2026 in 1m 41s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+  },
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407124179",
+    "status": [
+      "succeeded"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "One emulated hour on the exact RC2",
+      "Run mandatory digital observer in the verified baseline environment #6",
+      "Annotations"
+    ],
+    "annotations": " Annotations 1 warning and 1 notice Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Run python3 tools/ci_gate_summary.py builds/soak builds/soak/verification.json: {\"profile\":\"public\",\"requested_seconds\":3600,\"emulated_cycles\":61186785041,\"emulated_seconds\":3647.016587317,\"playing_cycles\":54318837018,\"paused_cycles\":4829725768,\"menu_cycles\":2014627040,\"result_cycles\":23595215,\"judgments_P_G_M_W\":[4204,460,3624,1976],\"runFrame_calls\":217828,\"complete_songs\":[14,14,14],\"perfect_runs\":15,\"all_miss_runs\":15,\"mixed_runs\":12,\"pause_cycles\":126,\"replay_then_exit\":11,\"startup_frames_observed_not_reference_valid\":186,\"framebuffer_frames_checked\":3016,\"displaced_pixels\":0,\"visible_head_peak\":8,\"tail_peak\":12,\"foreground_peak\":155776,\"refill_peak\":1472,\"host_peak_rss_kib\":47532,\"nonzero_audio_samples\":103409565,\"reference_scores\":[2901,6338,12866],\"result\":\"passed\"} Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } One emulated hour on the exact RC2 One emulated hour on the exact RC2 succeeded Oct 21, 2026 in 3m 16s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+  },
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407124764",
+    "status": [
+      "succeeded"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "Exact-ROM gameplay and graphics",
+      "Run mandatory digital observer in the verified baseline environment #6",
+      "Annotations"
+    ],
+    "annotations": " Annotations 1 warning Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Exact-ROM gameplay and graphics Exact-ROM gameplay and graphics succeeded Oct 21, 2026 in 1m 11s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+  },
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407778992",
+    "status": [
+      "succeeded"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "Exact digital PCM and FIFO gate",
+      "Run mandatory digital observer in the verified baseline environment #6",
+      "Annotations"
+    ],
+    "annotations": " Annotations 1 warning and 2 notices Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Publish bounded public test diagnostics builds/digital/digital-verification.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"startup_advance_samples\":15,\"results\":[{\"difficulty\":0,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":0,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":1,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":19,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":4,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":22,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":0,\"process_exit_code\":0,\"oracle_exit_code\":0},{\"difficulty\":2,\"case\":12,\"process_exit_code\":0,\"oracle_exit_code\":0}],\"passed\":true,\"emulator_lateness_correction\":false} Show more Show less Publish bounded public test diagnostics builds/pause-edges/verification.json: [{\"case\":8,\"passed\":true,\"wrong_events\":1,\"cause\":\"genuine new B press after resume; existing head already judged\"},{\"case\":24,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"},{\"case\":25,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"},{\"case\":27,\"passed\":true,\"wrong_events\":0,\"cause\":\"no manufactured press\"}] Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Exact digital PCM and FIFO gate Exact digital PCM and FIFO gate succeeded Oct 21, 2026 in 1m 33s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+  },
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119407779036",
+    "status": [
+      "failed"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "Strict ordinary audio-output release gate",
+      "Run mandatory digital observer in the verified baseline environment #6",
+      "Annotations"
+    ],
+    "annotations": " Annotations 1 error, 1 warning, and 8 notices Run python3 tools/check_demo_audio.py --build builds/ci/result --captures builds/emulator Process completed with exit code 1. Show more Show less Complete job Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/ Show more Show less Publish audio gate result builds/emulator/difficulty-2-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-2-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 39.21282958984375, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-1-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/difficulty-1-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 53.78021240234375, 'error_ms', -1.068115234375) Show more Show less Publish audio gate result builds/emulator/difficulty-0-case-4.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.068115234375) Show more Show less Publish audio gate result builds/emulator/difficulty-0-case-22.output.log: assert score>.94,(label,'runtime_seconds',start/32768,'correlation',score,'error_ms',error);assert abs(error)<1,(label,'runtime_seconds',start/32768,'error_ms',error) | ^^^^^^^^^^^^ | AssertionError: ('backing-only', 'runtime_seconds', 23.64447021484375, 'error_ms', -1.007080078125) Show more Show less Publish audio gate result builds/emulator/audio-output.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"check\":\"ordinary unmodified mGBA output; existing thresholds unchanged\",\"passed\":9,\"total\":15,\"results\":[{\"difficulty\":0,\"case\":19,\"exit_code\":0},{\"difficulty\":0,\"case\":4,\"exit_code\":1},{\"difficulty\":0,\"case\":22,\"exit_code\":1},{\"difficulty\":0,\"case\":0,\"exit_code\":0},{\"difficulty\":0,\"case\":12,\"exit_code\":0},{\"difficulty\":1,\"case\":19,\"exit_code\":0},{\"difficulty\":1,\"case\":4,\"exit_code\":1},{\"difficulty\":1,\"case\":22,\"exit_code\":1},{\"difficulty\":1,\"case\":0,\"exit_code\":0},{\"difficulty\":1,\"case\":12,\"exit_code\":0},{\"difficulty\":2,\"case\":19,\"exit_code\":0},{\"difficulty\":2,\"case\":4,\"exit_code\":1},{\"difficulty\":2,\"case\":22,\"exit_code\":1},{\"difficulty\":2,\"case\":0,\"exit_code\":0},{\"difficulty\":2,\"case\":12,\"exit_code\":0}],\"release_gate\":\"blocked\"} Show more Show less Publish audio gate result builds/emulator/verification.json: {\"source_commit\":\"9ccc460693fa7254527177330f32e56153720237\",\"rom_sha256\":\"9c4af95ff97eddd266dca3d7491ac9a5b1256f417684aae51b7c126443afafde\",\"passed\":[{\"test\":\"difficulty-0-case-0\",\"exit_code\":0},{\"test\":\"difficulty-0-case-4\",\"exit_code\":0},{\"test\":\"difficulty-0-case-11\",\"exit_code\":0},{\"test\":\"difficulty-0-case-12\",\"exit_code\":0},{\"test\":\"difficulty-0-case-17\",\"exit_code\":0},{\"test\":\"difficulty-0-case-19\",\"exit_code\":0},{\"test\":\"difficulty-0-case-20\",\"exit_code\":0},{\"test\":\"difficulty-0-case-22\",\"exit_code\":0},{\"test\":\"difficulty-0-case-23\",\"exit_code\":0},{\"test\":\"difficulty-0-case-28\",\"exit_code\":0},{\"test\":\"graphics-0-perfect\",\"exit_code\":0},{\"test\":\"graphics-0-mixed\",\"exit_code\":0},{\"test\":\"difficulty-1-case-0\",\"exit_code\":0},{\"test\":\"difficulty-1-case-4\",\"exit_code\":0},{\"test\":\"difficulty-1-case-11\",\"exit_code\":0},{\"test\":\"difficulty-1-case-12\",\"exit_code\":0},{\"test\":\"difficulty-1-case-17\",\"exit_code\":0},{\"test\":\"difficulty-1-case-19\",\"exit_code\":0},{\"test\":\"difficulty-1-case-20\",\"exit_code\":0},{\"test\":\"difficulty-1-case-22\",\"exit_code\":0},{\"test\":\"difficulty-1-case-23\",\"exit_code\":0},{\"test\":\"difficulty-1-case-28\",\"exit_code\":0},{\"test\":\"graphics-1-perfect\",\"exit_code\":0},{\"test\":\"graphics-1-mixed\",\"exit_code\":0},{\"test\":\"difficulty-2-case-0\",\"exit_code\":0},{\"test\":\"difficulty-2-case-4\",\"exit_code\":0},{\"test\":\"difficulty-2-case-11\",\"exit_code\":0},{\"test\":\"difficulty-2-case-12\",\"exit_code\":0},{\"test\":\"difficulty-2-case-17\",\"exit_code\":0},{\"test\":\"difficulty-2-case-19\",\"exit_code\":0},{\"test\":\"difficulty-2-case-20\",\"exit_code\":0},{\"test\":\"difficulty-2-case-22\",\"exit_code\":0},{\"test\":\"difficulty-2-case-23\",\"exit_code\":0},{\"test\":\"difficulty-2-case-28\",\"exit_code\":0},{\"te Show more Show less @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } } Strict ordinary audio-output release gate Strict ordinary audio-output release gate failed Oct 21, 2026 in 34s background wait wait-all cancel parallel Loading Re-running jobs... html { scroll-behavior: smooth } You can\u2019t perform that action at this time. "
+  },
+  {
+    "url": "https://github.com/jellynada/guitar-boy-advance-expanded/actions/runs/39653084111/job/119408862413",
+    "status": [
+      "Started"
+    ],
+    "headings": [
+      "Navigation Menu",
+      "Repository navigation",
+      "Release promotion blocked until explicit acceptance",
+      "Run mandatory digital observer in the verified baseline environment #6"
+    ],
+    "annotations": ""
+  }
+]

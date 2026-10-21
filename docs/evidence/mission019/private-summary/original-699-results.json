@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "perfect",
+    "frames": 36000,
+    "exit_code": 0
+  },
+  {
+    "mode": "miss",
+    "frames": 36000,
+    "exit_code": 0
+  },
+  {
+    "mode": "mixed",
+    "frames": 36000,
+    "exit_code": 0
+  }
+]

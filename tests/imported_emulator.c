@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "default_difficulty.h"
+
 static int crashed;
 static void on_crash(void* context) { (void)context; crashed=1; }
 static void log_message(struct mLogger* logger,int category,enum mLogLevel level,const char* format,va_list args) {
@@ -39,8 +41,8 @@ int main(int argc,char** argv) {
     for(unsigned f=0;f<2;++f){frame(core,128);} // Down
     for(unsigned f=0;f<2;++f){frame(core,0);}
     for(unsigned f=0;f<2;++f){frame(core,8);} // Start
-    frame(core,0);assert(core->busRead32(core,modeaddr)==2);
-    unsigned next=0;unsigned buttons[]={32,1,2};unsigned nonzero=0,visible=0;
+    frame(core,0);selectDefaultDifficulty(core,modeaddr);assert(core->busRead32(core,modeaddr)==2);
+    unsigned next=0;unsigned buttons[]={32,2,1};unsigned nonzero=0,visible=0;
     uint64_t previous=0;
     for(unsigned f=0;f<frames;++f) {
         uint64_t now=(uint64_t)core->busRead32(core,clockaddr)*280896;
@@ -86,7 +88,7 @@ int main(int argc,char** argv) {
         assert(core->busRead32(core,modeaddr)==0);
         for(unsigned f=0;f<2;++f){frame(core,128);}frame(core,0);
         for(unsigned f=0;f<2;++f){frame(core,8);}frame(core,0);
-        assert(core->busRead32(core,modeaddr)==2);
+        selectDefaultDifficulty(core,modeaddr);assert(core->busRead32(core,modeaddr)==2);
         assert(core->busRead32(core,clockaddr)<10);
         assert(core->busRead32(core,statsaddr)==0&&core->busRead32(core,statsaddr+8)==0);
         // Drain old frontend samples before measuring newly produced silence.

@@ -1,3 +1,123 @@
+# Current status — Mission 020
+
+Development recommendation **APPROVED WITH DOCUMENTED LIMITATIONS**, audio
+**AUDIO BOUNDED LIMITATION**, formal release **BLOCKED**. Engine changes NONE;
+RC2 checksum and original Copper Circuit are preserved. Actual new CI passes
+host/sanitizers,38 gameplay/graphics checks,15 digital transports and public soak;
+strict ordinary output9/15 remains failed. The paired reference discrepancy is
+localized to stock emulator PWM-slot updates; see M020_AUDIO_CONCLUSION.md.
+
+New owner evidence: positive RC2 physical-GBA playability and subjective audio,
+without inferred exhaustive difficulty/timing/stack/recording-fidelity coverage.
+Private full Cream resource/testing numbers remain retained M019 evidence.
+No graphics, merge, formal release or private upload. Baseline and resource
+contract await owner/reviewer approval. Current report:
+[M020](MISSION_020_FOUNDATION_CLOSEOUT.md). All following status is historical.
+
+# Historical status — Mission 019
+
+Foundation recommendation **BLOCKED**, audio **AUDIO BLOCKED**. No runtime
+changes and no RC3: immutable Copper Circuit RC2 was independently rebuilt and
+downloaded/tested again.209 Python,13 regular sanitizers,38 ROM checks and15/15
+complete digital transports pass; ordinary output9/15 on stock0.10.1/0.10.5.
+Public both versions, private full Cream Easy and original699 each exceeded an
+emulated hour. Remote CI actually passes build/gameplay/digital/soak and fails
+ordinary output. Owner RC2 all-difficulty acceptance, precise hardware margins
+and source-license choice remain pending. No integration or graphics approval.
+
+See [M019 report](MISSION_019_FOUNDATION_CERTIFICATION.md),
+[verification](M019_VERIFICATION.json), [owner checklist](OWNER_M019_PLAYTEST.md).
+Older status below is historical and does not override this decision.
+
+# Current authoritative status — Mission018
+
+**YELLOW**, playable public Copper Circuit; audio-output release gate unresolved.
+Easy/Medium/Hard and song selection are implemented. RC1 received positive real
+GBA playability feedback. RC2 requires separate owner testing. Extra pause-case8
+WrongInput is explained as a real new B press, not a manufactured edge.
+Medium pattern remains unchanged by owner choice.
+
+Use MISSION_018_STABILIZATION_REPORT.md and M018_VERIFICATION.json for current
+source, features, measurements, gates and next milestone. The current private
+Windows launcher/build profiles are preserved; no private delivery is attempted.
+
+The older mission notes below are historical evidence, not current feature status.
+
+# Mission 017 current candidate
+
+Original Copper Circuit public profile implemented on isolated mission branch.
+Easy/Medium/Hard, scoring/sustains, reactive stems, pause/results/replay preserved.
+Public profile excludes commercial original-demo content; legacy remains intact.
+**Release gate blocked** by strict ordinary audio output comparison; exploratory
+pause/repress finding and owner real-GBA acceptance remain open. No merge/tag.
+See MISSION_017_PUBLIC_DEMO.md and M017_VERIFICATION.json for exact evidence.
+
+# Current: post Medium/Hard stabilization candidate
+
+## Arcade75 / handheld candidate — provisional
+
+Offline versioned cut/adaptation recipes preserve normalized native inputs.
+Cream75: Easy 110 heads/20 holds, Medium 186/38, Hard 235/39; 3/4 shifted heads
+remove the Medium/Hard physical conflicts without deletion. No on-device chart
+rewriting. The only runtime compatibility path is finite EOF settlement for
+cut builds; full-length binaries must match stabilization outside revision.
+See ARCADE75_VERIFICATION.md for measurements, test evidence and open gates.
+Owner handheld acceptance, authorized private transfer and the inherited strict
+full-length audio output issue remain open. No merge or stable release.
+
+
+Frozen base3ed8be72f9652ada15c32ef4f77bbafddc2615bf; new isolated branch
+stabilization-post-medium-hard. Startup readiness is explicit and immutable
+bounds/fonts prepare at boot. Imported affine translation is reused exactly.
+All37original regressions now pass unchanged; measured Hard peak249280perfect /
+256448mixed stress is below280896cycles. Full report and evidence:
+STABILIZATION_POST_MEDIUM_HARD.md and evidence/stabilization.
+
+Open: native opposing-direction chords need owner policy approval; ordinary
+mGBA output comparisons are10/15, while exact digital checks pass. No public
+Cream upload, private download route, Windows GUI or real GBA acceptance is
+claimed. No merge or stable release. Historical reports below remain scoped
+records, not the current acceptance status.
+
+# Current: Mission014 provisional pause/resume
+
+Branch `mission-014-pause-resume` starts from Mission013 `664c83ea624c4cec1c81d4c83f066e8abf0d2d87`. Owner authorized provisional work; Mission013 handheld acceptance is unconfirmed. No develop/main merge. Imported-only pause, sample-preserving FIFO transport, resume input seeding, independent hold policy and static overlay are implemented. Original controls, charts, audio preparation, scoring and Windows build profiles are retained.
+
+See MISSION_014_PAUSE_RESUME.md, evidence/mission014 and OWNER_M014_PLAYTEST.md for current tests and limits. Cream delivery is blocked: keep ROM local until an authorized private route exists. Public encrypted hosting is not used. Owner acceptance and stable baseline designation remain pending. Next sequence: complete private delivery and handheld checks; review/approve dependent integrations; only then plan Mission015.
+
+Current gate: one strict ordinary mGBA0.10.1 backing comparison remains failed; exact FIFO/model continuity passes and an emulator-only lateness diagnostic passes. The correction is not shipped. No all-green audio QA or stable-release claim.
+
+Historical Mission013 report follows.
+
+# Mission013 — physical controls review candidate
+
+Current work: mission-013-physical-controls, based on verified develop
+56f6b7b243dfc710996336b99ac249806e666c85. Develop and main are not modified.
+Imported Easy logical lanes0/1/2 now bind to LEFT/B/A through an allocation-free
+physical-to-logical layer. Receptor labels/activation and all diagnostic prompts
+agree with that order. Original699-note Demo keeps LEFT/RIGHT/A/B. Menu/results
+A/Start and B/Select navigation remain unchanged.
+
+Chart headers, note positions/times/sustains, PCM, timing windows, scoring rules,
+reactive mixer and scanline DMA code remain unchanged. Six label map cells are
+restored exactly on scene exit. Medium/Hard exist only as future design/test
+fixtures; Up/Down aliases coalesce before logical edge detection. No new playable
+difficulty, song, front end, pause, animation, codec or score feature is added.
+
+Mission012 official public/private profiles and Windows launcher remain, with
+M013 output identities/filenames. Public review uses original synthetic assets;
+real Cream is built/tested locally and delivered by the previously authorized
+AES-password workflow, never as a plaintext public song/ROM. No secret is stored
+in source or public GitHub metadata. See the mission report/download receipt.
+
+Owner acceptance of the new mapping is **pending**. Older Mission011 hardware
+feedback is valuable but does not approve Mission013. Preserve emulator audio
+compatibility, physical DMA margin/stack and inherited asset review gates.
+Detailed tests, known results and owner checklist: MISSION_013_PHYSICAL_CONTROLS.md.
+Architecture: PHYSICAL_INPUT.md. Windows local alternative: WINDOWS_PRIVATE_BUILD.md.
+
+## Historical Mission012 status (superseded for the new mission branch)
+
 # Project status — Mission012 build/release foundation
 
 Current source: `mission-012-build-release-foundation`, descended only from

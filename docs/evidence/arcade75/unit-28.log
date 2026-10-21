@@ -1,0 +1,33 @@
+test_alignment_identical_two_streams (test_arcade75.CutTests.test_alignment_identical_two_streams) ... ok
+test_duration_configurable_or_disabled (test_arcade75.CutTests.test_duration_configurable_or_disabled) ... ok
+test_exact_75_samples (test_arcade75.CutTests.test_exact_75_samples) ... ok
+test_fade_exact_length_symmetric_and_zero_endpoint (test_arcade75.CutTests.test_fade_exact_length_symmetric_and_zero_endpoint) ... ok
+test_hold_crossing_boundary (test_arcade75.CutTests.test_hold_crossing_boundary) ... ok
+test_just_before_and_exact_boundary (test_arcade75.CutTests.test_just_before_and_exact_boundary) ... ok
+test_pipeline_deterministic_and_native_preserved (test_arcade75.CutTests.test_pipeline_deterministic_and_native_preserved) ... ok
+test_provenance_tampering_rejected (test_arcade75.CutTests.test_provenance_tampering_rejected) ... ok
+test_public_arcade_packager_rejects_owner_prepared_data (test_arcade75.CutTests.test_public_arcade_packager_rejects_owner_prepared_data) ... ok
+test_score_and_counts_recomputed (test_arcade75.CutTests.test_score_and_counts_recomputed) ... ok
+test_shorter_song_natural_length (test_arcade75.CutTests.test_shorter_song_natural_length) ... ok
+test_active_hold_destination_avoided (test_arcade75.HandheldTests.test_active_hold_destination_avoided) ... ok
+test_alias_is_one_lane_not_two_attacks (test_arcade75.HandheldTests.test_alias_is_one_lane_not_two_attacks) ... ok
+test_deterministic_provenance (test_arcade75.HandheldTests.test_deterministic_provenance) ... ok
+test_duplicate_head_rejected (test_arcade75.HandheldTests.test_duplicate_head_rejected) ... ok
+test_easy_native_unchanged (test_arcade75.HandheldTests.test_easy_native_unchanged) ... ok
+test_full_chord_minimal_deletion (test_arcade75.HandheldTests.test_full_chord_minimal_deletion) ... ok
+test_future_hold_interval_checked (test_arcade75.HandheldTests.test_future_hold_interval_checked) ... ok
+test_impossible_triple_keeps_all_heads (test_arcade75.HandheldTests.test_impossible_triple_keeps_all_heads) ... ok
+test_medium_cannot_invent_alias_lane (test_arcade75.HandheldTests.test_medium_cannot_invent_alias_lane) ... ok
+test_native_rearticulation_report_only (test_arcade75.HandheldTests.test_native_rearticulation_report_only) ... ok
+test_occupied_head_not_merged (test_arcade75.HandheldTests.test_occupied_head_not_merged) ... ok
+test_opposing_double_minimal_shift (test_arcade75.HandheldTests.test_opposing_double_minimal_shift) ... ok
+test_playable_double_unchanged (test_arcade75.HandheldTests.test_playable_double_unchanged) ... ok
+test_playable_triple_unchanged (test_arcade75.HandheldTests.test_playable_triple_unchanged) ... ok
+test_rapid_new_same_lane_conflict_avoided (test_arcade75.HandheldTests.test_rapid_new_same_lane_conflict_avoided) ... ok
+test_unrepairable_protected_chords_fail (test_arcade75.HandheldTests.test_unrepairable_protected_chords_fail) ... ok
+test_unsupported_lane_explicit_failure (test_arcade75.HandheldTests.test_unsupported_lane_explicit_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 1.271s
+
+OK

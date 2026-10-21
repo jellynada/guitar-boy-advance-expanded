@@ -1,7 +1,9 @@
 #include "pcmPlayback.hpp"
 #include "guitarGate.hpp"
 #include "maxmod.h"
+#ifndef GBA_PUBLIC_DEMO
 #include "soundbank_bin.h"
+#endif
 #include "imported_audio.hpp"
 #include "imported_audio_bin.h"
 #include "imported_backing_bin.h"
@@ -12,17 +14,21 @@ volatile u32 audioFaultCode=0;
 volatile u32 guitarAudible=1,guitarGain=256;
 volatile u32 audioRefillCount=0,audioRefillMaxCycles=0,audioUnderruns=0;
 volatile u64 audioRefillTotalCycles=0;
+volatile u32 audioPauseCount=0,audioResumeCount=0,audioPausedSamples=0,audioPausedFill=0;
+static u16 pausedRouting=0;
 struct GuitarEventRecord {u32 sample,kind,gain,serial;u64 gameplayTick;};
 EWRAM_DATA GuitarEventRecord guitarEventTrace[16];
 volatile u32 guitarEventSerial=0;
 static GuitarGate gate;
 static u32 fillPosition=0,previousBlock=0,countEpoch=0,previousRaw=0;
 // Retained original Maxmod storage; no allocations during mode changes.
+#ifndef GBA_PUBLIC_DEMO
 alignas(4) static u8 mixMemory[MM_MIXLEN_16KHZ];
 alignas(4) EWRAM_DATA static u8 waveMemory[MM_MIXLEN_16KHZ];
 alignas(4) EWRAM_DATA static u8 moduleChannels[16*MM_SIZEOF_MODCH];
 alignas(4) EWRAM_DATA static u8 activeChannels[16*MM_SIZEOF_ACTCH];
 alignas(4) EWRAM_DATA static u8 mixingChannels[16*MM_SIZEOF_MIXCH];
+#endif
 bool legacyAudioReady=false;
 static void hardwareStop() {
     REG_TM0CNT=0;REG_TM1CNT=0;REG_TM2CNT=0;
@@ -32,12 +38,14 @@ static void hardwareStop() {
 }
 void legacyAudioInit() {
     legacyAudioReady=false;hardwareStop();
+#ifndef GBA_PUBLIC_DEMO
     memset32(moduleChannels,0,sizeof(moduleChannels)/4);
     memset32(activeChannels,0,sizeof(activeChannels)/4);
     memset32(mixingChannels,0,sizeof(mixingChannels)/4);
     memset32(mixMemory,0,sizeof(mixMemory)/4);
     mm_gba_system setup={MM_MIX_16KHZ,16,16,moduleChannels,activeChannels,mixingChannels,mixMemory,waveMemory,(mm_addr)soundbank_bin};
     mmInit(&setup);legacyAudioReady=true;
+#endif
 }
 // Timer1 reloads after16 sample requests; Timer2 counts those blocks. Software
 // extends the20-bit count, serviced1024times/sec, including >64second tracks.
@@ -93,6 +101,7 @@ void pcmStop() {
 }
 void pcmStart() {
     pcmStop();audioRefillCount=audioRefillMaxCycles=audioUnderruns=0;audioRefillTotalCycles=0;
+    audioPauseCount=audioResumeCount=audioPausedSamples=audioPausedFill=0;pausedRouting=0;
     if(!imported_audio_enabled)return;
     const u16 irq=REG_IME;REG_IME=0;
     REG_SNDSTAT=SSTAT_ENABLE;REG_SNDDMGCNT=0;
@@ -104,6 +113,39 @@ void pcmStart() {
     irq_set(II_TIMER1,refill,0);REG_IF=IRQ_TIMER1;irq_enable(II_TIMER1);
     REG_TM0D=65536-PcmClock::PERIOD;audioState=PcmClock::Playing;REG_TM0CNT=TM_ENABLE;
     REG_IME=irq;
+}
+bool pcmPause() {
+    const u16 irq=REG_IME;REG_IME=0;
+    pcmService();
+    if(audioState!=PcmClock::Playing){REG_IME=irq;return false;}
+    // Stop ONLY the source timer. Keep FIFO contents, cascade counters, mixer
+    // cursor, gain/ramp and count-extension epoch. hardwareStop resets FIFO.
+    REG_TM0CNT=0;
+    const u32 count=consumed();
+    // A Timer1 overflow may have become pending just before IME was cleared.
+    // Service that one normal refill now, then acknowledge it exactly once.
+    if((count>>4)!=previousBlock)refill();
+    if(audioState!=PcmClock::Playing){REG_IME=irq;return false;}
+    audioSamplesConsumed=PcmClock::bounded(count,imported_audio_playback_samples);
+    if(count>=imported_audio_playback_samples){audioState=PcmClock::Ended;hardwareStop();REG_IME=irq;return false;}
+    irq_disable(II_TIMER1);REG_IF=IRQ_TIMER1;
+    pausedRouting=REG_SNDDSCNT&~(SDS_ARESET|SDS_BRESET);
+    REG_SNDDSCNT=pausedRouting&~(SDS_AL|SDS_AR);
+    audioPausedSamples=audioSamplesConsumed;audioPausedFill=fillPosition;++audioPauseCount;
+    audioState=PcmClock::Paused;REG_IME=irq;return true;
+}
+bool pcmResume() {
+    const u16 irq=REG_IME;REG_IME=0;
+    if(audioState!=PcmClock::Paused){REG_IME=irq;return false;}
+    if(REG_TM0CNT!=0||REG_TM1CNT!=(TM_ENABLE|TM_CASCADE)||
+       REG_TM2CNT!=(TM_ENABLE|TM_CASCADE)||!(REG_SNDSTAT&SSTAT_ENABLE)||
+       consumed()!=audioPausedSamples||fillPosition!=audioPausedFill){fault(4);REG_IME=irq;return false;}
+    // Do not reset/reprime FIFO or rewrite Timer1/2. Timer0 restarts a full
+    // 1024-cycle period; only its interrupted fractional DAC interval is lost.
+    // No source sample is consumed/replayed, and chart time uses this SAME count.
+    REG_IF=IRQ_TIMER1;irq_enable(II_TIMER1);
+    REG_SNDDSCNT=pausedRouting;audioState=PcmClock::Playing;
+    REG_TM0CNT=TM_ENABLE;++audioResumeCount;REG_IME=irq;return true;
 }
 void pcmService() {
     if(audioState!=PcmClock::Playing)return;

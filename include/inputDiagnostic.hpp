@@ -2,6 +2,7 @@
 #define INPUT_DIAGNOSTIC_HPP
 #include "importedRuntime.hpp"
 #include "sustain.hpp"
+#include "physicalInput.hpp"
 
 // Original, silent test data. Never used by the imported song or its audio clock.
 namespace InputDiagnostic {
@@ -9,9 +10,9 @@ constexpr unsigned COUNT=13, GAP=240, LEAD=120;
 constexpr uint64_t tick(unsigned frame){return uint64_t(frame)*ImportedTiming::FRAME;}
 struct Target {const char* label;uint8_t mask;};
 inline constexpr Target targets[COUNT]={
-    {"LEFT",1},{"A",2},{"B",4},{"LEFT+A",3},{"LEFT+B",5},{"A+B",6},
-    {"LEFT+A+B",7},{"LEFT THEN A",3},{"HOLD LEFT + TAP A",3},
-    {"HOLD A+B",6},{"RELEASE A KEEP B",6},{"RAPID A A A",2},{"LEFT A B SEQUENCE",7}};
+    {"LEFT",1},{"B",2},{"A",4},{"LEFT+B",3},{"LEFT+A",5},{"B+A",6},
+    {"LEFT+B+A",7},{"LEFT THEN B",3},{"HOLD LEFT + TAP B",3},
+    {"HOLD B+A",6},{"RELEASE B KEEP A",6},{"RAPID B B B",2},{"LEFT B A SEQUENCE",7}};
 constexpr uint64_t at(unsigned test,unsigned offset=0){return tick(LEAD+test*GAP+offset);}
 inline constexpr Note notes[]={
     {at(0),0,0},{at(1),1,0},{at(2),2,0},
@@ -55,7 +56,7 @@ public:
     }
     void update(unsigned frame,uint8_t held){
         state.frame=frame;state.test=frame<LEAD?0:(frame-LEAD)/GAP;if(state.test>=COUNT)state.test=COUNT-1;
-        state.held=held;state.pressed=held&~previous_;previous_=held;state.expected=targets[state.test].mask;
+        state.held=held;state.pressed=PhysicalInput::edges(held,previous_).pressed;previous_=held;state.expected=targets[state.test].mask;
         score_.addSustainBonus(holds_.update(tick(frame),held));judgment_.step(tick(frame),held);
         state.hit=0;state.missing=0;state.active=0;
         for(unsigned i=first[state.test];i<first[state.test+1];++i){auto s=judgment_.state(i);if(s==NoteState::Perfect||s==NoteState::Good)state.hit|=1u<<notes[i].lane;else state.missing|=1u<<notes[i].lane;}

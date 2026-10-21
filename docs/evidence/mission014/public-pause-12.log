@@ -1,0 +1,18 @@
+before timers 0 84 84 consumed 65604 frozen 65604 fill 65632
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 68607 frozen 68607 fill 68624
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 71610 frozen 71610 fill 71632
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 74613 frozen 74613 fill 74640
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 77616 frozen 77616 fill 77648
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 80619 frozen 80619 fill 80640
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 83622 frozen 83622 fill 83648
+resume phase=1 audio=1 mode=2 fault=0
+before timers 0 84 84 consumed 86622 frozen 86622 fill 86640
+resume phase=1 audio=1 mode=2 fault=0
+result score=512 P=25 G=0 M=0 W=0 holds=5 released=1 bonus=42
+PASS case=12 pauses=8 resumes=8 frozen_checks=240 score=512 heads=25

@@ -24,8 +24,8 @@ int main() {
     assert(laneX(0) < laneX(1) && laneX(1) < laneX(2));
     assert(laneX(99) == 0);
     assert(easyLaneMaskFromButtons(KEY_LEFT) == 1);
-    assert(easyLaneMaskFromButtons(KEY_A) == 2);
-    assert(easyLaneMaskFromButtons(KEY_B) == 4);
+    assert(easyLaneMaskFromButtons(KEY_B) == 2);
+    assert(easyLaneMaskFromButtons(KEY_A) == 4);
     assert(easyLaneMaskFromButtons(KEY_RIGHT | KEY_L | KEY_R) == 0);
     assert(laneMaskFromButtons(KEY_LEFT | KEY_RIGHT | KEY_A | KEY_B) == 15);
     // Independent reference events at beginning, middle, end of a one-hour chart.

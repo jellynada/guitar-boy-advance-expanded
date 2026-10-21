@@ -1,0 +1,62 @@
+{
+  "source": "e4cc5771aaacf18301b2dae6110538e78b38a834",
+  "captures": [
+    {
+      "capture": "exact-scoring",
+      "process_exit_code": 0,
+      "digital_exit_code": 0,
+      "experimental_only": false
+    },
+    {
+      "capture": "exact-wrong",
+      "process_exit_code": 0,
+      "digital_exit_code": 0,
+      "experimental_only": false
+    },
+    {
+      "capture": "exact-reactive",
+      "process_exit_code": 0,
+      "digital_exit_code": 0,
+      "experimental_only": false
+    },
+    {
+      "capture": "diagnostic-corrected-scoring",
+      "process_exit_code": 0,
+      "digital_exit_code": null,
+      "experimental_only": true
+    },
+    {
+      "capture": "diagnostic-corrected-wrong",
+      "process_exit_code": 0,
+      "digital_exit_code": null,
+      "experimental_only": true
+    },
+    {
+      "capture": "diagnostic-corrected-reactive",
+      "process_exit_code": 0,
+      "digital_exit_code": null,
+      "experimental_only": true
+    },
+    {
+      "capture": "diagnostic-corrected-miss",
+      "process_exit_code": 0,
+      "digital_exit_code": null,
+      "experimental_only": true
+    }
+  ],
+  "experimental_output_checks": [
+    {
+      "mode": "scoring",
+      "exit_code": 0
+    },
+    {
+      "mode": "wrong",
+      "exit_code": 0
+    },
+    {
+      "mode": "reactive",
+      "exit_code": 0
+    }
+  ],
+  "experimental_correction_shipped": false
+}

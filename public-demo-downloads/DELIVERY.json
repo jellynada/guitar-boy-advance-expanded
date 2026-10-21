@@ -1,0 +1,23 @@
+{
+  "status": "playtest candidate; release approval BLOCKED",
+  "source_commit": "113fc49fbcec851631ee4a932320de7fa803e551",
+  "rom": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba",
+  "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+  "archive": "Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip",
+  "archive_sha256": "5a2e0e420a59c02bb578c72e10f202461b1e0da91799d871896307953d29388d",
+  "public_content": "Copper Circuit original composition only; no Cream/commercial original-demo song",
+  "packaging": "14 player-only entries; independent source regeneration and CRC/hash extraction passed",
+  "gameplay_checks_passed": 35,
+  "digital_checks_passed": 15,
+  "ordinary_audio_output": "9/15; unchanged thresholds",
+  "owner_hardware_acceptance": false,
+  "network_download_verified": true,
+  "formal_release": false,
+  "artifact_commit": "e8ef0a59ddf1eecca84895c32c5e1e87722b51f5",
+  "download_urls": {
+    "rom": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba",
+    "zip": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip"
+  },
+  "downloaded_extraction": "passed;14 exact entries",
+  "downloaded_rom_emulator": "all3 complete hit runs, UI/results/replay,20 readiness epochs passed"
+}

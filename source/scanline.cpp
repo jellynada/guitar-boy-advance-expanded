@@ -1,5 +1,6 @@
 #include "scanline.hpp"
 #include "mode7.hpp"
+#include "affineTranslation.hpp"
 #include <cstddef>
 
 namespace {
@@ -8,6 +9,7 @@ static_assert(sizeof(BG_AFFINE)==16&&offsetof(BG_AFFINE,dx)==8&&offsetof(BG_AFFI
 struct alignas(4) Frame {BG_AFFINE affine[SCREEN_HEIGHT+1];u16 blend[SCREEN_HEIGHT+1];};
 EWRAM_DATA Frame frames[2];
 volatile bool enabled=false,ready=false;
+EWRAM_DATA AffineTranslation::Cache affineCache;
 volatile unsigned active=0;
 void build(unsigned index){
     auto& target=frames[index];
@@ -30,7 +32,18 @@ const BG_AFFINE* volatile scanlineActiveData=nullptr;
 volatile u32 scanlineFrameCommits=0,scanlineVblankMaxCycles=0,scanlineDeadlineMisses=0,scanlineVblankLatestLine=0;
 }
 namespace Scanline {
+void prepareAffines(){
+    auto& level=m7_level;const auto& cam=*level.camera;
+    if(level.horizon>=SCREEN_HEIGHT){affineCache.invalidate();m7_prep_affines(&level);return;}
+    const unsigned first=level.horizon<0?0:level.horizon;
+    const AffineTranslation::Key key={level.bgaff,cam.pos.x,cam.pos.y,cam.u.x,cam.u.z,cam.v.y,cam.w.y,level.horizon};
+    if(!affineCache.translate(level.bgaff,first,SCREEN_HEIGHT,key,cam.pos.z)){
+        m7_prep_affines(&level);affineCache.remember(level.bgaff,first,SCREEN_HEIGHT,key,cam.pos.z);
+    }
+    level.bgaff[SCREEN_HEIGHT]=level.bgaff[0];
+}
 void stop(){
+    affineCache.invalidate();
     const u16 previous=REG_IME;REG_IME=0;
     if(enabled){REG_DMA0CNT=0;REG_DMA3CNT=0;}
     enabled=false;ready=false;scanlineActiveData=nullptr;

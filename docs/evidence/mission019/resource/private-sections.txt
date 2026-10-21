@@ -1,0 +1,44 @@
+/workspace/mission019-evidence/private/guitar-boy-advance-expanded/guitar-boy-advance-expanded.elf  :
+section                size        addr
+.crt0                   528   134217728
+.init                    12   134218256
+.plt                      0   134218268
+.text                 40328   134218272
+.fini                    12   134258600
+.rodata             9133452   134258616
+.ctors                    0   143392068
+.dtors                    0   143392068
+.eh_frame                 4   143392068
+.gcc_except_table         0   143392072
+.iwram                 6976    50331648
+.bss                  20072    50338624
+.data                   204    50358696
+.init_array              16    50358900
+.fini_array               8    50358916
+.iwram0                   0    50358924
+.iwram1                   0    50358924
+.iwram2                   0    50358924
+.iwram3                   0    50358924
+.iwram4                   0    50358924
+.iwram5                   0    50358924
+.iwram6                   0    50358924
+.iwram7                   0    50358924
+.iwram8                   0    50358924
+.iwram9                   0    50358924
+.ewram                 9600    33554432
+.sbss                     0    33564032
+.pad                      8    33564032
+.comment                 59           0
+.debug_aranges          888           0
+.debug_info          121532           0
+.debug_abbrev         18131           0
+.debug_line           66353           0
+.debug_frame           3772           0
+.debug_str            36096           0
+.ARM.attributes          44           0
+.debug_loclists       51647           0
+.debug_rnglists        9354           0
+.debug_line_str         376           0
+Total               9519472
+
+

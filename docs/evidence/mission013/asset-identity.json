@@ -1,0 +1,14 @@
+{
+  "public": {
+    "chart_sha256": "f22234e064afc54bc54858bea9cab68399a44b0f5d5c823b436be6e6118053b4",
+    "guitar_sha256": "9bdf7bb29f01fcca718bac7b4b27e1ad8a1b5828182d543b24fdd5b1db6b3a01",
+    "backing_sha256": "bb1609766da3e8ba8da57f1b964bfccd4bfd6c46310b42da27114f8c0a04862e",
+    "asset_manifest_identical_to_m012": true
+  },
+  "cream": {
+    "chart_sha256": "368883c55492c5139ae940c740ac5d4463de8bf30b3ddadf04a1c48b41d3e1e4",
+    "guitar_sha256": "f0dd9ae3ffc3c04efc292ef815652a792dde2914880480efd4c94581595908fc",
+    "backing_sha256": "0efd813e88652191bfcd0574d59d6d96ec4d52e81484ca5b31a44956003db764",
+    "asset_manifest_identical_to_m012": true
+  }
+}

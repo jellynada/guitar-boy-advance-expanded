@@ -1,3 +1,51 @@
+# Current priority — Mission 019 certification gates
+
+**BLOCKED for graphics development.** First resolve the retained Easy mixed
+paired-backing residual without weakening strict criteria, obtain RC2 handheld
+feedback and review remaining hardware evidence. Then explicitly review the
+source/history integration proposal. No feature, new song, codec, scoring change
+or graphics mission begins automatically. Medium's pattern stays as chosen.
+
+[Audio next experiment](M019_AUDIO_GATE.md), [owner playtest](OWNER_M019_PLAYTEST.md),
+[integration plan](M019_INTEGRATION_PLAN.md). Older backlog is historical.
+
+# Current priority — Mission018 stabilization
+
+Keep Medium's current pattern by owner choice. Resolve measured audio-output
+compatibility through a targeted hardware/stock-emulator comparison, gather RC2
+handheld feedback, then review history-preserving develop integration. Features
+remain deferred; no next mission is automatically begun.
+
+Older backlog entries below are historical, subject to the current gate report.
+
+# Mission 017 priority gates
+
+Before any new feature: classify/fix strict public-demo output failure, investigate
+pause/repress trace, and obtain owner handheld acceptance for all3 difficulties.
+Then review normal integration into develop. No star power, health meter, extra
+songs, codecs or visual overhaul is included. See RELEASE_CANDIDATE_CHECKLIST.md.
+
+# Mission014 gate
+
+## Arcade75 candidate follow-up gates
+
+No further mission is authorized automatically. First perform private Cream75
+handheld acceptance, including diagonals/UP-DOWN alias, edited chords, muting,
+pause near EOF and replay. Keep full native charts and frozen references.
+Then explicitly review the inherited emulator output issue and integration.
+Ten-song storage remains a forecast only; no compression/front-end/scoring or
+multi-song storage work is included. See ARCADE75_VERIFICATION.md.
+
+
+Provisional pause/resume is implemented for review. Complete private delivery and owner Mission013/Mission014 handheld acceptance before integration or Mission015 planning. No front end or new difficulty is included. See MISSION_014_PAUSE_RESUME.md.
+
+# Design backlog after Mission013
+
+Easy LEFT/B/A is now implemented on the Mission013 review branch; owner handheld
+acceptance is pending. Medium/Hard are design/test only. Sustain polish, codecs,
+new difficulty gameplay and song libraries remain unimplemented. Historical
+Mission012 proposals below record intent, not the current implementation status.
+
 # Approved directions for later missions — not implemented in Mission012
 
 ## Physical lane order and input conflicts

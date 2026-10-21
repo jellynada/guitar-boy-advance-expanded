@@ -1,25 +1,169 @@
-# Guitar Boy Advance Expanded — Mission012 development foundation
+# Foundation accepted — development integration under review
+
+The owner accepts M020's development recommendation with documented limitations.
+A normal merge PR into `develop` is being prepared and verified; completing the
+merge still requires separate owner approval. RC2, Copper Circuit and gameplay
+remain unchanged. The strict9/15 audio-output failure continues blocking release.
+No graphics work or formal publication is authorized. See the
+[integration scope, checks and rollback plan](docs/FOUNDATION_DEVELOPMENT_INTEGRATION.md).
+
+The certification below records the evidence at its original closeout date;
+its “await owner acceptance” wording is superseded only by the acceptance above.
+
+# Current status — Mission 020
+
+**Development recommendation: APPROVED WITH DOCUMENTED LIMITATIONS. Public
+release: BLOCKED.** RC2 is unchanged and retains Copper Circuit and all three
+difficulties. Fresh CI passes209 Python tests,13 sanitizer programs,38 ROM checks,
+15/15 digital transports and the public hour soak. Strict ordinary output remains
+**9/15**, visibly failing; it is not overridden by this development recommendation.
+
+The focused stock0.10.1/0.10.5 experiment identifies expired emulator PWM-slot
+updates in the backing reference while every FIFO byte and song clock remains
+correct. See [closeout](docs/MISSION_020_FOUNDATION_CLOSEOUT.md),
+[audio conclusion](docs/M020_AUDIO_CONCLUSION.md),
+[resource contract](docs/M020_GRAPHICS_RESOURCE_CONTRACT.md),
+[baseline proposal](docs/M020_DEVELOPMENT_BASELINE_PLAN.md) and
+[verification](docs/M020_VERIFICATION.json).
+
+Owner feedback is now **positive RC2 real-GBA playability and subjective audio**;
+it does not establish every-difficulty coverage, professional recording fidelity,
+calibrated timing or physical stack/IRQ margins. No graphics work, protected merge
+or formal release is authorized or performed. Cream remains private.
+
+[Play unchanged RC2](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba)
+or [download player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip).
+No compilation required. Runtime source9ccc460693fa7254527177330f32e56153720237;
+proposed development code baseline33b4d227e7e8142639486d1effeb67a81c15903e.
+Next: owner/reviewer decision on that baseline and its safeguards.
+
+Everything below is retained historical status and does not override M020.
+
+# Historical status — Mission 019
+
+**Foundation certification: BLOCKED.** Copper Circuit RC2 remains playable; no
+gameplay or song change was needed. Fresh gameplay, graphics, complete digital
+audio and hour-long stress tests pass. Strict ordinary audio remains9/15 on two
+stock emulator versions, and RC2 handheld acceptance is pending.
+
+[Download RC2 ROM](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba) or
+[download RC2 player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/437410b45881119084cf675735b30cf3c841dad5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.zip).
+These unchanged hosted files were downloaded, hashed, extracted and tested again.
+Windows: right-click ZIP → Extract All; open the RC2.gba in mGBA or copy it to
+your flash cartridge normally. No compilation is needed.
+
+[Certification report](docs/MISSION_019_FOUNDATION_CERTIFICATION.md),
+[audio evidence](docs/M019_AUDIO_GATE.md), [handheld checklist](docs/OWNER_M019_PLAYTEST.md),
+[machine verification](docs/M019_VERIFICATION.json), [proposed integration](docs/M019_INTEGRATION_PLAN.md).
+Review branch: `mission-019-foundation-certification`; main/develop untouched.
+Actual remote CI passes build/host, gameplay/graphics, digital15/15 and the hour
+soak, and fails ordinary output9/15. No promotion, merge or graphics work approved.
+
+ROM source remains9ccc460693fa7254527177330f32e56153720237; no fictitious RC3.
+Maintainer canonical build is `python3 tools/build_public_demo.py` from that clean
+source with its pinned toolchain. Private owner-song profiles and the Windows
+launcher remain intact; private recordings are not public download payloads.
+
+Everything below is historical Mission017 or earlier context unless explicitly
+referenced by the current report. M018 evidence is preserved under docs.
+
+# Mission 017 playable public candidate
+
+**Copper Circuit** is the new original75-second demo for Easy/Medium/Hard.
+[Download the ROM](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba) or
+[download the player ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip).
+Both were downloaded back, hash-verified, extracted and emulated. No compiler is needed. Open the `.gba` in mGBA or put
+it on a compatible GBA flash cartridge.
+
+Easy: LEFT/B/A. Medium: LEFT/RIGHT/B/A. Hard: LEFT/UP-or-DOWN/RIGHT/B/A.
+START pauses/resumes. SELECT while paused returns. A/START replays results;
+B/SELECT returns. See [handheld checklist](docs/OWNER_M017_PLAYTEST.md).
+
+This is a development playtest candidate: the strict public-demo emulator
+audio-output gate is blocked, and real-GBA owner acceptance is pending.
+See [Mission017 report](docs/MISSION_017_PUBLIC_DEMO.md) and
+[content provenance](docs/DEMO_CONTENT_PROVENANCE.md). Historical build and
+private-song instructions below describe separate preserved profiles.
+
+# Stabilization candidate — post Medium/Hard
+
+## Arcade75 handheld preparation candidate
+
+Branch `arcade75-handheld-chart-adaptation` starts at stabilization commit
+`6c627e36dc30286575183c10076258d0bc9a7a0a`. Native/full-length profiles remain
+available. New offline `--arcade` preparation cuts source music to 75 seconds
+and minimally repairs impossible D-pad combinations; playable chords stay intact.
+Cream75 contains Easy 110/20, Medium 186/38 and Hard 235/39 heads/holds.
+No multi-song cartridge or stable release is implemented.
+
+Read [chart policy](docs/GBA_COMPATIBLE_CHARTS_V1.md),
+[cut timing](docs/ARCADE_CUT_75_V1.md),
+[verification evidence](docs/ARCADE75_VERIFICATION.md), and
+[owner playtest steps](docs/OWNER_ARCADE75_PLAYTEST.md).
+Public original synthetic review and actual private Cream ROMs are separate.
+Private upload is unavailable in this session; local preparation is not a
+verified download. The Windows one-click launcher is preserved.
+
+
+Current candidate branch: `stabilization-post-medium-hard`, from frozen
+`3ed8be72f9652ada15c32ef4f77bbafddc2615bf`. It fixes measured startup readiness
+and reduces native Hard frame cost without changing controls, charts, audio or
+score rules. Original restart tests pass unchanged. This is **not** a stable
+release, develop/main integration, or owner hardware acceptance.
+
+See [the stabilization report](docs/STABILIZATION_POST_MEDIUM_HARD.md) for before/
+after measurements, exact chord conflicts, audio failures and delivery limits.
+Native Medium/Hard LEFT+RIGHT conflicts remain pending owner-approved adaptation.
+The normal mGBA audio output matrix still has5failed checks; exact digital
+samples pass and emulator-only diagnostics are not shipped. The synthetic
+Actions artifact is a review build; the real Cream ROM must be transferred
+through an authorized private route, currently unavailable in this session.
+
+Custom songs now have a [difficulty selection screen](docs/MEDIUM_HARD_DIFFICULTIES.md) with native Easy/Medium/Hard charts and the owner-confirmed controls.
+
+# Mission 016 song pipeline
+
+Generic package preparation and private builds are documented in
+[Mission016](docs/MISSION_016_SONG_PIPELINE.md). It supports explicit audio
+selection and compatible Easy chart/MIDI data without game-source edits.
+The runtime and separate Cream/public regression profiles are preserved.
+
+# Mission 015 foundation work
+
+Repository audit and CI development-artifact workflow are prepared on
+`foundation-audit-2026-10-20`. See [audit and backlog](docs/MISSION_015_FOUNDATION_AUDIT.md)
+and [build/download procedure](docs/MISSION_015_BUILD_DELIVERY.md). GitHub publication,
+real downloads, licensing and physical-hardware acceptance remain separate gates.
+The runtime remains the provisional M014 engine; no gameplay is changed.
+
+# Mission 014 — provisional pause/resume review
+
+Imported Easy uses **LEFT / B / A**. Press **START** to pause/resume; **SELECT** exits while paused. START+SELECT returns to the selector. Original Demo controls remain unchanged.
+
+Mission013 handheld acceptance is still pending; the owner authorized this provisional work. See [Mission014 details](docs/MISSION_014_PAUSE_RESUME.md) and the [handheld checklist](docs/OWNER_M014_PLAYTEST.md). Public download contains synthetic audio only. The actual Cream ROM is kept local, as requested, until authorized private delivery exists. There is no working private attachment tool in this session.
+
+# Guitar Boy Advance Expanded — Mission014 provisional review
 
 A Game Boy Advance rhythm game based on
 [startfliing's original project](https://github.com/startfliing/guitar-boy-advance).
 The working engine has imported Easy charts/audio, reactive guitar muting,
 score/combo, sustains, results/replay, an input diagnostic and the repaired
-perspective highway. Mission012 improves building and source management; it adds
-no gameplay features. **Development review baseline, not a stable public release.**
+perspective highway. Mission013 corrects imported Easy physical controls to LEFT/B/A. Charts, audio,
+timing and scoring rules are preserved. **Development review baseline, not a stable public release.**
 
 ## Play the public test on Windows
 
-[Download the public Mission012 review ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/refs/heads/mission-012-download/downloads/mission012-review.zip).
+[Download the public Mission014 review ZIP](https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/refs/heads/mission-014-download/downloads/mission014-review.zip).
 
 1. Right-click the ZIP → **Extract All**.
 2. Install [mGBA for Windows](https://mgba.io/downloads.html).
-3. File → Load ROM → **Guitar-Boy-Advance-M012-Synthetic.gba**.
-4. Confirm **M012 / SYNTH**, choose Imported Easy Test, or INPUT / CHORD TEST.
+3. File → Load ROM → **Guitar-Boy-Advance-M014-Synthetic.gba**.
+4. Confirm **M014 / SYNTH**, choose Imported Easy Test, or INPUT / CHORD TEST.
 
 The short public imported song uses original synthetic audio/chart data. The
 existing Original Demo is retained with its inherited assets and699-note chart.
 
-## Build your Cream ROM locally
+## Optional developer build (launcher preserved)
 
 Keep your existing song ZIP separately; you do not need to edit game code.
 Follow [one-time Windows setup](docs/WINDOWS_PRIVATE_BUILD.md), place your ZIP at
@@ -30,15 +174,15 @@ inputs/outputs are ignored by Git and excluded from public review packages.
 
 ## Controls
 
-Imported Easy currently uses **GBA Left / A / B** from left to right. Original
+Imported Easy uses **GBA Left / B / A** from left to right. Original
 Demo uses **Left / Right / A / B**. Check mGBA Settings → Controllers for your
-keyboard mappings. Planned Easy Left/B/A physical ordering is future work.
+keyboard mappings. Medium/Hard mappings remain future work.
 Up/Down selects modes; A or Start begins. Start+Select exits play. Results:
 A/Start replays; B/Select returns. A held button sustains its matching note;
 release early to lose later hold bonuses. Misses mute the guitar; backing continues.
 
 INPUT / CHORD TEST automatically walks through single buttons, chords and holds.
-Follow its prompts, including release-A/keep-B. Missing held keys may indicate
+Follow its prompts, including release-B/keep-A. Missing held keys may indicate
 keyboard ghosting; try a different mapping/controller. See docs/QA_TEST_PLAN.md.
 
 ## Build and test for developers
@@ -52,7 +196,7 @@ python3 tools/build_profile.py public
 # Optional, with your own private/Cream.zip:
 python3 tools/build_profile.py cream
 # Public ZIP; use the successful versioned folder printed by the first command:
-python3 tools/package_public.py --build builds/public/VERSION --output builds/public/packages/mission012-review.zip
+python3 tools/package_public.py --build builds/public/VERSION --output builds/public/packages/mission014-review.zip
 ```
 
 Host QA needs g++, Python3, FFmpeg and NumPy: `bash tests/check.sh`.
@@ -60,20 +204,23 @@ mGBA C regressions additionally need gcc/libmgba-dev. Official profiles always
 build fresh committed source (or verify the complete exported source manifest),
 validate inputs and publish versioned outputs with manifests. FFmpeg version can
 change conversion bytes. Actual Windows launcher execution is not claimed from
-this Linux workspace; see the Mission012 report for performed checks/limits.
+this Linux workspace; see the Mission014 report for performed checks/limits.
 
 ## Project and review status
 
-The owner reports Mission011 runs well on actual GBA: flicker gone, good music,
-working score/holds/results/replay. This is valuable scoped acceptance, not full
-hardware certification. Two strict additional mGBA audio comparisons, physical
-DMA margins and stack measurements remain open. No thresholds were relaxed.
+Mission014 is provisional on Mission013, whose LEFT/B/A handheld acceptance is
+unconfirmed. No merge into develop/main. Both real Cream and synthetic profiles
+build;37 behavior/input regressions,42 pause cases and Original Demo checks pass.
+The established Cream scoring reference remains15815. One strict mGBA0.10.1
+common-backing output comparison remains open despite passing exact mixer bytes;
+see [the full evidence and limits](docs/MISSION_014_PAUSE_RESUME.md).
 
-Source is saved on mission branches; develop is the integration baseline.
-Main remains historical until explicit owner approval. Download branches never
-merge into source. See [release/branch policy](docs/RELEASE_PROCESS.md),
-[Mission012 evidence](docs/MISSION_012_BUILD_FOUNDATION.md),
-[known issues](docs/KNOWN_ISSUES.md) and [future design](docs/DESIGN_BACKLOG.md).
+Cream ROM delivery is blocked because no supported private upload route is
+available. The owner asked to keep it local; no public encrypted Cream ZIP is
+created for download. [Owner handheld checks](docs/OWNER_M014_PLAYTEST.md) and
+explicit integration approval remain required. No Mission015 work is included.
+See [branch policy](docs/RELEASE_PROCESS.md), [known issues](docs/KNOWN_ISSUES.md)
+and [future design](docs/DESIGN_BACKLOG.md).
 
 ## Credits and inherited content
 
@@ -81,4 +228,4 @@ Original Guitar Boy Advance by startfliing; Tonc, Maxmod and devkitPro retain th
 respective attribution/licensing requirements. Existing demo music, chart and art
 are retained under their historical arrangement; separate redistribution review
 is outstanding and no repository-wide LICENSE was found. Historical public song
-downloads also require review. Mission012 adds no public third-party song package.
+downloads also require review. Mission013 adds no public third-party song package.

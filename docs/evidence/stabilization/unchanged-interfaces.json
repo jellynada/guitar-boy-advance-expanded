@@ -1,0 +1,30 @@
+{
+  "tests/audio_emulator.c": {
+    "identical": true,
+    "sha256": "5ec3b44456c72506c8e6ed9a925c109cf34489a4665e23b602f77ca82d3c7d5a"
+  },
+  "tests/physical_emulator.c": {
+    "identical": true,
+    "sha256": "d473f308803b8c8b88b18c6494b6de320578a3267d2f55798986804fc556402f"
+  },
+  "include/scoring.hpp": {
+    "identical": true,
+    "sha256": "5b9a994264f6c1ea2f9b2e486ca4e1703bf4e31add09657167a5710fed6acc98"
+  },
+  "include/sustain.hpp": {
+    "identical": true,
+    "sha256": "13d6e4d6604614aa5cbee6831f9b65a94c9c617e02f85d109212c853558c644c"
+  },
+  "include/noteJudgment.hpp": {
+    "identical": true,
+    "sha256": "2746c1108220305a2b31d21ab6da60d910d750e77b1157213428cb5d972e2efb"
+  },
+  "include/gameControls.hpp": {
+    "identical": true,
+    "sha256": "d62346c4a5a212e521362692f47f007983146d3161ec6c7cc856c4fcdb6b67a6"
+  },
+  "source/pcmPlayback.cpp": {
+    "identical": true,
+    "sha256": "57bae2ff51d252c1dc490cb5ae30a56e7b22d5486623dfdf0e3ec12d8fbebe92"
+  }
+}

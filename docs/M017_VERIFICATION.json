@@ -1,0 +1,842 @@
+{
+  "status": "downloadable playtest candidate; release approval blocked",
+  "baseline": "1e8fec75eca86dd99798ec31e52c53dca34974f1",
+  "source_commit": "113fc49fbcec851631ee4a932320de7fa803e551",
+  "artifact_commit": "e8ef0a59ddf1eecca84895c32c5e1e87722b51f5",
+  "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+  "rom_bytes": 2643632,
+  "compiler": "devkitARM GCC16.1.0",
+  "toolchain": "devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5",
+  "source_tree_sha256": "8fb47c852bc9df5c752a08244ca59f6431559be6e502e46e799ab37678d35255",
+  "composition": {
+    "title": "Copper Circuit",
+    "tempo_bpm": 128,
+    "source_bars": 42,
+    "source_samples": 1290240,
+    "source_seconds": 78.75,
+    "playable_bars": 40,
+    "playable_seconds": 75,
+    "origin": "New score, melody, arrangement, charts and deterministic synthesizer written for Mission017; no external recordings or copied chart data.",
+    "rights_scope": "New composition/source generation only; no license is asserted for inherited game code or artwork.",
+    "sections": [
+      "opening/riff",
+      "A development",
+      "upper-register B",
+      "A return",
+      "closing/ring-out"
+    ],
+    "stems": {
+      "guitar.wav": "8be9dca6b6c4aa40e4eda0542b6c73f0b3001a76ba638c97e60dbd1ba9a78a4f",
+      "backing.wav": "2edf15e7885480bfffeab5ffd8958725d6e4b47e366fe7eda3a9e02aae78f377"
+    },
+    "source_chart_heads": {
+      "Easy": 86,
+      "Medium": 171,
+      "Hard": 335
+    },
+    "synthesis": "Plucked harmonic drive guitar; tonal bass; synthesized kick, noise snare and hats. Separate guitar/backing roles."
+  },
+  "charts": [
+    {
+      "name": "Easy",
+      "note_heads": 86,
+      "physical_controls": [
+        "LEFT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Medium",
+      "note_heads": 171,
+      "physical_controls": [
+        "LEFT",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "name": "Hard",
+      "note_heads": 335,
+      "physical_controls": [
+        "LEFT",
+        "UP/DOWN",
+        "RIGHT",
+        "B",
+        "A"
+      ]
+    }
+  ],
+  "genuine_holds": {
+    "Easy": 11,
+    "Medium": 11,
+    "Hard": 10
+  },
+  "host": {
+    "python_tests": 201,
+    "sanitizer_programs": 13,
+    "result": "passed",
+    "log_sha256": "bc6e2ec08e78f822b77ed40a03694ec861d12fb0b4f4f5ed04a2a71dbf8a1e8d"
+  },
+  "gameplay": {
+    "source_commit": "113fc49fbcec851631ee4a932320de7fa803e551",
+    "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+    "passed": [
+      {
+        "test": "difficulty-0-case-0",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-4",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-11",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-12",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-17",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-19",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-20",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-22",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-0-case-23",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-0-perfect",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-0-mixed",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-0",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-4",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-11",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-12",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-17",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-19",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-20",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-22",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-1-case-23",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-1-perfect",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-1-mixed",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-0",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-4",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-11",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-12",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-17",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-19",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-20",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-22",
+        "exit_code": 0
+      },
+      {
+        "test": "difficulty-2-case-23",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-2-perfect",
+        "exit_code": 0
+      },
+      {
+        "test": "graphics-2-mixed",
+        "exit_code": 0
+      },
+      {
+        "test": "ui",
+        "exit_code": 0
+      },
+      {
+        "test": "readiness",
+        "exit_code": 0
+      }
+    ],
+    "performance": [
+      {
+        "difficulty": 0,
+        "foreground_max_cycles": 119616,
+        "frame_cycles": 280896,
+        "headroom_cycles": 161280,
+        "graphics": [
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 52158797,
+            "peak_tails": 8,
+            "foreground_max": 119552,
+            "foreground_mean": 75367.021,
+            "refill_max": 1408,
+            "refill_mean": 1376.565,
+            "underruns": 0
+          },
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 52167037,
+            "peak_tails": 8,
+            "foreground_max": 117184,
+            "foreground_mean": 75832.861,
+            "refill_max": 1472,
+            "refill_mean": 1401.538,
+            "underruns": 0
+          }
+        ]
+      },
+      {
+        "difficulty": 1,
+        "foreground_max_cycles": 147008,
+        "frame_cycles": 280896,
+        "headroom_cycles": 133888,
+        "graphics": [
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 46257460,
+            "peak_tails": 12,
+            "foreground_max": 146624,
+            "foreground_mean": 89854.427,
+            "refill_max": 1408,
+            "refill_mean": 1374.037,
+            "underruns": 0
+          },
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 46272087,
+            "peak_tails": 11,
+            "foreground_max": 144128,
+            "foreground_mean": 89663.75,
+            "refill_max": 1472,
+            "refill_mean": 1395.732,
+            "underruns": 0
+          }
+        ]
+      },
+      {
+        "difficulty": 2,
+        "foreground_max_cycles": 155392,
+        "frame_cycles": 280896,
+        "headroom_cycles": 125504,
+        "graphics": [
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 45357354,
+            "peak_tails": 8,
+            "foreground_max": 155392,
+            "foreground_mean": 105314.456,
+            "refill_max": 1408,
+            "refill_mean": 1352.36,
+            "underruns": 0
+          },
+          {
+            "frames": 4900,
+            "frames_checked": 4570,
+            "defect_frames": 0,
+            "worst_displaced_pixels": 0,
+            "total_displaced_pixels": 0,
+            "floor_pixels": 45360428,
+            "peak_tails": 8,
+            "foreground_max": 152384,
+            "foreground_mean": 105689.23,
+            "refill_max": 1472,
+            "refill_mean": 1371.847,
+            "underruns": 0
+          }
+        ]
+      }
+    ],
+    "result": "passed",
+    "audio_output_release_gate": "separate; not cleared by gameplay tests",
+    "hardware_verified": false
+  },
+  "digital": {
+    "source_commit": "113fc49fbcec851631ee4a932320de7fa803e551",
+    "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+    "startup_advance_samples": 15,
+    "results": [
+      {
+        "difficulty": 0,
+        "case": 19,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 4,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 22,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 0,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 12,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 19,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 4,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 22,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 0,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 12,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 19,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 4,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 22,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 0,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 12,
+        "process_exit_code": 0,
+        "oracle_exit_code": 0
+      }
+    ],
+    "passed": true,
+    "emulator_lateness_correction": false
+  },
+  "digital_sample_reports": {
+    "difficulty-0-case-0.digital": {
+      "consumed_samples_checked": 2580,
+      "mixer_words_checked": 644,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-0-case-12.digital": {
+      "consumed_samples_checked": 65946,
+      "mixer_words_checked": 16484,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-0-case-19.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-0-case-22.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-0-case-4.digital": {
+      "consumed_samples_checked": 49763,
+      "mixer_words_checked": 12440,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-1-case-0.digital": {
+      "consumed_samples_checked": 2563,
+      "mixer_words_checked": 640,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-1-case-12.digital": {
+      "consumed_samples_checked": 65927,
+      "mixer_words_checked": 16480,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-1-case-19.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-1-case-22.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-1-case-4.digital": {
+      "consumed_samples_checked": 49743,
+      "mixer_words_checked": 12432,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-2-case-0.digital": {
+      "consumed_samples_checked": 2546,
+      "mixer_words_checked": 636,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1024,
+      "request_period_max": 1024,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-2-case-12.digital": {
+      "consumed_samples_checked": 65910,
+      "mixer_words_checked": 16476,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-2-case-19.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-2-case-22.digital": {
+      "consumed_samples_checked": 1261568,
+      "mixer_words_checked": 315388,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    },
+    "difficulty-2-case-4.digital": {
+      "consumed_samples_checked": 49726,
+      "mixer_words_checked": 12428,
+      "digital_mismatches": 0,
+      "mixer_mismatches": 0,
+      "startup_advance_samples": 15,
+      "startup_advance_ms": 0.91552734375,
+      "request_period_min": 1022,
+      "request_period_max": 1026,
+      "complete_clock_drift_cycles": 0
+    }
+  },
+  "ordinary_output": {
+    "check": "ordinary unmodified mGBA output; existing thresholds unchanged",
+    "passed": 9,
+    "total": 15,
+    "results": [
+      {
+        "difficulty": 0,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 0,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 0,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 0,
+        "case": 12,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 1,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 1,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 1,
+        "case": 12,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 4,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 2,
+        "case": 22,
+        "exit_code": 1
+      },
+      {
+        "difficulty": 2,
+        "case": 0,
+        "exit_code": 0
+      },
+      {
+        "difficulty": 2,
+        "case": 12,
+        "exit_code": 0
+      }
+    ],
+    "release_gate": "blocked"
+  },
+  "ordinary_output_failures": [
+    {
+      "difficulty": 0,
+      "case": 4,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.068115234375)"
+    },
+    {
+      "difficulty": 0,
+      "case": 22,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 23.64447021484375, 'error_ms', -1.007080078125)"
+    },
+    {
+      "difficulty": 1,
+      "case": 4,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125)"
+    },
+    {
+      "difficulty": 1,
+      "case": 22,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 53.78021240234375, 'error_ms', -1.068115234375)"
+    },
+    {
+      "difficulty": 2,
+      "case": 4,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('sync-reference', 'runtime_seconds', 6.314178466796875, 'error_ms', -1.007080078125)"
+    },
+    {
+      "difficulty": 2,
+      "case": 22,
+      "exit_code": 1,
+      "assertion": "AssertionError: ('backing-only', 'runtime_seconds', 39.21282958984375, 'error_ms', -1.007080078125)"
+    }
+  ],
+  "stock_mgba105": {
+    "version": "0.10.5",
+    "source_commit": "26b7884bc25a5933960f3cdcd98bac1ae14d42e2",
+    "unmodified": true,
+    "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+    "cases": [
+      {
+        "case": 19,
+        "exit_code": 0
+      },
+      {
+        "case": 22,
+        "exit_code": 0
+      },
+      {
+        "case": 23,
+        "exit_code": 0
+      }
+    ],
+    "output_perfect": "passed",
+    "output_real_wrong_press_backing_reference": "passed",
+    "output_mixed": "failed: -1.007080078125ms at23.644470s; unchanged abs<1ms bound"
+  },
+  "original_699_mode": [
+    {
+      "mode": "perfect",
+      "exit_code": 0
+    },
+    {
+      "mode": "miss",
+      "exit_code": 0
+    },
+    {
+      "mode": "mixed",
+      "exit_code": 0
+    }
+  ],
+  "exploratory_pause_case8": {
+    "public_result": "86Perfect/0Good/0Miss/1WrongInput; old zero-WrongInput assertion failed",
+    "non_public_profile_same_chart": "identical result and same failed assertion; not a public-isolation regression",
+    "acceptance": "open; no gameplay code or acceptance threshold changed"
+  },
+  "reference_scores": {
+    "Easy": 2901,
+    "Medium": 6338,
+    "Hard": 12866,
+    "scope": "specific scripted case19 traces; not universal all-Perfect scores",
+    "medium_hold_note": "one same-lane re-articulation replaces preceding hold under existing rules:10 completed/1 ended early"
+  },
+  "resources": {
+    "rom_budget": 33554432,
+    "rom_bytes": 2643632,
+    "iwram_static_bytes": 8308,
+    "ewram_static_bytes": 7016,
+    "dynamic_stack_hardware_highwater": "not measured"
+  },
+  "content_safety": {
+    "owner_original_creator_permission": true,
+    "notices_retained": true,
+    "positive_original_regeneration": true,
+    "commercial_original_song_excluded": true,
+    "Cream_used": false,
+    "zip_members": 14
+  },
+  "hardware_verified": false,
+  "owner_acceptance": false,
+  "formal_release": false,
+  "merge_performed": false,
+  "download_back": {
+    "artifact_commit": "e8ef0a59ddf1eecca84895c32c5e1e87722b51f5",
+    "downloads": [
+      {
+        "url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba",
+        "http_status": 200,
+        "bytes": 2643632,
+        "sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/jellynada/guitar-boy-advance-expanded/e8ef0a59ddf1eecca84895c32c5e1e87722b51f5/public-demo-downloads/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip",
+        "http_status": 200,
+        "bytes": 316877,
+        "sha256": "5a2e0e420a59c02bb578c72e10f202461b1e0da91799d871896307953d29388d"
+      }
+    ],
+    "extraction": {
+      "archive_sha256": "5a2e0e420a59c02bb578c72e10f202461b1e0da91799d871896307953d29388d",
+      "rom_sha256": "243e4160c68c671a7b9e1d4dc0e2f4bb439294eccf62a1accf04b0aae5df6af6",
+      "members": 14,
+      "extraction": "passed"
+    },
+    "emulator": [
+      {
+        "test": "downloaded-difficulty-0",
+        "exit_code": 0
+      },
+      {
+        "test": "downloaded-difficulty-1",
+        "exit_code": 0
+      },
+      {
+        "test": "downloaded-difficulty-2",
+        "exit_code": 0
+      },
+      {
+        "test": "downloaded-ui",
+        "exit_code": 0
+      },
+      {
+        "test": "downloaded-readiness",
+        "exit_code": 0
+      }
+    ],
+    "hashes_verified": true
+  }
+}
