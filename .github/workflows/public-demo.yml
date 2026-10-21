@@ -63,22 +63,28 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with: {persist-credentials: false}
-      - run: sudo apt-get update && sudo apt-get install -y gcc ffmpeg python3-numpy libmgba-dev
+      - run: sudo apt-get update && sudo apt-get install -y python3-numpy
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with: {name: m019-build, path: builds/ci}
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with: {name: m019-gameplay, path: builds/emulator}
+      - name: Use the baseline stock Debian observer environment
+        run: |
+          set -euo pipefail
+          docker run -d --name m019-digital -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE" -w "$GITHUB_WORKSPACE" devkitpro/devkitarm@sha256:116afba8df8453961de2936ffab20dd441edf4d682856c1ec8b0e53d7ed0bbf5 sleep infinity
+          docker exec m019-digital bash -c 'apt-get update && apt-get install -y gcc libmgba-dev'
+          docker exec m019-digital dpkg-query -W libmgba-dev > builds/ci/digital-emulator-version.txt
       - run: |
           set -euo pipefail
-          gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/pause.c -o builds/emulator/pause -lmgba
-          gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/stress.c -o builds/emulator/stress -lmgba
-          gcc -O2 -Wall -Wextra -Werror tests/pause_trace_emulator.c -o builds/pause-trace -lmgba
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/pause.c -o builds/emulator/pause -lmgba
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror builds/emulator/probes/stress.c -o builds/emulator/stress -lmgba
+          docker exec m019-digital gcc -O2 -Wall -Wextra -Werror tests/pause_trace_emulator.c -o builds/pause-trace -lmgba
       - name: Pause input-edge gate
-        run: python3 tools/check_pause_trace.py --probe builds/pause-trace --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --symbols builds/ci/result/symbols.txt --output builds/pause-edges
+        run: python3 tools/check_pause_trace.py --probe builds/pause-trace --rom builds/ci/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC2.gba --symbols builds/ci/result/symbols.txt --output builds/pause-edges --docker-container m019-digital
       - name: Compile matching stock-library FIFO observer
-        run: gcc -O2 -Wall -Wextra -Werror -fPIC -shared tests/hardware_tap.c -o builds/tap.so -lmgba -ldl
+        run: docker exec m019-digital gcc -O2 -Wall -Wextra -Werror -fPIC -shared tests/hardware_tap.c -o builds/tap.so -lmgba -ldl
       - name: Digital transport gate including every resume
-        run: python3 tools/check_demo_fifo.py --build builds/ci/result --probes builds/emulator --output builds/digital --tap builds/tap.so --skip-pwm
+        run: python3 tools/check_demo_fifo.py --build builds/ci/result --probes builds/emulator --output builds/digital --tap builds/tap.so --skip-pwm --docker-container m019-digital
       - name: Publish bounded public test diagnostics
         if: always()
         run: python3 tools/ci_gate_summary.py builds/pause-edges builds/digital
@@ -91,6 +97,7 @@ jobs:
             builds/digital/*.log
             builds/pause-edges/*.json
             builds/pause-edges/*.csv
+            builds/ci/digital-emulator-version.txt
           if-no-files-found: warn
           retention-days: 14
   audio-output:
