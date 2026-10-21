@@ -3,6 +3,7 @@ import argparse
 import hashlib
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -63,7 +64,7 @@ def build(root, container=None):
         if container:
             actual=subprocess.check_output(['docker','inspect','--format','{{.Config.Image}}',container],text=True).strip()
             if actual!=image:raise ValueError('Existing build container is not the exact pinned toolchain image')
-            command=['docker','exec','-w',str(work),container,'make','-j2',*flags]
+            command=['docker','exec','--user',str(os.getuid())+':'+str(os.getgid()),'-w',str(work),container,'make','-j2',*flags]
         else:command=['bash','scripts/build-docker.sh',*flags]
         with(job/'build.log').open('w')as log:
             subprocess.run(command,cwd=work,stdout=log,stderr=subprocess.STDOUT,check=True)
