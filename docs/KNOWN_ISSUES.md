@@ -1,3 +1,16 @@
+# Mission 017 current public candidate
+
+- Strict mixed-play output residual -1.007080ms at23.644470s exceeds unchanged
+  absolute<1ms limit on stock mGBA0.10.1 and0.10.5. Digital checks separately pass.
+- Exploratory legacy pause case8 applied to the new Easy chart produces one
+  WrongInput after release/repress; reproduced identically in the preserved
+  non-public profile. Not counted as a passed acceptance case.
+- Real-GBA audio, diagonal comfort, musical enjoyment and owner acceptance pending.
+- Controls/Help remains the historical Easy input diagnostic, not a full tutorial.
+- No project-wide source license has been selected; owner authorized this public
+  candidate's code/art, and third-party notices are retained separately.
+- Inherited full Cream output10/15 issue remains separate and unresolved.
+
 # Stabilization gate: current status
 
 ## Arcade75 candidate

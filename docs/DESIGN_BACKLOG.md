@@ -1,3 +1,10 @@
+# Mission 017 priority gates
+
+Before any new feature: classify/fix strict public-demo output failure, investigate
+pause/repress trace, and obtain owner handheld acceptance for all3 difficulties.
+Then review normal integration into develop. No star power, health meter, extra
+songs, codecs or visual overhaul is included. See RELEASE_CANDIDATE_CHECKLIST.md.
+
 # Mission014 gate
 
 ## Arcade75 candidate follow-up gates

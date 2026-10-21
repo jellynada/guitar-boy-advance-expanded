@@ -1,3 +1,12 @@
+# Mission 017 current candidate
+
+Original Copper Circuit public profile implemented on isolated mission branch.
+Easy/Medium/Hard, scoring/sustains, reactive stems, pause/results/replay preserved.
+Public profile excludes commercial original-demo content; legacy remains intact.
+**Release gate blocked** by strict ordinary audio output comparison; exploratory
+pause/repress finding and owner real-GBA acceptance remain open. No merge/tag.
+See MISSION_017_PUBLIC_DEMO.md and M017_VERIFICATION.json for exact evidence.
+
 # Current: post Medium/Hard stabilization candidate
 
 ## Arcade75 / handheld candidate — provisional

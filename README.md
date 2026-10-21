@@ -1,3 +1,21 @@
+# Mission 017 playable public candidate
+
+**Copper Circuit** is the new original75-second demo for Easy/Medium/Hard.
+Player ROM/ZIP links are on the `mission-017-public-demo` branch under
+`public-demo-downloads/DELIVERY.json`; the owner delivery response supplies
+direct immutable links. No compiler is needed. Open the `.gba` in mGBA or put
+it on a compatible GBA flash cartridge.
+
+Easy: LEFT/B/A. Medium: LEFT/RIGHT/B/A. Hard: LEFT/UP-or-DOWN/RIGHT/B/A.
+START pauses/resumes. SELECT while paused returns. A/START replays results;
+B/SELECT returns. See [handheld checklist](docs/OWNER_M017_PLAYTEST.md).
+
+This is a development playtest candidate: the strict public-demo emulator
+audio-output gate is blocked, and real-GBA owner acceptance is pending.
+See [Mission017 report](docs/MISSION_017_PUBLIC_DEMO.md) and
+[content provenance](docs/DEMO_CONTENT_PROVENANCE.md). Historical build and
+private-song instructions below describe separate preserved profiles.
+
 # Stabilization candidate — post Medium/Hard
 
 ## Arcade75 handheld preparation candidate

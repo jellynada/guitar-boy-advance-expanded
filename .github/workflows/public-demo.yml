@@ -1,0 +1,51 @@
+name: Public demo candidate gates
+on:
+  workflow_dispatch:
+  push:
+    branches: [mission-017-public-demo]
+    paths-ignore: ['public-demo-downloads/**']
+permissions:
+  contents: read
+concurrency:
+  group: public-demo-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ ffmpeg python3-numpy libmgba-dev
+      - name: Host regressions
+        run: bash tests/check.sh
+      - name: Build original public composition
+        run: python3 tools/build_public_demo.py
+      - name: Package, extract, exercise exact ROM
+        run: |
+          set -euo pipefail
+          build="builds/public-demo/$(cat builds/public-demo/LATEST.txt)"
+          zip="builds/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip"
+          python3 tools/package_public_demo.py --build "$build" --output "$zip"
+          python3 tools/verify_demo_zip.py "$zip" --receipt "${zip%.zip}.verification.json" --extract-to builds/player
+          python3 tools/test_public_demo.py --build "$build" --rom builds/player/Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba --output builds/emulator
+      - name: Strict ordinary audio-output release gate
+        run: |
+          build="builds/public-demo/$(cat builds/public-demo/LATEST.txt)"
+          python3 tools/check_demo_audio.py --build "$build" --captures builds/emulator
+      - name: Retain candidate evidence even when release gate fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m017-candidate-${{ github.sha }}
+          path: |
+            builds/*.zip
+            builds/*.verification.json
+            builds/emulator/*.log
+            builds/emulator/*.json
+          if-no-files-found: warn
+          retention-days: 30

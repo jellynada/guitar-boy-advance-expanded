@@ -1,3 +1,13 @@
+# Mission 017 exact-candidate validation
+
+Run tests/check.sh, build_public_demo.py, package_public_demo.py, verify_demo_zip.py,
+test_public_demo.py and check_demo_audio.py. Retain all failures; digital accuracy
+is not ordinary-output or hardware clearance. Test both hit and mixed graphics
+loads, all3 difficulties, aliases, sustains, restart,10s pause/results/replay.
+Hash/extract/download back and emulate the exact delivered ROM. See
+M017_VERIFICATION.json and OWNER_M017_PLAYTEST.md. Existing host tests and
+legacy699-note regressions remain separate; no assertion thresholds relaxed.
+
 # Mission014 additions
 
 ## Arcade75 additional gates

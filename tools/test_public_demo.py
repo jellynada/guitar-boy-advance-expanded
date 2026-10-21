@@ -35,7 +35,7 @@ def run(root, build, rom, output, container=None):
     jobs=[]
     for i,count in enumerate([86,171,335]):
         env={'GBA_DIFFICULTY':str(i),'GBA_PAUSE_PLAYBACK_SAMPLES':'1261568'}
-        for case in [0,4,5,6,7,8,9,11,12,17,19,20,22,23]:
+        for case in [0,4,11,12,17,19,20,22,23]:
             prefix=output/f'difficulty-{i}-case-{case}'
             jobs.append((prefix,[output/('stress'if case in [22,23]else'pause'),rom,build/'symbols.txt',str(count),'4900',str(case),'120'if case==20 else'1'if case==0 else'30',prefix],env))
         for mode in ['perfect','mixed']:

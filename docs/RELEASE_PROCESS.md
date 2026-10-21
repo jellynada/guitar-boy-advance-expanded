@@ -1,3 +1,19 @@
+# Mission 017 public playtest delivery
+
+Build from clean committed source only. Independently regenerate original
+Copper Circuit inputs during packaging; public profile has no owner-song input.
+Check actual embedded stems, identity, chart derivation, license notices and
+explicit ZIP inventory. Verify extracted ROM and stock-emulator results.
+
+Use only the mission branch's four allowlisted public-demo-downloads files.
+Artifact-only commit is distinct from manifest source commit; exclude those
+files from future source exports/build inputs. Retrieve immutable raw GitHub
+URLs, recheck ZIP/ROM hashes, safely extract and emulate downloaded ROM.
+A failure in strict audio comparison keeps release approval blocked even if
+the candidate is available for playtesting. No formal Release/tag, merge,
+force push or main/develop change without owner approval. Third-party music
+is never made public through this workflow.
+
 # Current foundation release policy
 
 ## Arcade75 development delivery (not a stable release)
