@@ -135,6 +135,9 @@ def verify_rom(folder,rom,elf,revision):
   if name.endswith('_bin'):
    end=re.search(r'^([0-9a-fA-F]+)\s+\w\s+'+re.escape(name)+'_end$',sy,re.M)
    if end:symbols[name]=(int(addr,16),int(end[1],16)-int(addr,16))
+ expected_bins={a['symbol']for song in m['songs']for a in song['audio'].values()}
+ if {n for n in symbols if n.endswith('_bin')}!=expected_bins:raise ValueError('Unexpected linked binary payload')
+ if any(name in sy for name in ['soundbank_bin','careless_expertsingle','mmStart','mmInit']):raise ValueError('Unselected legacy content linked')
  def embedded(symbol,expected):
   if symbol not in symbols:raise ValueError('Missing asset symbol: '+symbol)
   addr,size=symbols[symbol];offset=addr-0x08000000
