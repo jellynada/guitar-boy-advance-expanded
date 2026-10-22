@@ -1,0 +1,102 @@
+name: Mission 021 actual UI candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [mission-021-ui-navigation]
+  pull_request:
+    branches: [develop]
+permissions:
+  contents: read
+concurrency:
+  group: m021-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Host sanitizers and actual public candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - run: sudo apt-get update && sudo apt-get install -y g++ ffmpeg python3-numpy libmgba-dev
+      - run: bash tests/check.sh
+      - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Retain original Synth Demo 2 engine fixture and observers
+        run: |
+          python3 tools/build_profile.py public
+          fixture="builds/public/$(cat builds/public/LATEST.txt)"
+          image=$(cat scripts/toolchain-image.txt)
+          docker run --rm -v "$PWD:/project:ro" "$image" /opt/devkitpro/devkitARM/bin/arm-none-eabi-nm "/project/$fixture/Guitar-Boy-Advance-M014-Synthetic.elf" > builds/m021-fixture-symbols.txt
+          python3 tools/test_ui_fixture.py --rom "$fixture/Guitar-Boy-Advance-M014-Synthetic.gba" --symbols builds/m021-fixture-symbols.txt --output builds/m021-fixture-tests
+      - name: Compile committed candidate; frozen RC2 remains independent
+        run: |
+          python3 tools/build_ui_candidate.py
+          mkdir -p builds/m021-delivery
+          cp -r "$(cat builds/m021-candidates/public/LATEST.txt)" builds/m021-delivery/result
+          rm -rf builds/m021-delivery/result/engine builds/m021-delivery/result/composition
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m021-public-candidate, path: builds/m021-delivery, if-no-files-found: error, retention-days: 14}
+  gameplay:
+    name: Candidate navigation, gameplay, graphics and stack
+    needs: build
+    runs-on: ubuntu-24.04
+    container: debian:bookworm-slim
+    timeout-minutes: 35
+    steps:
+      - run: apt-get update && apt-get install -y git gcc libmgba-dev python3-numpy ffmpeg
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m021-public-candidate, path: builds/m021-delivery}
+      - run: python3 tools/test_ui_candidate.py --build builds/m021-delivery/result --output builds/m021-emulator
+      - name: Inherited physical pause-edge assertions
+        run: python3 tools/check_pause_trace.py --probe builds/m021-emulator/pause-trace --rom "builds/m021-delivery/result/$(python3 -c "import json;print(json.load(open('builds/m021-delivery/result/manifest.json'))['rom'])")" --symbols builds/m021-delivery/result/symbols.txt --output builds/m021-pause-edges
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m021-candidate-observations, path: builds/m021-emulator, if-no-files-found: warn, retention-days: 14}
+  digital:
+    name: Candidate exact digital PCM and FIFO
+    needs: [build, gameplay]
+    runs-on: ubuntu-24.04
+    container: debian:bookworm-slim
+    timeout-minutes: 30
+    steps:
+      - run: apt-get update && apt-get install -y git gcc libmgba-dev python3-numpy
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m021-public-candidate, path: builds/m021-delivery}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m021-candidate-observations, path: builds/m021-emulator}
+      - run: |
+          gcc -O2 -Itests builds/m021-emulator/probes/pause.c -o builds/m021-emulator/pause -lmgba
+          gcc -O2 -Itests builds/m021-emulator/probes/stress.c -o builds/m021-emulator/stress -lmgba
+          gcc -O2 -fPIC -shared tests/hardware_tap.c -o builds/m021-tap.so -lmgba -ldl
+          python3 tools/check_ui_fifo.py --build builds/m021-delivery/result --probes builds/m021-emulator --output builds/m021-digital --tap builds/m021-tap.so --skip-pwm
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m021-digital-evidence
+          path: |
+            builds/m021-digital/*.json
+            builds/m021-digital/*.log
+          retention-days: 14
+  audio-output:
+    name: Strict ordinary audio-output RELEASE gate (known limitation retained)
+    needs: gameplay
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m021-candidate-observations, path: observations}
+      - name: Report every result; never waive output failures
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('observations/audio-output.json').read_text())
+          print(json.dumps(m,indent=2))
+          assert m['passed']==m['total']==15, 'Strict output gate remains blocked; development review is separate'
+          PY

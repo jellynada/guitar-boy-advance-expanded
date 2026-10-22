@@ -52,6 +52,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
   build:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'mission-020-foundation-closeout'
     name: Build and host regressions
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -233,7 +234,7 @@ jobs:
           retention-days: 14
   development-integration:
     name: Development integration readiness (owner review still required)
-    if: always()
+    if: always() && (github.event_name == 'workflow_dispatch' || github.head_ref == 'mission-020-foundation-closeout')
     needs: [build, gameplay, digital, audio-output, soak, focused-audio]
     runs-on: ubuntu-24.04
     steps:
@@ -258,7 +259,7 @@ jobs:
         with: {name: foundation-development-integration, path: 'builds/development-*.json', if-no-files-found: error, retention-days: 14}
   promotion:
     name: Release promotion blocked until explicit acceptance
-    if: always()
+    if: always() && (github.event_name == 'workflow_dispatch' || github.head_ref == 'mission-020-foundation-closeout')
     needs: [build, gameplay, digital, audio-output, soak]
     runs-on: ubuntu-24.04
     steps:

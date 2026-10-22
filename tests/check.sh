@@ -89,3 +89,8 @@ ASAN_OPTIONS=detect_leaks=1 "$tmp/arcade_eof"
 python3 -m unittest discover -s tests -p test_public_demo.py -v
 
 python3 -m unittest discover -s tests -p test_release_gates.py -v
+
+# Mission021 pure navigation/catalog contract; existing engine tests above unchanged.
+g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Iinclude tests/ui_navigation.cpp -o "$tmp/ui_navigation"
+ASAN_OPTIONS=detect_leaks=1 "$tmp/ui_navigation"
+python3 -m unittest discover -s tests -p test_ui_metadata.py -v
