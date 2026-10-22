@@ -89,6 +89,13 @@ def run(build,out,tools=None,quick=False):
      if case==22:args+=['--require-recovery']
      with Path(str(pre)+'.ordinary.log').open('w')as f:rc=subprocess.run(args,stdout=f,stderr=subprocess.STDOUT).returncode
      ordinary.append(dict(song=s['index'],difficulty=c['lanes']-3,case=case,exit_code=rc))
+ if not quick and report['passed']:
+  from check_pause_trace import check as check_physical_pause
+  report['physical_pause_edges']=check_physical_pause(binaries['pause-trace'],build/m['rom'],sym,out/'physical-pause-edges')
+  report['performance']=[dict(test=str(p.relative_to(out)),**json.loads(p.read_text()))for p in out.rglob('*.timing.json')]
+  for p in report['performance']:
+   if p['foreground_max']>=280896 or p['defect_frames']or p['underruns']:report['passed']=False
+  report['stack_observations']=[dict(test=str(p.relative_to(out)),user_free=int(f),user_touched=int(t),irq_touched=int(i))for p in out.rglob('stack.log')for f,t,i in re.findall(r'user_free=(\d+) user_touched_from_top=(\d+) irq_touched=(\d+)',p.read_text())]
  report['ordinary_output']=dict(results=ordinary,passed=sum(not x['exit_code']for x in ordinary),total=len(ordinary),release_gate='blocked')
  (out/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
  return report['passed']
