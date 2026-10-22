@@ -17,6 +17,11 @@
 #include "importedSelection.hpp"
 #include "imported_audio.hpp"
 #include "pcmPlayback.hpp"
+#ifdef GBA_MULTI_SONG
+#include "song_collection.hpp"
+EWRAM_DATA static bool activeSongCut=false;
+extern "C" { EWRAM_DATA volatile u32 activeSongIndex=0,activeSongDifficulty=0; }
+#endif
 #include "scoring.hpp"
 #include "scoreDisplay.hpp"
 #include "sustain.hpp"
@@ -60,13 +65,17 @@ static bool difficultyReady=false;
 static NoteScore<imported_note_count> importedScoring;
 EWRAM_DATA static Sustain::Holds<imported_note_count,5> importedHolds(imported_notes,imported_sustain_us);
 static u64 importedLastEnd=0;
+#ifndef GBA_MULTI_SONG
 static u64 importedLastEnds[imported_choice_count]{};
+#endif
 extern "C" {volatile u32 importedReady=0;}
 static void prepareImportedBounds(){
+#ifndef GBA_MULTI_SONG
     for(unsigned c=0;c<imported_choice_count;++c){const auto& chart=imported_choices[c];u64 last=0;
         for(u32 i=0;i<chart.count;++i){const u64 end=chart.notes[i].tick+Sustain::duration(chart.sustains[i]);if(end>last)last=end;}
         importedLastEnds[c]=last;
     }
+#endif
 }
 ScoreSnapshot scoreSnapshot() {
     auto s=importedScoring.snapshot();const auto& h=importedHolds.stats();
@@ -376,7 +385,9 @@ int main(){
             importedScoring.reset(importedChartCount);
             importedHolds.configure(activeImportedNotes,activeImportedSustains,importedChartCount);
             importedNotes.configure(activeImportedNotes,importedChartCount);
+#ifndef GBA_MULTI_SONG
             importedLastEnd=importedLastEnds[difficultySelection];
+#endif
             displayedScore=scoreSnapshot();
             importedSessionState=ImportedCompletion::Playing;feedbackUntilFrame=0;
             importedCompletionDiagnostic=completionWaitFrames=0;
@@ -424,11 +435,26 @@ int main(){
 
     };
     auto beginImported=[&]()->bool{
+#ifdef GBA_MULTI_SONG
+        if(!catalog.valid(ui.song)||ui.song>=collectionSongCount||ui.difficulty>=3)return false;
+        const auto& assets=collectionAssets[ui.song];
+        if(assets.metadata!=&catalog.entries[ui.song]||assets.metadata->assetReference!=ui.song+1||
+           !(assets.metadata->difficulties&(1u<<ui.difficulty)))return false;
+        unsigned chosenIndex=assets.chartCount;
+        for(unsigned i=0;i<assets.chartCount;++i)if(assets.charts[i].lanes==ui.difficulty+3)chosenIndex=i;
+        if(chosenIndex==assets.chartCount)return false;
+        const auto& chosen=assets.charts[chosenIndex];
+        if(!pcmSelect(assets.pcm))return false;
+        activeSongIndex=ui.song;activeSongDifficulty=ui.difficulty;activeSongCut=assets.cut;
+        importedLastEnd=0;
+        for(unsigned i=0;i<chosen.count;++i){const u64 end=chosen.notes[i].tick+Sustain::duration(chosen.sustains[i]);if(end>importedLastEnd)importedLastEnd=end;}
+#else
         if(!catalog.valid(ui.song)||catalog.entries[ui.song].assetReference!=1||ui.difficulty>=3)return false;
         unsigned chosenIndex=imported_choice_count;
         for(unsigned i=0;i<imported_choice_count;++i)if(imported_choices[i].lanes==ui.difficulty+3)chosenIndex=i;
         if(chosenIndex==imported_choice_count)return false;
         const auto& chosen=imported_choices[chosenIndex];
+#endif
         if(!chosen.notes||!chosen.sustains||!chosen.count||chosen.count>imported_note_count)return false;
         difficultySelection=chosenIndex;difficultyReady=true;
         importedLaneCount=chosen.lanes;importedChartCount=chosen.count;
@@ -517,7 +543,10 @@ int main(){
                 importedNotes.update(currentGameFrame,importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount));feedbackDirty=true;
             }
 
-#ifdef GBA_IMPORTED_CUT
+#if defined(GBA_IMPORTED_CUT) || defined(GBA_MULTI_SONG)
+#ifdef GBA_MULTI_SONG
+            if(activeSongCut){
+#endif
             // Only finite cut profiles close pending late windows at real EOF.
             // The normal update above first settles clipped holds at that clock.
             if(imported_audio_enabled && audioState==PcmClock::Ended &&
@@ -528,6 +557,9 @@ int main(){
                 importedScoring.addSustainBonus(importedHolds.update(importedNotes.now(),
                     importedLaneMaskFromButtons(key_is_down(mask),importedLaneCount)));
             }
+#ifdef GBA_MULTI_SONG
+            }
+#endif
 #endif
             importedNowCycles = importedNotes.now();
             importedFirstVisible = importedNotes.firstVisible();
