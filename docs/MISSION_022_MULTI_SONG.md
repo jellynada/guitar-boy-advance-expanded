@@ -57,10 +57,11 @@ comes from allowlisted generation, not title-string scanning.
 The actual-ROM observer checks catalog and active chart/stem addresses against
 the verified manifest, all supported difficulties, full completions, every Results
 action, pause/resume/restart/quit, held confirmation, invalid index and 40
-alternating switches without reboot. It waits for the accepted readiness flag
+launch/quit loops covering changes in both directions without reboot (20
+adjacent cross-song changes in that loop). It waits for the accepted readiness flag
 before observing gameplay initialization. Inherited gameplay, physical chord,
 sustain, graphics, deadline and stack assertions remain in their original probes;
-the adapter changes song menu travel only. Observer symbol aliases never enter
+the adapter changes host menu travel and adds bounded readiness waits. Observer symbol aliases never enter
 the ROM. The exact FIFO oracle retains startup advance15 and no lateness correction.
 
 CI runs the actual collection candidate. Ordinary-output comparisons retain the
@@ -85,3 +86,10 @@ The old pre-navigation OAM identity assertion remains for historical ROMs.
 Gameplay assertions, all original smoke cases and -Werror remain enabled.
 The cartridge-only verifier needs standard-library Python; NumPy synthesis stays
 on the preparation host, outside the pinned compiler image.
+
+## Closeout review
+
+See [technical closeout](M022_CLOSEOUT_REVIEW.md),
+[performance exception proposal](M022_PERFORMANCE_EXCEPTION_PROPOSAL.md) and
+[owner acceptance record](M022_OWNER_ACCEPTANCE.md). The recommendation is not
+owner approval; PR #5 remains draft and unmerged pending explicit decisions.
