@@ -18,3 +18,11 @@ class UiMetadata(unittest.TestCase):
   with tempfile.TemporaryDirectory()as d:
    out=generate(Path(__file__).resolve().parents[1],d)
    s=(out/'pause.c').read_text();self.assertIn('assert(!memcmp(image,pixels,sizeof image))',s);self.assertIn('assert(c->busRead32(c,audioUnderruns)==0)',s);self.assertIn('assert(c->busRead32(c,displayedStats+8)==0)',s)
+
+ def test_public_audio_windows_match_original_gate(self):
+  import ast
+  from tools.test_ui_candidate import PUBLIC_OUTPUT_TIMES
+  original=Path(__file__).resolve().parents[1]/'tools/check_demo_audio.py'
+  literals={n.value for n in ast.walk(ast.parse(original.read_text()))if isinstance(n,ast.Constant)and isinstance(n.value,str)}
+  self.assertEqual(PUBLIC_OUTPUT_TIMES,'6.322,37.5,76.7')
+  self.assertIn(PUBLIC_OUTPUT_TIMES,literals)

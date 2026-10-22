@@ -1,6 +1,8 @@
-# Mission 021 owner GBA playtest
+# Mission 021 owner handheld playtest
 
-Keep the old ROM as a fallback. Use the new M021 ROM on your actual GBA.
+**Recorded owner feedback:** Owner tested Mission021 on an RG SP handheld running mGBA; subjective result was successful (complete success in personal testing). Exact screens/difficulties, emulator version/configuration and ROM hash were not specified. Original GBA hardware certification is still pending.
+
+The following checklist is for future detailed coverage, not a claim that each item was owner-tested. Keep the old ROM as fallback. Use the primary RG SP/mGBA setup for handheld emulation; record original Nintendo GBA tests separately if performed.
 
 - Power on: title,PRESS START,no highway or unwanted music.
 - START once enters Main; holding it must not launch multiple screens.

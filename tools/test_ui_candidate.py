@@ -10,6 +10,8 @@ from tools.release_common import file_hash
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tests'))
 from build_ui_probes import generate
 
+PUBLIC_OUTPUT_TIMES = '6.322,37.5,76.7'  # Original check_demo_audio public reference windows.
+
 def run(build,output,cc='gcc',flags='',output_only=False):
  root=Path(__file__).resolve().parents[1];build=Path(build).resolve();output=Path(output).resolve();m=verify(build);rom=build/m['rom'];prepared=json.loads((build/'prepared/song-manifest.json').read_text());counts=[c['note_heads']for c in prepared['runtime']['difficulties']]
  if len(counts)!=3:raise ValueError('M021 review matrix requires all three supported difficulties')
@@ -50,7 +52,7 @@ def run(build,output,cc='gcc',flags='',output_only=False):
  else:
   observed=json.loads((output/'verification.json').read_text());assert observed['source_commit']==m['source_commit']and observed['rom_sha256']==file_hash(rom)
  # Preserve all 15 original ordinary-output assertions on this candidate.
- audio=[];times=f"6.322,{min(136,prepared['audio']['source_samples']/16384/2)},{min(75.2,prepared['audio']['playback_samples']/16384-.3) if m['profile']=='public' else 265}"
+ audio=[];times=PUBLIC_OUTPUT_TIMES if m['profile']=='public' else f"6.322,{min(136,prepared['audio']['source_samples']/16384/2)},265"
  for d in range(3):
   for case in [19,4,22,0,12]:
    prefix=output/f'difficulty-{d}-case-{case}';cmd=[sys.executable,str(root/'tests/analyze_reactive.py'),'--audio-dir',str(build/'prepared/audio'),'--prefix',str(prefix),'--times',times]
