@@ -5,8 +5,14 @@
 #include "soundbank_bin.h"
 #endif
 #include "imported_audio.hpp"
+#ifdef GBA_MULTI_SONG
+#include "pcmSource.hpp"
+#define imported_audio_bin (activePcm.guitar)
+#define imported_backing_bin (activePcm.backing)
+#else
 #include "imported_audio_bin.h"
 #include "imported_backing_bin.h"
+#endif
 
 volatile u32 audioState=PcmClock::Disabled;
 volatile u32 audioSamplesConsumed=0;

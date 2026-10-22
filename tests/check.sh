@@ -94,3 +94,6 @@ python3 -m unittest discover -s tests -p test_release_gates.py -v
 g++ -std=c++17 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -Iinclude tests/ui_navigation.cpp -o "$tmp/ui_navigation"
 ASAN_OPTIONS=detect_leaks=1 "$tmp/ui_navigation"
 python3 -m unittest discover -s tests -p test_ui_metadata.py -v
+
+# Mission022 explicit collection/profile boundary tests.
+python3 -m unittest discover -s tests -p test_song_collection.py -v

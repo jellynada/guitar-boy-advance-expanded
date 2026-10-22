@@ -8,11 +8,18 @@
 #include "ui_song.hpp"
 #include "build_identity.hpp"
 #include "importedCompletion.hpp"
+#ifdef GBA_MULTI_SONG
+#include "song_collection.hpp"
+#endif
 namespace UiScreens {
 EWRAM_DATA UiNav::Controller controller;
+#ifndef GBA_MULTI_SONG
 static constexpr uint8_t mask(){uint8_t result=0;for(unsigned i=0;i<imported_choice_count;++i)if(imported_choices[i].lanes>=3&&imported_choices[i].lanes<=5)result|=1u<<(imported_choices[i].lanes-3);return result;}
 static const UiNav::Song songs[]={{UI_SONG_ID,UI_SONG_TITLE?UI_SONG_TITLE:imported_title,UI_SONG_ARTIST,imported_audio_source_samples/imported_audio_rate,mask(),true,1}};
 UiNav::Catalog catalog(){return {songs,1};}
+#else
+UiNav::Catalog catalog(){return {collectionCatalog,collectionSongCount};}
+#endif
 void sync(){uiScreen=unsigned(controller.screen);uiCursor=controller.cursor;uiSong=controller.song;uiDifficulty=controller.difficulty;}
 static void centered(unsigned row,const char* value){char bounded[31];UiNav::bounded(bounded,sizeof bounded,value);unsigned n=0;while(bounded[n])++n;ScoreDisplay::line((30-n)/2,row,bounded);}
 static void item(unsigned row,unsigned index,const char* text){ScoreDisplay::line(1,row,controller.cursor==index?">":" ");ScoreDisplay::line(3,row,text);}
@@ -28,7 +35,13 @@ void draw(const ScoreSnapshot& s,unsigned completion,unsigned diagnostic){
  const auto cat=catalog();const auto* song=cat.valid(controller.song)?&cat.entries[controller.song]:nullptr;
  if(screen==Screen::Songs){if(controller.cursor<cat.size())song=&cat.entries[cat.index(controller.cursor)];centered(1,"SELECT A SONG");for(unsigned row=0;row<UiNav::VISIBLE_ROWS;++row){unsigned p=controller.first+row;if(p>=cat.size())break;item(5+row*2,p,cat.entries[cat.index(p)].title);}if(!cat.size())centered(8,"NO PLAYABLE CONTENT");if(song){ScoreDisplay::line(1,15,song->artist?song->artist:"");ScoreDisplay::line(1,16,"DURATION SECONDS:");ScoreDisplay::value(20,16,song->durationSeconds);}ScoreDisplay::line(1,18,"A: SELECT   B: MAIN MENU");return;}
  if(screen==Screen::Difficulty){centered(1,song?song->title:"UNAVAILABLE");centered(3,"CHOOSE DIFFICULTY");if(song){const char* names[]={"EASY  LEFT B A","MEDIUM  L R B A","HARD  L U/D R B A"};for(unsigned i=0;i<UiNav::difficultyCount(song->difficulties);++i)item(7+i*2,i,names[UiNav::difficultyAt(song->difficulties,i)]);}ScoreDisplay::line(1,16,"U/D = UP OR DOWN ALIAS");ScoreDisplay::line(1,18,"A: PLAY   B: SONG SELECT");return;}
- if(screen==Screen::Options){centered(1,"CONTROLS / BUILD INFO");ScoreDisplay::line(1,4,"EASY: LEFT B A");ScoreDisplay::line(1,6,"MEDIUM: LEFT RIGHT B A");ScoreDisplay::line(1,8,"HARD: LEFT UP/DOWN RIGHT B A");ScoreDisplay::line(1,10,"START: PAUSE / RESUME");ScoreDisplay::line(1,11,"PAUSED SELECT: SONG SELECT");ScoreDisplay::line(1,13,"M021 DEVELOPMENT REVIEW");ScoreDisplay::line(1,14,GBA_SOURCE_REVISION);ScoreDisplay::line(1,16,"A: INPUT TEST");
+ if(screen==Screen::Options){centered(1,"CONTROLS / BUILD INFO");ScoreDisplay::line(1,4,"EASY: LEFT B A");ScoreDisplay::line(1,6,"MEDIUM: LEFT RIGHT B A");ScoreDisplay::line(1,8,"HARD: LEFT UP/DOWN RIGHT B A");ScoreDisplay::line(1,10,"START: PAUSE / RESUME");ScoreDisplay::line(1,11,"PAUSED SELECT: SONG SELECT");
+#ifdef GBA_MULTI_SONG
+ ScoreDisplay::line(1,13,"M022 DEVELOPMENT REVIEW");
+#else
+ ScoreDisplay::line(1,13,"M021 DEVELOPMENT REVIEW");
+#endif
+ ScoreDisplay::line(1,14,GBA_SOURCE_REVISION);ScoreDisplay::line(1,16,"A: INPUT TEST");
 #ifndef GBA_PUBLIC_DEMO
  ScoreDisplay::line(1,17,"SELECT: LEGACY DEMO TEST");
 #endif

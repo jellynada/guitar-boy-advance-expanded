@@ -31,6 +31,7 @@ SOURCES		:= $(shell find $(wildcard source) -type d)
 INCLUDES	:= $(shell find $(wildcard include) -type d)
 DATA		:=
 MUSIC		:= music
+COLLECTION_DIR ?=
 GRAPHICS	:= graphics
 
 CSV_DIR		:= data
@@ -41,7 +42,7 @@ CSV_READER	:= csv_reader.exe
 
 CHARTS		:= charts
 CHART_FILES	:= $(wildcard $(CHARTS)/*.chart)
-ifeq ($(BUILD_PROFILE),public-demo)
+ifneq ($(filter public-demo collection-public collection-private,$(BUILD_PROFILE)),)
 MUSIC :=
 CHART_FILES :=
 endif
@@ -70,6 +71,11 @@ CFLAGS	:=	-g -Wall -O2\
 CFLAGS	+=	$(INCLUDE)
 ifeq ($(BUILD_PROFILE),public-demo)
 CFLAGS += -DGBA_PUBLIC_DEMO
+endif
+
+ifneq ($(strip $(COLLECTION_DIR)),)
+CFLAGS += -DGBA_MULTI_SONG -DGBA_PUBLIC_DEMO
+DATA :=
 endif
 
 CXXFLAGS	:=	$(CFLAGS) -std=gnu++17 -fno-rtti -fno-exceptions
@@ -120,7 +126,11 @@ ifneq ($(strip $(MUSIC)),)
 	BINFILES += soundbank.bin
 endif
 
+ifeq ($(strip $(COLLECTION_DIR)),)
 BINFILES += imported_audio.bin imported_backing.bin
+else
+BINFILES += $(notdir $(wildcard $(COLLECTION_DIR)/audio/*.bin))
+endif
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -144,7 +154,7 @@ export OFILES_GRAPHICS := $(PNGFILES:.png=.o)
 
 export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(OFILES_GRAPHICS)
 
-export HFILES := ui_song.hpp build_identity.hpp imported_chart.hpp imported_audio.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
+export HFILES := $(if $(COLLECTION_DIR),song_collection.hpp) ui_song.hpp build_identity.hpp imported_chart.hpp imported_audio.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -160,6 +170,7 @@ $(CHART_READER): bin/chart_reader.cpp
 
 # The default is original synthetic data. Private adapted headers are opt-in.
 .PHONY: runtime_input
+ifeq ($(strip $(COLLECTION_DIR)),)
 $(BUILD)/ui_song.hpp: runtime_input tools/write_song_ui.py $(SONG_METADATA)
 	$(PYTHON) tools/write_song_ui.py --profile "$(BUILD_PROFILE)" --output $@ $(if $(SONG_METADATA),--metadata "$(SONG_METADATA)")
 
@@ -172,12 +183,26 @@ $(BUILD)/imported_chart.hpp: runtime_input tools/prepare_runtime.py tools/adapt_
 $(BUILD)/imported_audio.bin $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.hpp &: runtime_input $(BUILD)/imported_chart.hpp tools/build_audio.py tools/audio_prepare.py tools/reactive_prepare.py
 	$(PYTHON) tools/build_audio.py --output-dir $(BUILD) $(if $(AUDIO_DIR),--audio-dir "$(AUDIO_DIR)") $(if $(IMPORTED_HEADER),--private-chart)
 
-$(BUILD): $(BUILD)/ui_song.hpp $(BUILD)/build_identity.hpp $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+else
+$(BUILD)/imported_chart.hpp $(BUILD)/imported_audio.hpp $(BUILD)/ui_song.hpp $(BUILD)/song_collection.hpp &: runtime_input
+	@mkdir -p $(BUILD)
+	@cp $(COLLECTION_DIR)/imported_chart.hpp $(COLLECTION_DIR)/imported_audio.hpp $(COLLECTION_DIR)/ui_song.hpp $(COLLECTION_DIR)/song_collection.hpp $(COLLECTION_DIR)/audio/*.bin $(BUILD)/
+$(BUILD)/build_identity.hpp: runtime_input tools/write_build_identity.py
+	$(PYTHON) tools/write_build_identity.py --profile "$(BUILD_PROFILE)" --revision "$(SOURCE_REVISION)" --output $@
+endif
+
+$(BUILD): $(if $(COLLECTION_DIR),$(BUILD)/song_collection.hpp) $(BUILD)/ui_song.hpp $(BUILD)/build_identity.hpp $(if $(COLLECTION_DIR),,$(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin) $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
+ifeq ($(strip $(COLLECTION_DIR)),)
 	@$(PYTHON) tools/validate_holds.py $(BUILD)/imported_chart.hpp --audio-header $(BUILD)/imported_audio.hpp
+endif
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@$(PYTHON) tools/check_rom_size.py "$(OUTPUT).gba"
+ifeq ($(strip $(COLLECTION_DIR)),)
 	@$(PYTHON) tools/verify_build.py "$(OUTPUT).gba" "$(OUTPUT).elf" --header $(BUILD)/imported_chart.hpp
+else
+	@$(PYTHON) tools/song_collection.py --output "$(COLLECTION_DIR)" --verify-rom "$(OUTPUT).gba" --elf "$(OUTPUT).elf" --revision "$(SOURCE_REVISION)"
+endif
 
 #---------------------------------------------------------------------------------
 clean:
