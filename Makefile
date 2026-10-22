@@ -48,6 +48,7 @@ endif
 CHART_SFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.s,$(CHART_FILES))
 CHART_HFILES	:= $(patsubst $(CHARTS)/%.chart,$(BUILD)/%.h,$(CHART_FILES))
 PYTHON ?= python3
+SONG_METADATA ?=
 AUDIO_DIR ?=
 IMPORTED_HEADER ?=
 BUILD_PROFILE ?= $(if $(IMPORTED_HEADER),legacy,public-synthetic)
@@ -143,7 +144,7 @@ export OFILES_GRAPHICS := $(PNGFILES:.png=.o)
 
 export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(OFILES_GRAPHICS)
 
-export HFILES := build_identity.hpp imported_chart.hpp imported_audio.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
+export HFILES := ui_song.hpp build_identity.hpp imported_chart.hpp imported_audio.hpp $(addsuffix .h,$(subst .,_,$(BINFILES))) $(PNGFILES:.png=.h)
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -159,6 +160,9 @@ $(CHART_READER): bin/chart_reader.cpp
 
 # The default is original synthetic data. Private adapted headers are opt-in.
 .PHONY: runtime_input
+$(BUILD)/ui_song.hpp: runtime_input tools/write_song_ui.py $(SONG_METADATA)
+	$(PYTHON) tools/write_song_ui.py --profile "$(BUILD_PROFILE)" --output $@ $(if $(SONG_METADATA),--metadata "$(SONG_METADATA)")
+
 $(BUILD)/build_identity.hpp: runtime_input tools/write_build_identity.py
 	$(PYTHON) tools/write_build_identity.py --profile "$(BUILD_PROFILE)" --revision "$(SOURCE_REVISION)" --output $@
 
@@ -168,7 +172,7 @@ $(BUILD)/imported_chart.hpp: runtime_input tools/prepare_runtime.py tools/adapt_
 $(BUILD)/imported_audio.bin $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.hpp &: runtime_input $(BUILD)/imported_chart.hpp tools/build_audio.py tools/audio_prepare.py tools/reactive_prepare.py
 	$(PYTHON) tools/build_audio.py --output-dir $(BUILD) $(if $(AUDIO_DIR),--audio-dir "$(AUDIO_DIR)") $(if $(IMPORTED_HEADER),--private-chart)
 
-$(BUILD): $(BUILD)/build_identity.hpp $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
+$(BUILD): $(BUILD)/ui_song.hpp $(BUILD)/build_identity.hpp $(BUILD)/imported_backing.bin $(BUILD)/imported_audio.bin $(BUILD)/imported_audio.hpp $(BUILD)/imported_chart.hpp $(BUILD)/note.h $(CSV_SFILES) $(CSV_HFILES) $(CHART_SFILES) $(CHART_HFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(PYTHON) tools/validate_holds.py $(BUILD)/imported_chart.hpp --audio-header $(BUILD)/imported_audio.hpp
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile

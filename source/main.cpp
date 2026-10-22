@@ -6,6 +6,7 @@
 #include "mode7.hpp"
 #include "scanline.hpp"
 #include "playTransport.hpp"
+#include "uiScreens.hpp"
 #include "build_identity.hpp"
 #include "noteManager.hpp"
 #include "sprite.hpp"
@@ -344,142 +345,17 @@ int main(){
     //Setup is done. Lets put it into action!
     //Terminal::log("Hello World! %%", careless_expertsingle_data[0].tick);
     // Audio starts after a mode is chosen.
-    textDisplay menuTitle(28, 28, 16, true, 24);
-    textDisplay menuOriginal(16, 58, 48);
-    textDisplay menuImported(16, 82, 64, true, 24);
-    textDisplay menuDiagnostic(16, 106, 88, true, 24);
-    textDisplay menuHelp(16, 128, 112, true, 16);
-    textDisplay menuInfo(16, 146, 0);
-    textDisplay modeLabel(4, 40, 96);
-    int selection =
-#ifdef GBA_PUBLIC_DEMO
-    2;
-#else
-    1;
-#endif
-    bool menuDirty = true;
-    bool selectorControlsArmed = true;
-
-    while(1){
-        // Poll first: judge the newly observed input, not last frame's keys.
-        key_poll();
-        if(gameMode!=2)importedReady=0;
-        if(gameMode==4){
-            if(!selectorControlsArmed){if(key_is_down(KEY_A|KEY_START|KEY_SELECT|KEY_B)){vid_vsync();continue;}selectorControlsArmed=true;}
-            if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;difficultyReady=false;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
-            if(key_hit(KEY_DOWN)){difficultySelection=(difficultySelection+1)%imported_choice_count;menuDirty=true;}
-            if(key_hit(KEY_UP)){difficultySelection=(difficultySelection+imported_choice_count-1)%imported_choice_count;menuDirty=true;}
-            if(menuDirty){
-                oam_init(oam_mem,128);
-                menuTitle.updateText("DIFFICULTY");menuInfo.updateText(imported_title);
-                menuOriginal.updateText(imported_choice_count>0?(difficultySelection==0?">":" "):"");
-                menuImported.updateText("");menuDiagnostic.updateText("");
-                textDisplay* rows[]={&menuOriginal,&menuImported,&menuDiagnostic};
-                for(unsigned i=0;i<imported_choice_count;++i){char label[16];unsigned j=0;label[j++]=i==difficultySelection?'>':' ';const char* name=imported_choices[i].difficulty;while(*name&&j<15)label[j++]=*name++;label[j]=0;
-#ifdef GBA_PUBLIC_DEMO
-                    rows[i]->updateText(i==0?(difficultySelection==0?">Easy LEFT B A":" Easy LEFT B A"):i==1?(difficultySelection==1?">Medium L R B A":" Medium L R B A"):(difficultySelection==2?">Hard L U/D R B A":" Hard L U/D R B A"));
-#else
-                    rows[i]->updateText(label);
-#endif
-                }
-#ifdef GBA_PUBLIC_DEMO
-                menuHelp.updateText("A:Play B:Back");
-#else
-                menuHelp.updateText("A:Choose B:Back");
-#endif
-#ifdef GBA_PUBLIC_DEMO
-                if(difficultySelection==2)menuInfo.updateText("U/D=Up or Down");
-#endif
-                menuDirty=false;
-            }
-            if(!key_hit(KEY_A|KEY_START)){vid_vsync();continue;}
-            const auto& chosen=imported_choices[difficultySelection];
-            importedLaneCount=chosen.lanes;importedChartCount=chosen.count;activeImportedNotes=chosen.notes;activeImportedSustains=chosen.sustains;
-            difficultyReady=true;gameMode=0;selection=2;
-        }
-        const auto systemCommand=gameMode==2&&importedSessionState==ImportedCompletion::Playing
-            ?importedTransport.poll(key_is_down(KEY_START|KEY_SELECT)):PlayTransport::Command::None;
-        const bool oldExitChord=gameMode&&(gameMode!=2||importedSessionState!=ImportedCompletion::Playing)&&
-            key_is_down(KEY_START|KEY_SELECT)==(KEY_START|KEY_SELECT);
-        if (oldExitChord||systemCommand==PlayTransport::Command::Exit) {
-            importedTransport.apply(PlayTransport::Command::Exit);
-            importedTransport.reset();
-            selectorControlsArmed=false; // Require release after exit before another start.
-            Scanline::stop();
-            mmStop();
-            pcmStop();
-            importedSessionState=ImportedCompletion::Playing;
-            irq_enable(II_HBLANK);
-            ScoreDisplay::clear();
-            gameClockRunning = false;
-            importedReady=0;gameMode = 0;difficultyReady=false;
-            menuDirty = true;
-            oam_init(oam_mem, 128);
-            vid_vsync(); continue; // Return chord must not also confirm the selector.
-        }
-        if(gameMode==2&&importedTransport.phase==PlayTransport::Phase::Paused) {
-            if(systemCommand!=PlayTransport::Command::Resume){vid_vsync();Scanline::vblank();continue;}
-            // UI changes are made in VBlank while audio/time are still frozen.
-            vid_vsync();Scanline::vblank();ScoreDisplay::pauseHide();
-            const u8 held=importedLaneMaskFromButtons(key_is_down(importedGameButtons(importedLaneCount)),importedLaneCount);
-            importedNotes.judgment().seedInput(held);
-            importedHolds.resumeInput(importedNowCycles,held);
-            for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,held&(1u<<lane));
-            const bool resumed=!imported_audio_enabled||pcmResume();
-            importedTransport.apply(PlayTransport::Command::Resume);
-            ++importedResumeCount;gameClockRunning=resumed;feedbackDirty=true;
-        }
-        if(gameMode==2&&importedSessionState!=ImportedCompletion::Playing) {
-            if(key_hit(KEY_B|KEY_SELECT)) {
-                Scanline::stop();pcmStop();importedTransport.reset();gameMode=0;difficultyReady=false;gameClockRunning=false;menuDirty=true;
-                importedSessionState=ImportedCompletion::Playing;irq_enable(II_HBLANK);
-                oam_init(oam_mem,128);ScoreDisplay::clear();
-            } else if(key_hit(KEY_A|KEY_START)) {
-                Scanline::stop();pcmStop();gameMode=0;selection=2; // reuse the existing fresh-mode initialization below
-            } else {vid_vsync();continue;}
-        }
-        if(gameMode==3) {
-            if(InputDiagnostic::finished()) {
-                if(key_hit(KEY_B|KEY_SELECT)){gameMode=0;menuDirty=true;gameClockRunning=false;irq_enable(II_HBLANK);oam_init(oam_mem,128);ScoreDisplay::clear();}
-                else if(key_hit(KEY_A|KEY_START)){gameplayFrames=0;InputDiagnostic::start(easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));}
-            }
-            if(gameMode==3){vid_vsync();InputDiagnostic::update(gameplayFrames,easyLaneMaskFromButtons(key_is_down(EASY_GAME_BUTTONS)));continue;}
-        }
-        if (!gameMode) {
-#ifdef GBA_PUBLIC_DEMO
-            if(key_hit(KEY_DOWN|KEY_UP)){selection=selection==2?3:2;menuDirty=true;}
-#else
-            if (key_hit(KEY_DOWN)) { selection=selection%3+1;menuDirty=true; }
-            if (key_hit(KEY_UP)) { selection=(selection+1)%3+1;menuDirty=true; }
-#endif
-            if (menuDirty) {
-                oam_init(oam_mem,128);
-                REG_DISPCNT = DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE1;
-                menuTitle.updateText(GBA_BUILD_TITLE);
-#ifdef GBA_PUBLIC_DEMO
-                menuOriginal.updateText(selection==2?">Copper Circuit":" Copper Circuit");
-                menuImported.updateText(selection==3?">Controls / Help":" Controls / Help");
-                menuDiagnostic.updateText("EXPANDED RC2");
-#else
-                menuOriginal.updateText(selection == 1 ? ">Original Demo" : " Original Demo");
-                menuImported.updateText(selection == 2 ? ">Custom song" : " Custom song");
-                menuDiagnostic.updateText(selection == 3 ? ">INPUT / CHORD TEST" : " INPUT / CHORD TEST");
-#endif
-                menuHelp.updateText("Up/Down A:Start");
-#ifdef GBA_PUBLIC_DEMO
-                menuInfo.updateText("Original / 75s");
-#else
-                menuInfo.updateText(imported_audio_enabled ? imported_is_synthetic ? "SYNTH / AUDIO" : "LOCAL / AUDIO" : "SILENT FALLBACK");
-#endif
-                pal_bg_mem[0] = 0;
-                menuDirty = false;
-            }
-            if(!selectorControlsArmed){
-                if(key_is_down(KEY_START|KEY_SELECT|KEY_A)){vid_vsync();continue;}
-                selectorControlsArmed=true;
-            }
-            if (!key_hit(KEY_A | KEY_START)) { vid_vsync(); continue; }
-            if(selection==2&&!difficultyReady){gameMode=4;menuDirty=true;selectorControlsArmed=false;vid_vsync();continue;}
+    using UiNav::Screen;
+    using UiNav::Action;
+    auto& ui=UiScreens::controller;
+    const auto catalog=UiScreens::catalog();
+    auto leaveScene=[&](){
+        Scanline::stop();mmStop();pcmStop();importedTransport.reset();
+        gameClockRunning=false;importedReady=0;gameMode=0;difficultyReady=false;
+        irq_disable(II_HBLANK);REG_TM3CNT=0;
+        oam_init(oam_mem,128);ScoreDisplay::clear();
+    };
+    auto beginMode=[&](unsigned selection){
             Scanline::stop();
             importedReady=0;
             // Fresh mode epoch: counters, camera, visuals and held-key history.
@@ -543,8 +419,81 @@ int main(){
             gameplayFrames=0; gameClockRunning=true;
             REG_IME=startIrq;
             REG_TM3CNT=0; REG_TM3D=0; REG_TM3CNT=TM_ENABLE|1; // profile at64CPUcycles/tick
-            modeLabel.updateText("");
-            if(gameMode==3){vid_vsync();continue;}
+
+
+
+    };
+    auto beginImported=[&]()->bool{
+        if(!catalog.valid(ui.song)||catalog.entries[ui.song].assetReference!=1||ui.difficulty>=3)return false;
+        unsigned chosenIndex=imported_choice_count;
+        for(unsigned i=0;i<imported_choice_count;++i)if(imported_choices[i].lanes==ui.difficulty+3)chosenIndex=i;
+        if(chosenIndex==imported_choice_count)return false;
+        const auto& chosen=imported_choices[chosenIndex];
+        if(!chosen.notes||!chosen.sustains||!chosen.count||chosen.count>imported_note_count)return false;
+        difficultySelection=chosenIndex;difficultyReady=true;
+        importedLaneCount=chosen.lanes;importedChartCount=chosen.count;
+        activeImportedNotes=chosen.notes;activeImportedSustains=chosen.sustains;
+        beginMode(2);UiScreens::sync();return true;
+    };
+    leaveScene();ui.enter(Screen::Title,0);UiScreens::draw(displayedScore,0,0);
+    while(1){
+        key_poll();const u16 held=key_is_down(KEY_ANY);
+        if(gameMode!=2)importedReady=0;
+        const auto systemCommand=gameMode==2&&importedSessionState==ImportedCompletion::Playing
+            ?importedTransport.poll(held&(KEY_START|KEY_SELECT)):PlayTransport::Command::None;
+        if((gameMode==2&&systemCommand==PlayTransport::Command::Exit)||
+           ((gameMode==1||gameMode==3)&&(held&(KEY_START|KEY_SELECT))==(KEY_START|KEY_SELECT))){
+            const bool wasTest=gameMode!=2;leaveScene();importedSessionState=ImportedCompletion::Playing;
+            if(wasTest)ui.enter(Screen::Options,held);else ui.songs(catalog,held);
+            vid_vsync();UiScreens::draw(displayedScore,0,0);continue;
+        }
+        if(ui.screen==Screen::Pause){
+            const unsigned previous=ui.cursor;
+            const auto action=systemCommand==PlayTransport::Command::Resume?Action::Resume:ui.poll(catalog,held);
+            if(action==Action::Resume){
+                // Accepted resume sequence: frozen VBlank restore, then physical held-key seeding.
+                vid_vsync();Scanline::vblank();ScoreDisplay::pauseHide();
+                const u8 lanes=importedLaneMaskFromButtons(held&importedGameButtons(importedLaneCount),importedLaneCount);
+                importedNotes.judgment().seedInput(lanes);importedHolds.resumeInput(importedNowCycles,lanes);
+                for(unsigned lane=0;lane<importedLaneCount;++lane)drawButton(lane,lanes&(1u<<lane));
+                const bool resumed=!imported_audio_enabled||pcmResume();
+                importedTransport.apply(PlayTransport::Command::Resume);
+                ++importedResumeCount;gameClockRunning=resumed;feedbackDirty=true;
+                ui.enter(Screen::Playing,held);UiScreens::sync();
+            }else if(action==Action::Restart){
+                leaveScene();ui.enter(Screen::Playing,held);if(!beginImported())ui.songs(catalog,held);
+            }else if(action==Action::Quit){
+                leaveScene();ui.songs(catalog,held);vid_vsync();UiScreens::draw(displayedScore,0,0);continue;
+            }else{vid_vsync();Scanline::vblank();if(previous!=ui.cursor)UiScreens::draw(displayedScore,0,0);continue;}
+        }
+        if(gameMode==3){
+            if(InputDiagnostic::finished()){
+                if(key_hit(KEY_B|KEY_SELECT)){leaveScene();ui.enter(Screen::Options,held);vid_vsync();UiScreens::draw(displayedScore,0,0);continue;}
+                if(key_hit(KEY_A|KEY_START)){gameplayFrames=0;InputDiagnostic::start(easyLaneMaskFromButtons(held));}
+            }
+            vid_vsync();InputDiagnostic::update(gameplayFrames,easyLaneMaskFromButtons(held));continue;
+        }
+        if(ui.screen!=Screen::Playing&&ui.screen!=Screen::Legacy){
+            const auto previous=ui.screen;const unsigned previousCursor=ui.cursor;
+            const auto action=ui.poll(catalog,held,
+#ifdef GBA_PUBLIC_DEMO
+                false
+#else
+                true
+#endif
+            );
+            if(action==Action::Start||action==Action::Restart){
+                if(action==Action::Restart)ui.enter(Screen::Playing,held);
+                leaveScene();if(!beginImported()){ui.songs(catalog,held);vid_vsync();UiScreens::draw(displayedScore,0,0);continue;}
+            }else if(action==Action::Diagnostic||action==Action::Legacy){
+                ui.enter(action==Action::Diagnostic?Screen::Diagnostic:Screen::Legacy,held);
+                beginMode(action==Action::Diagnostic?3:1);UiScreens::sync();
+                if(gameMode==3){vid_vsync();continue;}
+            }else{
+                if(action==Action::Quit)leaveScene();
+                vid_vsync();if(action==Action::Quit||previous!=ui.screen||previousCursor!=ui.cursor)UiScreens::draw(displayedScore,importedSessionState,importedCompletionDiagnostic);
+                continue;
+            }
         }
         bool pauseNow=false;
         if(gameMode==2&&systemCommand==PlayTransport::Command::Pause){
@@ -604,7 +553,7 @@ int main(){
                 importedReady=0;importedTransport.finish();
                 gameClockRunning=false;Scanline::stop();irq_disable(II_HBLANK);oam_init(oam_mem,128);
                 pal_bg_mem[0]=0;REG_BLDCNT=0;REG_DISPCNT=DCNT_BG1|DCNT_MODE0;
-                ScoreDisplay::results(displayedScore,imported_title,importedSessionState,importedCompletionDiagnostic);
+                irq_disable(II_TIMER1);REG_IF=IRQ_TIMER1;REG_TM3CNT=0;ui.enter(Screen::Results,held);UiScreens::draw(displayedScore,importedSessionState,importedCompletionDiagnostic);
                 vid_vsync();continue;
             }
             } // No end-of-song transition during a successful freeze.
@@ -649,7 +598,7 @@ int main(){
         Scanline::vblank();
         if(gameMode==2)importedReady=1; // First completed table committed; initialization is over.
         if(pauseNow){
-            ScoreDisplay::pauseShow();
+            ui.enter(Screen::Pause,held);UiScreens::draw(displayedScore,0,0);
             importedTransport.apply(PlayTransport::Command::Pause);++importedPauseCount;
         }
     }

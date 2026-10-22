@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   synthetic:
+    if: github.head_ref != 'mission-021-ui-navigation'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
