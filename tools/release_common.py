@@ -10,7 +10,7 @@ import zipfile
 PUBLIC_DIRS = {'bin', 'charts', 'docs', 'graphics', 'imports', 'include',
                'music', 'scripts', 'source', 'tests', 'tools'}
 PUBLIC_WORKFLOWS = {'.github/workflows/foundation.yml', '.github/workflows/public-demo.yml',
-                    '.github/workflows/m020-closeout.yml', '.github/workflows/m021-ui.yml'}
+                    '.github/workflows/m020-closeout.yml', '.github/workflows/m021-ui.yml', '.github/workflows/m022-collection.yml'}
 PUBLIC_DEMO_DELIVERY = {'public-demo-downloads/' + n for n in (
     'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.gba',
     'Guitar-Boy-Advance-Expanded-v0.1.0-alpha-RC1.zip', 'DELIVERY.json', 'SHA256SUMS.txt',

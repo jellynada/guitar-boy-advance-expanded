@@ -1,0 +1,74 @@
+name: Mission 022 actual multi-song cartridge
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [mission-022-multi-song]
+permissions:
+  contents: read
+concurrency:
+  group: m022-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: M022 host sanitizers and actual public collection
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', fetch-depth: 0, persist-credentials: false}
+      - run: sudo apt-get update && sudo apt-get install -y g++ ffmpeg python3-numpy libmgba-dev
+      - run: bash tests/check.sh
+      - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Build actual two-song candidate from committed source
+        run: |
+          python3 tools/build_collection.py --spec tests/fixtures/collection/public.json
+          mkdir -p builds/m022-delivery
+          candidate="$(cat builds/m022-candidates/public/LATEST.txt)"
+          cp -r "$candidate" builds/m022-delivery/result
+          rm -rf builds/m022-delivery/result/engine
+          rm -rf builds/m022-delivery/result/assets/packages/composition-*
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: m022-public-collection, path: builds/m022-delivery, if-no-files-found: error, retention-days: 14}
+  candidate:
+    name: M022 actual switching gameplay resources and digital FIFO
+    needs: build
+    runs-on: ubuntu-24.04
+    container: debian:bookworm-slim
+    timeout-minutes: 50
+    steps:
+      - run: apt-get update && apt-get install -y git gcc libmgba-dev python3-numpy ffmpeg
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m022-public-collection, path: builds/m022-delivery}
+      - run: python3 tools/test_collection.py --build builds/m022-delivery/result --output builds/m022-evidence
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m022-public-evidence
+          path: |
+            builds/m022-evidence/**/*.json
+            builds/m022-evidence/**/*.log
+            builds/m022-evidence/multi*.ppm
+          if-no-files-found: error
+          retention-days: 14
+  strict-output:
+    name: M022 strict ordinary-output RELEASE gate (no waiver)
+    needs: candidate
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: m022-public-evidence, path: evidence}
+      - name: All existing strict windows and all packaged cases must pass
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('evidence/verification.json').read_text())
+          a=r['ordinary_output']
+          print(json.dumps(a,indent=2))
+          assert r['passed'], 'Development regression blocks integration'
+          assert a['total']==20 and a['passed']==20, 'Strict ordinary-output failure blocks formal release'
+          PY

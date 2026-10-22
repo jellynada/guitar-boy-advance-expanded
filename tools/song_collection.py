@@ -86,7 +86,7 @@ def generate_collection(spec,out):
    verify_prepared(e['prepared']);shutil.copytree(e['prepared'],folder)
    meta=json.loads((folder/'normalized-song.json').read_text())['metadata']
    title=meta['Name'];artist=meta.get('Artist','');provenance='owner-local-verified-prepared'
-  if not all(isinstance(s,str)and 0<len(s)<=127 and all(32<=ord(c)<=126 for c in s)for s in [title])or not isinstance(artist,str)or len(artist)>127:raise ValueError('Invalid metadata')
+  if not isinstance(title,str)or not 0<len(title)<=127 or not isinstance(artist,str)or len(artist)>127 or any(not 32<=ord(c)<=126 for c in title+artist):raise ValueError('Invalid metadata')
   text,a,counts=inspect_package(folder)
   prefix='s'+str(i)+'_'
   renamed=re.sub(r'\b(?:imported_|chart_)\w+',lambda m:prefix+m[0],text)
@@ -103,6 +103,7 @@ def generate_collection(spec,out):
    target='s'+str(i)+'_'+role+'.bin';shutil.copyfile(folder/'audio'/name,out/'audio'/target)
    inventory[role]=dict(file=target,symbol=target.replace('.','_'),bytes=(out/'audio'/target).stat().st_size,sha256=sha(out/'audio'/target))
   songs.append(dict(index=i,id=e['id'],title=title,artist=artist,provenance=provenance,source_samples=a['source_samples'],playback_samples=a['playback_samples'],storage_samples=inventory['guitar']['bytes'],sample_rate=RATE,difficulty_mask=mask,charts=counts,cut='GBA_IMPORTED_CUT'in text,chart_header_sha256=sha(folder/'imported_chart.hpp'),audio=inventory,package_inventory={p.relative_to(folder).as_posix():sha(p)for p in folder.rglob('*')if p.is_file()}))
+ for song in songs: song['manifest_identity']=hashlib.sha256(json.dumps(song,sort_keys=True,separators=(',',':')).encode()).hexdigest()
  total=sum(x['bytes']for s in songs for x in s['audio'].values())
  if total>=LIMIT:raise ValueError('Song payload exceeds cartridge limit')
  chart='#pragma once\n#include "note.h"\n#include "importedChoice.hpp"\n#include <cstdint>\n'+'\n'.join(headers)
@@ -118,7 +119,7 @@ def generate_collection(spec,out):
  for s in songs:cpp+='{'+','.join([json.dumps(s['id']),json.dumps(s['title']),json.dumps(s['artist']),str(s['source_samples']//RATE),str(s['difficulty_mask']),'true',str(s['index']+1)])+'},\n'
  cpp+='};\ninline const SongAssets collectionAssets[]={\n'
  for s in songs:
-  i=s['index'];cpp+='{&collectionCatalog['+str(i)+'],s'+str(i)+'_imported_choices,'+str(len(s['charts']))+',{'+s['audio']['guitar']['symbol']+','+s['audio']['backing']['symbol']+','+str(s['source_samples'])+','+str(s['playback_samples'])+','+str(s['storage_samples'])+'},'+str(s['cut']).lower()+','+json.dumps(s['chart_header_sha256'])+'},\n'
+  i=s['index'];cpp+='{&collectionCatalog['+str(i)+'],s'+str(i)+'_imported_choices,'+str(len(s['charts']))+',{'+s['audio']['guitar']['symbol']+','+s['audio']['backing']['symbol']+','+str(s['source_samples'])+','+str(s['playback_samples'])+','+str(s['storage_samples'])+'},'+str(s['cut']).lower()+','+json.dumps(s['manifest_identity'])+'},\n'
  cpp+='};\ninline constexpr unsigned collectionSongCount='+str(len(songs))+';\n'
  (out/'song_collection.hpp').write_text(cpp)
  manifest=dict(schema='gba-collection-assets-v1',profile=spec['profile'],song_count=len(songs),maximum_chart_heads=max_count,pcm_payload_bytes=total,songs=songs)
@@ -130,6 +131,10 @@ def verify_rom(folder,rom,elf,revision):
  prefix=str(Path(os.environ['DEVKITARM'])/'bin/arm-none-eabi-')
  sy=subprocess.check_output([prefix+'nm','-S',str(elf)],text=True)
  symbols={n:(int(a,16),int(size,16))for a,size,t,n in re.findall(r'^(\w+)\s+(\w+)\s+(\w)\s+(\S+)$',sy,re.M)}
+ for addr,kind,name in re.findall(r'^(\w+)\s+(\w)\s+(\S+)$',sy,re.M):
+  if name.endswith('_bin'):
+   end=re.search(r'^([0-9a-fA-F]+)\s+\w\s+'+re.escape(name)+'_end$',sy,re.M)
+   if end:symbols[name]=(int(addr,16),int(end[1],16)-int(addr,16))
  def embedded(symbol,expected):
   if symbol not in symbols:raise ValueError('Missing asset symbol: '+symbol)
   addr,size=symbols[symbol];offset=addr-0x08000000

@@ -24,7 +24,7 @@ def build(root,spec,native=False):
   else:
    # The volume contains only the audited source and explicitly selected packages.
    shutil.copytree(job/'assets',work/'collection-input')
-   flags=[f for f in flags if not f.startswith('COLLECTION_DIR=')]+['COLLECTION_DIR=collection-input']
+   flags=[f for f in flags if not f.startswith('COLLECTION_DIR=')]+['COLLECTION_DIR=/workspace/guitar-boy-advance-expanded/collection-input']
    subprocess.run(['bash','scripts/build-docker.sh',*flags],cwd=work,stdout=log,stderr=subprocess.STDOUT,check=True)
  for ext in ['.gba','.elf']:shutil.copy2(work/(target+ext),job/(target+ext))
  if native:
