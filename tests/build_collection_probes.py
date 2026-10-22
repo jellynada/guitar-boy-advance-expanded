@@ -17,5 +17,14 @@ def generate(root,out):
  for p in out.glob('*.c'):
   s=p.read_text().replace('static void m021Songs(','static void m021SongsBase(',1)
   at=s.index('static void m021Difficulty(');s=s[:at]+WRAPPER+s[at:]
+  wait='for(unsigned init=0;!c->busRead32(c,collectionSymbol(sy,"importedReady"));++init){assert(init<16);m021Frame(c,0);}'
+  if p.name in ['pause.c','stress.c']:
+   old='step(c,1);step(c,0);assert(c->busRead32(c,gameMode)==2);'
+   assert old in s
+   s=s.replace(old,'step(c,1);step(c,0);'+wait+'assert(c->busRead32(c,gameMode)==2);')
+  if p.name=='timing.c':
+   old='selectDefaultDifficulty(c,mode);chart='
+   assert old in s
+   s=s.replace(old,'selectDefaultDifficulty(c,mode);'+wait.replace('collectionSymbol(sy,','collectionSymbol(syms,')+'chart=')
   p.write_text(s)
  return out

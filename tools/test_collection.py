@@ -25,7 +25,6 @@ def run(build,out,tools=None,quick=False):
  for s in m['songs']:
   for c in s['charts']:
    row=[s['index'],c['lanes']-3,c['count'],s['playback_samples']]
-   row+=' '.join([]).split()
    line=' '.join(map(str,row))+' '+' '.join(format(x,'x')for x in [0x08000000+c['notes_rom_offset'],0x08000000+c['holds_rom_offset'],0x08000000+s['audio']['guitar']['rom_offset'],0x08000000+s['audio']['backing']['rom_offset']])+' '+str(s['source_samples'])+' '+str(s['storage_samples'])
    rows.append(line)
  (out/'matrix.txt').write_text('\n'.join(rows)+'\n')

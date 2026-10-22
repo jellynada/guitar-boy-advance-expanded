@@ -1,4 +1,5 @@
 #include <mgba/core/core.h>
+#include <mgba/core/timing.h>
 #include <mgba/core/log.h>
 #include <mgba/core/blip_buf.h>
 #include <assert.h>
@@ -26,8 +27,9 @@ static void startRow(struct mCore*c,const struct Row*r,const char*sy){
  unsigned mask=c->busRead32(c,symbol(sy,"collectionCatalog")+r->song*20+16)&255;
  unsigned position=0;for(unsigned d=0;d<r->difficulty;++d)position+=!!(mask&(1u<<d));
  for(unsigned n=0;c->busRead32(c,cursor)!=position;++n){assert(n<3);press(c,128);}
- step(c,0);step(c,1);
+ step(c,0);uint64_t transitionBegin=mTimingGlobalTime(c->timing);step(c,1);
  for(unsigned n=0;n<16&&!c->busRead32(c,ready);++n)step(c,1);
+ printf("TRANSITION song=%u difficulty=%u cycles_to_ready_frame=%llu\n",r->song,r->difficulty,(unsigned long long)(mTimingGlobalTime(c->timing)-transitionBegin));
  expect(c,4);
  assert(c->busRead32(c,ready)&&c->busRead32(c,mode)==2);
  assert(c->busRead32(c,symbol(sy,"activeSongIndex"))==r->song);
