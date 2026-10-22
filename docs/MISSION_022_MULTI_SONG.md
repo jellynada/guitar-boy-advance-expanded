@@ -78,3 +78,10 @@ Rollback before merge is to retain the accepted baseline and leave this branch
 unmerged. If a future normal merge is separately approved, revert that merge with
 git revert -m 1 MERGE_SHA on a rollback branch, test, and submit a normal PR.
 Never reset or force-push shared history.
+
+Legacy public package smoke drivers now detect the accepted navigation UI and
+use the existing M021 menu adapters and a title/options glyph identity observer.
+The old pre-navigation OAM identity assertion remains for historical ROMs.
+Gameplay assertions, all original smoke cases and -Werror remain enabled.
+The cartridge-only verifier needs standard-library Python; NumPy synthesis stays
+on the preparation host, outside the pinned compiler image.

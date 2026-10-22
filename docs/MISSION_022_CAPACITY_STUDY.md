@@ -24,7 +24,7 @@ bytes/second. A private recording's chart density is not a universal rule.
 
 At roughly 0.1 MiB shared content, a 1 MiB future reserve, 192 chart bytes/second
 and approximately 0.11 MiB existing count-in/tail/guard per full-length song,
-provisional capacities are about eight 2-minute songs, five 3-minute songs,
+provisional capacities are about seven 2-minute songs, five 3-minute songs,
 four 4-minute songs or three 5-minute songs. Final machine-readable projections
 must use final measured shared overhead and show rounding and mixed libraries.
 These are storage estimates, not built-and-tested song libraries.

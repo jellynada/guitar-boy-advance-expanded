@@ -5,13 +5,11 @@ import argparse,hashlib,json,re,shutil,subprocess,sys,tempfile
 from pathlib import Path
 try:
  from .song_pipeline import prepare,verify_prepared
- from .compose_public_demo import generate
  from .chart_importer import normalize
  from .adapt_chart import adapt,header
  from .reactive_prepare import synthetic_reactive
 except ImportError:
  from song_pipeline import prepare,verify_prepared
- from compose_public_demo import generate
  from chart_importer import normalize
  from adapt_chart import adapt,header
  from reactive_prepare import synthetic_reactive
@@ -46,6 +44,8 @@ def validate(spec):
 def public_package(key,dest):
  root=Path(__file__).resolve().parents[1]
  if key=='public:synth-demo':
+  try:from .compose_public_demo import generate
+  except ImportError:from compose_public_demo import generate
   generate(dest.parent/('composition-'+dest.name))
   prepare(dest.parent/('composition-'+dest.name),dest,difficulty='All',guitar='guitar.wav',backing=['backing.wav'],max_duration=75,handheld=True,display_title='Copper Circuit')
   verify_prepared(dest)

@@ -3,6 +3,10 @@ from pathlib import Path
 from tools.song_collection import validate,inspect_package
 SPEC={'schema':'gba-song-collection-v1','profile':'public','entries':[{'id':'copper-circuit','package':'public:synth-demo'},{'id':'synthetic-easy-fixture','package':'public:synth-demo-2'}]}
 class CollectionValidation(unittest.TestCase):
+ def test_verifier_cli_needs_no_numpy(self):
+  import subprocess,sys
+  result=subprocess.run([sys.executable,'-S',str(Path(__file__).resolve().parents[1]/'tools/song_collection.py'),'--help'],capture_output=True,text=True)
+  self.assertEqual(result.returncode,0,result.stderr)
  def test_explicit_public(self):self.assertEqual(validate(copy.deepcopy(SPEC)),SPEC)
  def reject(self,fn):
   s=copy.deepcopy(SPEC);fn(s)

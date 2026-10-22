@@ -12,6 +12,14 @@ def measure(build,output,probe=None):
  prefix=str(Path(os.environ['DEVKITARM'])/'bin/arm-none-eabi-')
  text=subprocess.check_output([prefix+'nm','-S',str(build/m['elf'])],text=True)
  sym={n:(int(a,16)-0x08000000,int(z,16))for a,z,t,n in re.findall(r'^(\w+)\s+(\w+)\s+(\w)\s+(\S+)$',text,re.M)}
+ addresses={n:int(a,16)-0x08000000 for a,t,n in re.findall(r'^(\w+)\s+(\w)\s+(\S+)$',text,re.M)}
+ graphics=m.get('generated_graphics_bytes',{})
+ if not graphics and (build/'engine/build').exists():
+  for h in (build/'engine/build').glob('*.h'):
+   graphics.update({n:int(z)for n,z in re.findall(r'#define (\w+(?:Tiles|Map|Pal))Len (\d+)',h.read_text())})
+ for n,z in graphics.items():
+  if n in addresses:sym[n]=(addresses[n],z)
+ if 'sys8Glyphs'in addresses:sym['sys8Glyphs']=(addresses['sys8Glyphs'],768)
  section_text=subprocess.check_output([prefix+'objdump','-h',str(build/m['elf'])],text=True)
  loads=[];sections=[]
  lines=section_text.splitlines()
@@ -45,7 +53,7 @@ def measure(build,output,probe=None):
  iwram=sum(s['bytes']for s in sections if 0x03000000<=s['vma']<0x03008000)
  ewram=sum(s['bytes']for s in sections if s['name']in ['.ewram','.sbss'])
  shared_code=sum(s['bytes']for s in sections if s['name']in ['.crt0','.init','.plt','.text','.fini','.iwram'])
- artnames=['imageTiles','imageMap','palettePal','notesTiles','notesMap','buttonsTiles','buttonsMap','text_spritesTiles','text_spritesMap','sys8Glyphs']
+ artnames=list(graphics)+['sys8Glyphs']
  art=[(sym[n][0],sym[n][0]+sym[n][1])for n in artnames if n in sym and sym[n][0]>=0]
  code_gap=len(data)-union(loads)
  # Planning deliberately adds the future reserve to currently measured shared bytes.

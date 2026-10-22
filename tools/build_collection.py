@@ -2,7 +2,7 @@
 On Windows, run with --native using the existing process-local devkitARM/make
 environment. Otherwise use the pinned existing Docker toolchain.
 """
-import argparse,datetime,json,os,shutil,subprocess
+import argparse,datetime,json,os,shutil,subprocess,re
 from pathlib import Path
 try:
  from .release_common import source_snapshot,export_source,file_hash
@@ -37,6 +37,11 @@ def build(root,spec,native=False):
   m=json.loads((work/'collection-input/verified-collection.json').read_text())
   image=(work/'scripts/toolchain-image.txt').read_text().strip()
   with(job/'symbols.txt').open('w')as f:subprocess.run(['docker','run','--rm','-v',str(job)+':/candidate:ro',image,'/opt/devkitpro/devkitARM/bin/arm-none-eabi-nm','-n','/candidate/'+target+'.elf'],stdout=f,check=True)
+ graphics={}
+ for header in (work/'build').glob('*.h'):
+  for name,size in re.findall(r'#define (\w+(?:Tiles|Map|Pal))Len (\d+)',header.read_text()):
+   graphics[name]=int(size)
+ m['generated_graphics_bytes']=graphics
  m.update(schema='gba-collection-candidate-v1',rom=target+'.gba',elf=target+'.elf',source_tree_sha256=source['source_tree_sha256'],release_promotion='blocked; documented ordinary-output limitation',hardware_verified=False)
  m['file_sha256']={name:file_hash(job/name)for name in [m['rom'],m['elf'],'symbols.txt']}
  (job/'manifest.json').write_text(json.dumps(m,indent=2)+'\n')

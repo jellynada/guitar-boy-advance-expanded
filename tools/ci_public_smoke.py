@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 try:
     from .release_common import file_hash, verify_result
@@ -20,10 +21,20 @@ def run(root, build, extracted, output, symbols):
     if file_hash(rom) != manifest['rom_sha256']:
         raise ValueError('Extracted ROM differs from successful build')
     output.mkdir(parents=True, exist_ok=False)
+    navigation='uiScreen' in Path(symbols).read_text()
+    probe_root=root/'tests'
+    if navigation:
+        sys.path.insert(0,str(root/'tests'))
+        from build_ui_probes import generate
+        generated=generate(root,output/'probes')
+        for helper in generated.glob('*.c'):
+            helper.write_text(helper.read_text().replace('static void m021','static inline void m021').replace('static unsigned m021','static inline unsigned m021'))
     for name, source in [('identity', 'build_identity_emulator.c'), ('pause', 'pause_emulator.c'), ('readiness', 'readiness_emulator.c')]:
-        subprocess.run(['gcc', '-O2', '-Wall', '-Wextra', '-Werror', str(root / 'tests' / source),
-                        '-o', str(output / name), '-lmgba'], check=True)
-    subprocess.run([str(output / 'identity'), str(rom), 'M014 / SYNTH'], check=True)
+        src=generated/(name+'.c') if navigation and name!='identity' else probe_root/source
+        subprocess.run(['gcc','-O2','-Wall','-Wextra','-Werror','-I'+str(probe_root),str(src),'-o',str(output/name),'-lmgba'],check=True)
+    identity=[str(output/'identity'),str(rom),'M014 / SYNTH']
+    if navigation:identity+=[str(symbols),manifest['source_commit']]
+    subprocess.run(identity,check=True)
     samples = re.search(r'imported_audio_playback_samples = (\d+)', (build / 'runtime/imported_audio.hpp').read_text())[1]
     env = os.environ.copy()
     # Do not inherit manual fault/silent test knobs into acceptance runs.
@@ -41,7 +52,7 @@ def run(root, build, extracted, output, symbols):
                             str(case), '1' if case == 0 else '30', str(prefix)],
                            env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
     receipt = dict(schema='gba-ci-smoke-v1', source_commit=manifest['source_commit'],
-                   rom_sha256=file_hash(rom), visible_identity='M014 / SYNTH',
+                   rom_sha256=file_hash(rom), visible_identity='title/main/options and source revision' if navigation else 'M014 / SYNTH',
                    pause_cases=cases, readiness_epochs=20, result='passed', physical_hardware_verified=False)
     (output / 'smoke.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(json.dumps(receipt, indent=2))
