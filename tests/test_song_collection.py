@@ -7,6 +7,10 @@ class CollectionValidation(unittest.TestCase):
   import subprocess,sys
   result=subprocess.run([sys.executable,'-S',str(Path(__file__).resolve().parents[1]/'tools/song_collection.py'),'--help'],capture_output=True,text=True)
   self.assertEqual(result.returncode,0,result.stderr)
+ def test_original_ordinary_windows_retained(self):
+  s=(Path(__file__).resolve().parents[1]/'tools/test_collection.py').read_text()
+  self.assertIn("'6.322,37.5,76.7'",s)
+  self.assertIn('},265"',s)
  def test_explicit_public(self):self.assertEqual(validate(copy.deepcopy(SPEC)),SPEC)
  def reject(self,fn):
   s=copy.deepcopy(SPEC);fn(s)

@@ -82,7 +82,7 @@ def run(build,out,tools=None,quick=False):
   for s in m['songs']:
    for c in s['charts']:
     folder=out/f"song-{s['index']}-difficulty-{c['lanes']-3}"
-    times='6.322,37.5,76.7'if s['provenance']=='public:synth-demo'else f"6.322,{min(136,s['source_samples']/16384/2)},{max(7,s['source_samples']/16384-2)}"
+    times='6.322,37.5,76.7'if s['provenance']=='public:synth-demo'else (f"6.322,{min(136,s['source_samples']/16384/2)},265"if s['provenance']=='owner-local-verified-prepared'else f"6.322,{min(136,s['source_samples']/16384/2)},{max(7,s['source_samples']/16384-2)}")
     for case in [19,4,22,0,12]:
      pre=folder/f'case-{case}';args=[sys.executable,str(ROOT/'tests/analyze_reactive.py'),'--audio-dir',str(build/'assets/packages'/str(s['index'])/'audio'),'--prefix',str(pre),'--times',times]
      if case in [4,22]:args+=['--backing-capture',str(folder/'case-23'),'--require-mute']

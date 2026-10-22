@@ -13,7 +13,7 @@ static unsigned screen,mode,phase,stats,score,clockAddr,session,ready,countAddr,
 static void step(struct mCore*c,unsigned keys){c->setKeys(c,keys);c->runFrame(c);short b[4096];for(int i=0;i<2;i++)while(blip_read_samples(c->getAudioChannel(c,i),b,4096,0)>0){}}
 static void press(struct mCore*c,unsigned keys){step(c,0);step(c,keys);step(c,0);}
 static uint64_t r64(struct mCore*c,unsigned a){return c->busRead32(c,a)|((uint64_t)c->busRead32(c,a+4)<<32);}
-static void expect(struct mCore*c,unsigned s){if(c->busRead32(c,screen)!=s)fprintf(stderr,"UI expected=%u actual=%u mode=%u\n",s,c->busRead32(c,screen),c->busRead32(c,mode));assert(c->busRead32(c,screen)==s);}
+static void expect(struct mCore*c,unsigned s){if(c->busRead32(c,screen)!=s)fprintf(stderr,"UI expected=%u actual=%u mode=%u ready=%u\n",s,c->busRead32(c,screen),c->busRead32(c,mode),c->busRead32(c,ready));assert(c->busRead32(c,screen)==s);}
 static void menusSilent(struct mCore*c){assert(!(c->busRead16(c,0x4000102)&128));assert(!(c->busRead16(c,0x4000106)&128));assert(!(c->busRead16(c,0x400010a)&128));assert(!(c->busRead32(c,0x40000b8)&0x80000000));assert(!(c->busRead32(c,0x40000dc)&0x80000000));if(c->busRead16(c,0x4000200)&(2|16))fprintf(stderr,"MENU RESOURCE screen=%u IE=%x mode=%u\n",c->busRead32(c,screen),c->busRead16(c,0x4000200),c->busRead32(c,mode));assert(!(c->busRead16(c,0x4000200)&(2|16)));assert(!(c->busRead16(c,0x4000000)&(1024|4096)));}
 static void glyph(struct mCore*c,color_t*p,unsigned font,unsigned x,unsigned y,const char*s){for(;*s;s++,x++)for(unsigned row=0;row<8;row++){unsigned bits=c->busRead8(c,font+((unsigned)*s-32)*8+row);for(unsigned col=0;col<8;col++){unsigned rgb=p[(y*8+row)*240+x*8+col];int white=(rgb&255)>200&&((rgb>>8)&255)>200&&((rgb>>16)&255)>200;assert(white==!!(bits&(1u<<col)));}}}
 static void shot(const char*prefix,const char*name,color_t*p){char file[1024];snprintf(file,sizeof file,"%s.%s.ppm",prefix,name);FILE*f=fopen(file,"wb");assert(f);fprintf(f,"P6\n240 160\n255\n");for(unsigned i=0;i<38400;i++){unsigned char b[]={p[i]&255,(p[i]>>8)&255,(p[i]>>16)&255};fwrite(b,1,3,f);}fclose(f);}
@@ -43,6 +43,7 @@ static void startRow(struct mCore*c,const struct Row*r,const char*sy){
  assert(c->busRead32(c,score)==0&&c->busRead32(c,stats)==0&&c->busRead32(c,stats+8)==0);
  assert(r64(c,clockAddr)<16777216ULL);
 }
+static void waitReady(struct mCore*c){for(unsigned n=0;!c->busRead32(c,ready);++n){assert(n<16);step(c,0);}expect(c,4);assert(c->busRead32(c,mode)==2);}
 static void quit(struct mCore*c){press(c,8);expect(c,5);press(c,128);press(c,128);press(c,1);expect(c,2);menusSilent(c);}
 static void finish(struct mCore*c,unsigned count,unsigned limit,const char*sy){unsigned chart=c->busRead32(c,symbol(sy,"activeImportedNotes")),holds=c->busRead32(c,symbol(sy,"activeImportedSustains"));unsigned lanes=c->busRead32(c,lanesAddr),buttons[5]={32,2,1,0,0};if(lanes==4){unsigned b[]={32,16,2,1};memcpy(buttons,b,sizeof b);}if(lanes==5){unsigned b[]={32,64,16,2,1};memcpy(buttons,b,sizeof b);}uint64_t until[5]={0};unsigned next=0;
 for(unsigned frame=0;frame<limit&&c->busRead32(c,screen)==4;frame++){uint64_t now=r64(c,clockAddr);unsigned keys=0;for(unsigned l=0;l<lanes;l++)if(until[l]>now)keys|=buttons[l];if(next<count){unsigned lane=c->busRead32(c,chart+next*16+8);uint64_t t=r64(c,chart+next*16);if(t>now+280896&&t<=now+561792&&(keys&buttons[lane])){keys&=~buttons[lane];until[lane]=0;}}while(next<count){uint64_t t=r64(c,chart+next*16);if(t>now+280896)break;unsigned lane=c->busRead32(c,chart+next*16+8);keys|=buttons[lane];until[lane]=t+(r64(c,holds+next*8)*16777216ULL+500000)/1000000;next++;}step(c,keys);}expect(c,6);assert(c->busRead32(c,session)==1);assert(c->busRead32(c,stats)+c->busRead32(c,stats+4)==count);assert(c->busRead32(c,stats+8)==0);assert(c->busRead32(c,stats+12)==0);assert(c->busRead32(c,score+44)==1);assert(c->busRead32(c,symbol(sy,"audioUnderruns"))==0);}
@@ -69,14 +70,14 @@ int main(int argc,char**argv){
    uint64_t frozen=r64(c,clockAddr);unsigned pts=c->busRead32(c,score);
    for(unsigned i=0;i<60;++i)step(c,0);
    assert(r64(c,clockAddr)==frozen&&c->busRead32(c,score)==pts);
-   press(c,8);expect(c,4);press(c,8);expect(c,5);press(c,128);press(c,1);expect(c,4);
+   press(c,8);expect(c,4);press(c,8);expect(c,5);press(c,128);press(c,1);waitReady(c);
    assert(c->busRead32(c,score)==0&&c->busRead32(c,pausedCount)==0);
    finish(c,x->count,limit,sy);
    assert(c->busRead32(c,symbol(sy,"audioSamplesConsumed"))==x->samples);
    unsigned final=c->busRead32(c,score);for(unsigned i=0;i<30;++i)step(c,0);assert(c->busRead32(c,score)==final);
    menusSilent(c);
    for(unsigned i=0;i<choice;++i)press(c,128);press(c,1);
-   if(choice==0){expect(c,4);assert(c->busRead32(c,symbol(sy,"activeSongIndex"))==x->song);assert(c->busRead32(c,score)==0);quit(c);}
+   if(choice==0){waitReady(c);assert(c->busRead32(c,symbol(sy,"activeSongIndex"))==x->song);assert(c->busRead32(c,score)==0);quit(c);}
    else if(choice==1){expect(c,3);press(c,2);}
    else if(choice==2){expect(c,2);}
    else{expect(c,1);songs(c);}
