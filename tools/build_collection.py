@@ -11,7 +11,7 @@ except ImportError:
  from release_common import source_snapshot,export_source,file_hash
  from song_collection import generate_collection,verify_rom
 def build(root,spec,native=False):
- root=Path(root).resolve();files,source=source_snapshot(root)
+ root=Path(root).absolute();files,source=source_snapshot(root)
  profile=spec['profile'];revision=source['source_commit']
  job=root/'builds/m022-candidates'/profile/(revision[:12]+'-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'));job.mkdir(parents=True)
  generate_collection(spec,job/'assets')
@@ -43,4 +43,4 @@ def build(root,spec,native=False):
  (root/'builds/m022-candidates'/profile/'LATEST.txt').write_text(str(job.relative_to(root))+'\n')
  print(json.dumps(dict(build=str(job),source_commit=revision,rom_sha256=m['rom_sha256'],bytes=m['rom_bytes']),indent=2));return job
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,default=Path(__file__).resolve().parents[1]);p.add_argument('--spec',type=Path,required=True);p.add_argument('--native',action='store_true');a=p.parse_args();build(a.repo,json.loads(a.spec.read_text()),a.native)
+ p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,default=Path(__file__).absolute().parents[1]);p.add_argument('--spec',type=Path,required=True);p.add_argument('--native',action='store_true');a=p.parse_args();build(a.repo,json.loads(a.spec.read_text()),a.native)
